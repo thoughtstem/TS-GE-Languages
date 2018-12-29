@@ -1,6 +1,6 @@
 #lang battle-arena
 (define (my-enemy)
- (custom-enemy #:sprite          STUDENT-IMAGE-HERE
+ (custom-enemy #:sprite          (star 30 'solid 'gold)
                #:ai              'easy
                #:health          200
                #:shield          100

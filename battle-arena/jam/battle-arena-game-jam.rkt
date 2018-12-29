@@ -7,6 +7,7 @@
          plain-bg-entity
          custom-background
          custom-weapon
+         custom-armor
          spear
          sword
          paint
@@ -102,7 +103,7 @@
                                #:ai (ai-level 'easy)
                                #:health (health 100)
                                #:shield (shield 100)
-                               #:weapon (weapon (custom-weapon-system))
+                               #:weapon (weapon (custom-weapon))
                                #:death-particles (particles (custom-particles)))
 
   (->* () (#:amount-in-world positive?
@@ -110,7 +111,7 @@
            #:ai symbol?
            #:health positive?
            #:shield positive?
-           #:weapon component?
+           #:weapon entity?
            #:death-particles entity? ) entity?)
 
   
@@ -168,8 +169,9 @@
               ;Need to face player when attacking...
 
               (storage "amount-in-world" amount-in-world)
-                         
-              (enemy-ai (get-ai-from-level ai-level weapon))
+
+              (enemy-ai (get-ai-from-level ai-level (get-storage-data "Weapon" weapon)))
+              ;(enemy-ai (get-ai-from-level ai-level weapon))
               ))
 
 
@@ -217,7 +219,8 @@
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"
                                             #f)
-                                        (~a shoot-key " to shoot")
+                                        ;(~a shoot-key " to shoot")
+                                        "LEFT-CLICK to shoot"
                                         "NUM KEYS to select weapon"
                                         "SPACE to interact"
                                         "ENTER to close dialogs"
@@ -252,11 +255,88 @@
 (define (won? g e)
   #f)
 
+(define (kill-player-v2)
+  (lambda (g e1 e2)
+    (define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
+    (if (lost? g e2)
+        ((do-many remove-on-key
+                  (stop-animation)
+                  (change-sprite (new-sprite dead-player-image))) g e2)
+        e2)))
+
 (define (lost? g e)
-  #f)
+  (define player (get-entity "player" g))
+  (define health (get-stat "health" player))
+  (<= health 0))
 
+(define (backpack-has-armor? g e)
+  (define items (get-items (get-entity "player" g)))
+  (define entity-list (map item-entity items))
+  (ormap (λ (e)(get-storage "Armor" e)) entity-list))
 
-(define (custom-weapon        #:name        [n "Weapon"]
+(define (nearest-item-is-armor? g e)
+  (define all-es (game-entities g))
+  
+  (define player (entity-with-name "player" g))
+
+  (define (ui? e)
+    (and ((has-component? layer?) e)
+         (eq? (get-layer e) "ui")))
+
+  (define (not-ui? e)
+    (not (ui? e)))
+  
+  (define all-but-me-and-player
+    (~> all-es
+        (remove player _ entity-eq?)
+        (remove e      _ entity-eq?)
+        (filter not-ui? _)))
+
+  (define (closer-to-player? e1 e2)
+    (< (distance-between (get-posn e1) (get-posn player))
+       (distance-between (get-posn e2) (get-posn player))))
+
+  (define sorted-list (sort all-but-me-and-player
+                            closer-to-player?))
+
+  (displayln (~a "NEAREST ENTITY TO PLAYER: " (if (empty? sorted-list)
+                                                  "NONE"
+                                                  (get-name (first sorted-list)))))
+  
+  (and (not (empty? sorted-list))
+       (get-storage "Armor" (first sorted-list))))
+
+(define (custom-armor        #:name          [n "Armor"]
+                             #:sprite        [s chest-sprite]
+                             #:protects-from [pf "Bullet"]
+                             #:change-damage [cd identity]
+                             #:rarity      [rarity 'common])
+  (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
+                             [(eq? rarity 'epic)      (~a "Epic " n)]
+                             [(eq? rarity 'legendary) (~a "Legendary " n)]
+                             [else n]))
+
+  (define damage-processor (conditional-damage-processor #:rule (damager-has-tag? (string->symbol pf))
+                                                         #:processor (divert-damage #:first-stat-protection cd
+                                                                                    #:filter-out '(friendly-team passive))
+                                                         #:default-processor (divert-damage #:filter-out '(friendly-team passive))))
+  (sprite->entity s
+                  #:name updated-name
+                  #:position    (posn 0 0)
+                  #:components  (active-on-bg 0)
+
+                                (physical-collider)
+                                (storage "Armor" damage-processor)
+                                (storage "Rarity" rarity)
+
+                                (static)
+                                (hidden)
+                                (on-start (do-many (respawn 'anywhere)
+                                                   (active-on-random)
+                                                   show))
+                                (storable)))
+
+(define (custom-weapon        #:name        [n "Repeater"]
                               #:sprite      [s chest-sprite]
                               #:dart      [b (custom-dart)]
                               #:fire-mode   [fm 'normal]
@@ -271,7 +351,11 @@
                              [(eq? rarity 'legendary) (~a "Legendary " n)]
                              [else n]))
 
-  (define weapon-component (custom-weapon-system #:dart b
+  (define (add-tag-to-entity e tag)
+    (define damager (get-component e damager?))
+    (update-entity e damager? (add-damager-tag damager tag)))
+
+  (define weapon-component (custom-weapon-system #:dart (add-tag-to-entity b (string->symbol updated-name))
                                                  #:fire-mode fm
                                                  #:fire-rate fr
                                                  #:fire-key  key
@@ -365,6 +449,7 @@
                        #:scale 4))
 
 (define (custom-avatar #:sprite       [sprite (circle 10 'solid 'red)]
+                       #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                        #:position     [p   (posn 100 100)]
                        #:speed        [spd 10]
                        #:key-mode     [key-mode 'wasd]
@@ -389,9 +474,13 @@
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
                                (stop-on-edge)
                                (backpack-system #:max-items w-slots
+                                                #:pickup-rule (or/r (not/r backpack-has-armor?)
+                                                             (not/r nearest-item-is-armor?))
                                                 #:components (observe-change backpack-changed? update-backpack))
+                               (observe-change lost? (kill-player-v2))
                                (player-edge-system)
                                (counter 0)
+                               (weapon-selector #:slots w-slots)
                                (cons c custom-components)
                                ))
 
@@ -422,7 +511,7 @@
   (combatant
    #:stats (list (make-stat-config 'health 100 health-bar)
                  (make-stat-config 'shield 100 sheild-bar))
-   #:damage-processor (divert-damage #:filter-out '(friendly-team passive))         
+   #:damage-processor dp         
    base-avatar)
   )
 
@@ -430,8 +519,11 @@
                   #:headless       [headless #f]
                   #:bg             [bg-ent (custom-background)]
                   #:avatar         [p (custom-avatar)]
-                  #:enemy-list     [e-list '()]
+                  #:enemy-list     [e-list (list (custom-enemy)
+                                                 (custom-enemy #:weapon (custom-weapon #:name "Sword"
+                                                                                       #:dart (sword))))]
                   #:weapon-list    [weapon-list '()]
+                  #:item-list      [item-list '()]
                   #:other-entities [ent #f]
                   . custom-entities)
   
@@ -440,16 +532,29 @@
            #:avatar entity?
            #:enemy-list (listof entity?)
            #:weapon-list (listof entity?)
+           #:item-list   (listof entity?)
            #:other-entities (or/c #f (listof entity?)))
        
        #:rest (listof entity?) game?)
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
+
+  (define (armor-entity->player-system e)
+    (define armor-name (get-name e))
+    (define new-dp (get-storage-data "Armor" e))
+    (observe-change (in-backpack? armor-name) (λ (g e1 e2)
+                                                (if ((in-backpack? armor-name) g e2)
+                                                    (begin (displayln (~a "ADDING ARMOR: " armor-name))
+                                                           (update-entity e2 damage-processor? new-dp))
+                                                    (begin (displayln "REMOVING ARMOR")
+                                                           (update-entity e2 damage-processor?
+                                                                          (divert-damage #:filter-out '(friendly-team passive))))))))
     
   (define player-with-weapons
-    (add-components p (weapon-selector #:slots 3)
-                      (map weapon-entity->player-system weapon-list)))
+    (add-components p ;(weapon-selector #:slots 3)
+                      (map weapon-entity->player-system weapon-list)
+                      (map armor-entity->player-system item-list)))
 
   (define move-keys (if (eq? (get-key-mode p) 'wasd)
                         "WASD KEYS"
@@ -521,6 +626,8 @@
 
                        ;(map (λ (w) (entity-cloner w 3)) weapon-list)
                        (clone-by-rarity (flatten weapon-list))
+
+                       (clone-by-rarity (flatten item-list))
 
                        (clone-by-amount-in-world (flatten e-list))
 
@@ -695,7 +802,7 @@
 
 
 (module+ test
-  #;(battle-arena-game
+  (battle-arena-game
    #:bg              (custom-background)
    #:avatar          (custom-avatar)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))

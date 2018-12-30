@@ -10,7 +10,7 @@
   ))
 
 (define compile-omit-paths '(
-  "examples/compiled-kata-data"))
+  "examples"))
 
 (define test-omit-paths '("examples/compiled-kata-data"))
 

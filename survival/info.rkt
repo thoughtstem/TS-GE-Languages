@@ -10,7 +10,7 @@
   ))
 
 (define compile-omit-paths '(
-  "test" "scribblings" "examples/compiled-kata-data"))
+  "test" "scribblings" "examples"))
 
 (define test-omit-paths '("doc" "scribblings" "jam" "scoring" "examples/compiled-kata-data"))
 

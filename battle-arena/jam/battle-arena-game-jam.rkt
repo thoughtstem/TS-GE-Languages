@@ -1,10 +1,50 @@
-#lang racket
+#lang at-exp racket
+
+
+
+(require scribble/srcdoc)
 
 (require game-engine
          game-engine-demos-common)
 
-(provide battle-arena-game
-         plain-bg-entity
+(require (for-doc racket/base scribble/manual))
+
+(provide
+ (proc-doc
+  battle-arena-game
+
+
+  (->i ()
+       (#:headless [headless boolean?]
+        #:bg [bg entity?]
+        #:avatar [avatar entity?]
+        #:enemy-list [enemy-list (listof entity?)]
+        #:weapon-list [weapon-list (listof entity?)]
+        #:item-list   [item-list (listof entity?)]
+        #:other-entities [other-entities (or/c #f (listof entity?))])
+       #:rest [rest (listof entity?)]
+       [res (bg ) game?])
+  
+  (#f
+   (custom-background)
+   (custom-avatar)
+
+   (list (custom-enemy)
+         (custom-enemy #:weapon (custom-weapon #:name "Sword"
+                                               #:dart (sword))))
+   '()
+   '()
+   #f
+   )
+  
+  @{The top-level function for the battle-arena language.
+         Can be run with no parameters to get a basic, default game
+         with nothing in it.}))
+
+
+
+
+(provide plain-bg-entity
          custom-background
          custom-weapon
          custom-armor

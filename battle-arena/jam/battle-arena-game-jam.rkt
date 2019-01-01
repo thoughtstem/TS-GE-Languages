@@ -69,7 +69,14 @@
 
          spear-tower-builder
          spike-mine-builder
-         lava-builder)
+         lava-builder
+
+         rocket-tower-builder
+         repeater-tower-builder
+         dagger-tower-builder
+
+         rocket
+         rocket-sprite)
 
 (define STUDENT-IMAGE-HERE
   (text "Student Image Here" 30 'blue))
@@ -494,7 +501,7 @@
                        #:speed        [spd 10]
                        #:key-mode     [key-mode 'wasd]
                        #:mouse-aim?   [mouse-aim? #t]
-                       #:weapon-slots [w-slots 2]
+                       #:item-slots   [w-slots 2]
                        #:components   [c #f]
                        . custom-components)
   (define dead-frame (if (image? sprite)
@@ -756,6 +763,9 @@
 
 (define (tower #:weapon (weapon (custom-weapon))
                #:die-after (die-after 500))
+  (define tower-id (random 100000))
+  (define tower-name (~a "tower" tower-id))
+  (displayln (~a "TOWER NAME: " tower-name))
 
   (define tower-base (overlay/offset 
                       (rectangle 32 24 "solid" "dimgray")
@@ -777,6 +787,7 @@
                     #:components
                     (layer "tops")
                     (after-time die-after die)
+                    (on-rule (λ (g e) (not (get-entity tower-name g))) die)
                     (active-on-bg)))
 
   (precompile! tower-top
@@ -787,7 +798,7 @@
   
   (sprite->entity tower-base
 
-                  #:name "wall"
+                  #:name tower-name
                   #:position (posn 0 0)
                   #:components
                   (direction 0)
@@ -797,7 +808,7 @@
                   (static)
                   (lock-to-grid 50)
                   (physical-collider)
-                  (on-collide "wall" die)
+                  (on-collide tower-name die)
                   (after-time die-after die)
                   (on-start (spawn-on-current-tile tower-top-entity))))
 
@@ -916,12 +927,13 @@
                #:components (on-start (set-size 0.5))
                             (every-tick (scale-sprite 1.1))))
 
-(define (flying-dagger #:sprite     [s   flying-sword-sprite]
+(define (flying-dagger #:position   [p   (posn 20 0)]
+                       #:sprite     [s   flying-sword-sprite]
                        #:damage     [dmg 10]
                        #:durability [dur 20]
                        #:speed      [spd 2]
                        #:range      [rng 40])
-  (custom-dart #:position (posn 20 0)
+  (custom-dart #:position p
                #:sprite     s
                #:damage     dmg
                #:durability dur
@@ -998,3 +1010,78 @@
                                #:size size
                                #:sprite sprite)
                 #:distance range))
+
+(define rocket-sprite
+  (scale 0.75 (beside (rotate 90 (triangle 6 "solid" "orange"))
+                      (rectangle 5 10 "solid" "gray")
+                      (rectangle 16 6 "solid" "gray")
+                      (rotate -90 (triangle 12 "solid" "red")))))
+
+(define (rocket #:sprite     [s   rocket-sprite]
+                #:damage     [dmg 200]
+                #:durability [dur 10]
+                #:speed      [spd 5]
+                #:range      [rng 100])
+  (custom-dart #:position (posn 0 -70)
+               #:sprite   s
+               #:damage dmg
+               #:durability dur
+               #:speed spd
+               #:range rng
+               ))
+
+(define (rocket-tower-builder #:sprite     [s rocket-sprite]
+                              #:damage     [dmg 200]
+                              #:durability [dur 10]
+                              #:speed      [spd 5]
+                              #:range      [rng 100]
+                              #:fire-mode  [fm 'normal]
+                              #:fire-rate  [fire-rate 0.5])
+  (builder-dart #:entity
+                (tower #:weapon (custom-weapon #:fire-rate fire-rate
+                                               #:fire-mode fm
+                                               ;#:point-to-mouse? #f
+                                               #:dart (rocket
+                                                       #:sprite     s
+                                                       #:damage     dmg
+                                                       #:durability dur
+                                                       #:speed      spd
+                                                       #:range      rng)))))
+
+(define (repeater-tower-builder #:sprite     [s (rectangle 10 2 "solid" "green")]
+                                #:damage     [dmg 10]
+                                #:durability [dur 10]
+                                #:speed      [spd 10]
+                                #:range      [rng 1000]
+                                #:fire-mode  [fm 'normal]
+                                #:fire-rate  [fire-rate 3])
+  (builder-dart #:entity
+                (tower #:weapon (custom-weapon #:fire-rate fire-rate
+                                               #:fire-mode fm
+                                               ;#:point-to-mouse? #f
+                                               #:dart (custom-dart
+                                                       #:position  (posn 0 -70)
+                                                       #:sprite     s
+                                                       #:damage     dmg
+                                                       #:durability dur
+                                                       #:speed      spd
+                                                       #:range      rng)))))
+
+(define (dagger-tower-builder #:sprite     [s (scale 0.5 flying-sword-sprite)]
+                              #:damage     [dmg 200]
+                              #:durability [dur 20]
+                              #:speed      [spd 5]
+                              #:range      [rng 200]
+                              #:fire-mode  [fm 'normal]
+                              #:fire-rate  [fire-rate 0.5])
+  (builder-dart #:entity
+                (tower #:weapon (custom-weapon #:fire-rate fire-rate
+                                               #:fire-mode fm
+                                               ;#:point-to-mouse? #f
+                                               #:dart (custom-dart
+                                                       #:position  (posn 0 -70) 
+                                                       #:sprite     s
+                                                       #:damage     dmg
+                                                       #:durability dur
+                                                       #:speed      spd
+                                                       #:range      rng)))))

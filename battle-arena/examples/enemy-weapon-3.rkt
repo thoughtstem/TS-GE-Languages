@@ -11,8 +11,7 @@
 (define (my-weapon)
   (custom-weapon
    #:name      "Repeator"
-   #:dart      (my-dart)
-   #:fire-rate 10))
+   #:dart      (my-dart)))
 
 (battle-arena-game
  #:enemy-list (list (custom-enemy

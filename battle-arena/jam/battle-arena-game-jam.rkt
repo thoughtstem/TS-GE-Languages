@@ -1052,7 +1052,7 @@
                                 #:damage     [dmg 10]
                                 #:durability [dur 10]
                                 #:speed      [spd 10]
-                                #:range      [rng 1000]
+                                #:range      [rng 100]
                                 #:fire-mode  [fm 'normal]
                                 #:fire-rate  [fire-rate 3])
   (builder-dart #:entity

@@ -1012,7 +1012,7 @@
                 #:distance range))
 
 (define rocket-sprite
-  (scale 0.25 (beside (rotate 90 (triangle 6 "solid" "orange"))
+  (scale 0.75 (beside (rotate 90 (triangle 6 "solid" "orange"))
                       (rectangle 5 10 "solid" "gray")
                       (rectangle 16 6 "solid" "gray")
                       (rotate -90 (triangle 12 "solid" "red")))))

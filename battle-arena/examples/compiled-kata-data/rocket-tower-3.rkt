@@ -8,4 +8,4 @@
                              #:range      200
                              #:damage     1000
                              #:speed      2
-                             #:fire-mode  'spread))))
+                             #:fire-mode  'homing))))

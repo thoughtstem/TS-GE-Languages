@@ -1,7 +1,6 @@
 #lang at-exp racket
 
 
-
 (require scribble/srcdoc)
 
 (require game-engine
@@ -9,53 +8,21 @@
 
 (require (for-doc racket/base scribble/manual))
 
-(provide
- (proc-doc
-  battle-arena-game
 
+(require ts-kata-util)
 
-  (->i ()
-       (#:headless [headless boolean?]
-        #:bg [bg entity?]
-        #:avatar [avatar entity?]
-        #:enemy-list [enemy-list (listof entity?)]
-        #:weapon-list [weapon-list (listof entity?)]
-        #:item-list   [item-list (listof entity?)]
-        #:other-entities [other-entities (or/c #f (listof entity?))])
-       #:rest [rest (listof entity?)]
-       [res (bg ) game?])
-  
-  (#f
-   (custom-background)
-   (custom-avatar)
-
-   (list (custom-enemy)
-         (custom-enemy #:weapon (custom-weapon #:name "Sword"
-                                               #:dart (sword))))
-   '()
-   '()
-   #f
-   )
-  
-  @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it.}))
-
-
-
-
+;Instead of using provide,
+;  use define/contract/doc on your functions.
+;This will provide it automatically.
+;  And it will also document it automatically for you.
+;  If your change the contract, it will automatically change
+;  the docs. 
 (provide plain-bg-entity
-         custom-background
-         custom-weapon
-         custom-armor
          spear
          sword
          paint
          flying-dagger
          ring-of-fire
-
-         custom-enemy
-         custom-avatar
 
          move-in-ring
 
@@ -77,6 +44,16 @@
 
          rocket
          rocket-sprite)
+
+(define sprite? (or/c image? animated-sprite?))
+
+(define rarity-level?
+  (or/c 'common 'uncommon 'rare 'epic 'legendary))
+
+
+
+(define fire-mode?    (or/c 'normal 'random 'spread 'homing))
+
 
 (define STUDENT-IMAGE-HERE
   (text "Student Image Here" 30 'blue))
@@ -143,23 +120,29 @@
                                 #:wander-speed 3)]))
 
 
+(define (ai-level? v)
+  (or/c 'easy 'medium 'hard))
 
+(define/contract/doc (custom-enemy #:amount-in-world (amount-in-world 1)
+                                   #:sprite (s (row->sprite (random-character-row) #:delay 4))
+                                   #:ai (ai-level 'easy)
+                                   #:health (health 99)
+                                   #:shield (shield 100)
+                                   #:weapon (weapon (custom-weapon))
+                                   #:death-particles (particles (custom-particles)))
 
-(define/contract (custom-enemy #:amount-in-world (amount-in-world 1)
-                               #:sprite (s (row->sprite (random-character-row) #:delay 4))
-                               #:ai (ai-level 'easy)
-                               #:health (health 100)
-                               #:shield (shield 100)
-                               #:weapon (weapon (custom-weapon))
-                               #:death-particles (particles (custom-particles)))
+  (->i () (#:amount-in-world [amount-in-world positive?]
+           #:sprite [sprite sprite?]
+           #:ai [ai ai-level?]
+           #:health [health positive?]
+           #:shield [shield positive?]
+           #:weapon [weapon entity?]
+           #:death-particles [death-particles entity?] )
+       [returns entity?])
 
-  (->* () (#:amount-in-world positive?
-           #:sprite any/c
-           #:ai symbol?
-           #:health positive?
-           #:shield positive?
-           #:weapon entity?
-           #:death-particles entity? ) entity?)
+  @{Creates a custom enemy that can be used in the enemy list
+         of @racket[battle-arena-game].}
+  
 
   
  
@@ -353,11 +336,25 @@
   (and (not (empty? sorted-list))
        (get-storage "Armor" (first sorted-list))))
 
-(define (custom-armor        #:name          [n "Armor"]
-                             #:sprite        [s chest-sprite]
-                             #:protects-from [pf "Bullet"]
-                             #:change-damage [cd identity]
-                             #:rarity      [rarity 'common])
+
+
+
+(define/contract/doc (custom-armor        #:name          [n "Armor"]
+                                          #:sprite        [s chest-sprite]
+                                          #:protects-from [pf "Bullet"]
+                                          #:change-damage [cd identity]
+                                          #:rarity      [rarity 'common])
+  (->i ()
+       ( #:name          [name string?]
+         #:sprite        [sprite sprite?]
+         #:protects-from [protects-from string?]
+         #:change-damage [change-damage procedure?]
+         #:rarity        [rarity rarity-level?])
+       [returns entity?])
+
+  @{Returns custom armor}
+
+  
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
                              [(eq? rarity 'epic)      (~a "Epic " n)]
                              [(eq? rarity 'legendary) (~a "Legendary " n)]
@@ -383,16 +380,34 @@
                                                    show))
                                 (storable)))
 
-(define (custom-weapon        #:name        [n "Repeater"]
-                              #:sprite      [s chest-sprite]
-                              #:dart      [b (custom-dart)]
-                              #:fire-mode   [fm 'normal]
-                              #:fire-rate   [fr 3]
-                              #:fire-key    [key 'f]
-                              #:mouse-fire-button [button 'left]
-                              #:point-to-mouse? [ptm? #t]
-                              #:rapid-fire?       [rf? #t]
-                              #:rarity      [rarity 'common])
+
+
+(define/contract/doc (custom-weapon        #:name        [n "Repeater"]
+                                           #:sprite      [s chest-sprite]
+                                           #:dart      [b (custom-dart)]
+                                           #:fire-mode   [fm 'normal]
+                                           #:fire-rate   [fr 3]
+                                           #:fire-key    [key 'f]
+                                           #:mouse-fire-button [button 'left]
+                                           #:point-to-mouse? [ptm? #t]
+                                           #:rapid-fire?       [rf? #t]
+                                           #:rarity      [rarity 'common])
+  (->i ()
+       (#:name        [name string?]
+        #:sprite      [sprite sprite?]
+        #:dart      [dart entity?]
+        #:fire-mode   [fire-mode fire-mode?]
+        #:fire-rate   [fire-rate number?]
+        #:fire-key    [fire-key symbol?]
+        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:point-to-mouse?   [ptm? boolean?]
+        #:rapid-fire?       [rf? boolean?]
+        #:rarity      [rarity rarity-level?])
+       [result entity?])
+
+  @{Returns a custom weapon}
+
+
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
                              [(eq? rarity 'epic)      (~a "Epic " n)]
                              [(eq? rarity 'legendary) (~a "Legendary " n)]
@@ -482,12 +497,24 @@
   (apply + (map entity->amount es)))
   
 
-(define (custom-background #:bg-img     [bg FOREST-BG]
-                           #:rows       [rows 3]
-                           #:columns    [cols 3]
-                           #:start-tile [t 0]
-                           #:components [c #f]
+(define/contract/doc (custom-background #:bg-img     [bg FOREST-BG]
+                                        #:rows       [rows 3]
+                                        #:columns    [cols 3]
+                                        #:start-tile [t 0]
+                                        #:components [c #f]
                                         . custom-components)
+
+  (->i ()
+       (#:bg-img [bg-img image?]
+        #:rows   [rows number?]
+        #:columns [columns number?]
+        #:start-tile [start-tile number?]
+        #:components [first-component component?])
+       #:rest [more-components (listof component?)]
+       [result entity?])
+
+  @{Returns a custom background}
+  
 
   (bg->backdrop-entity (scale 0.25 FOREST-BG)
                        #:rows       rows
@@ -495,7 +522,8 @@
                        #:start-tile t
                        #:scale 4))
 
-(define (custom-avatar #:sprite       [sprite (circle 10 'solid 'red)]
+(define/contract/doc (custom-avatar
+                      #:sprite       [sprite (circle 10 'solid 'red)]
                        #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                        #:position     [p   (posn 100 100)]
                        #:speed        [spd 10]
@@ -504,6 +532,24 @@
                        #:item-slots   [w-slots 2]
                        #:components   [c #f]
                        . custom-components)
+
+  (->i ()
+       (#:sprite [sprite sprite?]
+        #:damage-processor [damage-processor damage-processor?]
+        #:position [position posn?]
+        #:speed [speed number?]
+        #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
+        #:mouse-aim? [mouse-aim boolean?]
+        #:item-slots [item-slots number?]
+        #:components [first-component component?]
+        )
+       #:rest (rest (listof component?))
+       [returns entity?])
+
+  @{Returns a custom avatar...}
+  
+
+  
   (define dead-frame (if (image? sprite)
                          (rotate -90 sprite)
                          (rotate -90 (render sprite))))
@@ -562,27 +608,37 @@
    base-avatar)
   )
 
-(define/contract (battle-arena-game
-                  #:headless       [headless #f]
-                  #:bg             [bg-ent (custom-background)]
-                  #:avatar         [p (custom-avatar)]
-                  #:enemy-list     [e-list (list (custom-enemy)
-                                                 (custom-enemy #:weapon (custom-weapon #:name "Sword"
-                                                                                       #:dart (sword))))]
-                  #:weapon-list    [weapon-list '()]
-                  #:item-list      [item-list '()]
-                  #:other-entities [ent #f]
-                  . custom-entities)
+
+
   
-  (->* () (#:headless boolean?
-           #:bg entity?
-           #:avatar entity?
-           #:enemy-list (listof entity?)
-           #:weapon-list (listof entity?)
-           #:item-list   (listof entity?)
-           #:other-entities (or/c #f (listof entity?)))
-       
-       #:rest (listof entity?) game?)
+
+(define/contract/doc
+  (battle-arena-game
+   #:headless       [headless #f]
+   #:bg             [bg-ent (custom-background)]
+   #:avatar         [p (custom-avatar)]
+   #:enemy-list     [e-list (list (custom-enemy)
+                                  (custom-enemy #:weapon (custom-weapon #:name "Sword"
+                                                                        #:dart (sword))))]
+   #:weapon-list    [weapon-list '()]
+   #:item-list      [item-list '()]
+   #:other-entities [ent #f]
+   . custom-entities)
+
+  (->i ()
+       (#:headless [headless boolean?]
+        #:bg [bg entity?]
+        #:avatar [avatar entity?]
+        #:enemy-list [enemy-list   (listof entity?)]
+        #:weapon-list [weapon-list (listof entity?)]
+        #:item-list   [item-list   (listof entity?)]
+        #:other-entities [other-entities (or/c #f (listof entity?))])
+       #:rest [rest (listof entity?)]
+       [res () game?])
+
+  @{The top-level function for the battle-arena language.
+         Can be run with no parameters to get a basic, default game
+         with nothing in it!}
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
@@ -688,7 +744,10 @@
   
   (if headless
       (initialize-game es) ;Just return initial game state for whatever processing or unit tests...
-      (apply start-game es)))
+      (apply start-game es))
+  )
+
+
 
 
 
@@ -852,7 +911,7 @@
        
 
 
-(module+ test
+#;(module+ test
   (battle-arena-game
    #:bg              (custom-background)
    #:avatar          (custom-avatar)

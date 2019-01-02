@@ -24,7 +24,7 @@
                                               #:damage 20
                                               #:durability 20
                                               #:speed 15
-                                              #:range 10)
+                                              #:range 15)
                                       #:rarity 'rare)
                        (custom-weapon #:name "Homing Repeater"
                                       #:sprite (make-icon "HR")
@@ -34,5 +34,5 @@
                                               #:sprite (rectangle 10 2 'solid 'pink)
                                               #:damage 15
                                               #:speed 8
-                                              #:range 30)
+                                              #:range 40)
                                        #:rarity 'epic)))

@@ -1,0 +1,6 @@
+#lang survival
+ 
+(define-kata-code survival basic-avatar
+
+ (survival-game
+   #:avatar (custom-avatar)))

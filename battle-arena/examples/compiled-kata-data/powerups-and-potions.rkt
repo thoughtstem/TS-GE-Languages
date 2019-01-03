@@ -1,40 +1,17 @@
 #lang battle-arena
+(define (health-potion)
+ (custom-item #:name     "Health Potion"
+              #:sprite   (make-icon "HP" 'green 'white)
+              #:on-use   (change-health-by 50)
+              #:rarity   'uncommon
+              #:respawn? #t))
+
+(define (max-health-potion)
+ (custom-item #:name   "Max Health Potion"
+              #:sprite (make-icon "MHP" 'green 'white)
+              #:on-use (set-health-to 100)
+              #:rarity 'epic))
+
 (battle-arena-game
-#:avatar         (custom-avatar #:sprite (random-character-sprite)
-                                #:item-slots 3)
-#:enemy-list     (list (custom-enemy #:ai 'easy
-                                     #:amount-in-world 10))
-#:weapon-list    (list (custom-weapon))
-#:item-list      (list
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                       (custom-item #:name     "Grow Potion"
-                                    #:sprite   (make-icon "BIG" 'red 'white)
-                                    #:on-use   (scale-sprite 2 #:for 100)
-                                    #:rarity   'common)))
+#:item-list      (list (health-potion)
+                       (max-health-potion)))

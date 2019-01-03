@@ -1,0 +1,11 @@
+#lang battle-arena
+(battle-arena-game
+<<<<<<< HEAD
+#:item-list (list (custom-item #:name   "Health Potion"
+                               #:sprite (make-icon "HP" 'green 'white)
+                               #:on-use (change-health-by 50))))
+=======
+#:item-list (list (custom-item #:name     "Health Potion"
+                               #:sprite   (make-icon "HP" 'green 'white)
+                               #:on-use   (change-health-by 50))))
+>>>>>>> cb36c4c502579e6715d62816e731de279d5b6fb6

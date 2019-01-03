@@ -1,7 +1,7 @@
 #lang info
 
 (define scribblings 
-  '(("scribblings/manual.scrbl" (multi-page))))
+  '(("scribblings/manual.scrbl" ())))
 
 (define deps '(
   "https://github.com/thoughtstem/game-engine.git"

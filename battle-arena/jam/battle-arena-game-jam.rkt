@@ -3,11 +3,11 @@
 
 (require scribble/srcdoc)
 
-(require game-engine
+(require (except-in game-engine
+                    change-health-by)
          game-engine-demos-common)
 
-(require (for-doc racket/base scribble/manual))
-
+(require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util)
 
@@ -18,6 +18,7 @@
 ;  If your change the contract, it will automatically change
 ;  the docs. 
 (provide plain-bg-entity
+
          spear
          sword
          paint
@@ -442,6 +443,82 @@
                                                    show))
                                 (storable)))
 
+(define/contract/doc (custom-item #:name         [n "Item"]
+                                  #:sprite       [s chest-sprite]
+                                  #:on-use       [f #f]
+                                  #:rarity       [r 'common]
+                                  #:respawn?     [respawn? #t]
+                                  #:components   [c #f]
+                                  . custom-entities)
+
+  (->i () (#:name [name string?]
+           #:sprite [sprite sprite?]
+           #:on-use [on-use any/c]
+           #:rarity [rarity rarity-level?]
+           #:respawn? [respawn boolean?]
+           #:components [first-component component?])
+       #:rest [more-components (listof component?)]
+       [returns entity?])
+
+  @{Returns a custom item, which will be placed int othe world
+              automatically if it is passed into @racket[battle-arena-game]
+              via the @racket[#:item-list] parameter.}
+  
+  (define new-entity
+    (sprite->entity s
+                  #:name n
+                  #:position (posn 0 0)
+                  #:components (physical-collider)
+                               (active-on-bg)
+                               (static)
+                               (hidden)
+                               (on-start (do-many (active-on-random)
+                                                  (respawn 'anywhere)
+                                                  show))
+                               (storage "rarity" r)
+                               (storage "on-use" f)
+                               (storable)
+                               (cons c custom-entities)))
+  (if respawn?
+      (add-components new-entity (on-key 'space #:rule (and/r near-player?
+                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                         (do-many (respawn 'anywhere)
+                                                  (active-on-random))))
+      (add-components new-entity (on-key 'space #:rule (and/r near-player?
+                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                         die))))
+
+; ==== BORDERLANDS STYLE POP UPS =====
+; todo: add to game-engine?
+(define (go-to-entity name #:offset [offset (posn 0 0)])
+  (lambda (g e)
+    (define target? (get-entity name g))
+    (if target?
+        (update-entity e posn? (posn-add (get-component target? posn?) offset))
+        e)))
+
+(define (text/shadow message size color)
+  (overlay/offset (freeze (text/font message size color "Arial" 'default 'normal 'normal #f))
+                  -1 1
+                  (freeze (text/font message size "black" "Arial" 'default 'normal 'normal #f))))
+
+(define (player-toast-entity message #:color [color "yellow"])
+  (sprite->entity (text/shadow message 16 color)
+                  #:name       "player toast"
+                  #:position   (posn 0 0)
+                  #:components (hidden)
+                               (layer "ui")
+                               (direction 270)
+                               ;(physical-collider)
+                               (speed 3)
+                               (on-start (do-many (go-to-entity "player" #:offset (posn 0 -20))
+                                                  (random-direction 240 300)
+                                                  (random-speed 2 4)
+                                                  show))
+                               (every-tick (do-many (move)
+                                                    (scale-sprite 1.05)))
+                               (after-time 15 die)))
+
 (define (entity-cloner entity amount)
   (map (thunk*
         (if (procedure? entity) (entity)
@@ -521,6 +598,9 @@
                        #:columns    cols
                        #:start-tile t
                        #:scale 4))
+
+
+
 
 (define/contract/doc (custom-avatar
                       #:sprite       [sprite (circle 10 'solid 'red)]
@@ -653,11 +733,30 @@
                                                     (begin (displayln "REMOVING ARMOR")
                                                            (update-entity e2 damage-processor?
                                                                           (divert-damage #:filter-out '(friendly-team passive))))))))
-    
+
+  (define (item-entity->player-system e #:use-key [use-key 'space])
+    (define item-name (get-name e))
+    (precompile! (player-toast-entity item-name))
+    (define on-use-func (get-storage-data "on-use" e))
+    (if on-use-func
+        (on-key use-key #:rule (and/r (player-is-near? item-name)
+                                      (nearest-entity-to-player-is? item-name))
+                (do-many on-use-func
+                         (spawn (player-toast-entity item-name))))
+        #f)
+    )
+  
+  (define (is-armor? e)
+    (get-storage "Armor" e))
+     
+  (define armor-list    (filter is-armor? item-list))
+  (define powerups-list (filter-not is-armor? item-list))
+  
   (define player-with-weapons
     (add-components p ;(weapon-selector #:slots 3)
                       (map weapon-entity->player-system weapon-list)
-                      (map armor-entity->player-system item-list)))
+                      (map armor-entity->player-system armor-list)
+                      (map item-entity->player-system powerups-list)))
 
   (define move-keys (if (eq? (get-key-mode p) 'wasd)
                         "WASD KEYS"
@@ -1144,3 +1243,80 @@
                                                        #:durability dur
                                                        #:speed      spd
                                                        #:range      rng)))))
+
+
+(define (is-weapon-component? c)
+    (and (on-start? c)
+         (eq? (on-start-rule c) mouse-in-game?)
+         (eq? (on-start-func c) point-to-mouse)))
+
+; POWER UP HANDLERS
+
+(provide set-health-to
+         change-health-by
+         set-shield-to
+         change-shield-by
+         change-damage-by)
+
+;change-damage-by
+;multiply-damage-by
+
+;Holy crap, why is this so hard.  WE need better tools for
+;  applying a function to all things spawned from some entity
+(define (change-damage-by n #:for [d #f])
+  (λ(g e)
+    (define (upgrade-bullet e)
+      (define a-damager (get-component e damager?))
+      (update-entity e damager? (set-damager-amount a-damager n)))
+    
+    (define (upgrade-weapon w)
+      (add-weapon-filter w
+                         upgrade-bullet))
+
+    (define old-weapons (get-components e weapon?))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ weapon?)
+          (add-components _ old-weapons)))
+
+    (~> e
+        (remove-components _ weapon?)
+        (add-components new-weapons)
+        (add-component _ (after-time d revert)))
+
+    
+    ))
+
+;change-fire-rate-by
+;multiply-fire-rate-by
+
+(define (set-health-to amt)
+  (lambda (g e)
+    (set-stat "health" e (max 0 (min 100 amt)))))
+
+(define (change-health-by amt)
+  (lambda (g e)
+    (define current-stat (get-stat "health" e))
+    (if (<= current-stat (- 100 amt))
+        (change-stat "health" e amt)
+        (set-stat "health" e 100))))
+
+(define (set-shield-to amt)
+  (lambda (g e)
+    (set-stat "shield" e (max 0 (min 100 amt)))))
+
+(define (change-shield-by amt)
+  (lambda (g e)
+    (define current-stat (get-stat "shield" e))
+    (if (<= current-stat (- 100 amt))
+        (change-stat "shield" e amt)
+        (set-stat "shield" e 100))))
+
+
+(module test racket
+  (displayln "TEST!!!")
+  )
+

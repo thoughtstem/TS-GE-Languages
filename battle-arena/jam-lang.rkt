@@ -12,6 +12,7 @@
 
 (require "jam/battle-arena-game-jam.rkt")
 (require ts-kata-util)
-(require game-engine)
+(require (except-in game-engine
+                    change-health-by))
 (require game-engine-demos-common)
 (require 2htdp/image)

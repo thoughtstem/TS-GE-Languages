@@ -1,6 +1,6 @@
 #lang battle-arena
 
-(define-kata-code battle-arena powerups-and-potions
+(define-kata-code battle-arena health-3
 
   (define (health-potion)
     (custom-item #:name     "Health Potion"

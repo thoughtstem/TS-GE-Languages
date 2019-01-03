@@ -1,6 +1,6 @@
 #lang battle-arena
 
-(define-kata-code battle-arena powerups-and-potions
+(define-kata-code battle-arena health-2
   
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Max Health Potion"

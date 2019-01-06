@@ -1,4 +1,5 @@
-#lang battle-arena
+#lang racket
+(require ts-kata-util battle-arena)
 
 ; ======= FORTNITE BATTLE GEAR - PAINTBALL WEAPONS =======
 #;(fortnite2d-game

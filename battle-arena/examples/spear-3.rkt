@@ -1,4 +1,5 @@
-#lang battle-arena
+#lang racket
+(require ts-kata-util battle-arena)
 
 (define-kata-code battle-arena spear-3
   (define (my-spear)

@@ -1,4 +1,5 @@
-#lang battle-arena
+#lang racket
+(require ts-kata-util battle-arena)
 
 (define-kata-code battle-arena enemy-2
   (define (my-enemy)
@@ -7,6 +8,6 @@
                   #:shield          100
                   #:amount-in-world 10))
 
-  (battle-arena-game
+  (boobs-game
    #:enemy-list (list (my-enemy)))
   )

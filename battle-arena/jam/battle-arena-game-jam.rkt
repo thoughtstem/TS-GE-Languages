@@ -232,7 +232,8 @@
                   (speed spd)
                   (direction 0)
                   (rotation-style 'left-right)
-                  custom-components))
+                  (cons c custom-components)
+                  ))
 
 
 
@@ -593,7 +594,7 @@
   @{Returns a custom background}
   
 
-  (bg->backdrop-entity (scale 0.25 FOREST-BG)
+  (bg->backdrop-entity (scale 0.25 bg)
                        #:rows       rows
                        #:columns    cols
                        #:start-tile t

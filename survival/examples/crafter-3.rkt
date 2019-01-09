@@ -1,4 +1,6 @@
-#lang survival
+#lang racket
+
+(require ts-kata-util survival)
  
 (define-kata-code survival crafter-3
 
@@ -17,8 +19,6 @@
 
   (survival-game
    #:avatar       (custom-avatar)
-   #:coin-list    (list (custom-coin))
    #:food-list    (list (custom-food #:amount-in-world 10)
                         (carrot-cake))
-   ;#:ememy-list     (list (custom-enemya))
    #:crafter-list (list (my-oven))))

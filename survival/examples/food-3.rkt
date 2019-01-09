@@ -1,5 +1,7 @@
-#lang survival
- 
+#lang racket
+
+(require ts-kata-util survival)
+
 (define-kata-code survival food-3
 
   (define (my-food)
@@ -10,5 +12,4 @@
 
   (survival-game
    #:avatar     (custom-avatar)
-   #:coin-list  (list (custom-coin))
    #:food-list  (list (my-food))))

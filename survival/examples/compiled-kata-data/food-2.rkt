@@ -5,5 +5,4 @@
 
 (survival-game
 #:avatar     (custom-avatar)
-#:coin-list  (list (custom-coin))
 #:food-list  (list (my-food)))

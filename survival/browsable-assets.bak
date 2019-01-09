@@ -135,5 +135,4 @@
 
 (module+ test
   ;(show-coin-sprites)
-  ;(show-food-sprites)
-  (show-enemy-sprites))
+  (show-food-sprites))

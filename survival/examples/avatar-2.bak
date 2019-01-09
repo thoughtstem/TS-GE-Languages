@@ -1,7 +1,5 @@
-#lang racket
-
-(require ts-kata-util survival)
-
+#lang survival
+ 
 (define-kata-code survival avatar-2
 
   (define (my-avatar)

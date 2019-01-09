@@ -43,10 +43,7 @@
                                   'solid 'darkgreen) 
                        #:scale 30))
 
-
-
-
-; === GAME DIALOG ===
+; === EXAMPLE GAME DIALOG ===
 (define (player-dialog)
   (list "Hello. What's your name?"
         "I'm lost and hungry, can you help me?"))
@@ -65,34 +62,44 @@
                             #:animated #t
                             #:speed 4))
 
-(define (instructions-entity)
+(define (instructions-entity #:move-keys  [move-keys "ARROW KEYS"]
+                             #:mouse-aim? [mouse-aim? #f])
+
+  (define (instruction->sprite text offset)
+    (new-sprite text #:y-offset offset #:color 'yellow))
+
+  (define i-list (filter identity (list (~a move-keys " to move")
+                                        (if mouse-aim?
+                                            "MOVE MOUSE to aim"
+                                            #f)
+                                        "SPACE to interact/use"
+                                        "ENTER to close dialogs"
+                                        "I to open these instructions"
+                                        "Z to pick up items"
+                                        "X to drop items")))
+  (define i-length (length i-list))
+  
   (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
   
   (define i
     (sprite->entity (~> bg
-                        (set-x-scale 260 _)
-                        (set-y-scale 150 _)
-                        (set-y-offset 60 _))
-                    #:position   (posn (/ (WIDTH) 2) 50)
+                        (set-x-scale 340 _)             
+                        (set-y-scale (* 25 i-length) _) 
+                        (set-y-offset 0 _))             
+                    #:position   (posn 0 0)
                     #:name       "instructions"
                     #:components (layer "ui")
-                    (on-key 'enter die)
-                    (on-key 'space die)
-                    (on-key "i" die)))
+                                 (hidden)
+                                 (on-start (do-many (go-to-pos 'center)
+                                                    show))
+                                 (on-key 'enter die)
+                                 (on-key 'space die)
+                                 (on-key "i" die)))
 
-  (add-components i
-                  (new-sprite "ARROW KEYS to move"
-                              #:y-offset 0 #:color 'yellow)
-                  (new-sprite "SPACE BAR to interact"
-                              #:y-offset 20 #:color 'yellow)
-                  (new-sprite "ENTER to select or close dialog"
-                              #:y-offset 40 #:color 'yellow)
-                  (new-sprite "I to open these instructions"
-                              #:y-offset 60 #:color 'yellow)
-                  (new-sprite "Z to pick up items"
-                              #:y-offset 80 #:color 'yellow)
-                  (new-sprite "X to drop items"
-                              #:y-offset 100 #:color 'yellow)))
+  (define last-y-pos (* 20 i-length))
+
+  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (/ last-y-pos 2) 20))
+                  ))
      
 ; ==== NEW HELPER SYSTEMS ====
 ; todo: maybe put this in game-engine?
@@ -119,24 +126,28 @@
 
 ; ==== BORDERLANDS STYLE POP UPS =====
 ; todo: add to game-engine?
-(define (go-to-entity name #:offset [offset (posn 0 0)])
+#|(define (go-to-entity name #:offset [offset (posn 0 0)])
   (lambda (g e)
     (define target? (get-entity name g))
     (if target?
         (update-entity e posn? (posn-add (get-component target? posn?) offset))
-        e)))
+        e)))|#
 
-(define (text/shadow message size color)
+#|(define (text/shadow message size color)
   (overlay/offset (freeze (text/font message size color "Arial" 'default 'normal 'normal #f))
                   -1 1
-                  (freeze (text/font message size "black" "Arial" 'default 'normal 'normal #f))))
+                  (freeze (text/font message size "black" "Arial" 'default 'normal 'normal #f))))|#
 
 (define (player-toast-entity message #:color [color "yellow"])
-  (sprite->entity (text/shadow message 16 color)
+  (define color-symbol (if (string? color)
+                           (string->symbol color)
+                           color))
+  (sprite->entity (new-sprite message #:x-offset -1 #:y-offset 1 #:color 'black)
                   #:name       "player toast"
                   #:position   (posn 0 0)
                   #:components (hidden)
                                (layer "ui")
+                               (new-sprite message #:color color-symbol)
                                (direction 270)
                                ;(physical-collider)
                                (speed 3)
@@ -162,11 +173,14 @@
 
 (define (kill-player-v2)
   (lambda (g e1 e2)
-    (define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
+    ;(define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
+    
     (if (lost? g e2)
         ((do-many remove-on-key
                   (stop-animation)
-                  (change-sprite (new-sprite dead-player-image))) g e2)
+                  ;(change-sprite (new-sprite dead-player-image))
+                  (rotate-sprite 90)
+                  ) g e2)
         e2)))
 
 (define (lost? g e)
@@ -197,7 +211,7 @@
   
   (if coin-value
       (list 
-            (precompiler coin-toast-entity)
+            ;(precompiler coin-toast-entity)
          ;   (apply precompiler (map (λ (num) (draw-dialog (~a "Gold: " num))) (range 0 (add1 (* 100 coin-value)) coin-value)))
             (on-key use-key #:rule (and/r (player-is-near? coin-name)
                                           (nearest-entity-to-player-is? coin-name #:filter (has-component? on-key?)))
@@ -239,7 +253,7 @@
                   #:components (physical-collider)
                                (sound-stream)
                                (damager 10 (list 'passive 'friendly-team))
-                               (precompiler dead-frame)
+                               ;(precompiler dead-frame)
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
@@ -552,10 +566,23 @@
   @{The top-level function for the surival-game language.
          Can be run with no parameters to get a basic, default game
          with nothing in it!}
+  
+  (define move-keys (if (eq? (get-key-mode p) 'wasd)
+                        "WASD KEYS"
+                        "ARROW KEYS"))
+
+  (define (mouse-aim-component? c)
+    (and (on-rule? c)
+         (eq? (on-rule-rule? c) mouse-in-game?)
+         (eq? (on-rule-func c) point-to-mouse)))
+
+  (define mouse-aim? (get-component p mouse-aim-component?))
 
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn instructions-entity #:relative? #f))))
+                                   (spawn (instructions-entity #:move-keys move-keys
+                                                               #:mouse-aim? mouse-aim?)
+                                          #:relative? #f))))
 
   (define (food->toast-entity f)
     (define heal-amt (get-storage-data "heals-by" f))
@@ -568,9 +595,9 @@
   (define player-with-recipes
     (if p
         (add-components p (map recipe->system known-recipes-list)
-                          (precompiler (player-toast-entity "-1" #:color "orangered"))
-                          (apply precompiler (map food->toast-entity f-list))
-                          (apply precompiler f-list)
+                          ;(precompiler (player-toast-entity "-1" #:color "orangered"))
+                          ;(apply precompiler (map food->toast-entity f-list))
+                          ;(apply precompiler f-list)
                           (map food->component f-list)
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
@@ -599,9 +626,9 @@
     (~> e
         (update-entity _ posn? (posn 100 20))
         (add-components _
-                        (precompiler (player-toast-entity "-1" #:color "orangered"))
-                        (apply precompiler (map food->toast-entity f-list))
-                        (apply precompiler f-list)
+                        ;(precompiler (player-toast-entity "-1" #:color "orangered"))
+                        ;(apply precompiler (map food->toast-entity f-list))
+                        ;(apply precompiler f-list)
                        ; (precompiler all-backpack-stacks)
                         (map food->component f-list)
                         (do-every starvation-period

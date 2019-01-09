@@ -95,9 +95,11 @@
                               #:y-offset 100 #:color 'yellow)))
      
 ; ==== NEW HELPER SYSTEMS ====
+; todo: maybe put this in game-engine?
 (define (entity-cloner entity amount)
   (map (thunk*
-        (if (procedure? entity) (entity) entity ))
+        (if (procedure? entity) (entity)
+            (clone-entity entity) ))
        (range amount)))
 
 (define/contract (clone-by-amount-in-world es)
@@ -898,13 +900,15 @@
    #:avatar (custom-avatar #:sprite (random-character-sprite))
    #:coin-list  (list (custom-coin))
    #:npc-list   (list (custom-npc))
-   #:enemy-list (list (curry custom-enemy #:amount-in-world 10)
-                      #;(custom-enemy #:sprite bat-sprite
+   #:enemy-list (list (custom-enemy #:sprite bat-sprite
                                     #:ai 'medium
                                     #:amount-in-world 5)
-                      #;(custom-enemy #:sprite slime-sprite
+                      (custom-enemy #:sprite slime-sprite
                                     #:ai 'easy
-                                    #:amount-in-world 10))
+                                    #:amount-in-world 10)
+                      ; adding curry allows each enemy to have a random sprite
+                      ;(curry custom-enemy #:amount-in-world 10) ;adding curry passes in as proc
+                      )
    #:food-list (list (custom-food #:name "Carrot"
                                   #:sprite carrot-sprite
                                   #:amount-in-world 30)

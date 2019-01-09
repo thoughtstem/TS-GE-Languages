@@ -8,6 +8,6 @@
                   #:shield          100
                   #:amount-in-world 10))
 
-  (boobs-game
+  (battle-arena-game
    #:enemy-list (list (my-enemy)))
   )

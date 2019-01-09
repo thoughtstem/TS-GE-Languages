@@ -1,10 +1,6 @@
 #lang at-exp racket
 
-(provide survival-game
-         
-         ;food
-         ;coin
-         crafting-menu-set!
+(provide crafting-menu-set!
          custom-crafter
          custom-npc
          custom-coin
@@ -105,7 +101,7 @@
        (range amount)))
 
 (define/contract (clone-by-amount-in-world es)
-  (-> (listof entity?) (listof (listof entity?)))
+  (-> (listof (or/c entity? procedure?)) (listof entity?))
 
   (define (f e)
     (define to-clone (if (procedure? e)
@@ -115,9 +111,9 @@
     (define n (if (get-storage "amount-in-world" to-clone)
                   (get-storage-data "amount-in-world" to-clone)
                   1))
-    (entity-cloner to-clone n))
+    (entity-cloner  e n))
 
-  (map f es))
+  (flatten (map f es)))
 
 ; ==== BORDERLANDS STYLE POP UPS =====
 ; todo: add to game-engine?
@@ -409,18 +405,23 @@
                                    #:sprite (s (first (shuffle (list slime-sprite bat-sprite snake-sprite))))
                                    #:ai (ai-level 'medium)
                                    #:health (health 99)
-                                   #:shield (shield 100)
+                                   ;#:shield (shield 100)
                                    #:weapon (weapon (custom-weapon #:name "Spitter"
                                                                    #:dart (acid)))
-                                   #:death-particles (particles (custom-particles)))
+                                   #:death-particles (particles (custom-particles))
+                                   #:components (c #f)
+                                   . custom-components
+                                   )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
            #:sprite [sprite sprite?]
            #:ai [ai ai-level?]
            #:health [health positive?]
-           #:shield [shield positive?]
+           ;#:shield [shield positive?]
            #:weapon [weapon entity?]
-           #:death-particles [death-particles entity?] )
+           #:death-particles [death-particles entity?]
+           #:components [first-component component?])
+       #:rest [more-components (listof component?)]
        [returns entity?])
 
   @{Creates a custom enemy that can be used in the enemy list
@@ -436,8 +437,8 @@
 
     (define c (~> e
                   (combatant
-                   #:stats (default-health+shields-stats health shield)
-                   #:damage-processor (divert-damage #:filter-out '(passive enemy-team))
+                   #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -15)))) ;(default-health+shields-stats health shield)
+                   #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team))
                              _)
                   ))
  
@@ -485,6 +486,7 @@
 
                     (enemy-ai (get-ai-from-level ai-level (get-storage-data "Weapon" weapon)))
                     ;(enemy-ai (get-ai-from-level ai-level weapon))
+                    (cons c custom-components)
                     ))
 
 
@@ -518,9 +520,9 @@
 ; ==== END OF CUSTOM ENEMY FUNCTIONS ====
 
 
-(define/log "surival-game"
-  (survival-game #:bg              [bg-ent (plain-bg-entity)]
-                 #:headless        [headless #f]
+(define/contract/doc
+  (survival-game #:headless        [headless #f]
+                 #:bg              [bg-ent (plain-bg-entity)]
                  #:avatar          [p         #f #;(custom-avatar)]
                  #:starvation-rate [sr 50]
                  #:npc-list        [npc-list  '() #;(list (random-npc (posn 200 200)))]
@@ -531,6 +533,23 @@
                  #:crafter-list    [c-list    '() #;(list (custom-crafter))]
                  #:other-entities  [ent #f]
                                    . custom-entities)
+  (->i ()
+       (#:headless [headless boolean?]
+        #:bg [bg entity?]
+        #:avatar [avatar entity?]
+        #:starvation-rate [starvation-rate number?]
+        #:npc-list   [npc-list     (listof (or/c entity? procedure?))]
+        #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
+        #:coin-list  [coin-list    (listof (or/c entity? procedure?))]
+        #:food-list  [food-list   (listof (or/c entity? procedure?))]
+        #:crafter-list [crafter-list (listof (or/c entity? procedure?))]
+        #:other-entities [other-entities (or/c #f (listof entity?))])
+       #:rest [rest (listof entity?)]
+       [res () game?])
+
+  @{The top-level function for the surival-game language.
+         Can be run with no parameters to get a basic, default game
+         with nothing in it!}
 
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
@@ -628,9 +647,9 @@
                        ;(map (λ (c) (entity-cloner c (get-storage-data "amount-in-world" c))) updated-coin-list)
                        ;(map (λ (f) (entity-cloner f (get-storage-data "amount-in-world" f))) updated-food-list)
                        
-                       (clone-by-amount-in-world (flatten updated-coin-list))
-                       (clone-by-amount-in-world (flatten updated-food-list))
-                       (clone-by-amount-in-world (flatten e-list))
+                       (clone-by-amount-in-world updated-coin-list)
+                       (clone-by-amount-in-world updated-food-list)
+                       (clone-by-amount-in-world e-list)
 
                        (cons ent custom-entities)
               
@@ -879,10 +898,11 @@
    #:avatar (custom-avatar #:sprite (random-character-sprite))
    #:coin-list  (list (custom-coin))
    #:npc-list   (list (custom-npc))
-   #:enemy-list (list (custom-enemy #:sprite bat-sprite
+   #:enemy-list (list (curry custom-enemy #:amount-in-world 10)
+                      #;(custom-enemy #:sprite bat-sprite
                                     #:ai 'medium
                                     #:amount-in-world 5)
-                      (custom-enemy #:sprite slime-sprite
+                      #;(custom-enemy #:sprite slime-sprite
                                     #:ai 'easy
                                     #:amount-in-world 10))
    #:food-list (list (custom-food #:name "Carrot"

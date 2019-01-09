@@ -130,7 +130,10 @@
                                    #:health (health 99)
                                    #:shield (shield 100)
                                    #:weapon (weapon (custom-weapon))
-                                   #:death-particles (particles (custom-particles)))
+                                   #:death-particles (particles (custom-particles))
+                                   #:components (c #f)
+                                   . custom-components
+                                   )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
            #:sprite [sprite sprite?]
@@ -138,7 +141,9 @@
            #:health [health positive?]
            #:shield [shield positive?]
            #:weapon [weapon entity?]
-           #:death-particles [death-particles entity?] )
+           #:death-particles [death-particles entity?]
+           #:components [first-component component?])
+       #:rest [more-components (listof component?)]
        [returns entity?])
 
   @{Creates a custom enemy that can be used in the enemy list
@@ -203,6 +208,7 @@
 
               (enemy-ai (get-ai-from-level ai-level (get-storage-data "Weapon" weapon)))
               ;(enemy-ai (get-ai-from-level ai-level weapon))
+              (cons c custom-components)
               ))
 
 
@@ -528,7 +534,7 @@
 
 
 (define/contract (clone-by-amount-in-world es)
-  (-> (listof entity?) (listof (listof entity?)))
+  (-> (listof (or/c procedure? entity?)) (listof entity?))
 
   (define (f e)
     (define to-clone (if (procedure? e)
@@ -538,12 +544,12 @@
     (define n (if (get-storage "amount-in-world" to-clone)
                   (get-storage-data "amount-in-world" to-clone)
                   1))
-    (entity-cloner to-clone n))
+    (entity-cloner e n))
 
-  (map f es))
+  (flatten (map f es)))
 
 (define/contract (clone-by-rarity es)
-  (-> (listof entity?) (listof (listof entity?)))
+  (-> (listof (or/c procedure? entity?)) (listof entity?))
 
   (define (f e)
     (define to-clone (if (procedure? e)
@@ -559,12 +565,12 @@
                     [(eq? rarity 'rare)      3]
                     [(eq? rarity 'epic)      2]
                     [(eq? rarity 'legendary) 1]))
-    (entity-cloner to-clone n))
+    (entity-cloner e n))
 
-  (map f es))
+  (flatten (map f es)))
 
 (define/contract (get-total-by-amount-in-world es)
-  (-> (listof entity?) number?)
+  (-> (listof (or/c entity? procedure?)) number?)
   (define (entity->amount e)
     (define to-clone (if (procedure? e)
                          (e)
@@ -710,9 +716,9 @@
        (#:headless [headless boolean?]
         #:bg [bg entity?]
         #:avatar [avatar entity?]
-        #:enemy-list [enemy-list   (listof entity?)]
-        #:weapon-list [weapon-list (listof entity?)]
-        #:item-list   [item-list   (listof entity?)]
+        #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
+        #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
+        #:item-list   [item-list   (listof (or/c entity? procedure?))]
         #:other-entities [other-entities (or/c #f (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -828,11 +834,11 @@
                        (round-tree (posn 322 59) #:tile 4 (damager 5 (list 'passive)))
 
                        ;(map (λ (w) (entity-cloner w 3)) weapon-list)
-                       (clone-by-rarity (flatten weapon-list))
+                       (clone-by-rarity weapon-list)
 
-                       (clone-by-rarity (flatten item-list))
+                       (clone-by-rarity item-list)
 
-                       (clone-by-amount-in-world (flatten e-list))
+                       (clone-by-amount-in-world e-list)
 
                        (cons ent custom-entities)
 

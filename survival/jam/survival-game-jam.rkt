@@ -422,8 +422,8 @@
            ;#:shield [shield positive?]
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
-           #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+           #:components [first-component any/c])
+       #:rest [more-components (listof any/c)]
        [returns entity?])
 
   @{Creates a custom enemy that can be used in the enemy list
@@ -898,7 +898,7 @@
   (survival-game
    #:bg     (custom-background #:bg-img SNOW-BG)
    #:avatar (custom-avatar #:sprite (random-character-sprite))
-   #:starvation-rate 100
+   #:starvation-rate 20
    #:coin-list  (list (custom-coin))
    #:npc-list   (list (custom-npc))
    #:enemy-list (list (custom-enemy #:sprite bat-sprite

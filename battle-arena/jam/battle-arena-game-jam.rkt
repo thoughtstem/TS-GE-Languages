@@ -719,7 +719,7 @@
         #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
         #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
-        #:other-entities [other-entities (or/c #f (listof entity?))])
+        #:other-entities [other-entities (or/c #f entity?)])
        #:rest [rest (listof entity?)]
        [res () game?])
 

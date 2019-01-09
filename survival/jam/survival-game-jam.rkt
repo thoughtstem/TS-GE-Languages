@@ -17,7 +17,7 @@
                     change-health-by)
          game-engine-demos-common)
 
-(require "../scoring/score.rkt")
+;(require "../scoring/score.rkt")
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -545,7 +545,7 @@
         #:coin-list  [coin-list    (listof (or/c entity? procedure?))]
         #:food-list  [food-list   (listof (or/c entity? procedure?))]
         #:crafter-list [crafter-list (listof (or/c entity? procedure?))]
-        #:other-entities [other-entities (or/c #f (listof entity?))])
+        #:other-entities [other-entities (or/c #f entity?)])
        #:rest [rest (listof entity?)]
        [res () game?])
 
@@ -726,10 +726,10 @@
   
   (define dialog
     (if (not d)
-        (dialog->sprites (first (shuffle (list (list "Hello.")
-                                           (list "Hi! Nice to meet you!")
-                                           (list "Sorry, I don't have time to talk now.")
-                                           (list "The weather is nice today."))))
+        (dialog->sprites (first (shuffle (list (list "It's dangerous out here!")
+                                               (list "You should find food to survive.")
+                                               (list "Sorry, I don't have time to talk now.")
+                                               (list "I'm hungry..."))))
                      #:game-width GAME-WIDTH
                      #:animated #t
                      #:speed 4)
@@ -896,8 +896,9 @@
 
 (module+ test
   (survival-game
-   #:bg     (custom-background)
+   #:bg     (custom-background #:bg-img SNOW-BG)
    #:avatar (custom-avatar #:sprite (random-character-sprite))
+   #:starvation-rate 100
    #:coin-list  (list (custom-coin))
    #:npc-list   (list (custom-npc))
    #:enemy-list (list (custom-enemy #:sprite bat-sprite
@@ -907,7 +908,7 @@
                                     #:ai 'easy
                                     #:amount-in-world 10)
                       ; adding curry allows each enemy to have a random sprite
-                      ;(curry custom-enemy #:amount-in-world 10) ;adding curry passes in as proc
+                      (curry custom-enemy #:amount-in-world 10)
                       )
    #:food-list (list (custom-food #:name "Carrot"
                                   #:sprite carrot-sprite

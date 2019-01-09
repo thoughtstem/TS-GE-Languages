@@ -1,4 +1,6 @@
-#lang survival
+#lang racket
+
+(require ts-kata-util survival)
  
 (define-kata-code survival coin-2
   

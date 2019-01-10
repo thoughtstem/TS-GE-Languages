@@ -222,7 +222,9 @@
 
 (define/contract/doc
   (custom-avatar #:sprite     [sprite (circle 10 'solid 'red)]
-                 #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive))]
+                 #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
+                                                              #:show-damage? #t
+                                                              )]
                  #:position   [p   (posn 100 100)]
                  #:speed      [spd 10]
                  #:key-mode   [key-mode 'arrow-keys]

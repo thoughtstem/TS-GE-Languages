@@ -7,3 +7,9 @@ Languages must also follow our Language Design Guidelines.
 
 API Docs should be present for any languages in this repo.
 Use inline docs with the `define/contract/doc` form.
+
+To make a new language:
+
+```
+raco new-language NAME-OF-Language
+```

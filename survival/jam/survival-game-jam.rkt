@@ -658,7 +658,8 @@
   (define es (filter identity
                      (flatten
                       (list
-                       (instructions-entity)
+                       (instructions-entity #:move-keys move-keys
+                                            #:mouse-aim? mouse-aim?)
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity) #f)
 

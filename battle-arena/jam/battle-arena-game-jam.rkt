@@ -1263,7 +1263,9 @@
          change-health-by
          set-shield-to
          change-shield-by
-         change-damage-by)
+         change-damage-by
+         multiply-damage-by
+         set-damage-to)
 
 ;change-damage-by
 ;multiply-damage-by

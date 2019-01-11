@@ -5,7 +5,8 @@
          custom-npc
          custom-coin
          custom-food
-         entity-cloner)
+         entity-cloner
+         player-toast-entity)
 
 (require scribble/srcdoc)
 
@@ -210,10 +211,7 @@
 
   
   (if coin-value
-      (list 
-            ;(precompiler coin-toast-entity)
-         ;   (apply precompiler (map (λ (num) (draw-dialog (~a "Gold: " num))) (range 0 (add1 (* 100 coin-value)) coin-value)))
-            (on-key use-key #:rule (and/r (player-is-near? coin-name)
+      (list (on-key use-key #:rule (and/r (player-is-near? coin-name)
                                           (nearest-entity-to-player-is? coin-name #:filter (has-component? on-key?)))
                     (do-many (change-counter-by coin-value)
                              (draw-counter-rpg #:prefix "Gold: ")
@@ -255,7 +253,6 @@
                   #:components (physical-collider)
                                (sound-stream)
                                (damager 10 (list 'passive 'friendly-team))
-                               ;(precompiler dead-frame)
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
@@ -597,9 +594,7 @@
   (define player-with-recipes
     (if p
         (add-components p (map recipe->system known-recipes-list)
-                          ;(precompiler (player-toast-entity "-1" #:color "orangered"))
-                          ;(apply precompiler (map food->toast-entity f-list))
-                          ;(apply precompiler f-list)
+                          (apply precompiler f-list)
                           (map food->component f-list)
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
@@ -628,10 +623,6 @@
     (~> e
         (update-entity _ posn? (posn 100 20))
         (add-components _
-                        ;(precompiler (player-toast-entity "-1" #:color "orangered"))
-                        ;(apply precompiler (map food->toast-entity f-list))
-                        ;(apply precompiler f-list)
-                       ; (precompiler all-backpack-stacks)
                         (map food->component f-list)
                         (do-every starvation-period
                                   (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f)))))

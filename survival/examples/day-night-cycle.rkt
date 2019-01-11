@@ -3,51 +3,57 @@
 (require ts-kata-util survival threading)
 
 (define-kata-code survival day-night-cycle
-  (define LENGTH-OF-DAY 2000)
-  (define (night-sky)
-    (sprite->entity (~> (new-sprite (square 1 'solid (make-color 0 0 0 100)))
+  ; CHANGEABLE BY STUDENTS:
+  (define LENGTH-OF-DAY 4800)
+  (define START-OF-DAYTIME (exact-round (* 0.25 LENGTH-OF-DAY)))
+  (define END-OF-DAYTIME   (exact-round (* 0.75 LENGTH-OF-DAY)))
+  (define MAX-ALPHA 150) ; max-darkness? out of 255
+  ; 'darkred 'midnightblue 'darkslategray 'darkmagenta 'indigo 'dimgray 'black
+  (define SKY-COLOR 'darkmagenta)
+  
+  (define (night-sky #:color         [color 'black]
+                     #:max-alpha     [max-alpha 180]
+                     #:length-of-day [length-of-day 2400])
+    (define update-interval (* 2 (/ length-of-day 2 max-alpha)))
+    (define c (name->color color))
+    (define r-val (color-red c))
+    (define g-val (color-green c))
+    (define b-val (color-blue c))
+    (define (update-night-sky g e)
+      (define game-count (get-counter (get-entity "time manager" g)))
+      (define time-of-day (modulo game-count length-of-day))
+      (define alpha-val (exact-round (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha))))
+      (define new-night-sky (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val alpha-val)))
+                                (set-x-scale 480 _)
+                                (set-y-scale 360 _)))
+      (update-entity e animated-sprite? new-night-sky))
+    (sprite->entity (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val max-alpha)))
                         (set-x-scale 480 _)
                         (set-y-scale 360 _))
                     #:position (posn 0 0)
                     #:name "night sky"
                     #:components (layer "tops")
                                  (hidden)
+                                 (apply precompiler
+                                        (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
+                                             (range 255)))
                                  (on-start (do-many (go-to-pos 'center)
                                                     show))
-                                 (on-rule  (reached-multiple-of? LENGTH-OF-DAY) die)))
+                                 (do-every update-interval update-night-sky)
+                                 ;(on-rule  (reached-multiple-of? LENGTH-OF-DAY) die)
+                                 ))
 
-  (define (day-time? g e)
-    (define game-count (get-counter (get-entity "time manager" g)))
-    (< (modulo game-count LENGTH-OF-DAY) (/ LENGTH-OF-DAY 2)))
-
+  ; === GENERIC TIME MANAGER FUNCTIONS ===
   (define (reached-multiple-of? num #:offset [offset 0])
     (lambda (g e)
       (define game-count (get-counter (get-entity "time manager" g)))
-      (= (modulo (+ game-count offset) num) 0)))
+      (= (- (modulo game-count num) offset) 0)))
 
-  (define (tm-entity)
-    (time-manager-entity
-     #:components (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset (/ LENGTH-OF-DAY 2))
-                           (do-many (spawn (night-sky) #:relative? #f)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    (spawn-on-current-tile random-enemy)
-                                    ))))
+  (define (start-stop-game-counter)
+    (lambda (g e)
+      (if (get-component e every-tick?)
+          (remove-component e every-tick?)
+          (add-components e (every-tick (change-counter-by 1))))))
 
   (define (game-count-between min max)
     (lambda (g e)
@@ -55,41 +61,83 @@
       (and (>= game-count min)
            (<= game-count max))))
   
+  ; ==== END OF TIME MANANGER FUNCTIONS ===
+
+  (define (tm-entity)
+    (time-manager-entity
+     #:components (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
+                           (do-many ;(spawn (night-sky) #:relative? #f)
+                                    (spawn (player-toast-entity "NIGHTTIME HAS BEGUN"))
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    (spawn-on-current-tile random-enemy)
+                                    ))
+                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
+                            (spawn (player-toast-entity "DAYTIME HAS BEGUN")))
+                   (on-key 't (start-stop-game-counter))
+     ))
+
+
+  ; === DAY/NIGHT FUNCTIONS FOR ENEMY ===
   (define (store-birth-time g e)
     (define game-count (get-counter (get-entity "time manager" g)))
     (add-components e (storage "birth-time" game-count)))
+
+  ; typically between 6am (600) and 6pm (1800)
+  (define (daytime? g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count LENGTH-OF-DAY))
+    (and (> time-of-day START-OF-DAYTIME)
+         (< time-of-day END-OF-DAYTIME)))
 
   (define (should-be-dead? g e)
     (define game-count (get-counter (get-entity "time manager" g)))
     (define birth-time (get-storage-data "birth-time" e))
     (and birth-time
-         (>= (- game-count birth-time) (/ LENGTH-OF-DAY 2))))
+         (>= (- game-count birth-time) (- END-OF-DAYTIME START-OF-DAYTIME))))
   
   (define (random-enemy)
     (custom-enemy #:amount-in-world 10
                   #:components (on-start store-birth-time)
-                               (on-rule day-time? die)
+                               (on-rule daytime? die)
                                (on-rule should-be-dead? die)))
-
   (survival-game
-   #:bg     (custom-background #:bg-img SNOW-BG)
+   #:bg     (custom-background #:bg-img FOREST-BG)
    #:avatar (custom-avatar #:sprite (random-character-sprite)
                            #:key-mode 'wasd
                            #:mouse-aim? #t)
    #:starvation-rate 20
-   ;#:coin-list  (list (custom-coin))
-   ;#:npc-list   (list (custom-npc))
-   ;#:enemy-list (list (curry custom-enemy #:amount-in-world 10
-   ;                                       #:components (on-rule (reached-game-count? 0) die))
-   #:food-list (list (custom-food #:name "Carrot"
-                                  #:sprite carrot-sprite
-                                  #:amount-in-world 10)
-                     (custom-food #:name "Carrot Stew"
-                                  #:sprite carrot-stew-sprite
-                                  #:heals-by 40
-                                  #:respawn? #f))
+   #:coin-list  (list (custom-coin))
+   #:npc-list   (list (custom-npc))
+   #:enemy-list (list (curry custom-enemy #:sprite slime-sprite
+                                          #:amount-in-world 10
+                                          #:ai 'easy))
+   #:food-list  (list (custom-food #:name "Carrot"
+                                   #:sprite carrot-sprite
+                                   #:amount-in-world 10)
+                      (custom-food #:name "Carrot Stew"
+                                   #:sprite carrot-stew-sprite
+                                   #:heals-by 40
+                                   #:respawn? #f))
    #:crafter-list (list (custom-crafter))
-   #:other-entities (tm-entity))
-
+   #:other-entities (tm-entity)
+                    (night-sky #:color         SKY-COLOR
+                               #:max-alpha     MAX-ALPHA
+                               #:length-of-day LENGTH-OF-DAY))
   )
 

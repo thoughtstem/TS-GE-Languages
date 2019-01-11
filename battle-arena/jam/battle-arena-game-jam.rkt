@@ -1263,7 +1263,9 @@
          change-health-by
          set-shield-to
          change-shield-by
-         change-damage-by)
+         change-damage-by
+         multiply-damage-by
+         set-damage-to)
 
 ;change-damage-by
 ;multiply-damage-by
@@ -1271,6 +1273,62 @@
 ;Holy crap, why is this so hard.  WE need better tools for
 ;  applying a function to all things spawned from some entity
 (define (change-damage-by n #:for [d #f])
+  (λ(g e)
+    (define (upgrade-bullet e)
+      (define a-damager (get-component e damager?))
+      (define old-amount (damager-amount a-damager))
+      (update-entity e damager? (set-damager-amount a-damager (+ old-amount n))))
+    
+    (define (upgrade-weapon w)
+      (add-weapon-filter w
+                         upgrade-bullet))
+
+    (define old-weapons (get-components e weapon?))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ weapon?)
+          (add-components _ old-weapons)))
+
+    (~> e
+        (remove-components _ weapon?)
+        (add-components new-weapons)
+        (add-component _ (after-time d revert)))
+
+    
+    ))
+
+(define (multiply-damage-by n #:for [d #f])
+  (λ(g e)
+    (define (upgrade-bullet e)
+      (define a-damager (get-component e damager?))
+      (define old-amount (damager-amount a-damager))
+      (update-entity e damager? (set-damager-amount a-damager (* old-amount n))))
+    
+    (define (upgrade-weapon w)
+      (add-weapon-filter w
+                         upgrade-bullet))
+
+    (define old-weapons (get-components e weapon?))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ weapon?)
+          (add-components _ old-weapons)))
+
+    (~> e
+        (remove-components _ weapon?)
+        (add-components new-weapons)
+        (add-component _ (after-time d revert)))
+
+    
+    ))
+
+(define (set-damage-to n #:for [d #f])
   (λ(g e)
     (define (upgrade-bullet e)
       (define a-damager (get-component e damager?))

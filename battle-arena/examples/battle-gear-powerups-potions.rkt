@@ -14,7 +14,11 @@
                                        #:rarity 'common)
                           (custom-item #:name   "Damage Boost"
                                        #:sprite (make-icon "DB" 'orangered)
-                                       #:on-use (change-damage-by 1000 #:for 200)
+                                       #:on-use (change-damage-by 100 #:for 200)
+                                       #:rarity 'rare)
+                          (custom-item #:name   "Damage Multiplier"
+                                       #:sprite (make-icon "DM" 'orange 'red)
+                                       #:on-use (multiply-damage-by 10 #:for 200)
                                        #:rarity 'epic)
                           #;(custom-item #:name   "Weapon Boost"
                                          #:sprite (make-icon "WB" 'lightblue)

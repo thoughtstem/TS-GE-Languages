@@ -4,10 +4,10 @@
 
 (define-kata-code survival day-night-cycle
   ; CHANGEABLE BY STUDENTS:
-  (define LENGTH-OF-DAY 4800)
-  (define START-OF-DAYTIME (exact-round (* 0.25 LENGTH-OF-DAY)))
-  (define END-OF-DAYTIME   (exact-round (* 0.75 LENGTH-OF-DAY)))
-  (define MAX-ALPHA 150) ; max-darkness? out of 255
+  (define LENGTH-OF-DAY 2400)
+  (define START-OF-DAYTIME (exact-round (* 0.1 LENGTH-OF-DAY)))
+  (define END-OF-DAYTIME   (exact-round (* 0.9 LENGTH-OF-DAY)))
+  (define MAX-ALPHA 150) ; max-darkness? min: 1 max: 255
   ; 'darkred 'midnightblue 'darkslategray 'darkmagenta 'indigo 'dimgray 'black
   (define SKY-COLOR 'darkmagenta)
   
@@ -43,31 +43,10 @@
                                  ;(on-rule  (reached-multiple-of? LENGTH-OF-DAY) die)
                                  ))
 
-  ; === GENERIC TIME MANAGER FUNCTIONS ===
-  (define (reached-multiple-of? num #:offset [offset 0])
-    (lambda (g e)
-      (define game-count (get-counter (get-entity "time manager" g)))
-      (= (- (modulo game-count num) offset) 0)))
-
-  (define (start-stop-game-counter)
-    (lambda (g e)
-      (if (get-component e every-tick?)
-          (remove-component e every-tick?)
-          (add-components e (every-tick (change-counter-by 1))))))
-
-  (define (game-count-between min max)
-    (lambda (g e)
-      (define game-count (get-counter (get-entity "time manager" g)))
-      (and (>= game-count min)
-           (<= game-count max))))
-  
-  ; ==== END OF TIME MANANGER FUNCTIONS ===
-
   (define (tm-entity)
     (time-manager-entity
      #:components (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many ;(spawn (night-sky) #:relative? #f)
-                                    (spawn (player-toast-entity "NIGHTTIME HAS BEGUN"))
+                           (do-many (spawn (player-toast-entity "NIGHTTIME HAS BEGUN"))
                                     (spawn-on-current-tile random-enemy)
                                     (spawn-on-current-tile random-enemy)
                                     (spawn-on-current-tile random-enemy)
@@ -116,25 +95,46 @@
                   #:components (on-start store-birth-time)
                                (on-rule daytime? die)
                                (on-rule should-be-dead? die)))
+  
+  (define (my-stew)
+    (custom-food #:name "Carrot Stew"
+                 #:sprite carrot-stew-sprite
+                 #:heals-by 40
+                 #:respawn? #f))
+  
   (survival-game
    #:bg     (custom-background #:bg-img FOREST-BG)
    #:avatar (custom-avatar #:sprite (random-character-sprite)
                            #:key-mode 'wasd
                            #:mouse-aim? #t)
    #:starvation-rate 20
+   
+   ; === MOCKUP CUSTOM-SKY KATA ===
+   #;#:sky #;(custom-sky #:night-sky-color  'darkmagenta
+                         #:length-of-day    4000
+                         #:start-of-daytime 1000
+                         #:end-of-daytime   3000 
+                         #:max-darkness     150
+                         )
+   
    #:coin-list  (list (custom-coin))
    #:npc-list   (list (custom-npc))
-   #:enemy-list (list (curry custom-enemy #:sprite slime-sprite
-                                          #:amount-in-world 10
-                                          #:ai 'easy))
+   #:enemy-list (list (custom-enemy #:sprite slime-sprite
+                                    #:amount-in-world 10
+                                    #:ai 'easy
+                                    #:weapon (custom-weapon #:dart (acid #:damage 0))
+                                    ;#:night-only? #t
+                                    ))
    #:food-list  (list (custom-food #:name "Carrot"
                                    #:sprite carrot-sprite
                                    #:amount-in-world 10)
-                      (custom-food #:name "Carrot Stew"
-                                   #:sprite carrot-stew-sprite
-                                   #:heals-by 40
-                                   #:respawn? #f))
-   #:crafter-list (list (custom-crafter))
+                      (my-stew)
+                      )
+   #:crafter-list (list (custom-crafter
+                         #:menu (crafting-menu-set!
+                                 #:recipes (recipe #:product (my-stew)
+                                                   #:build-time 20
+                                                   #:ingredients (list "Carrot")))))
    #:other-entities (tm-entity)
                     (night-sky #:color         SKY-COLOR
                                #:max-alpha     MAX-ALPHA

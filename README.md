@@ -2,6 +2,20 @@
 
 This repository organizes various teaching language implementations used at ThoughtSTEM.
 
+## Installation
+
+First install `ts-kata-util` in `TS-Kata-Collections` repo.
+
+Then
+
+```
+git clone https://github.com/thoughtstem/TS-Languages.git
+cd TS-Languages
+raco install-all-here
+```
+
+## Making new languages
+
 Languages in this repo must follow our Kata-based curriculum organizational conventions.
 Languages must also follow our Language Design Guidelines.
 

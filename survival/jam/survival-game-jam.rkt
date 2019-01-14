@@ -569,7 +569,7 @@
          Can be run with no parameters to get a basic, default game
          with nothing in it!}
   
-  (define move-keys (if (eq? (get-key-mode p) 'wasd)
+  (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
                         "WASD KEYS"
                         "ARROW KEYS"))
 
@@ -578,7 +578,8 @@
          (eq? (on-rule-rule? c) mouse-in-game?)
          (eq? (on-rule-func c) point-to-mouse)))
 
-  (define mouse-aim? (get-component p mouse-aim-component?))
+  (define mouse-aim? (and p
+                          (get-component p mouse-aim-component?)))
 
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))

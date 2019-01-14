@@ -12,8 +12,8 @@
   ))
 
 (define compile-omit-paths '(
-  "test" "scribblings" "examples"))
+  "test" "examples"))
 
-(define test-omit-paths '("doc" "scribblings" "jam" "scoring" "examples/compiled-kata-data"))
+(define test-omit-paths '("jam" "examples/compiled-example-data"))
 
 (define test-include-paths '( "examples/*.rkt"))

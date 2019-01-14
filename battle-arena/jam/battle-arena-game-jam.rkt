@@ -651,6 +651,7 @@
                                (sound-stream)
                                ;Handle deaths....
                                (precompiler dead-frame)
+                               (damager 10 (list 'passive 'friendly-team))
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)

@@ -6,7 +6,8 @@
          custom-coin
          custom-food
          entity-cloner
-         player-toast-entity)
+         player-toast-entity
+         acid)
 
 (require scribble/srcdoc)
 

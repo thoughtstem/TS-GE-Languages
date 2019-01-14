@@ -674,9 +674,9 @@
                                                           (add-component _
                                                                          (on-start
                                                                           (go-to-pos-inside 'top-left
-                                                                                            #:posn-offset (posn 10 20))))))))
+                                                                                            #:posn-offset (posn 10 23))))))))
 
-  (define sheild-bar (stat-progress-bar 'blue
+  (define sheild-bar (stat-progress-bar 'deepskyblue
                                         #:width 100
                                         #:height 10
                                         #:max 100

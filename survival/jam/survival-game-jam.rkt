@@ -1,10 +1,10 @@
 #lang at-exp racket
 
 (provide crafting-menu-set!
-         custom-crafter
-         custom-npc
-         custom-coin
-         custom-food
+         ;custom-crafter
+         ;custom-npc
+         ;custom-coin
+         ;custom-food
          entity-cloner
          player-toast-entity
          acid)
@@ -33,6 +33,8 @@
 (define (TOTAL-TILES) 9)
 
 (define sprite? (or/c image? animated-sprite?))
+
+(define dialog? (or/c (listof string?) (listof (listof string?))))
 
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
@@ -237,9 +239,9 @@
         #:speed [speed number?]
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
-        #:components [first-component component?]
+        #:components [first-component component-or-system?]
         )
-       #:rest (rest (listof component?))
+       #:rest (rest (listof component-or-system?))
        [returns entity?])
 
   @{Returns a custom avatar...}
@@ -718,12 +720,24 @@
                                         #:build-time 30
                                         #:ingredients (list "Carrot"))))
 
-(define (custom-crafter #:position   [p (posn 100 100)]
-                        #:tile       [t 0]
-                        #:name       [name "Crafter"]
-                        #:sprite     [sprite cauldron-sprite]
-                        #:menu       [menu  default-crafting-menu]
-                        #:components [c #f] . custom-components)
+(define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
+                                     #:tile       [t 0]
+                                     #:name       [name "Crafter"]
+                                     #:sprite     [sprite cauldron-sprite]
+                                     #:menu       [menu  default-crafting-menu]
+                                     #:components [c #f] . custom-components)
+  (->i ()
+       (#:position   [position posn?]
+        #:tile       [tile number?]
+        #:name       [name string?]
+        #:sprite     [sprite sprite?]
+        #:menu       [menu component-or-system?]
+        #:components [first-component component-or-system?])
+        #:rest       [more-components (listof component-or-system?)]
+        [result entity?])
+
+  @{Returns a custom crafter}
+  
   (crafting-chest p
                   #:sprite sprite
                   #:name   name
@@ -733,19 +747,37 @@
                                (cons c custom-components)))
 
 
-(define (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
-                    #:position   [p (posn 0 0)]
-                    #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
-                                                             "Sydney" "Charlie" "Andy")))]
-                    #:tile       [tile 0]
-                    #:dialog     [d  #f]
-                    #:mode       [mode 'wander]
-                    #:game-width [GAME-WIDTH 480]
-                    #:speed      [spd 2]
-                    #:target     [target "player"]
-                    #:sound      [sound #t]
-                    #:scale      [scale 1]
-                    #:components [c #f] . custom-components )
+(define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+                                 #:position   [p (posn 0 0)]
+                                 #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
+                                                                          "Sydney" "Charlie" "Andy")))]
+                                 #:tile       [tile 0]
+                                 #:dialog     [d  #f]
+                                 #:mode       [mode 'wander]
+                                 #:game-width [GAME-WIDTH 480]
+                                 #:speed      [spd 2]
+                                 #:target     [target "player"]
+                                 #:sound      [sound #t]
+                                 #:scale      [scale 1]
+                                 #:components [c #f] . custom-components )
+
+  (->i () (#:sprite     [sprite sprite?]
+           #:position   [position posn?]
+           #:name       [name string?]
+           #:tile       [tile number?]
+           #:dialog     [dialog dialog?]
+           #:mode       [mode (or/c 'still 'wander 'pace 'follow)]
+           #:game-width [game-width number?]
+           #:speed      [speed number?]
+           #:target     [target string?]
+           #:sound      [sound any/c]
+           #:scale      [scale number?]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Creates a custom npc that can be used in the npc list
+         of @racket[survival-game].}
   
   (define dialog
     (if (not d)
@@ -794,8 +826,8 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
-        #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+        #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background}
@@ -812,16 +844,32 @@
       (update-entity e component-pred f)
       e))
 
-(define (custom-food #:entity           [base-entity (carrot-entity)]
-                     #:sprite           [s #f]
-                     #:position         [p #f]
-                     #:name             [n #f]
-                     #:tile             [t #f]
-                     #:amount-in-world  [world-amt 0]
-                     #:heals-by         [heal-amt 10]
-                     #:respawn?         [respawn? #t]
-                     #:components       [c #f]
-                                        . custom-entities)
+(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
+                                  #:sprite           [s #f]
+                                  #:position         [p #f]
+                                  #:name             [n #f]
+                                  #:tile             [t #f]
+                                  #:amount-in-world  [world-amt 0]
+                                  #:heals-by         [heal-amt 10]
+                                  #:respawn?         [respawn? #t]
+                                  #:components       [c #f]
+                                  . custom-entities)
+  (->i () (#:entity     [entity entity?]
+           #:sprite     [sprite sprite?]
+           #:position   [position posn?]
+           #:name       [name string?]
+           #:tile       [tile number?]
+           #:amount-in-world [amount-in-world number?]
+           #:heals-by   [heal-amt number?]
+           #:respawn?   [respawn? boolean?]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom food, which will be placed into the world
+              automatically if it is passed into @racket[battle-arena-game]
+              via the @racket[#:coin-food] parameter.}
+  
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))
@@ -834,6 +882,7 @@
                          (safe-update-entity _ active-on-bg? tile)
                          (add-components _ (storage "amount-in-world" world-amt)
                                            (storage "heals-by"        heal-amt)
+                                           ;(static)
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
@@ -844,16 +893,33 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-(define (custom-coin #:entity           [base-entity (coin-entity)]
-                     #:sprite           [s #f]
-                     #:position         [p #f]
-                     #:name             [n #f]
-                     #:tile             [t #f]
-                     #:amount-in-world  [world-amt 10]
-                     #:value            [val 10]
-                     #:respawn?         [respawn? #t]
-                     #:components       [c #f]
-                                        . custom-entities)
+(define/contract/doc (custom-coin #:entity           [base-entity (coin-entity)]
+                                  #:sprite           [s #f]
+                                  #:position         [p #f]
+                                  #:name             [n #f]
+                                  #:tile             [t #f]
+                                  #:amount-in-world  [world-amt 10]
+                                  #:value            [val 10]
+                                  #:respawn?         [respawn? #t]
+                                  #:components       [c #f]
+                                  . custom-entities)
+
+   (->i () (#:entity   [entity entity?]
+            #:sprite   [sprite sprite?]
+            #:position [position posn?]
+            #:name     [name string?]
+            #:tile     [tile number?]
+            #:amount-in-world [amount-in-world number?]
+            #:value    [value number?]
+            #:respawn? [respawn boolean?]
+            #:components [first-component component-or-system?])
+        #:rest [more-components (listof component-or-system?)]
+        [returns entity?])
+
+  @{Returns a custom coin, which will be placed into the world
+              automatically if it is passed into @racket[battle-arena-game]
+              via the @racket[#:coin-list] parameter.}
+  
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))

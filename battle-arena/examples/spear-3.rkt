@@ -13,5 +13,4 @@
                    #:rarity 'common))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-1)))
-  )
+   #:weapon-list (list (my-weapon-1))))

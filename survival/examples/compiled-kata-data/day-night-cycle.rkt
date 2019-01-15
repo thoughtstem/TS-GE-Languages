@@ -1,33 +1,36 @@
 #lang survival
-(define (night-sky)
- (sprite->entity (new-sprite (rectangle 4.8 3.6 'solid (make-color 0 0 0 100))
-                             #:scale 100)
-                 #:position (posn 0 0)
-                 #:name "night sky"
-                 #:components (layer "ui")
-                              (hidden)
-                              (on-start (do-many (go-to-pos 'center)
-                                                 show))
-                              (on-rule  (reached-game-count? 1000) die)))
-
-(define (tm-entity)
- (time-manager-entity
-  #:components (on-rule (reached-game-count? 500)(spawn (night-sky) #:relative? #f))
-               (on-rule (reached-game-count? 1000) (set-counter 0))))
+(define (my-stew)
+ (custom-food #:name "Carrot Stew"
+              #:sprite carrot-stew-sprite
+              #:heals-by 40
+              #:respawn? #f))
 
 (survival-game
-#:bg     (custom-background #:bg-img SNOW-BG)
-#:avatar (custom-avatar #:sprite (random-character-sprite))
-#:starvation-rate -200
+#:bg     (custom-background #:bg-img FOREST-BG)
+#:avatar (custom-avatar #:sprite (random-character-sprite)
+                        #:key-mode 'wasd
+                        #:mouse-aim? #t)
+#:starvation-rate 20
 
+#:sky (custom-sky #:night-sky-color  'darkmagenta
+                  #:length-of-day    4000
+                  #:start-of-daytime 1000
+                  #:end-of-daytime   3000
+                  #:max-darkness     150)
 
-#:enemy-list (list (curry custom-enemy #:amount-in-world 10))
-#:food-list (list (custom-food #:name "Carrot"
-                               #:sprite carrot-sprite
-                               #:amount-in-world 10)
-                  (custom-food #:name "Carrot Stew"
-                               #:sprite carrot-stew-sprite
-                               #:heals-by 40
-                               #:respawn? #f))
-#:crafter-list (list (custom-crafter))
-#:other-entities (tm-entity))
+#:coin-list  (list (custom-coin))
+#:npc-list   (list (custom-npc))
+#:enemy-list (list (custom-enemy #:sprite slime-sprite
+                                 #:amount-in-world 10
+                                 #:ai 'easy
+                                 #:weapon (custom-weapon #:dart (acid #:damage 0))
+                                 #:night-only? #t))
+#:food-list  (list (custom-food #:name "Carrot"
+                                #:sprite carrot-sprite
+                                #:amount-in-world 10)
+                   (my-stew))
+#:crafter-list (list (custom-crafter
+                      #:menu (crafting-menu-set!
+                              #:recipes (recipe #:product (my-stew)
+                                                #:build-time 20
+                                                #:ingredients (list "Carrot"))))))

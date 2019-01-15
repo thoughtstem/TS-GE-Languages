@@ -9,4 +9,4 @@
 
 @defmodulelang[survival]
 
-@;(include-previously-extracted survival #rx".*")
+@(include-previously-extracted survival #rx".*")

@@ -14,6 +14,6 @@
 
 (define/contract/doc (starwars-game #:avatar (avatar (custom-jedi)))
   (->i () (#:avatar [avatar entity?]) (result game?))
-  @{This starts a game.}
+  @{This returns an avatar.}
   (battle-arena-game #:avatar avatar))
 

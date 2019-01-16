@@ -4,9 +4,11 @@
          starwars-battle-arena)
 
 
-(with-mappings-from
-    starwars-battle-arena/mappings
+(with-mappings-from starwars-battle-arena/mappings
+  
   (define-example-code/from*
     battle-arena
     starwars-battle-arena))
+
+(define-run:*)
 

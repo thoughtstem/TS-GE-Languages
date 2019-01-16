@@ -6,6 +6,6 @@
 @title{My TS-Language}
 @author{thoughtstem}
 
-@defmodulelang[language-pkg-name-here]
+@defmodulelang[starwars-battle-arena]
 
 @(include-previously-extracted "../main.rkt" #rx".*")

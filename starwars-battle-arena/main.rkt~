@@ -12,5 +12,5 @@
 
 (provide (all-from-out "./lang.rkt"))
 
-(require (except-in "./lang.rkt" exported))
+(require "./lang.rkt")
 

@@ -3,17 +3,9 @@
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
 
-@title{starwars-battle-arena}
+@title{My TS-Language}
 @author{thoughtstem}
 
 @defmodulelang[starwars-battle-arena]
 
-@section{Functions}
-
-@(include-extracted "../lang/main.rkt")
-
-@section{Image Assets}
-
-@(include-extracted "../assets.rkt")
-
-
+@(include-previously-extracted "../main.rkt" #rx".*")

@@ -4,11 +4,12 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util 2htdp/image 
+         "../assets.rkt"
          battle-arena)
 
 
-(define/contract/doc (custom-jedi #:sprite (sprite (circle 10 'solid 'blue)))
-  (->i () (#:sprite [sprite any/c]) (result entity?))
+(define/contract/doc (custom-jedi #:sprite (sprite (sheet->sprite twileck-jedi)))
+  (->i () (#:sprite [sprite sprite?]) (result entity?))
   @{This returns an avatar.}
   (custom-avatar #:sprite sprite))
 

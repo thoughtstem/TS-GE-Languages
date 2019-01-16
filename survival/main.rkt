@@ -17,3 +17,7 @@
 
 (module reader syntax/module-reader
   survival/jam-lang)
+
+(provide (all-from-out "./jam-lang.rkt"))
+
+(require "./jam-lang.rkt")

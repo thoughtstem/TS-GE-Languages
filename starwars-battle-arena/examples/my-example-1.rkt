@@ -1,6 +1,11 @@
 #lang racket
 
 (require ts-kata-util
-  starwars-battle-arena)
+         starwars-battle-arena)
 
-(define-example-code/from battle-arena avatar-1)
+
+(require (prefix-in map: starwars-battle-arena/mappings))
+
+#;(with-substitutions-from (submod starwars-battle-arena 'mappings)
+    (define-example-code/from* battle-arena))
+

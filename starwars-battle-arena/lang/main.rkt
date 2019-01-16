@@ -12,7 +12,14 @@
 (define custom-jedi   ba:custom-avatar)
 (define starwars-game ba:battle-arena-game)
 
+
 (define/contract/doc (custom-circle #:color (color "red"))
   (->i () (#:color [color string?]) (result image?))
   @{This returns a fixed-size red circle.  But you can customize the color.}
   (circle 40 'solid color))
+
+
+(define/contract/doc (custom-square #:color (color "red"))
+  (->i () (#:color [color string?]) (result image?))
+  @{This returns a fixed-size red square.  But you can customize the color.}
+  (square 40 'solid color))

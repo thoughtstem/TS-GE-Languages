@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-dart)
  (custom-dart
   #:damage 5
@@ -10,7 +10,7 @@
   #:name      "Repeator"
   #:dart      (my-dart)))
 
-(battle-arena-game
+(starwars-game
 #:enemy-list (list (custom-enemy
                     #:weapon (my-weapon))))
 

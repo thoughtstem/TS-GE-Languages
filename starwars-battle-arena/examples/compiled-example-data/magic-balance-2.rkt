@@ -1,5 +1,5 @@
-#lang battle-arena
-(battle-arena-game
+#lang starwars-battle-arena
+(starwars-game
 #:weapon-list (list (custom-weapon #:name "Heavy Magic"
                                    #:dart (custom-dart #:sprite (scale 2 flame-sprite)
                                                        #:damage 200

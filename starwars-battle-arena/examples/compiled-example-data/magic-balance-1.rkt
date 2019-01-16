@@ -1,5 +1,5 @@
-#lang battle-arena
-(battle-arena-game
+#lang starwars-battle-arena
+(starwars-game
 #:weapon-list (list (custom-weapon #:name "Light Magic"
                                    #:dart (custom-dart #:sprite flame-sprite
                                                        #:damage 20

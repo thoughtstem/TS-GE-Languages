@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-spear)
  (custom-dart #:position (posn 20 0)
               #:sprite spear-sprite
@@ -49,9 +49,9 @@
               (every-tick (do-many (scale-sprite 1.05)
                                    (change-direction-by 10)))))
 
-(battle-arena-game
+(starwars-game
 #:bg              (custom-background)
-#:avatar          (custom-avatar #:sprite      (row->sprite (random-character-row))
+#:avatar          (custom-jedi #:sprite      (row->sprite (random-character-row))
                                  #:key-mode    'wasd
                                  #:mouse-aim?  #t)
 

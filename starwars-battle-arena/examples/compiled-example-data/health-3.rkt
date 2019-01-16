@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (health-potion)
  (custom-item #:name     "Health Potion"
               #:sprite   (make-icon "HP" 'green 'white)
@@ -12,7 +12,7 @@
               #:on-use (set-health-to 100)
               #:rarity 'epic))
 
-(battle-arena-game
+(starwars-game
 #:item-list      (list (health-potion)
                        (max-health-potion)))
 

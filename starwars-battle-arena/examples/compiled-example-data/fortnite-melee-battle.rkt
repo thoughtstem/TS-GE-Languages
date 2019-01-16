@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-sword-bullet)
  (custom-dart #:position (posn 10 0)
               #:sprite sword-bullet-sprite
@@ -18,9 +18,9 @@
               #:components (on-start (set-size 0.5))
               (every-tick (scale-sprite 1.1))))
 
-(battle-arena-game
+(starwars-game
 #:bg              (custom-background)
-#:avatar          (custom-avatar #:sprite      (row->sprite (random-character-row))
+#:avatar          (custom-jedi #:sprite      (row->sprite (random-character-row))
                                  #:key-mode    'wasd
                                  #:mouse-aim?  #t)
 #:weapon-list     (list (custom-weapon #:sprite SWORD-ICON

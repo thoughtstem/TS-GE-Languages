@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (heavy-dart)
  (custom-dart #:sprite (scale 2 flame-sprite)
               #:damage 200
@@ -17,7 +17,7 @@
               #:components
               (move-in-ring)))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (custom-weapon #:name "Heavy Magic"
                                    #:dart (heavy-dart)
                                    #:rarity 'uncommon)

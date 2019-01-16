@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-paint)
  (paint #:damage     10
         #:durability 20))
@@ -9,6 +9,6 @@
                 #:dart   (my-paint)
                 #:rarity 'epic))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (my-weapon-3)))
 

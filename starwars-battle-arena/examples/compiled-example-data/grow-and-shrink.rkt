@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (grow-potion)
  (custom-item #:name   "Grow Potion"
               #:sprite (make-icon "BIG" 'red 'white)
@@ -11,7 +11,7 @@
               #:on-use   (scale-sprite 0.5 #:for 100)
               #:rarity   'rare))
 
-(battle-arena-game
+(starwars-game
 #:item-list      (list (grow-potion)
                        (shrink-potion)))
 

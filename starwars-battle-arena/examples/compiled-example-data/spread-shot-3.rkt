@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (spread-dart)
  (custom-dart #:sprite     (rectangle 10 2 'solid 'orange)
               #:damage     20
@@ -12,6 +12,6 @@
                 #:dart      (spread-dart)
                 #:rarity    'rare))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list    (list (spread-shot)))
 

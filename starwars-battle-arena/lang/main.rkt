@@ -3,23 +3,17 @@
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
-(require ts-kata-util 2htdp/image
-         (prefix-in ba: battle-arena))
-
-(provide starwars-game
-         custom-jedi)
-
-(define custom-jedi   ba:custom-avatar)
-(define starwars-game ba:battle-arena-game)
+(require ts-kata-util 2htdp/image 
+         battle-arena)
 
 
-(define/contract/doc (custom-circle #:color (color "red"))
-  (->i () (#:color [color string?]) (result image?))
-  @{This returns a fixed-size red circle.  But you can customize the color.}
-  (circle 40 'solid color))
+(define/contract/doc (custom-jedi #:sprite (sprite (circle 10 'solid 'blue)))
+  (->i () (#:sprite [sprite any/c]) (result entity?))
+  @{This returns an avatar.}
+  (custom-avatar #:sprite sprite))
 
+(define/contract/doc (starwars-game #:avatar (avatar (custom-jedi)))
+  (->i () (#:avatar [avatar entity?]) (result game?))
+  @{This returns an avatar.}
+  (battle-arena-game #:avatar avatar))
 
-(define/contract/doc (custom-square #:color (color "red"))
-  (->i () (#:color [color string?]) (result image?))
-  @{This returns a fixed-size red square.  But you can customize the color.}
-  (square 40 'solid color))

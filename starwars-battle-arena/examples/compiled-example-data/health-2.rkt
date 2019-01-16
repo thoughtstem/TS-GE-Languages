@@ -1,6 +1,6 @@
-#lang battle-arena
-(battle-arena-game
-#:avatar         (custom-avatar #:sprite (random-character-sprite)
+#lang starwars-battle-arena
+(starwars-game
+#:avatar         (custom-jedi #:sprite (random-character-sprite)
                                 #:item-slots 3)
 #:enemy-list     (list (custom-enemy #:ai 'easy
                                      #:amount-in-world 10))

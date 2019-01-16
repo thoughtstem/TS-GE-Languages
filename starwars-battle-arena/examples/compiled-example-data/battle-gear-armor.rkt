@@ -1,6 +1,6 @@
-#lang battle-arena
-(battle-arena-game
-#:avatar         (custom-avatar #:sprite (random-character-sprite))
+#lang starwars-battle-arena
+(starwars-game
+#:avatar         (custom-jedi #:sprite (random-character-sprite))
 #:enemy-list     (list (custom-enemy #:ai 'medium
                                      #:amount-in-world 10
                                      #:weapon (custom-weapon #:name "Light Repeater"

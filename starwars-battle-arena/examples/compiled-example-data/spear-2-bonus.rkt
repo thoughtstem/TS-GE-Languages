@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-weapon-1)
  (custom-weapon #:name              "Spear"
                 #:sprite            SPEAR-ICON
@@ -7,6 +7,6 @@
                 #:mouse-fire-button 'left
                 #:rapid-fire?       #f))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (my-weapon-1)))
 

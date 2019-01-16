@@ -1,9 +1,9 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-avatar)
- (custom-avatar #:sprite     STUDENT-IMAGE-HERE
+ (custom-jedi #:sprite     STUDENT-IMAGE-HERE
                 #:key-mode   'wasd
                 #:mouse-aim? #t))
 
-(battle-arena-game
+(starwars-game
 #:avatar (my-avatar))
 

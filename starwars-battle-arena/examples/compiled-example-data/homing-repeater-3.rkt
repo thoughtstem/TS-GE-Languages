@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (homing-dart)
  (custom-dart #:sprite (rectangle 10 2 'solid 'pink)
               #:damage 15
@@ -12,6 +12,6 @@
                 #:dart      (homing-dart)
                 #:rarity    'epic))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list    (list (hoaming-shot)))
 

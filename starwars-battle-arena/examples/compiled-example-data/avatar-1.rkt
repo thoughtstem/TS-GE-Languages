@@ -1,4 +1,4 @@
-#lang battle-arena
-(battle-arena-game
-#:avatar (custom-avatar))
+#lang starwars-battle-arena
+(starwars-game
+#:avatar (custom-jedi))
 

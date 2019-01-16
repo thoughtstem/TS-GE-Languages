@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (damage-boost)
  (custom-item #:name   "Damage Boost"
               #:sprite (make-icon "DB" 'orangered)
@@ -11,7 +11,7 @@
               #:on-use (multiply-speed-by 2 #:for 200)
               #:rarity 'uncommon))
 
-(battle-arena-game
+(starwars-game
 #:item-list (list (damage-boost)
                   (speed-boost)))
 

@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (single-dart)
  (custom-dart #:sprite (rectangle 10 2 'solid 'cyan)
               #:damage 10
@@ -13,6 +13,6 @@
                 #:rapid-fire? #f
                 #:rarity      'common))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (single-shot)))
 

@@ -1,7 +1,7 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-avatar)
- (custom-avatar #:sprite (random-character-sprite)))
+ (custom-jedi #:sprite (random-character-sprite)))
 
-(battle-arena-game
+(starwars-game
 #:avatar (my-avatar))
 

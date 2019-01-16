@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-sword)
  (sword #:damage     50
         #:durability 20))
@@ -8,6 +8,6 @@
                 #:sprite STUDENT-IMAGE-HERE
                 #:dart   (my-sword)))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (my-weapon-2)))
 

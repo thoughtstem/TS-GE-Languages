@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (shield-potion)
  (custom-item #:name     "Shield Potion"
               #:sprite   (make-icon "SP" 'blue 'white)
@@ -12,7 +12,7 @@
               #:on-use   (set-shield-to 100)
               #:rarity   'epic))
 
-(battle-arena-game
+(starwars-game
 #:item-list (list (shield-potion)
                   (max-shield)))
 

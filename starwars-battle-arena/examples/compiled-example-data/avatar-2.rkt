@@ -1,4 +1,4 @@
-#lang battle-arena
-(battle-arena-game
-#:avatar (custom-avatar #:sprite (circle 30 'solid 'blue)))
+#lang starwars-battle-arena
+(starwars-game
+#:avatar (custom-jedi #:sprite (circle 30 'solid 'blue)))
 

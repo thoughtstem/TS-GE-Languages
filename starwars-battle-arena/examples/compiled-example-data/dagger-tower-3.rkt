@@ -1,5 +1,5 @@
-#lang battle-arena
-(battle-arena-game
+#lang starwars-battle-arena
+(starwars-game
 #:weapon-list (list (custom-weapon
                      #:name "Dagger Tower"
                      #:sprite (make-icon "RT")

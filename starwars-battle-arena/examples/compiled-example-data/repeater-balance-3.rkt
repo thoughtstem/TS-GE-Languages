@@ -1,4 +1,4 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (heavy-dart)
  (custom-dart #:sprite (scale 2 paint-sprite)
               #:damage 500
@@ -13,7 +13,7 @@
               #:speed  30
               #:range  50))
 
-(battle-arena-game
+(starwars-game
 #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
                                    #:dart (heavy-dart)
                                    #:rarity 'uncommon)

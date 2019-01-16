@@ -1,8 +1,8 @@
-#lang battle-arena
+#lang starwars-battle-arena
 (define (my-avatar)
- (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
+ (custom-jedi #:sprite (sheet->sprite STUDENT-IMAGE-HERE
                                         #:columns 3)))
 
-(battle-arena-game
+(starwars-game
 #:avatar (my-avatar))
 

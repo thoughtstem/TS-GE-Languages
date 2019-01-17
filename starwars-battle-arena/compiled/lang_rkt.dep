@@ -1,1 +1,0 @@
-("7.0" ("ca8460c8fa5e9bb9e5d4b5afd060c563b4ef2a09" . "68e828020674c29c02b76a58b855b38ff7608f22") (collects #"2htdp" #"image.rkt") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena" #"main.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"starwars-battle-arena" #"lang" #"main.rkt"))

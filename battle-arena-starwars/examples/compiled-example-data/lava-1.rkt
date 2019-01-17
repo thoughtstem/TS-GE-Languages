@@ -1,0 +1,7 @@
+#lang battle-arena-starwars
+(starwars-game
+#:weapon-list (list (custom-weapon
+                     #:name "Lava Pit"
+                     #:sprite (make-icon "LP")
+                     #:dart (lava-builder))))
+

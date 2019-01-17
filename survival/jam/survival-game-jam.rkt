@@ -894,11 +894,12 @@
   @{Returns a custom background}
   
 
-  (bg->backdrop-entity (scale 0.25 bg)
+  (add-components (bg->backdrop-entity (scale 0.25 bg)
                        #:rows       rows
                        #:columns    cols
                        #:start-tile t
-                       #:scale 4))
+                       #:scale 4)
+                  (cons c custom-components)))
 
 (define (safe-update-entity e component-pred f)
   (if f

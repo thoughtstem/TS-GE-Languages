@@ -9,4 +9,4 @@
 
 @defmodulelang[survival]
 
-@(include-previously-extracted survival #rx".*")
+@(include-extracted "../jam/survival-game-jam.rkt")

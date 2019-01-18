@@ -30,14 +30,15 @@
            custom-avatar)
 
   (require syntax/parse)
+
   
   (define-syntax (battle-arena-game stx)
     (syntax-case stx ()
       [(_)          #`(starwars-game)]
       [(_ expr ...) #`(starwars-game expr ...)]
-      [_ stx]
-      ))
+      [_ stx]))
 
+  
   (define-syntax (custom-avatar stx)
     (syntax-case stx ()
       [(_)          #`(custom-jedi)]

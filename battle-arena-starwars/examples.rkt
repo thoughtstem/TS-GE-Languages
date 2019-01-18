@@ -11,9 +11,7 @@
       (begin (custom-avatar))
       (battle-arena-game
        #:avatar
-       (custom-avatar)
-
-       )))
+       (custom-avatar))))
 
 
 (require macro-debugger/expand)

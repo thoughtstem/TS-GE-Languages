@@ -3,7 +3,10 @@
 (provide crafting-menu-set!
          entity-cloner
          player-toast-entity
-         acid)
+         acid
+         plain-bg
+         plain-color-bg
+         plain-forest-bg)
 
 (require scribble/srcdoc)
 
@@ -40,7 +43,7 @@
                                  #:length-of-day    [day-length 2400]
                                  #:start-of-daytime [day-start #f]
                                  #:end-of-daytime   [day-end   #f]
-                                 #:max-darkness     [max-alpha 180])
+                                 #:max-darkness     [max-alpha 160])
   (->i () (#:night-sky-color  [color (or/c string? symbol?)]
            #:length-of-day    [day-length number?]
            #:start-of-daytime [day-start  number?]
@@ -92,10 +95,41 @@
                                  ))
 
 ; === ENTITY DEFINITIONS ===
-(define (plain-bg-entity)
-  (bg->backdrop-entity (rectangle 48 36 ;Can even be smaller...
+(define (plain-bg)
+  (bg->backdrop-entity (rectangle 4 3
                                   'solid 'darkgreen) 
-                       #:scale 30))
+                       #:scale 360)) ; should scale to 3x 480 by 360 or 1440 by 1080
+
+(define (plain-color-bg)
+  (bg->backdrop-entity (above (beside (rectangle 4 3 'solid (color 0 128 0))
+                                      (rectangle 4 3 'solid (color 143 151 8))
+                                      (rectangle 4 3 'solid (color 141 104 0)))
+                              (beside (rectangle 4 3 'solid (color 151 57 8))
+                                      (rectangle 4 3 'solid (color 128 0 21))
+                                      (rectangle 4 3 'solid (color 110 8 151)))
+                              (beside (rectangle 4 3 'solid (color 0 3 141))
+                                      (rectangle 4 3 'solid (color 7 74 141))
+                                      (rectangle 4 3 'solid (color 8 151 118))))
+                       #:scale 120)) ; should scale to 3x 480 by 360 or 1440 by 1080
+
+(define (plain-forest-bg)
+  (bg->backdrop-entity (foldl (λ (image base)
+                                (place-image image
+                                             (random 24) (random 18)
+                                             base))
+                              (rectangle 24 18 'solid (color 190 143 82))
+                              (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+                                    (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+                                    (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
+                                    (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+                                    (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+                                    (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
+                                    (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+                                    (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+                                    (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+                                    (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+                                    ))
+                       #:scale 60))
 
 ; === EXAMPLE GAME DIALOG ===
 (define (player-dialog)
@@ -575,7 +609,7 @@
 
 (define/contract/doc
   (survival-game #:headless        [headless #f]
-                 #:bg              [bg-ent (plain-bg-entity)]
+                 #:bg              [bg-ent (plain-forest-bg)]
                  #:avatar          [p         #f #;(custom-avatar)]
                  #:starvation-rate [sr 50]
                  #:sky             [sky (custom-sky)]

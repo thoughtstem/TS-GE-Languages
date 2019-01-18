@@ -7,9 +7,11 @@
          "../assets.rkt"
          battle-arena)
 
-(provide (except-out (all-from-out battle-arena)
-                     battle-arena-game
-                     custom-avatar))
+
+(language-mappings battle-arena       starwars-battle-arena
+                   [custom-avatar     custom-jedi]
+                   [battle-arena-game starwars-game])
+
 
 (define sprite? (or/c image? animated-sprite?))
 
@@ -24,26 +26,4 @@
   @{This starts a game.}
   (battle-arena-game #:avatar avatar))
 
-
-(module+ mappings
-  (provide battle-arena-game
-           custom-avatar)
-
-  (require syntax/parse)
-
-  
-  (define-syntax (battle-arena-game stx)
-    (syntax-case stx ()
-      [(_)          #`(starwars-game)]
-      [(_ expr ...) #`(starwars-game expr ...)]
-      [_ stx]))
-
-  
-  (define-syntax (custom-avatar stx)
-    (syntax-case stx ()
-      [(_)          #`(custom-jedi)]
-      [(_ expr ...) #`(custom-jedi expr ...)]
-      [_ stx]))
-
-  )
 

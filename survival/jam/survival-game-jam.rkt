@@ -95,41 +95,77 @@
                                  ))
 
 ; === ENTITY DEFINITIONS ===
-(define (plain-bg)
-  (bg->backdrop-entity (rectangle 4 3
-                                  'solid 'darkgreen) 
-                       #:scale 360)) ; should scale to 3x 480 by 360 or 1440 by 1080
+(define (plain-bg #:bg-img     [bg (rectangle 4 3
+                                  'solid 'darkgreen)]
+                  #:scale      [scale 360] ; should scale to 3x 480 by 360 or 1440 by 1080
+                  #:rows       [rows 3]
+                  #:columns    [cols 3]
+                  #:start-tile [t 0]
+                  #:components [c #f]
+                  . custom-components)
+  (add-components (bg->backdrop-entity bg
+                       #:rows       rows
+                       #:columns    cols
+                       #:start-tile t
+                       #:scale scale)
+                  (cons c custom-components)))
 
-(define (plain-color-bg)
-  (bg->backdrop-entity (above (beside (rectangle 4 3 'solid (color 0 128 0))
-                                      (rectangle 4 3 'solid (color 143 151 8))
-                                      (rectangle 4 3 'solid (color 141 104 0)))
-                              (beside (rectangle 4 3 'solid (color 151 57 8))
-                                      (rectangle 4 3 'solid (color 128 0 21))
-                                      (rectangle 4 3 'solid (color 110 8 151)))
-                              (beside (rectangle 4 3 'solid (color 0 3 141))
-                                      (rectangle 4 3 'solid (color 7 74 141))
-                                      (rectangle 4 3 'solid (color 8 151 118))))
-                       #:scale 120)) ; should scale to 3x 480 by 360 or 1440 by 1080
+(define (draw-color-bg)
+  (above (beside (rectangle 4 3 'solid (color 0 128 0))
+                 (rectangle 4 3 'solid (color 143 151 8))
+                 (rectangle 4 3 'solid (color 141 104 0)))
+         (beside (rectangle 4 3 'solid (color 151 57 8))
+                 (rectangle 4 3 'solid (color 128 0 21))
+                 (rectangle 4 3 'solid (color 110 8 151)))
+         (beside (rectangle 4 3 'solid (color 0 3 141))
+                 (rectangle 4 3 'solid (color 7 74 141))
+                 (rectangle 4 3 'solid (color 8 151 118)))))
 
-(define (plain-forest-bg)
-  (bg->backdrop-entity (foldl (λ (image base)
-                                (place-image image
-                                             (random 24) (random 18)
-                                             base))
-                              (rectangle 24 18 'solid (color 190 143 82))
-                              (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
-                                    (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
-                                    (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
-                                    (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
-                                    (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
-                                    (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
-                                    (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
-                                    (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
-                                    (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
-                                    (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
-                                    ))
-                       #:scale 60))
+(define (plain-color-bg #:bg-img     [bg (draw-color-bg)]
+                        #:scale      [scale 120] ; should scale to 3x 480 by 360 or 1440 by 1080
+                        #:rows       [rows 3]
+                        #:columns    [cols 3]
+                        #:start-tile [t 0]
+                        #:components [c #f]
+                        . custom-components)
+  (add-components (bg->backdrop-entity bg
+                       #:rows       rows
+                       #:columns    cols
+                       #:start-tile t
+                       #:scale scale)
+                  (cons c custom-components)))
+
+(define (draw-plain-forest-bg)
+  (foldl (λ (image base)
+           (place-image image
+                        (random 24) (random 18)
+                        base))
+         (rectangle 24 18 'solid (color 190 143 82))
+         (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               )))
+
+(define (plain-forest-bg #:bg-img     [bg (draw-plain-forest-bg)]
+                         #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
+                         #:rows       [rows 3]
+                         #:columns    [cols 3]
+                         #:start-tile [t 0]
+                         #:components [c #f]
+                         . custom-components)
+  (add-components (bg->backdrop-entity bg
+                                       #:rows       rows
+                                       #:columns    cols
+                                       #:start-tile t
+                                       #:scale scale)
+                  (cons c custom-components)))
 
 ; === EXAMPLE GAME DIALOG ===
 (define (player-dialog)

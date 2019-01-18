@@ -10,14 +10,14 @@
 
 
 
-(define-kata-code battle-arena avatar-2
+(define-example-code battle-arena avatar-2
   
   (battle-arena-game
    #:avatar (custom-avatar #:sprite (circle 30 'solid 'blue))))
 
 
 
-(define-kata-code battle-arena avatar-3
+(define-example-code battle-arena avatar-3
 
   (define (my-avatar)
     (custom-avatar #:sprite (random-character-sprite)))
@@ -27,7 +27,7 @@
 
 
 
-(define-kata-code battle-arena avatar-3b
+(define-example-code battle-arena avatar-3b
 
   (define (my-avatar)
     (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
@@ -38,7 +38,7 @@
 
 
 
-(define-kata-code battle-arena avatar-3c
+(define-example-code battle-arena avatar-3c
 
   (define (my-avatar)
     (custom-avatar #:sprite     STUDENT-IMAGE-HERE
@@ -51,7 +51,7 @@
 
 
 
-(define-kata-code battle-arena avatar-4
+(define-example-code battle-arena avatar-4
   
   (define (my-avatar)
     (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
@@ -65,7 +65,7 @@
 
 
 
-(define-kata-code battle-arena axe-balance-1
+(define-example-code battle-arena axe-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Melee"
                                       #:dart (custom-dart #:sprite swinging-sword-sprite
@@ -81,7 +81,7 @@
 
 
 
-(define-kata-code battle-arena axe-balance-2
+(define-example-code battle-arena axe-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Melee"
                                       #:dart (custom-dart #:sprite (scale 2 swinging-sword-sprite)
@@ -97,7 +97,7 @@
 
 
 
-(define-kata-code battle-arena basic-weapon-balance-1
+(define-example-code battle-arena basic-weapon-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "My Weapon"
                                       #:dart (custom-dart)
@@ -105,7 +105,7 @@
 
 
 
-(define-kata-code battle-arena battle-gear-armor
+(define-example-code battle-arena battle-gear-armor
   (battle-arena-game
    #:avatar         (custom-avatar #:sprite (random-character-sprite))
    #:enemy-list     (list (custom-enemy #:ai 'medium
@@ -139,7 +139,7 @@
 
 
 
-(define-kata-code battle-arena battle-gear-powerups-and-potions
+(define-example-code battle-arena battle-gear-powerups-and-potions
   (battle-arena-game
    #:avatar         (custom-avatar #:sprite (random-character-sprite)
                                    #:item-slots 3)
@@ -192,7 +192,7 @@
 
 
 
-(define-kata-code battle-arena boost-1
+(define-example-code battle-arena boost-1
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Damage Boost"
                                   #:sprite (make-icon "DB" 'orangered)
@@ -203,7 +203,7 @@
 
 
 
-(define-kata-code battle-arena boost-2
+(define-example-code battle-arena boost-2
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Speed Boost"
                                   #:sprite (make-icon "SB" 'yellow)
@@ -213,7 +213,7 @@
 
 
 
-(define-kata-code battle-arena boost-3
+(define-example-code battle-arena boost-3
   (define (damage-boost)
     (custom-item #:name   "Damage Boost"
                  #:sprite (make-icon "DB" 'orangered)
@@ -233,7 +233,7 @@
 
 
 
-(define-kata-code battle-arena dagger-tower-1
+(define-example-code battle-arena dagger-tower-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Dagger Tower"
@@ -242,7 +242,7 @@
 
 
 
-(define-kata-code battle-arena dagger-tower-2
+(define-example-code battle-arena dagger-tower-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Dagger Tower"
@@ -253,7 +253,7 @@
 
 
 
-(define-kata-code battle-arena dagger-tower-3
+(define-example-code battle-arena dagger-tower-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Dagger Tower"
@@ -266,14 +266,14 @@
 
 
 
-(define-kata-code battle-arena enemy-1
+(define-example-code battle-arena enemy-1
   (battle-arena-game
    #:enemy-list (list (custom-enemy)))
   )
 
 
 
-(define-kata-code battle-arena enemy-2
+(define-example-code battle-arena enemy-2
   (define (my-enemy)
     (custom-enemy #:ai              'easy
                   #:health          200
@@ -286,7 +286,7 @@
 
 
 
-(define-kata-code battle-arena enemy-3-bonus
+(define-example-code battle-arena enemy-3-bonus
   (define (my-enemy)
     (custom-enemy #:sprite          (sheet->sprite STUDENT-IMAGE-HERE
                                                    #:columns 4)
@@ -301,7 +301,7 @@
 
 
 
-(define-kata-code battle-arena enemy-3
+(define-example-code battle-arena enemy-3
   (define (my-enemy)
     (custom-enemy #:sprite          (star 30 'solid 'gold)
                   #:ai              'easy
@@ -316,7 +316,7 @@
 
 
 
-(define-kata-code battle-arena enemy-4
+(define-example-code battle-arena enemy-4
   (define (my-enemy)
     (custom-enemy #:sprite          (sheet->sprite STUDENT-IMAGE-HERE
                                                    #:columns 4)
@@ -331,7 +331,7 @@
 
 
 
-(define-kata-code battle-arena enemy-weapon-1
+(define-example-code battle-arena enemy-weapon-1
 (battle-arena-game
  #:enemy-list (list (custom-enemy
                      #:weapon (custom-weapon
@@ -339,7 +339,7 @@
 
 
 
-(define-kata-code battle-arena enemy-weapon-2
+(define-example-code battle-arena enemy-weapon-2
   
 (define (my-weapon)
   (custom-weapon
@@ -352,7 +352,7 @@
 
 
 
-(define-kata-code battle-arena enemy-weapon-3
+(define-example-code battle-arena enemy-weapon-3
   
 (define (my-dart)
   (custom-dart
@@ -416,7 +416,7 @@
 
 
 
-(define-kata-code battle-arena fortnite-melee-battle-advanced
+(define-example-code battle-arena fortnite-melee-battle-advanced
   (define (my-spear)
     (custom-dart #:position (posn 20 0)
                  #:sprite spear-sprite
@@ -515,7 +515,7 @@
 
 
 
-(define-kata-code battle-arena fortnite-melee-battle-simple
+(define-example-code battle-arena fortnite-melee-battle-simple
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name        "Spear"
                                       #:sprite      SPEAR-ICON
@@ -545,7 +545,7 @@
 
 
 
-(define-kata-code battle-arena fortnite-melee-battle
+(define-example-code battle-arena fortnite-melee-battle
   ; ======= FORTNITE MELEE =======
   (define (my-sword-bullet)
     (custom-dart #:position (posn 10 0)
@@ -586,7 +586,7 @@
 
 
 
-(define-kata-code battle-arena grow-1
+(define-example-code battle-arena grow-1
   
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Grow Potion"
@@ -595,7 +595,7 @@
 
 
 
-(define-kata-code battle-arena grow-and-shrink
+(define-example-code battle-arena grow-and-shrink
 
   (define (grow-potion)
     (custom-item #:name   "Grow Potion"
@@ -615,7 +615,7 @@
 
 
 
-(define-kata-code battle-arena health-1
+(define-example-code battle-arena health-1
   
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Health Potion"
@@ -624,7 +624,7 @@
 
 
 
-(define-kata-code battle-arena health-2
+(define-example-code battle-arena health-2
   
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Max Health Potion"
@@ -633,7 +633,7 @@
 
 
 
-(define-kata-code battle-arena health-3
+(define-example-code battle-arena health-3
 
   (define (health-potion)
     (custom-item #:name     "Health Potion"
@@ -654,7 +654,7 @@
 
 
 
-(define-kata-code battle-arena homing-repeater-1
+(define-example-code battle-arena homing-repeater-1
   (battle-arena-game
    #:weapon-list    (list (custom-weapon #:name "Homing Repeater"
                                          #:sprite (make-icon "HR")
@@ -662,7 +662,7 @@
 
 
 
-(define-kata-code battle-arena homing-repeater-2
+(define-example-code battle-arena homing-repeater-2
 
   (define (homing-dart)
     (custom-dart #:damage 15
@@ -677,7 +677,7 @@
 
 
 
-(define-kata-code battle-arena homing-repeater-3
+(define-example-code battle-arena homing-repeater-3
 
   (define (homing-dart)
     (custom-dart #:sprite (rectangle 10 2 'solid 'pink)
@@ -697,7 +697,7 @@
 
 
 
-(define-kata-code battle-arena lava-1
+(define-example-code battle-arena lava-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Lava Pit"
@@ -706,7 +706,7 @@
 
 
 
-(define-kata-code battle-arena lava-2
+(define-example-code battle-arena lava-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Lava Pit"
@@ -717,7 +717,7 @@
 
 
 
-(define-kata-code battle-arena lava-3
+(define-example-code battle-arena lava-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Lava Pit"
@@ -730,7 +730,7 @@
 
 
 
-(define-kata-code battle-arena magic-balance-1
+(define-example-code battle-arena magic-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Magic"
                                       #:dart (custom-dart #:sprite flame-sprite
@@ -745,7 +745,7 @@
 
 
 
-(define-kata-code battle-arena magic-balance-2
+(define-example-code battle-arena magic-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Magic"
                                       #:dart (custom-dart #:sprite (scale 2 flame-sprite)
@@ -760,7 +760,7 @@
 
 
 
-(define-kata-code battle-arena magic-balance-3
+(define-example-code battle-arena magic-balance-3
   (define (heavy-dart)
     (custom-dart #:sprite (scale 2 flame-sprite)
                  #:damage 200
@@ -792,7 +792,7 @@
 
 
 
-(define-kata-code battle-arena melee-balance-1
+(define-example-code battle-arena melee-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Melee"
                                       #:dart (custom-dart #:sprite swinging-sword-sprite
@@ -808,7 +808,7 @@
 
 
 
-(define-kata-code battle-arena melee-balance-2
+(define-example-code battle-arena melee-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Melee"
                                       #:dart (custom-dart #:sprite (scale 2 swinging-sword-sprite)
@@ -824,7 +824,7 @@
 
 
 
-(define-kata-code battle-arena melee-balance-3
+(define-example-code battle-arena melee-balance-3
   (define (heavy-dart)
     (custom-dart #:sprite (scale 2 swinging-sword-sprite)
                  #:damage 500
@@ -852,7 +852,7 @@
 
 
 
-(define-kata-code battle-arena offensive-base
+(define-example-code battle-arena offensive-base
   (battle-arena-game
    #:avatar         (custom-avatar #:sprite (random-character-sprite)
                                    #:item-slots 3)
@@ -896,7 +896,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-1
+(define-example-code battle-arena paint-thrower-1
   
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name   "Paint Thrower"
@@ -907,7 +907,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-2-bonus
+(define-example-code battle-arena paint-thrower-2-bonus
   (define (my-weapon-3)
     (custom-weapon #:name              "Paint Thrower"
                    #:sprite            PAINT-THROWER-ICON
@@ -923,7 +923,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-2
+(define-example-code battle-arena paint-thrower-2
   (define (my-weapon-3)
     (custom-weapon #:name   "Paint Thrower"
                    #:sprite PAINT-THROWER-ICON
@@ -937,7 +937,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-3-bonus
+(define-example-code battle-arena paint-thrower-3-bonus
   (define (my-paint)
     (paint #:damage     10
            #:durability 20
@@ -958,7 +958,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-3
+(define-example-code battle-arena paint-thrower-3
   (define (my-paint)
     (paint #:damage     10
            #:durability 20))
@@ -976,7 +976,7 @@
 
 
 
-(define-kata-code battle-arena paint-thrower-4
+(define-example-code battle-arena paint-thrower-4
   (define (my-paint)
     (paint #:damage     10
            #:durability 20
@@ -996,7 +996,7 @@
 
 
 
-(define-kata-code battle-arena ranged-battle-mode
+(define-example-code battle-arena ranged-battle-mode
   (battle-arena-game
    #:avatar         (custom-avatar #:sprite (random-character-sprite)
                                    #:item-slots 3)
@@ -1039,7 +1039,7 @@
 
 
 
-(define-kata-code battle-arena repeater-armor-1
+(define-example-code battle-arena repeater-armor-1
   
   (battle-arena-game
    #:item-list (list (custom-armor #:name   "Repeater Armor"
@@ -1051,7 +1051,7 @@
 
 
 
-(define-kata-code battle-arena repeater-armor-2
+(define-example-code battle-arena repeater-armor-2
   
   (battle-arena-game
    #:item-list (list (custom-armor #:name          "Repeater Armor"
@@ -1067,7 +1067,7 @@
 
 
 
-(define-kata-code battle-arena repeater-armor-3
+(define-example-code battle-arena repeater-armor-3
   
   (battle-arena-game
    #:enemy-list (list (custom-enemy #:amount-in-world 10
@@ -1084,7 +1084,7 @@
 
 
 
-(define-kata-code battle-arena repeater-balance-1
+(define-example-code battle-arena repeater-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Repeater"
                                       #:dart (custom-dart #:sprite paint-sprite
@@ -1099,7 +1099,7 @@
 
 
 
-(define-kata-code battle-arena repeater-balance-2
+(define-example-code battle-arena repeater-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
                                       #:dart (custom-dart #:sprite (scale 2 paint-sprite)
@@ -1112,7 +1112,7 @@
 
 
 
-(define-kata-code battle-arena repeater-balance-3
+(define-example-code battle-arena repeater-balance-3
   (define (heavy-dart)
     (custom-dart #:sprite (scale 2 paint-sprite)
                  #:damage 500
@@ -1137,7 +1137,7 @@
 
 
 
-(define-kata-code battle-arena repeater-tower-1
+(define-example-code battle-arena repeater-tower-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Repeater Tower"
@@ -1146,7 +1146,7 @@
 
 
 
-(define-kata-code battle-arena repeater-tower-2
+(define-example-code battle-arena repeater-tower-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Repeater Tower"
@@ -1157,7 +1157,7 @@
 
 
 
-(define-kata-code battle-arena repeater-tower-3
+(define-example-code battle-arena repeater-tower-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Repeater Tower"
@@ -1171,7 +1171,7 @@
 
 
 
-(define-kata-code battle-arena rocket-tower-1
+(define-example-code battle-arena rocket-tower-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Rocket Tower"
@@ -1180,7 +1180,7 @@
 
 
 
-(define-kata-code battle-arena rocket-tower-2
+(define-example-code battle-arena rocket-tower-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Rocket Tower"
@@ -1191,7 +1191,7 @@
 
 
 
-(define-kata-code battle-arena rocket-tower-3
+(define-example-code battle-arena rocket-tower-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Rocket Tower"
@@ -1206,7 +1206,7 @@
 
 
 
-(define-kata-code battle-arena shield-1
+(define-example-code battle-arena shield-1
   (battle-arena-game
    #:item-list (list (custom-item #:name     "Shield Potion" 
                                   #:sprite   (make-icon "SP" 'blue 'white)
@@ -1217,7 +1217,7 @@
 
 
 
-(define-kata-code battle-arena shield-2
+(define-example-code battle-arena shield-2
   (battle-arena-game
    #:item-list (list (custom-item #:name     "Max Shield Potion"
                                   #:sprite   (make-icon "MSP" 'blue 'white)
@@ -1228,7 +1228,7 @@
 
 
 
-(define-kata-code battle-arena shield-3
+(define-example-code battle-arena shield-3
 
   (define (shield-potion)
     (custom-item #:name     "Shield Potion" 
@@ -1251,7 +1251,7 @@
 
 
 
-(define-kata-code battle-arena shrink-1
+(define-example-code battle-arena shrink-1
 
   (battle-arena-game
    #:item-list (list (custom-item #:name   "Shrink Potion"
@@ -1260,7 +1260,7 @@
 
 
 
-(define-kata-code battle-arena single-shot-1
+(define-example-code battle-arena single-shot-1
   (battle-arena-game
    #:weapon-list    (list (custom-weapon #:name      "Single Shot"
                                          #:sprite    (make-icon "SS")
@@ -1268,7 +1268,7 @@
 
 
 
-(define-kata-code battle-arena single-shot-2
+(define-example-code battle-arena single-shot-2
 
   (define (single-dart)
     (custom-dart #:damage 10
@@ -1283,7 +1283,7 @@
 
 
 
-(define-kata-code battle-arena single-shot-3
+(define-example-code battle-arena single-shot-3
 
   (define (single-dart)
     (custom-dart #:sprite (rectangle 10 2 'solid 'cyan)
@@ -1304,7 +1304,7 @@
 
 
 
-(define-kata-code battle-arena spear-1
+(define-example-code battle-arena spear-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name   "Spear"
                                       #:sprite SPEAR-ICON
@@ -1313,7 +1313,7 @@
 
 
 
-(define-kata-code battle-arena spear-2-bonus
+(define-example-code battle-arena spear-2-bonus
   (define (my-weapon-1)
     (custom-weapon #:name              "Spear"
                    #:sprite            SPEAR-ICON
@@ -1328,7 +1328,7 @@
 
 
 
-(define-kata-code battle-arena spear-2
+(define-example-code battle-arena spear-2
   (define (my-weapon-1)
     (custom-weapon #:name   "Spear"
                    #:sprite SPEAR-ICON
@@ -1341,7 +1341,7 @@
 
 
 
-(define-kata-code battle-arena spear-3-bonus
+(define-example-code battle-arena spear-3-bonus
   (define (my-spear)
     (spear #:damage     25
            #:durability 10
@@ -1361,7 +1361,7 @@
 
 
 
-(define-kata-code battle-arena spear-3
+(define-example-code battle-arena spear-3
   (define (my-spear)
     (spear #:damage     25
            #:durability 10))
@@ -1377,7 +1377,7 @@
 
 
 
-(define-kata-code battle-arena spear-4
+(define-example-code battle-arena spear-4
   (define (my-spear)
     (spear #:damage     25
            #:durability 10
@@ -1397,7 +1397,7 @@
 
 
 
-(define-kata-code battle-arena spear-tower-1
+(define-example-code battle-arena spear-tower-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spear Tower"
@@ -1406,7 +1406,7 @@
 
 
 
-(define-kata-code battle-arena spear-tower-2
+(define-example-code battle-arena spear-tower-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "ST"
@@ -1417,7 +1417,7 @@
 
 
 
-(define-kata-code battle-arena spear-tower-3
+(define-example-code battle-arena spear-tower-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spear Tower"
@@ -1430,7 +1430,7 @@
 
 
 
-(define-kata-code battle-arena spear-tower-builder-1
+(define-example-code battle-arena spear-tower-builder-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:dart (spear-tower-builder)))))
@@ -1439,7 +1439,7 @@
 
 
 
-(define-kata-code battle-arena spike-mine-1
+(define-example-code battle-arena spike-mine-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spike Mine"
@@ -1448,7 +1448,7 @@
 
 
 
-(define-kata-code battle-arena spike-mine-2
+(define-example-code battle-arena spike-mine-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spike Mine"
@@ -1459,7 +1459,7 @@
 
 
 
-(define-kata-code battle-arena spike-mine-3
+(define-example-code battle-arena spike-mine-3
   (battle-arena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spike Mine"
@@ -1472,7 +1472,7 @@
 
 
 
-(define-kata-code battle-arena spike-mine-builder-1
+(define-example-code battle-arena spike-mine-builder-1
   (battle-arena-game
    #:enemy-list  (list (custom-enemy #:amount-in-world 10))
    #:weapon-list (list (custom-weapon
@@ -1482,7 +1482,7 @@
 
 
 
-(define-kata-code battle-arena spread-shot-1
+(define-example-code battle-arena spread-shot-1
   (battle-arena-game
    #:weapon-list    (list (custom-weapon #:name      "Spread Shot"
                                          #:sprite    (make-icon "SPR")
@@ -1490,7 +1490,7 @@
 
 
 
-(define-kata-code battle-arena spread-shot-2
+(define-example-code battle-arena spread-shot-2
 
   (define (spread-dart)
     (custom-dart #:damage     20
@@ -1505,7 +1505,7 @@
 
 
 
-(define-kata-code battle-arena spread-shot-3
+(define-example-code battle-arena spread-shot-3
 
   (define (spread-dart)
     (custom-dart #:sprite     (rectangle 10 2 'solid 'orange)
@@ -1526,7 +1526,7 @@
 
 
 
-(define-kata-code battle-arena sword-1
+(define-example-code battle-arena sword-1
   
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name    "Sword"
@@ -1536,7 +1536,7 @@
 
 
 
-(define-kata-code battle-arena sword-2
+(define-example-code battle-arena sword-2
   (define (my-weapon-2)
     (custom-weapon #:name    "Sword"
                    #:sprite  SWORD-ICON
@@ -1549,7 +1549,7 @@
 
 
 
-(define-kata-code battle-arena sword-2b
+(define-example-code battle-arena sword-2b
   (define (my-weapon-2)
     (custom-weapon #:name              "Sword"
                    #:sprite            SWORD-ICON
@@ -1565,7 +1565,7 @@
 
 
 
-(define-kata-code battle-arena sword-3
+(define-example-code battle-arena sword-3
 
   (define (my-sword)
     (sword #:damage     50
@@ -1583,7 +1583,7 @@
 
 
 
-(define-kata-code battle-arena sword-3b
+(define-example-code battle-arena sword-3b
 
   (define (my-sword)
     (sword #:damage     50
@@ -1604,7 +1604,7 @@
 
 
 
-(define-kata-code battle-arena sword-4
+(define-example-code battle-arena sword-4
 
   (define (my-sword)
     (sword #:damage     50
@@ -1624,7 +1624,7 @@
 
 
 
-(define-kata-code battle-arena sword-armor-1
+(define-example-code battle-arena sword-armor-1
   
   (battle-arena-game
    #:item-list (list (custom-armor #:name   "Sword Armor"
@@ -1636,7 +1636,7 @@
 
 
 
-(define-kata-code battle-arena sword-armor-2
+(define-example-code battle-arena sword-armor-2
   
   (battle-arena-game
    #:item-list (list (custom-armor #:name   "Sword Armor"
@@ -1651,7 +1651,7 @@
 
 
 
-(define-kata-code battle-arena sword-armor-3
+(define-example-code battle-arena sword-armor-3
   
   (battle-arena-game
    #:enemy-list (list (custom-enemy #:amount-in-world 10
@@ -1669,7 +1669,7 @@
 
 
 
-(define-kata-code battle-arena wall-builder
+(define-example-code battle-arena wall-builder
   (battle-arena-game
    #:enemy-list (list (custom-enemy #:amount-in-world 20))
    #:weapon-list (list (custom-weapon

@@ -9,5 +9,7 @@
     battle-arena/jam-lang)
 
 (provide (all-from-out "./jam-lang.rkt"))
+(provide (all-from-out "./assets.rkt"))
 
 (require "./jam-lang.rkt")
+(require "./assets.rkt")

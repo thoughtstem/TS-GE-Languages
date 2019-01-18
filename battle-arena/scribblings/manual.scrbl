@@ -1,7 +1,8 @@
+
 #lang scribble/manual
 
 @require[scribble/extract]
-@require[@for-label[battle-arena
+@require[@for-label["../main.rkt"
                     racket/base]]
 
 @title{Battle Arena}
@@ -9,4 +10,10 @@
 
 @defmodulelang[battle-arena]
 
-@(include-previously-extracted battle-arena #rx".*")
+@section{Functions}
+
+@(include-extracted "../jam/battle-arena-game-jam.rkt")
+
+@section{Image Assets}
+
+@(include-extracted "../assets.rkt")

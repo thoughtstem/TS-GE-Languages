@@ -10,3 +10,6 @@
 ;  syntax:kata-names, this would be the file to do that.
 ;You can't see them, but they are here, defined by
 ;  define-example-code/from*
+
+;We'll test that the examples all run as games for 10 ticks
+(test-all-examples-as-games 'battle-arena-starwars)

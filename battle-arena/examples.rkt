@@ -5,9 +5,7 @@
 
 (define-example-code battle-arena avatar-1
   (battle-arena-game
-   #:avatar (custom-avatar))
-  )
-
+   #:avatar (custom-avatar)))
 
 
 (define-example-code battle-arena avatar-2
@@ -1675,3 +1673,13 @@
    #:weapon-list (list (custom-weapon
                         #:dart (builder-dart #:entity
                                              (wall))))))
+
+
+
+
+
+(test-all-examples-as-games 'battle-arena)
+
+
+
+

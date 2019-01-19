@@ -16,7 +16,8 @@
 
 (require (except-in game-engine
                     change-health-by)
-         game-engine-demos-common)
+         game-engine-demos-common
+         (only-in lang/posn make-posn))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -93,6 +94,65 @@
                                                     show))
                                  (do-every update-interval update-night-sky)
                                  ))
+
+(define (draw-sky-with-light color)
+  (place-images (list (circle 24 'outline (pen color 36 'solid 'round 'bevel))
+                      ;(circle 24 'outline (pen color 37 'solid 'round 'bevel))
+                      (circle 24 'outline (pen color 38 'solid 'round 'bevel))
+                      ;(circle 24 'outline (pen color 39 'solid 'round 'bevel))
+                      (circle 24 'outline (pen color 40 'solid 'round 'bevel)))
+                (list (make-posn 24 18)
+                      ;(make-posn 24 18)
+                      (make-posn 24 18)
+                      ;(make-posn 24 18)
+                      (make-posn 24 18))
+                (rectangle 48 36 'outline 'transparent)))
+
+(define (draw-sky-with-light-small color)
+  (place-images (list (circle 12 'outline (pen color 18 'solid 'round 'bevel))
+                      (circle 12 'outline (pen color 19 'solid 'round 'bevel))
+                      (circle 12 'outline (pen color 20 'solid 'round 'bevel)))
+                (list (make-posn 12 9)
+                      (make-posn 12 9)
+                      (make-posn 12 9))
+                (rectangle 24 18 'outline 'transparent)))
+
+(define (sky-sprite-with-light color)
+  (define sky-img (draw-sky-with-light color))
+  (new-sprite sky-img #:scale 20))
+
+(define (sky-sprite-with-light-small color)
+  (define sky-img (draw-sky-with-light-small color))
+  (new-sprite sky-img #:scale 40))
+
+(define (night-sky-with-lighting #:color         [color 'black]
+                                 #:max-alpha     [m-alpha 180]
+                                 #:length-of-day [length-of-day 2400])
+  (define max-alpha (exact-round (/ m-alpha 2)))
+  (define update-interval (* 2 (/ length-of-day 2 max-alpha)))
+  (define c (name->color color))
+  (define r-val (color-red c))
+  (define g-val (color-green c))
+  (define b-val (color-blue c))
+  (define (update-night-sky g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count length-of-day))
+    (define alpha-val (exact-round (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha))))
+    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
+    (update-entity e animated-sprite? new-night-sky))
+  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
+                  #:position (posn 0 0)
+                  #:name "night sky"
+                  #:components (layer "tops")
+                  (hidden)
+                  (lock-to "player")
+                  (apply precompiler
+                         (map (λ (a)(draw-sky-with-light (make-color r-val g-val b-val a)))
+                              (range 255)))
+                  (on-start (do-many (go-to-pos 'center)
+                                     show))
+                  (do-every update-interval update-night-sky)
+                  ))
 
 ; === ENTITY DEFINITIONS ===
 (define (plain-bg #:bg-img     [bg (rectangle 4 3
@@ -301,13 +361,19 @@
 ;(define (lost? g e)
 ;  (and e
 ;       (health-is-zero? g e)))
+
+(define (tops? e)
+  (and ((has-component? layer?) e)
+       (eq? (get-layer e) "tops")))
     
 (define (food->component f #:use-key [use-key 'space] #:max-health [max-health 100])
   (define item-name (get-name f))
   (define heal-amount (get-storage-data "heals-by" f))
   (if heal-amount
       (on-key use-key #:rule (and/r (player-is-near? item-name)
-                                (nearest-entity-to-player-is? item-name))
+                                    (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
+                                                                                            (not/c tops?)
+                                                                                            (not/c ui?))))
           (do-many (change-health-by heal-amount #:max max-health)
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
       #f))
@@ -321,7 +387,9 @@
   
   (if coin-value
       (list (on-key use-key #:rule (and/r (player-is-near? coin-name)
-                                          (nearest-entity-to-player-is? coin-name #:filter (has-component? on-key?)))
+                                          (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c tops?)
+                                                                                                  (not/c ui?))))
                     (do-many (change-counter-by coin-value)
                              (draw-counter-rpg #:prefix "Gold: ")
                              (spawn coin-toast-entity))))
@@ -801,9 +869,9 @@
                        (if p (score-entity) #f)
 
                        (tm-entity)
-                       (night-sky #:color         (sky-color sky)
-                                  #:max-alpha     (sky-max-alpha sky)
-                                  #:length-of-day (sky-day-length sky)) 
+                       (night-sky-with-lighting #:color         (sky-color sky)
+                                                #:max-alpha     (sky-max-alpha sky)
+                                                #:length-of-day (sky-day-length sky)) 
 
                        ;(if p (health-entity) #f)
 

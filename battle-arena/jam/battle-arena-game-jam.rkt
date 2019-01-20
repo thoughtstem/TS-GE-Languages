@@ -613,14 +613,14 @@
 
 (define/contract/doc (custom-avatar
                       #:sprite       [sprite (circle 10 'solid 'red)]
-                       #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
-                       #:position     [p   (posn 100 100)]
-                       #:speed        [spd 10]
-                       #:key-mode     [key-mode 'wasd]
-                       #:mouse-aim?   [mouse-aim? #t]
-                       #:item-slots   [w-slots 2]
-                       #:components   [c #f]
-                       . custom-components)
+                      #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
+                      #:position     [p   (posn 100 100)]
+                      #:speed        [spd 10]
+                      #:key-mode     [key-mode 'wasd]
+                      #:mouse-aim?   [mouse-aim? #t]
+                      #:item-slots   [w-slots 2]
+                      #:components   [c #f]
+                      . custom-components)
 
   (->i ()
        (#:sprite [sprite sprite?]

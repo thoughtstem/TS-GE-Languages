@@ -8,7 +8,7 @@
          battle-arena)
 
 
-(language-mappings battle-arena       starwars-battle-arena
+(language-mappings battle-arena       battle-arena-starwars
                    [custom-avatar     custom-jedi]
                    [battle-arena-game starwars-game])
 

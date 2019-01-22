@@ -129,7 +129,7 @@
 (define/contract/doc (custom-enemy #:amount-in-world (amount-in-world 1)
                                    #:sprite (s (row->sprite (random-character-row) #:delay 4))
                                    #:ai (ai-level 'easy)
-                                   #:health (health 99)
+                                   #:health (health 100)
                                    #:shield (shield 100)
                                    #:weapon (weapon (custom-weapon))
                                    #:death-particles (particles (custom-particles))

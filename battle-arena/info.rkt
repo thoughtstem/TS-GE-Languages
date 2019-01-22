@@ -10,7 +10,7 @@
   "https://github.com/thoughtstem/game-engine-demos.git?path=game-engine-demos-common"
   ))
 
-(define compile-omit-paths '(
+#;(define compile-omit-paths '(
   "examples"))
 
 (define test-omit-paths '("examples/compiled-kata-data" "examples/compiled-example-data"))

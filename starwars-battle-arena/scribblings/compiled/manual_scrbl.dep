@@ -1,1 +1,0 @@
-("7.0" ("a2df9ab0f6a97658da0b05214755b6b991884d98" . "6bb2ee1f089a45728dea6c4d0f2608478e80003d") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt") (collects #"starwars-battle-arena" #"main.rkt"))

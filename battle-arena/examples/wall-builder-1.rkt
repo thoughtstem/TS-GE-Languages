@@ -1,9 +1,0 @@
-#lang racket
-(require ts-kata-util battle-arena)
-
-(define-kata-code battle-arena wall-builder
-  (battle-arena-game
-   #:enemy-list (list (custom-enemy #:amount-in-world 20))
-   #:weapon-list (list (custom-weapon
-                        #:dart (builder-dart #:entity
-                                             (wall))))))

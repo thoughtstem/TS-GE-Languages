@@ -6,7 +6,10 @@
          acid
          plain-bg
          plain-color-bg
-         plain-forest-bg)
+         plain-forest-bg
+         carrot
+         carrot-stew
+         carrot-stew-recipe)
 
 (require scribble/srcdoc)
 
@@ -40,6 +43,12 @@
 
 (struct sky (color day-length day-start day-end max-alpha))
 
+(define (mround-up num multiple)
+  (define rounded-num (exact-round num))
+  (define remainder (modulo rounded-num multiple))
+  (cond [(= remainder 0) rounded-num]
+        [else (+ rounded-num multiple (- remainder))]))
+
 (define/contract/doc (custom-sky #:night-sky-color  [color      'black]
                                  #:length-of-day    [day-length 2400]
                                  #:start-of-daytime [day-start #f]
@@ -65,35 +74,36 @@
   (sky color day-length ds de ma))
 
 (define (night-sky #:color         [color 'black]
-                   #:max-alpha     [max-alpha 180]
+                   #:max-alpha     [max-alpha 160]
                    #:length-of-day [length-of-day 2400])
-    (define update-interval (* 2 (/ length-of-day 2 max-alpha)))
-    (define c (name->color color))
-    (define r-val (color-red c))
-    (define g-val (color-green c))
-    (define b-val (color-blue c))
-    (define (update-night-sky g e)
-      (define game-count (get-counter (get-entity "time manager" g)))
-      (define time-of-day (modulo game-count length-of-day))
-      (define alpha-val (exact-round (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha))))
-      (define new-night-sky (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val alpha-val)))
-                                (set-x-scale 480 _)
-                                (set-y-scale 360 _)))
-      (update-entity e animated-sprite? new-night-sky))
-    (sprite->entity (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val max-alpha)))
-                        (set-x-scale 480 _)
-                        (set-y-scale 360 _))
-                    #:position (posn 0 0)
-                    #:name "night sky"
-                    #:components (layer "tops")
-                                 (hidden)
-                                 (apply precompiler
-                                        (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
-                                             (range 255)))
-                                 (on-start (do-many (go-to-pos 'center)
-                                                    show))
-                                 (do-every update-interval update-night-sky)
-                                 ))
+  (define update-multiplier 2)
+  (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
+  (define c (name->color color))
+  (define r-val (color-red c))
+  (define g-val (color-green c))
+  (define b-val (color-blue c))
+  (define (update-night-sky g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count length-of-day))
+    (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
+    (define new-night-sky (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val alpha-val)))
+                              (set-x-scale 480 _)
+                              (set-y-scale 360 _)))
+    (update-entity e animated-sprite? new-night-sky))
+  (sprite->entity (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val max-alpha)))
+                      (set-x-scale 480 _)
+                      (set-y-scale 360 _))
+                  #:position (posn 0 0)
+                  #:name "night sky"
+                  #:components (layer "tops")
+                  (hidden)
+                  (apply precompiler
+                         (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
+                              (range 0 (+ max-alpha update-multiplier 1) update-multiplier)))
+                  (on-start (do-many (go-to-pos 'center)
+                                     show))
+                  (do-every update-interval update-night-sky)
+                  ))
 
 (define (draw-sky-with-light color)
   (place-images (list (circle 24 'outline (pen color 36 'solid 'round 'bevel))
@@ -119,17 +129,18 @@
 
 (define (sky-sprite-with-light color)
   (define sky-img (draw-sky-with-light color))
-  (new-sprite sky-img #:scale 20))
+  (new-sprite sky-img #:scale 20.167))
 
 (define (sky-sprite-with-light-small color)
   (define sky-img (draw-sky-with-light-small color))
-  (new-sprite sky-img #:scale 40))
+  (new-sprite sky-img #:scale 40.333))
 
 (define (night-sky-with-lighting #:color         [color 'black]
-                                 #:max-alpha     [m-alpha 180]
+                                 #:max-alpha     [m-alpha 160]
                                  #:length-of-day [length-of-day 2400])
-  (define max-alpha (exact-round (/ m-alpha 2)))
-  (define update-interval (* 2 (/ length-of-day 2 max-alpha)))
+  (define max-alpha (exact-round (* m-alpha 0.56)))
+  (define update-multiplier 2)
+  (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
   (define c (name->color color))
   (define r-val (color-red c))
   (define g-val (color-green c))
@@ -137,7 +148,8 @@
   (define (update-night-sky g e)
     (define game-count (get-counter (get-entity "time manager" g)))
     (define time-of-day (modulo game-count length-of-day))
-    (define alpha-val (exact-round (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha))))
+    (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
+    ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
     (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
     (update-entity e animated-sprite? new-night-sky))
   (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
@@ -148,7 +160,7 @@
                   (lock-to "player")
                   (apply precompiler
                          (map (λ (a)(draw-sky-with-light (make-color r-val g-val b-val a)))
-                              (range 255)))
+                              (range 0 (+ max-alpha 2 1) update-multiplier)))
                   (on-start (do-many (go-to-pos 'center)
                                      show))
                   (do-every update-interval update-night-sky)
@@ -905,32 +917,39 @@
   (crafting-menu-set! #:open-key     [open-key 'space]
                       #:open-sound   [open-sound #f]
                       #:select-sound [select-sound #f]
-                      #:recipes r
-                      . recipes)
-  (set! known-recipes-list (append (cons r recipes) known-recipes-list))
+                      ;#:recipes r . recipes
+                      #:recipe-list  [r-list '()]
+                      )
+  (set! known-recipes-list (append r-list known-recipes-list))
   (crafting-menu #:open-key open-key
                  #:open-sound open-sound
                  #:select-sound select-sound
-                 #:recipes r
-                           recipes))
+                 #:recipe-list r-list
+                 ;#:recipes r
+                 ;          recipes
+                           ))
 
 (define default-crafting-menu
-  (crafting-menu-set! #:recipes (recipe #:product (carrot-stew-entity)
-                                        #:build-time 30
-                                        #:ingredients (list "Carrot"))))
+  (crafting-menu-set! #:recipe-list (list (recipe #:product (carrot-stew-entity)
+                                                  #:build-time 30
+                                                  #:ingredients (list "Carrot")))))
 
 (define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
-                                     #:menu       [menu  default-crafting-menu]
+                                     ;#:menu       [menu  default-crafting-menu]
+                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew-entity)
+                                                                         #:build-time 30
+                                                                         #:ingredients (list "Carrot")))]
                                      #:components [c #f] . custom-components)
   (->i ()
        (#:position   [position posn?]
         #:tile       [tile number?]
         #:name       [name string?]
         #:sprite     [sprite sprite?]
-        #:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
+        ;#:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
+        #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
        [result entity?])
@@ -942,7 +961,7 @@
                   #:name   name
                   #:components (active-on-bg t)
                                (counter 0)
-                               menu
+                               (crafting-menu-set! #:recipe-list r-list)
                                (cons c custom-components)))
 
 
@@ -1062,7 +1081,9 @@
            #:amount-in-world [amount-in-world number?]
            #:heals-by   [heal-amt number?]
            #:respawn?   [respawn? boolean?]
-           #:components [first-component component-or-system?])
+           #:components [first-component (or/c component-or-system?
+                                               false?
+                                               (listof false?))])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
@@ -1171,6 +1192,48 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
+
+; ==== PREBUILT FOOD AND RECIPES ===
+(define (carrot #:sprite           [s carrot-sprite]
+                #:position         [p (posn 100 100)]
+                #:name             [n "Carrot"]
+                #:tile             [t 0]
+                #:amount-in-world  [world-amt 0]
+                #:heals-by         [heal-amt 20]
+                #:respawn?         [respawn? #t]
+                #:components       [c #f]
+                . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define (carrot-stew #:sprite           [s carrot-stew-sprite]
+                     #:position         [p (posn 100 100)]
+                     #:name             [n "Carrot Stew"]
+                     #:tile             [t 0]
+                     #:amount-in-world  [world-amt 0]
+                     #:heals-by         [heal-amt 40]
+                     #:respawn?         [respawn? #f]
+                     #:components       [c #f]
+                     . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define carrot-stew-recipe
+  (recipe #:product (carrot-stew-entity)
+          #:build-time 30
+          #:ingredients (list "Carrot")))
 
 ; ==== HEALTH HANDLERS ====
 (define (set-health-to amt)

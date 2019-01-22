@@ -13,3 +13,15 @@ To make a new language:
 ```
 raco new-language NAME-OF-Language
 ```
+
+To test examples for a langauge:
+
+```
+raco build-lang-examples
+```
+
+To run a specific example, run `examples.rkt` in DrRacket, then for running a specific example:
+
+```
+(run-example avatar-1)
+```

@@ -16,7 +16,10 @@
 (define sprite? (or/c image? animated-sprite?))
 
 
-(define/contract/doc (custom-jedi #:sprite (sprite (sheet->sprite twileck-jedi))
+(define/contract/doc (custom-jedi #:sprite       (sprite (sheet->sprite twileck-jedi
+                                                                        #:rows 4
+                                                                        #:columns 3
+                                                                        #:row-number 3))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position     [p   (posn 100 100)]
                                   #:speed        [spd 10]

@@ -4,6 +4,7 @@
   '(("scribblings/manual.scrbl" ())))
 
 (define deps '(
-  "battle-arena"
-  "ts-kata-util"))
+  "battle-arena"))
 
+(define compile-omit-paths '(
+  "examples.rkt"))

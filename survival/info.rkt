@@ -3,7 +3,6 @@
 (define scribblings '(("scribblings/manual.scrbl" (multi-page))))
 
 (define deps '(
-  "https://github.com/thoughtstem/ts-curric-common.git"
   "https://github.com/thoughtstem/TS-Kata-Collections.git?path=ts-kata-util"
   "https://github.com/thoughtstem/game-engine.git"
   "https://github.com/thoughtstem/game-engine-rpg.git"

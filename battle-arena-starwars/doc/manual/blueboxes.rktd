@@ -1,5 +1,5 @@
 377
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q starwars-game)) q (1043 . 18)) ((c def c (c (? . 0) q twileck-jedi)) q (2129 . 2)) ((c def c (c (? . 0) q custom-jedi)) q (0 . 20)) ((c def c (c (? . 0) q darth-vader)) q (2046 . 2)) ((c def c (c (? . 0) q r2-d2)) q (2075 . 2)) ((c def c (c (? . 0) q storm-trooper)) q (2098 . 2))))
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q starwars-game)) q (1096 . 18)) ((c def c (c (? . 0) q darth-vader)) q (2099 . 2)) ((c def c (c (? . 0) q custom-jedi)) q (0 . 21)) ((c def c (c (? . 0) q r2-d2)) q (2128 . 2)) ((c def c (c (? . 0) q storm-trooper)) q (2151 . 2)) ((c def c (c (? . 0) q twileck-jedi)) q (2182 . 2))))
 procedure
 (custom-jedi [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -10,7 +10,8 @@ procedure
               #:item-slots item-slots                 
               #:components first-component]           
               rest ...)                           -> entity?
-  sprite : sprite? = (sheet->sprite twileck-jedi)
+  sprite : sprite?
+         = (sheet->sprite twileck-jedi #:rows 4 #:columns 3 #:row-number 3)
   damage-processor : damage-processor?
                    = (divert-damage #:filter-out '(friendly-team passive))
   position : posn? = (posn 100 100)

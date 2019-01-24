@@ -4,6 +4,8 @@
   '(("scribblings/manual.scrbl" ())))
 
 (define deps '(
-  "battle-arena"
-  "ts-kata-util"))
+  "https://github.com/thoughtstem/TS-Kata-Collections.git?path=ts-kata-util"
+  "battle-arena"))
 
+(define compile-omit-paths '(
+  "examples.rkt"))

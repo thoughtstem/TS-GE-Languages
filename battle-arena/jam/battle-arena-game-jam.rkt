@@ -124,10 +124,12 @@
 (define (ai-level? v)
   (or/c 'easy 'medium 'hard))
 
+
+
 (define/contract/doc (custom-enemy #:amount-in-world (amount-in-world 1)
                                    #:sprite (s (row->sprite (random-character-row) #:delay 4))
                                    #:ai (ai-level 'easy)
-                                   #:health (health 99)
+                                   #:health (health 100)
                                    #:shield (shield 100)
                                    #:weapon (weapon (custom-weapon))
                                    #:death-particles (particles (custom-particles))
@@ -142,8 +144,8 @@
            #:shield [shield positive?]
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
-           #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Creates a custom enemy that can be used in the enemy list
@@ -463,8 +465,8 @@
            #:on-use [on-use any/c]
            #:rarity [rarity rarity-level?]
            #:respawn? [respawn boolean?]
-           #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Returns a custom item, which will be placed int othe world
@@ -593,8 +595,8 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
-        #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+        #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background}
@@ -611,14 +613,14 @@
 
 (define/contract/doc (custom-avatar
                       #:sprite       [sprite (circle 10 'solid 'red)]
-                       #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
-                       #:position     [p   (posn 100 100)]
-                       #:speed        [spd 10]
-                       #:key-mode     [key-mode 'wasd]
-                       #:mouse-aim?   [mouse-aim? #t]
-                       #:item-slots   [w-slots 2]
-                       #:components   [c #f]
-                       . custom-components)
+                      #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
+                      #:position     [p   (posn 100 100)]
+                      #:speed        [spd 10]
+                      #:key-mode     [key-mode 'wasd]
+                      #:mouse-aim?   [mouse-aim? #t]
+                      #:item-slots   [w-slots 2]
+                      #:components   [c #f]
+                      . custom-components)
 
   (->i ()
        (#:sprite [sprite sprite?]
@@ -628,9 +630,9 @@
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
         #:item-slots [item-slots number?]
-        #:components [first-component component?]
+        #:components [first-component component-or-system?]
         )
-       #:rest (rest (listof component?))
+       #:rest (rest (listof component-or-system?))
        [returns entity?])
 
   @{Returns a custom avatar...}
@@ -649,6 +651,7 @@
                                (sound-stream)
                                ;Handle deaths....
                                (precompiler dead-frame)
+                               (damager 10 (list 'passive 'friendly-team))
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)

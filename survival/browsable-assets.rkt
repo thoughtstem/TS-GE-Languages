@@ -4,7 +4,6 @@
          (except-in ts-racket scale-to-fit)
          (only-in game-engine draw-entity
                               render)
-         (only-in ts-curric-common text-with-image)
          pict
          pict/code)
 

@@ -1,13 +1,15 @@
 #lang at-exp racket
 
 (provide crafting-menu-set!
-         custom-crafter
-         custom-npc
-         custom-coin
-         custom-food
          entity-cloner
          player-toast-entity
-         acid)
+         acid
+         plain-bg
+         plain-color-bg
+         plain-forest-bg
+         carrot
+         carrot-stew
+         carrot-stew-recipe)
 
 (require scribble/srcdoc)
 
@@ -17,9 +19,8 @@
 
 (require (except-in game-engine
                     change-health-by)
-         game-engine-demos-common)
-
-;(require "../scoring/score.rkt")
+         game-engine-demos-common
+         (only-in lang/posn make-posn))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -27,23 +28,216 @@
       (displayln l)
       body ...)))
 
-
 (define (WIDTH)       480)
 (define (HEIGHT)      360)
 (define (TOTAL-TILES) 9)
 
 (define sprite? (or/c image? animated-sprite?))
 
+(define dialog? (or/c (listof string?) (listof (listof string?))))
+
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
 
 (define fire-mode?    (or/c 'normal 'random 'spread 'homing))
 
+(struct sky (color day-length day-start day-end max-alpha))
+
+(define (mround-up num multiple)
+  (define rounded-num (exact-round num))
+  (define remainder (modulo rounded-num multiple))
+  (cond [(= remainder 0) rounded-num]
+        [else (+ rounded-num multiple (- remainder))]))
+
+(define/contract/doc (custom-sky #:night-sky-color  [color      'black]
+                                 #:length-of-day    [day-length 2400]
+                                 #:start-of-daytime [day-start #f]
+                                 #:end-of-daytime   [day-end   #f]
+                                 #:max-darkness     [max-alpha 160])
+  (->i () (#:night-sky-color  [color (or/c string? symbol?)]
+           #:length-of-day    [day-length number?]
+           #:start-of-daytime [day-start  number?]
+           #:end-of-daytime   [day-end    number?]
+           #:max-darkness     [max-darkness number?])
+       [returns sky?])
+
+  @{Creates a custom sky that can be used in the sky parameter
+         of @racket[survival-game].}
+  
+  (define ds (if day-start
+                 (min day-length (max 0 day-start))
+                 (exact-round (* 0.25 day-length))))
+  (define de (if day-end
+                 (min day-length (max 0 day-end))
+                 (exact-round (* 0.75 day-length))))
+  (define ma (min 255 (max 1 max-alpha)))
+  (sky color day-length ds de ma))
+
+(define (night-sky #:color         [color 'black]
+                   #:max-alpha     [max-alpha 160]
+                   #:length-of-day [length-of-day 2400])
+  (define update-multiplier 2)
+  (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
+  (define c (name->color color))
+  (define r-val (color-red c))
+  (define g-val (color-green c))
+  (define b-val (color-blue c))
+  (define (update-night-sky g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count length-of-day))
+    (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
+    (define new-night-sky (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val alpha-val)))
+                              (set-x-scale 480 _)
+                              (set-y-scale 360 _)))
+    (update-entity e animated-sprite? new-night-sky))
+  (sprite->entity (~> (new-sprite (square 1 'solid (make-color r-val g-val b-val max-alpha)))
+                      (set-x-scale 480 _)
+                      (set-y-scale 360 _))
+                  #:position (posn 0 0)
+                  #:name "night sky"
+                  #:components (layer "tops")
+                  (hidden)
+                  (apply precompiler
+                         (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
+                              (range 0 (+ max-alpha update-multiplier 1) update-multiplier)))
+                  (on-start (do-many (go-to-pos 'center)
+                                     show))
+                  (do-every update-interval update-night-sky)
+                  ))
+
+(define (draw-sky-with-light color)
+  (place-images (list (circle 24 'outline (pen color 36 'solid 'round 'bevel))
+                      ;(circle 24 'outline (pen color 37 'solid 'round 'bevel))
+                      (circle 24 'outline (pen color 38 'solid 'round 'bevel))
+                      ;(circle 24 'outline (pen color 39 'solid 'round 'bevel))
+                      (circle 24 'outline (pen color 40 'solid 'round 'bevel)))
+                (list (make-posn 24 18)
+                      ;(make-posn 24 18)
+                      (make-posn 24 18)
+                      ;(make-posn 24 18)
+                      (make-posn 24 18))
+                (rectangle 48 36 'outline 'transparent)))
+
+(define (draw-sky-with-light-small color)
+  (place-images (list (circle 12 'outline (pen color 18 'solid 'round 'bevel))
+                      (circle 12 'outline (pen color 19 'solid 'round 'bevel))
+                      (circle 12 'outline (pen color 20 'solid 'round 'bevel)))
+                (list (make-posn 12 9)
+                      (make-posn 12 9)
+                      (make-posn 12 9))
+                (rectangle 24 18 'outline 'transparent)))
+
+(define (sky-sprite-with-light color)
+  (define sky-img (draw-sky-with-light color))
+  (new-sprite sky-img #:scale 20.167))
+
+(define (sky-sprite-with-light-small color)
+  (define sky-img (draw-sky-with-light-small color))
+  (new-sprite sky-img #:scale 40.333))
+
+(define (night-sky-with-lighting #:color         [color 'black]
+                                 #:max-alpha     [m-alpha 160]
+                                 #:length-of-day [length-of-day 2400])
+  (define max-alpha (exact-round (* m-alpha 0.56)))
+  (define update-multiplier 2)
+  (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
+  (define c (name->color color))
+  (define r-val (color-red c))
+  (define g-val (color-green c))
+  (define b-val (color-blue c))
+  (define (update-night-sky g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count length-of-day))
+    (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
+    ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
+    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
+    (update-entity e animated-sprite? new-night-sky))
+  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
+                  #:position (posn 0 0)
+                  #:name "night sky"
+                  #:components (layer "tops")
+                  (hidden)
+                  (lock-to "player")
+                  (apply precompiler
+                         (map (λ (a)(draw-sky-with-light (make-color r-val g-val b-val a)))
+                              (range 0 (+ max-alpha 2 1) update-multiplier)))
+                  (on-start (do-many (go-to-pos 'center)
+                                     show))
+                  (do-every update-interval update-night-sky)
+                  ))
+
 ; === ENTITY DEFINITIONS ===
-(define (plain-bg-entity)
-  (bg->backdrop-entity (rectangle 48 36 ;Can even be smaller...
-                                  'solid 'darkgreen) 
-                       #:scale 30))
+(define (plain-bg #:bg-img     [bg (rectangle 4 3
+                                  'solid 'darkgreen)]
+                  #:scale      [scale 360] ; should scale to 3x 480 by 360 or 1440 by 1080
+                  #:rows       [rows 3]
+                  #:columns    [cols 3]
+                  #:start-tile [t 0]
+                  #:components [c #f]
+                  . custom-components)
+  (add-components (bg->backdrop-entity bg
+                       #:rows       rows
+                       #:columns    cols
+                       #:start-tile t
+                       #:scale scale)
+                  (cons c custom-components)))
+
+(define (draw-color-bg)
+  (above (beside (rectangle 4 3 'solid (color 0 128 0))
+                 (rectangle 4 3 'solid (color 143 151 8))
+                 (rectangle 4 3 'solid (color 141 104 0)))
+         (beside (rectangle 4 3 'solid (color 151 57 8))
+                 (rectangle 4 3 'solid (color 128 0 21))
+                 (rectangle 4 3 'solid (color 110 8 151)))
+         (beside (rectangle 4 3 'solid (color 0 3 141))
+                 (rectangle 4 3 'solid (color 7 74 141))
+                 (rectangle 4 3 'solid (color 8 151 118)))))
+
+(define (plain-color-bg #:bg-img     [bg (draw-color-bg)]
+                        #:scale      [scale 120] ; should scale to 3x 480 by 360 or 1440 by 1080
+                        #:rows       [rows 3]
+                        #:columns    [cols 3]
+                        #:start-tile [t 0]
+                        #:components [c #f]
+                        . custom-components)
+  (add-components (bg->backdrop-entity bg
+                       #:rows       rows
+                       #:columns    cols
+                       #:start-tile t
+                       #:scale scale)
+                  (cons c custom-components)))
+
+(define (draw-plain-forest-bg)
+  (foldl (λ (image base)
+           (place-image image
+                        (random 24) (random 18)
+                        base))
+         (rectangle 24 18 'solid (color 190 143 82))
+         (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               )))
+
+(define (plain-forest-bg #:bg-img     [bg (draw-plain-forest-bg)]
+                         #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
+                         #:rows       [rows 3]
+                         #:columns    [cols 3]
+                         #:start-tile [t 0]
+                         #:components [c #f]
+                         . custom-components)
+  (add-components (bg->backdrop-entity bg
+                                       #:rows       rows
+                                       #:columns    cols
+                                       #:start-tile t
+                                       #:scale scale)
+                  (cons c custom-components)))
 
 ; === EXAMPLE GAME DIALOG ===
 (define (player-dialog)
@@ -126,20 +320,6 @@
 
   (flatten (map f es)))
 
-; ==== BORDERLANDS STYLE POP UPS =====
-; todo: add to game-engine?
-#|(define (go-to-entity name #:offset [offset (posn 0 0)])
-  (lambda (g e)
-    (define target? (get-entity name g))
-    (if target?
-        (update-entity e posn? (posn-add (get-component target? posn?) offset))
-        e)))|#
-
-#|(define (text/shadow message size color)
-  (overlay/offset (freeze (text/font message size color "Arial" 'default 'normal 'normal #f))
-                  -1 1
-                  (freeze (text/font message size "black" "Arial" 'default 'normal 'normal #f))))|#
-
 (define (player-toast-entity message #:color [color "yellow"])
   (define color-symbol (if (string? color)
                            (string->symbol color)
@@ -193,13 +373,19 @@
 ;(define (lost? g e)
 ;  (and e
 ;       (health-is-zero? g e)))
+
+(define (tops? e)
+  (and ((has-component? layer?) e)
+       (eq? (get-layer e) "tops")))
     
 (define (food->component f #:use-key [use-key 'space] #:max-health [max-health 100])
   (define item-name (get-name f))
   (define heal-amount (get-storage-data "heals-by" f))
   (if heal-amount
       (on-key use-key #:rule (and/r (player-is-near? item-name)
-                                (nearest-entity-to-player-is? item-name))
+                                    (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
+                                                                                            (not/c tops?)
+                                                                                            (not/c ui?))))
           (do-many (change-health-by heal-amount #:max max-health)
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
       #f))
@@ -213,7 +399,9 @@
   
   (if coin-value
       (list (on-key use-key #:rule (and/r (player-is-near? coin-name)
-                                          (nearest-entity-to-player-is? coin-name #:filter (has-component? on-key?)))
+                                          (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c tops?)
+                                                                                                  (not/c ui?))))
                     (do-many (change-counter-by coin-value)
                              (draw-counter-rpg #:prefix "Gold: ")
                              (spawn coin-toast-entity))))
@@ -237,9 +425,9 @@
         #:speed [speed number?]
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
-        #:components [first-component component?]
+        #:components [first-component component-or-system?]
         )
-       #:rest (rest (listof component?))
+       #:rest (rest (listof component-or-system?))
        [returns entity?])
 
   @{Returns a custom avatar...}
@@ -425,6 +613,7 @@
                                    #:weapon (weapon (custom-weapon #:name "Spitter"
                                                                    #:dart (acid)))
                                    #:death-particles (particles (custom-particles))
+                                   #:night-only? (night-only? #f)
                                    #:components (c #f)
                                    . custom-components
                                    )
@@ -436,6 +625,7 @@
            ;#:shield [shield positive?]
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
+           #:night-only?     [night-only? boolean?]
            #:components [first-component any/c])
        #:rest [more-components (listof any/c)]
        [returns entity?])
@@ -443,9 +633,6 @@
   @{Creates a custom enemy that can be used in the enemy list
          of @racket[survival-game].}
   
-
-  
- 
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -476,7 +663,6 @@
               (λ(g e)
                 (add-component e (after-time 2 die)))
               )))
-
   
   (custom-combatant #:name "Enemy"
                     #:sprite s
@@ -499,6 +685,7 @@
                     ;Need to face player when attacking...
 
                     (storage "amount-in-world" amount-in-world)
+                    (storage "night-only?" night-only?)
 
                     (enemy-ai (get-ai-from-level ai-level (get-storage-data "Weapon" weapon)))
                     ;(enemy-ai (get-ai-from-level ai-level weapon))
@@ -538,9 +725,10 @@
 
 (define/contract/doc
   (survival-game #:headless        [headless #f]
-                 #:bg              [bg-ent (plain-bg-entity)]
+                 #:bg              [bg-ent (plain-forest-bg)]
                  #:avatar          [p         #f #;(custom-avatar)]
                  #:starvation-rate [sr 50]
+                 #:sky             [sky (custom-sky)]
                  #:npc-list        [npc-list  '() #;(list (random-npc (posn 200 200)))]
                  #:enemy-list      [e-list (list (custom-enemy))]
                  #:coin-list       [coin-list '() #;(list (coin #:entity (coin-entity) #:amount-in-world 10))]
@@ -554,6 +742,7 @@
         #:bg [bg entity?]
         #:avatar [avatar entity?]
         #:starvation-rate [starvation-rate number?]
+        #:sky        [sky sky?]
         #:npc-list   [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list  [coin-list    (listof (or/c entity? procedure?))]
@@ -612,22 +801,35 @@
                                              show)))
         e))
 
-  
+  (define LENGTH-OF-DAY    (sky-day-length sky))
+  (define START-OF-DAYTIME (sky-day-start sky))
+  (define END-OF-DAYTIME   (sky-day-end sky))
 
-  
-  #;(define (health-entity)
-    (define max-health 100)
+    ; === DAY/NIGHT FUNCTIONS FOR ENEMY ===
+  (define (store-birth-time g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (add-components e (storage "birth-time" game-count)))
 
-    (define e (health-bar-entity #:max 100
-                                 #:starvation-period starvation-period
-                                 #:change-by         -1))
+  ; typically between 6am (600) and 6pm (1800)
+  (define (daytime? g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define time-of-day (modulo game-count LENGTH-OF-DAY))
+    (and (> time-of-day START-OF-DAYTIME)
+         (< time-of-day END-OF-DAYTIME)))
 
-    (~> e
-        (update-entity _ posn? (posn 100 20))
-        (add-components _
-                        (map food->component f-list)
-                        (do-every starvation-period
-                                  (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f)))))
+  (define (should-be-dead? g e)
+    (define game-count (get-counter (get-entity "time manager" g)))
+    (define birth-time (get-storage-data "birth-time" e))
+    (and birth-time
+         (>= (- game-count birth-time) (- END-OF-DAYTIME START-OF-DAYTIME))))
+
+  (define (maybe-add-night-only e)
+    (define ent (if (procedure? e) (e)e))
+    (if (get-storage-data "night-only?" ent)
+        (add-components ent (on-start store-birth-time)
+                            (on-rule daytime? die)
+                            (on-rule should-be-dead? die))
+        ent))
 
   (define (score-entity)
     (define bg (~> (rectangle 1 1 'solid (make-color 0 0 0 100))
@@ -647,6 +849,28 @@
   
   (define updated-food-list (map add-random-start-pos f-list))
   (define updated-coin-list (map add-random-start-pos coin-list))
+  (define updated-enemy-list (map maybe-add-night-only e-list))
+
+  (define (spawn-many-on-current-tile e-list)
+    (apply do-many (map spawn-on-current-tile (clone-by-amount-in-world e-list))))
+
+  (define (night-only? e)
+    (define ent (if (procedure? e)
+                    (e)
+                    e))
+    (get-storage-data "night-only?" ent))
+
+  (define (tm-entity)
+    (time-manager-entity
+     #:components (on-start (set-counter START-OF-DAYTIME))
+                  (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
+                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN"))
+                                    (spawn-many-on-current-tile (filter night-only? updated-enemy-list))
+                                    ))
+                  (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
+                           (spawn (toast-entity "DAYTIME HAS BEGUN")))
+                  ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
+     ))
   
   (define es (filter identity
                      (flatten
@@ -656,11 +880,15 @@
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity) #f)
 
+                       (tm-entity)
+                       (night-sky-with-lighting #:color         (sky-color sky)
+                                                #:max-alpha     (sky-max-alpha sky)
+                                                #:length-of-day (sky-day-length sky)) 
+
                        ;(if p (health-entity) #f)
 
                        player-with-recipes
-              
-              
+                           
                        ;(pine-tree (posn 400 140) #:tile 2)
                        ;(pine-tree (posn 93 136) #:tile 4)
                        ;(round-tree (posn 322 59) #:tile 4)
@@ -669,19 +897,13 @@
               
                        c-list
               
-                       ;(map (λ (c) (entity-cloner c (get-storage-data "amount-in-world" c))) updated-coin-list)
-                       ;(map (λ (f) (entity-cloner f (get-storage-data "amount-in-world" f))) updated-food-list)
-                       
                        (clone-by-amount-in-world updated-coin-list)
                        (clone-by-amount-in-world updated-food-list)
-                       (clone-by-amount-in-world e-list)
+                       (clone-by-amount-in-world updated-enemy-list)
 
                        (cons ent custom-entities)
               
                        bg-with-instructions))))
-
-
-  ;(displayln (~a "Score estimation for your game: " (score-game es)))
   
   (if headless
       (initialize-game es)
@@ -689,63 +911,91 @@
   
   )
 
-#|(define/log "food"
-  (food #:entity [entity (carrot-entity)] #:heals-by [heal-amt 5] #:amount-in-world [world-amt 0])
-  (list entity heal-amt world-amt))
-
-(define/log "coin"
-  (coin #:entity entity #:value [val 10] #:amount-in-world [world-amt 10])
-  (list entity val world-amt))
-|#
-
 (define known-recipes-list '())
 
 (define/log "crafting-menu-set!"
   (crafting-menu-set! #:open-key     [open-key 'space]
                       #:open-sound   [open-sound #f]
                       #:select-sound [select-sound #f]
-                      #:recipes r
-                      . recipes)
-  (set! known-recipes-list (append (cons r recipes) known-recipes-list))
+                      ;#:recipes r . recipes
+                      #:recipe-list  [r-list '()]
+                      )
+  (set! known-recipes-list (append r-list known-recipes-list))
   (crafting-menu #:open-key open-key
                  #:open-sound open-sound
                  #:select-sound select-sound
-                 #:recipes r
-                           recipes))
+                 #:recipe-list r-list
+                 ;#:recipes r
+                 ;          recipes
+                           ))
 
 (define default-crafting-menu
-  (crafting-menu-set! #:recipes (recipe #:product (carrot-stew-entity)
-                                        #:build-time 30
-                                        #:ingredients (list "Carrot"))))
+  (crafting-menu-set! #:recipe-list (list (recipe #:product (carrot-stew-entity)
+                                                  #:build-time 30
+                                                  #:ingredients (list "Carrot")))))
 
-(define (custom-crafter #:position   [p (posn 100 100)]
-                        #:tile       [t 0]
-                        #:name       [name "Crafter"]
-                        #:sprite     [sprite cauldron-sprite]
-                        #:menu       [menu  default-crafting-menu]
-                        #:components [c #f] . custom-components)
+(define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
+                                     #:tile       [t 0]
+                                     #:name       [name "Crafter"]
+                                     #:sprite     [sprite cauldron-sprite]
+                                     ;#:menu       [menu  default-crafting-menu]
+                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew-entity)
+                                                                         #:build-time 30
+                                                                         #:ingredients (list "Carrot")))]
+                                     #:components [c #f] . custom-components)
+  (->i ()
+       (#:position   [position posn?]
+        #:tile       [tile number?]
+        #:name       [name string?]
+        #:sprite     [sprite sprite?]
+        ;#:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
+        #:recipe-list [recipe-list (listof recipe?)]
+        #:components [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
+       [result entity?])
+
+  @{Returns a custom crafter}
+  
   (crafting-chest p
                   #:sprite sprite
                   #:name   name
                   #:components (active-on-bg t)
                                (counter 0)
-                               menu
+                               (crafting-menu-set! #:recipe-list r-list)
                                (cons c custom-components)))
 
 
-(define (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
-                    #:position   [p (posn 0 0)]
-                    #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
-                                                             "Sydney" "Charlie" "Andy")))]
-                    #:tile       [tile 0]
-                    #:dialog     [d  #f]
-                    #:mode       [mode 'wander]
-                    #:game-width [GAME-WIDTH 480]
-                    #:speed      [spd 2]
-                    #:target     [target "player"]
-                    #:sound      [sound #t]
-                    #:scale      [scale 1]
-                    #:components [c #f] . custom-components )
+(define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+                                 #:position   [p (posn 0 0)]
+                                 #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
+                                                                          "Sydney" "Charlie" "Andy")))]
+                                 #:tile       [tile 0]
+                                 #:dialog     [d  #f]
+                                 #:mode       [mode 'wander]
+                                 #:game-width [GAME-WIDTH 480]
+                                 #:speed      [spd 2]
+                                 #:target     [target "player"]
+                                 #:sound      [sound #t]
+                                 #:scale      [scale 1]
+                                 #:components [c #f] . custom-components )
+
+  (->i () (#:sprite     [sprite sprite?]
+           #:position   [position posn?]
+           #:name       [name string?]
+           #:tile       [tile number?]
+           #:dialog     [dialog dialog?]
+           #:mode       [mode (or/c 'still 'wander 'pace 'follow)]
+           #:game-width [game-width number?]
+           #:speed      [speed number?]
+           #:target     [target string?]
+           #:sound      [sound any/c]
+           #:scale      [scale number?]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Creates a custom npc that can be used in the npc list
+         of @racket[survival-game].}
   
   (define dialog
     (if (not d)
@@ -794,34 +1044,53 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
-        #:components [first-component component?])
-       #:rest [more-components (listof component?)]
+        #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background}
   
 
-  (bg->backdrop-entity (scale 0.25 bg)
+  (add-components (bg->backdrop-entity (scale 0.25 bg)
                        #:rows       rows
                        #:columns    cols
                        #:start-tile t
-                       #:scale 4))
+                       #:scale 4)
+                  (cons c custom-components)))
 
 (define (safe-update-entity e component-pred f)
   (if f
       (update-entity e component-pred f)
       e))
 
-(define (custom-food #:entity           [base-entity (carrot-entity)]
-                     #:sprite           [s #f]
-                     #:position         [p #f]
-                     #:name             [n #f]
-                     #:tile             [t #f]
-                     #:amount-in-world  [world-amt 0]
-                     #:heals-by         [heal-amt 10]
-                     #:respawn?         [respawn? #t]
-                     #:components       [c #f]
-                                        . custom-entities)
+(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
+                                  #:sprite           [s #f]
+                                  #:position         [p #f]
+                                  #:name             [n #f]
+                                  #:tile             [t #f]
+                                  #:amount-in-world  [world-amt 0]
+                                  #:heals-by         [heal-amt 10]
+                                  #:respawn?         [respawn? #t]
+                                  #:components       [c #f]
+                                  . custom-entities)
+  (->i () (#:entity     [entity entity?]
+           #:sprite     [sprite sprite?]
+           #:position   [position posn?]
+           #:name       [name string?]
+           #:tile       [tile number?]
+           #:amount-in-world [amount-in-world number?]
+           #:heals-by   [heal-amt number?]
+           #:respawn?   [respawn? boolean?]
+           #:components [first-component (or/c component-or-system?
+                                               false?
+                                               (listof false?))])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom food, which will be placed into the world
+              automatically if it is passed into @racket[battle-arena-game]
+              via the @racket[#:coin-food] parameter.}
+  
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))
@@ -834,6 +1103,7 @@
                          (safe-update-entity _ active-on-bg? tile)
                          (add-components _ (storage "amount-in-world" world-amt)
                                            (storage "heals-by"        heal-amt)
+                                           ;(static)
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
@@ -844,16 +1114,33 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-(define (custom-coin #:entity           [base-entity (coin-entity)]
-                     #:sprite           [s #f]
-                     #:position         [p #f]
-                     #:name             [n #f]
-                     #:tile             [t #f]
-                     #:amount-in-world  [world-amt 10]
-                     #:value            [val 10]
-                     #:respawn?         [respawn? #t]
-                     #:components       [c #f]
-                                        . custom-entities)
+(define/contract/doc (custom-coin #:entity           [base-entity (coin-entity)]
+                                  #:sprite           [s #f]
+                                  #:position         [p #f]
+                                  #:name             [n #f]
+                                  #:tile             [t #f]
+                                  #:amount-in-world  [world-amt 10]
+                                  #:value            [val 10]
+                                  #:respawn?         [respawn? #t]
+                                  #:components       [c #f]
+                                  . custom-entities)
+
+   (->i () (#:entity   [entity entity?]
+            #:sprite   [sprite sprite?]
+            #:position [position posn?]
+            #:name     [name string?]
+            #:tile     [tile number?]
+            #:amount-in-world [amount-in-world number?]
+            #:value    [value number?]
+            #:respawn? [respawn boolean?]
+            #:components [first-component component-or-system?])
+        #:rest [more-components (listof component-or-system?)]
+        [returns entity?])
+
+  @{Returns a custom coin, which will be placed into the world
+              automatically if it is passed into @racket[battle-arena-game]
+              via the @racket[#:coin-list] parameter.}
+  
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))
@@ -875,6 +1162,7 @@
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
+
 ; ==== PREBUILT DARTS ====
 (define (sword #:sprite     [s swinging-sword-sprite]
                #:damage     [dmg 50]
@@ -905,6 +1193,48 @@
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
 
+; ==== PREBUILT FOOD AND RECIPES ===
+(define (carrot #:sprite           [s carrot-sprite]
+                #:position         [p (posn 100 100)]
+                #:name             [n "Carrot"]
+                #:tile             [t 0]
+                #:amount-in-world  [world-amt 0]
+                #:heals-by         [heal-amt 20]
+                #:respawn?         [respawn? #t]
+                #:components       [c #f]
+                . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define (carrot-stew #:sprite           [s carrot-stew-sprite]
+                     #:position         [p (posn 100 100)]
+                     #:name             [n "Carrot Stew"]
+                     #:tile             [t 0]
+                     #:amount-in-world  [world-amt 0]
+                     #:heals-by         [heal-amt 40]
+                     #:respawn?         [respawn? #f]
+                     #:components       [c #f]
+                     . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define carrot-stew-recipe
+  (recipe #:product (carrot-stew-entity)
+          #:build-time 30
+          #:ingredients (list "Carrot")))
+
 ; ==== HEALTH HANDLERS ====
 (define (set-health-to amt)
   (lambda (g e)
@@ -917,30 +1247,9 @@
         (change-stat "health" e amt)
         (set-stat "health" e max))))
 
-(module+ test
-  (survival-game
-   #:bg     (custom-background #:bg-img SNOW-BG)
-   #:avatar (custom-avatar #:sprite (random-character-sprite))
-   #:starvation-rate 20
-   #:coin-list  (list (custom-coin))
-   #:npc-list   (list (custom-npc))
-   #:enemy-list (list (custom-enemy #:sprite bat-sprite
-                                    #:ai 'medium
-                                    #:amount-in-world 5)
-                      (custom-enemy #:sprite slime-sprite
-                                    #:ai 'easy
-                                    #:amount-in-world 10)
-                      ; adding curry allows each enemy to have a random sprite
-                      (curry custom-enemy #:amount-in-world 10)
-                      )
-   #:food-list (list (custom-food #:name "Carrot"
-                                  #:sprite carrot-sprite
-                                  #:amount-in-world 30)
-                     (custom-food #:name "Carrot Stew"
-                                  #:sprite carrot-stew-sprite
-                                  #:heals-by 40
-                                  #:respawn? #f))
-   #:crafter-list (list (custom-crafter))))
+(module test racket
+  (displayln "TEST!!!")
+  )
 
 
 

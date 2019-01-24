@@ -1,22 +1,15 @@
 #lang at-exp racket
 
-
 (require scribble/srcdoc
          scribble/extract)
 
 (require (for-doc racket/base scribble/manual))
 
-
-;This works, but there are broken links in the docs.
-;  For some reason, which I don't understand, Scribble's in-source
-;  documentation only works in this main.rkt file.  Doing it
-;  in battle-arena-game-jam.rkt (where I want to be doing it),
-;  leads to broken links.
-;  https://github.com/thoughtstem/TS-Languages/issues/9
-
-(provide-extracted "./jam/battle-arena-game-jam.rkt")
-
 (module reader syntax/module-reader
     battle-arena/jam-lang)
 
+(provide (all-from-out "./jam-lang.rkt"))
+(provide (all-from-out "./assets.rkt"))
 
+(require "./jam-lang.rkt")
+(require "./assets.rkt")

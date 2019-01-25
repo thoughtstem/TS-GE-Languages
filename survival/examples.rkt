@@ -199,10 +199,14 @@
    #:avatar     (custom-avatar)
    #:enemy-list (list (custom-enemy))))
 
-
-
-
 (define-example-code survival enemy-2
+
+  (survival-game
+   #:avatar     (custom-avatar)
+   #:enemy-list (list (curry custom-enemy #:amount-in-world 10))))
+
+
+(define-example-code survival enemy-3
   
   (define (my-enemy)
     (custom-enemy #:ai              'medium
@@ -213,24 +217,35 @@
    #:avatar     (custom-avatar)
    #:enemy-list (list (my-enemy))))
 
+(define-example-code survival enemy-4
 
-
-(define-example-code survival enemy-3
-
-  (define (my-weapon)
-    (custom-weapon #:name "Acidtron"
-                   #:dart (custom-dart #:damage 50
-                                       #:speed  20)))
- 
-  (define (my-enemy)
+  (define (easy-enemy)
+    (custom-enemy #:ai           'easy
+                  #:sprite       slime-sprite
+                  #:amount-in-world 5))
+  
+  (define (medium-enemy)
     (custom-enemy #:ai              'medium
                   #:sprite          bat-sprite
                   #:amount-in-world 5
-                  #:weapon          (my-weapon)))
+                  #:night-only? #t))
  
   (survival-game
    #:avatar     (custom-avatar)
-   #:enemy-list   (list (my-enemy))))
+   #:enemy-list (list (easy-enemy)
+                      (medium-enemy))))
+
+(define-example-code survival enemy-5
+ 
+  (define (hard-enemy)
+    (custom-enemy #:ai              'hard
+                  #:sprite          snake-sprite
+                  #:amount-in-world 5
+                  #:weapon          (acid-spitter #:damage 50)))
+ 
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:enemy-list   (list (hard-enemy))))
 
 
 

@@ -932,19 +932,12 @@
                  ;          recipes
                            ))
 
-(define default-crafting-menu
-  (crafting-menu-set! #:recipe-list (list (recipe #:product (carrot-stew-entity)
-                                                  #:build-time 30
-                                                  #:ingredients (list "Carrot")))))
-
 (define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
-                                     ;#:menu       [menu  default-crafting-menu]
-                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew-entity)
+                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew)
                                                                          #:build-time 30
-                                                                         ;#:ingredients (list "Carrot")
                                                                          ))]
                                      #:components [c #f] . custom-components)
   (->i ()
@@ -952,7 +945,6 @@
         #:tile       [tile number?]
         #:name       [name string?]
         #:sprite     [sprite sprite?]
-        ;#:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1253,7 +1245,7 @@
                 #:components       (cons c custom-entities)))
 
 (define carrot-stew-recipe
-  (recipe #:product (carrot-stew-entity)
+  (recipe #:product (carrot-stew)
           #:build-time 30
           #:ingredients (list "Carrot")))
 

@@ -10,7 +10,8 @@
          carrot
          carrot-stew
          carrot-stew-recipe
-         fish)
+         fish
+         acid-spitter)
 
 (require scribble/srcdoc)
 
@@ -503,7 +504,7 @@
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
-        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
@@ -1188,6 +1189,40 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
+
+(define (acid-spitter  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
+                                                 -3 3
+                                                 (overlay (circle 10 'outline 'green)
+                                                          (circle 10 'solid (make-color 180 200 0 128))))]
+                       #:damage      [dmg 10]
+                       #:durability  [dur 5]
+                       #:speed       [spd 3]
+                       #:range       [rng 100]
+                       #:name              [n "Acid Spitter"]
+                       #:fire-mode         [fm 'normal]
+                       #:fire-rate         [fr 3]
+                       #:fire-key          [key 'f]
+                       #:mouse-fire-button [button #f]
+                       #:point-to-mouse?   [ptm? #f]
+                       #:rapid-fire?       [rf? #t]
+                       #:rarity            [rarity 'common])
+  (define acid-dart
+    (custom-dart #:position (posn 25 0)
+                 #:sprite     s
+                 #:damage     dmg
+                 #:durability dur
+                 #:speed      spd
+                 #:range      rng
+                 #:components (on-start (random-size 0.5 1))))
+  (custom-weapon #:sprite (make-icon "AS")
+                 #:dart   acid-dart
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-key key
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
 
 ; ==== PREBUILT FOOD AND RECIPES ===
 (define (carrot #:sprite           [s carrot-sprite]

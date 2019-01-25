@@ -6,9 +6,6 @@
  (survival-game
    #:avatar (custom-avatar)))
 
-
-
-
 (define-example-code survival avatar-2 
 
   (define (my-avatar)
@@ -21,14 +18,20 @@
 (define-example-code survival avatar-3
 
   (define (my-avatar)
-    (custom-avatar #:sprite (random-character)))
+    (custom-avatar #:sprite (random-character-sprite)))
   
  (survival-game
    #:avatar (my-avatar)))
 
-                                        
-
+                                       
 (define-example-code survival avatar-4
+  (define (my-avatar)
+    (custom-avatar #:sprite STUDENT-IMAGE-HERE))
+
+   (survival-game
+     #:avatar (my-avatar)))
+
+(define-example-code survival avatar-5
   (define (my-avatar)
     (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
                                            #:columns 4)))
@@ -58,8 +61,8 @@
 
 (define-example-code survival coin-3
   (define (my-coin)
-    (custom-coin #:sprite          copper-coin-sprite
-                 #:name            "copper coin"
+    (custom-coin #:sprite          silver-coin-sprite
+                 #:name            "Silver Coin"
                  #:value           500
                  #:amount-in-world 20))
 
@@ -68,16 +71,15 @@
    #:coin-list  (list (my-coin))))
 
 
-
 (define-example-code survival coin-4
   
   (define (my-coin)
-    (custom-coin #:sprite copper-coin-sprite
-                 #:name   "copper coin"))
+    (custom-coin #:sprite silver-coin-sprite
+                 #:name   "Silver Coin"))
 
-  (define (special-coin)
-    (custom-coin #:sprite          bat-sprite
-                 #:name            "bat coin"
+  (define (my-special-coin)
+    (custom-coin #:sprite          gold-coin-sprite
+                 #:name            "Gold Coin"
                  #:value           1000
                  #:amount-in-world 1
                  #:respawn?        #f))
@@ -85,8 +87,7 @@
   (survival-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)
-                      (special-coin))))
-
+                      (my-special-coin))))
 
 
 (define-example-code survival crafter-1
@@ -95,87 +96,67 @@
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter))))
 
-
-
-
 (define-example-code survival crafter-2
-  (define (carrot-cake)
-    (custom-food #:sprite          (rectangle 40 20 "solid" "brown")
-                 #:name            "Carrot Cake"
-                 #:heals-by        25
-                 #:amount-in-world 1))
-
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (custom-crafter))))
-
-
+   #:food-list    (list (carrot #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter
+                         #:recipe-list (list carrot-stew-recipe)))))
  
 (define-example-code survival crafter-3
 
-  (define (carrot-cake)
-    (custom-food #:sprite   (rectangle 40 20 "solid" "brown")
-                 #:name     "Carrot Cake"
-                 #:heals-by 25))
+  (define (fish-stew)
+    (custom-food #:name "Fish Stew"
+                 #:sprite fish-stew-sprite
+                 #:respawn? #f
+                 #:heals-by 50))
 
-  (define carrot-cake-recipe
-    (recipe #:product     (carrot-cake)
-            #:build-time  5
-            #:ingredients (list "Carrot")))
-
-  (define (my-oven)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes carrot-cake-recipe))) 
+  (define fish-stew-recipe
+    (recipe #:product (fish-stew)
+            #:build-time 40
+            #:ingredients (list "Fish")))
 
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (my-oven))))
+   #:food-list    (list (fish #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
+                                        #:recipe-list (list red-curry-recipe)))))
 
 
 
 (define-example-code survival crafter-4
-  (define (carrot-cake)
-    (custom-food #:sprite   (rectangle 40 20 "solid" "brown")
-                 #:name     "Carrot Cake"
-                 #:heals-by 25))
+  
+  (define (fish-stew)
+    (custom-food #:name "Fish Stew"
+                 #:sprite fish-stew-sprite
+                 #:respawn? #f
+                 #:heals-by 50))
 
-  (define carrot-cake-recipe
-    (recipe #:product     (carrot-cake)
-            #:build-time  5
-            #:ingredients (list "Carrot")
-            ))
+  (define fish-stew-recipe
+    (recipe #:product (fish-stew)
+            #:build-time 40
+            #:ingredients (list "Fish")))
 
-  (define (carrot-cupcake)
-    (custom-food #:sprite   (square 10 "solid" "brown")
-                 #:name     "Carrot Cupcake"
-                 #:heals-by 15))
-
-  (define carrot-cupcake-recipe
-    (recipe #:product     (carrot-cupcake)
-            #:build-time  10
-            #:ingredients (list "Carrot Cake")
-            ))
-
-  (define (my-oven)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes carrot-cake-recipe
-                                               carrot-cupcake-recipe))) 
-
+  (define (my-cauldron)
+    (custom-crafter #:sprite      cauldron-sprite
+                    #:position    (posn 200 200)
+                    #:tile        2
+                    #:recipe-list (list carrot-stew-recipe
+                                        fish-stew-recipe)))
+  
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (my-oven))))
+   #:food-list    (list (carrot #:amount-in-world 10)
+                        (fish   #:amount-in-world 10))
+   #:crafter-list (list (my-cauldron))))
 
 
-(define-example-code survival day-night-cycle  
-  (define (my-stew)
-    (custom-food #:name "Carrot Stew"
-                 #:sprite carrot-stew-sprite
-                 #:heals-by 40
-                 #:respawn? #f))
+  (define-example-code survival day-night-cycle  
+    (define (my-stew)
+      (custom-food #:name "Carrot Stew"
+                   #:sprite carrot-stew-sprite
+                   #:heals-by 40
+                   #:respawn? #f))
   
   (survival-game
    #:bg     (custom-background #:bg-img FOREST-BG)

@@ -9,7 +9,8 @@
          plain-forest-bg
          carrot
          carrot-stew
-         carrot-stew-recipe)
+         carrot-stew-recipe
+         fish)
 
 (require scribble/srcdoc)
 
@@ -781,12 +782,14 @@
   (define starvation-period (max 1 (- 100 (min 100 sr))))
 
   (define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
+
+  (define known-products-list (map recipe-product known-recipes-list))
   
   (define player-with-recipes
     (if p
         (add-components p (map recipe->system known-recipes-list)
                           (apply precompiler f-list)
-                          (map food->component f-list)
+                          (map food->component (append f-list known-products-list))
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
@@ -929,26 +932,19 @@
                  ;          recipes
                            ))
 
-(define default-crafting-menu
-  (crafting-menu-set! #:recipe-list (list (recipe #:product (carrot-stew-entity)
-                                                  #:build-time 30
-                                                  #:ingredients (list "Carrot")))))
-
 (define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
-                                     ;#:menu       [menu  default-crafting-menu]
-                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew-entity)
+                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew)
                                                                          #:build-time 30
-                                                                         #:ingredients (list "Carrot")))]
+                                                                         ))]
                                      #:components [c #f] . custom-components)
   (->i ()
        (#:position   [position posn?]
         #:tile       [tile number?]
         #:name       [name string?]
         #:sprite     [sprite sprite?]
-        ;#:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1068,7 +1064,7 @@
                                   #:position         [p #f]
                                   #:name             [n #f]
                                   #:tile             [t #f]
-                                  #:amount-in-world  [world-amt 0]
+                                  #:amount-in-world  [world-amt 1]
                                   #:heals-by         [heal-amt 10]
                                   #:respawn?         [respawn? #t]
                                   #:components       [c #f]
@@ -1114,7 +1110,7 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-(define/contract/doc (custom-coin #:entity           [base-entity (coin-entity)]
+(define/contract/doc (custom-coin #:entity           [base-entity (copper-coin-entity)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
                                   #:name             [n #f]
@@ -1198,11 +1194,29 @@
                 #:position         [p (posn 100 100)]
                 #:name             [n "Carrot"]
                 #:tile             [t 0]
-                #:amount-in-world  [world-amt 0]
+                #:amount-in-world  [world-amt 1]
                 #:heals-by         [heal-amt 20]
                 #:respawn?         [respawn? #t]
                 #:components       [c #f]
                 . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define (fish #:sprite           [s fish-sprite]
+              #:position         [p (posn 100 100)]
+              #:name             [n "Fish"]
+              #:tile             [t 0]
+              #:amount-in-world  [world-amt 1]
+              #:heals-by         [heal-amt 20]
+              #:respawn?         [respawn? #t]
+              #:components       [c #f]
+              . custom-entities)
   (custom-food  #:sprite           s 
                 #:position         p 
                 #:name             n
@@ -1231,7 +1245,7 @@
                 #:components       (cons c custom-entities)))
 
 (define carrot-stew-recipe
-  (recipe #:product (carrot-stew-entity)
+  (recipe #:product (carrot-stew)
           #:build-time 30
           #:ingredients (list "Carrot")))
 

@@ -151,47 +151,47 @@
    #:crafter-list (list (my-cauldron))))
 
 
-  (define-example-code survival day-night-cycle  
-    (define (my-stew)
-      (custom-food #:name "Carrot Stew"
-                   #:sprite carrot-stew-sprite
-                   #:heals-by 40
-                   #:respawn? #f))
-  
+
+; Make a survival game with an avatar and a slow changing sky
+(define-example-code survival sky-1 
+
   (survival-game
-   #:bg     (custom-background #:bg-img FOREST-BG)
-   #:avatar (custom-avatar #:sprite (random-character-sprite)
-                           #:key-mode 'wasd
-                           #:mouse-aim? #t)
-   #:starvation-rate 20
-   
+   #:avatar (custom-avatar)
+   #:sky    (custom-sky #:length-of-day 5000))
+   )
+
+; Make a survival game with an avatar and a fast changing sky with max-darkness
+(define-example-code survival sky-2 
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:sky    (custom-sky #:length-of-day 500
+                        #:max-darkness  255)))
+
+; Make a survival game with an avatar and a darkmagenta night-sky with 150 darkness
+(define-example-code survival sky-3 
+
+  (survival-game
+   #:avatar (custom-avatar)
    #:sky (custom-sky #:night-sky-color  'darkmagenta
-                     #:length-of-day    4000
-                     #:start-of-daytime 1000
-                     #:end-of-daytime   3000 
-                     #:max-darkness     150)
-   
-   #:coin-list  (list (custom-coin))
-   #:npc-list   (list (custom-npc))
-   #:enemy-list (list (custom-enemy #:sprite slime-sprite
-                                    #:amount-in-world 10
-                                    #:ai 'easy
-                                    #:weapon (custom-weapon #:dart (acid #:damage 0))
-                                    #:night-only? #t))
-   #:food-list  (list (custom-food #:name "Carrot"
-                                   #:sprite carrot-sprite
-                                   #:amount-in-world 10)
-                      (my-stew) )
-   #:crafter-list (list (custom-crafter
-                         #:menu (crafting-menu-set!
-                                 #:recipes (recipe #:product (my-stew)
-                                                   #:build-time 20
-                                                   #:ingredients (list "Carrot")))))
-   ))
+                     #:max-darkness     150)))
 
+; Make a survival game with an avatar and a very short night-time and an enemy that only comes out at night.
+(define-example-code survival sky-4 
 
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:enemy-list   (list (custom-enemy #:amount-in-world 20
+                                      #:night-only? #t))
+   #:sky          (custom-sky #:length-of-day    2400
+                              #:start-of-daytime 200
+                              #:end-of-daytime   2200)))
 
-
+; Make a a survival game with the fastest starvation rate
+(define-example-code survival starvation-rate
+  (survival-game
+   #:avatar          (custom-avatar)
+   #:starvation-rate 100))
  
 (define-example-code survival enemy-1
 
@@ -321,14 +321,6 @@
 
   (require 2htdp/image)
   (circle 80 'solid 'red))
-
-
-
- 
-(define-example-code survival starvation-rate
-  (survival-game
-   #:avatar          (custom-avatar)
-   #:starvation-rate 100))
 
 
 

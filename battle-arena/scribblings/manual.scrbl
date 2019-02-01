@@ -22,7 +22,7 @@
  reuben.
 }
 
-@(include-extracted "../jam/battle-arena-game-jam.rkt")
+@(include-extracted "../lang/main.rkt")
 
 @section{Image Assets}
 

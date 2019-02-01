@@ -44,7 +44,16 @@
          dagger-tower-builder
 
          rocket
-         rocket-sprite)
+         rocket-sprite
+
+         sprite?
+         fire-mode?    
+         rarity-level?
+         ai-level?
+
+         draw-plain-bg
+         plain-bg
+         )
 
 (define sprite? (or/c image? animated-sprite?))
 
@@ -144,7 +153,7 @@
            #:shield [shield positive?]
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
-           #:components [first-component component-or-system?])
+           #:components [first-component (or/c component-or-system? false? (listof false?))])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
@@ -392,16 +401,16 @@
 
 
 
-(define/contract/doc (custom-weapon        #:name        [n "Repeater"]
-                                           #:sprite      [s chest-sprite]
-                                           #:dart      [b (custom-dart)]
-                                           #:fire-mode   [fm 'normal]
-                                           #:fire-rate   [fr 3]
-                                           #:fire-key    [key 'f]
-                                           #:mouse-fire-button [button 'left]
-                                           #:point-to-mouse? [ptm? #t]
-                                           #:rapid-fire?       [rf? #t]
-                                           #:rarity      [rarity 'common])
+(define/contract/doc (custom-weapon #:name              [n "Repeater"]
+                                    #:sprite            [s chest-sprite]
+                                    #:dart              [b (custom-dart)]
+                                    #:fire-mode         [fm 'normal]
+                                    #:fire-rate         [fr 3]
+                                    #:fire-key          [key 'f]
+                                    #:mouse-fire-button [button 'left]
+                                    #:point-to-mouse?   [ptm? #t]
+                                    #:rapid-fire?       [rf? #t]
+                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
         #:sprite      [sprite sprite?]
@@ -583,6 +592,39 @@
   (apply + (map entity->amount es)))
   
 
+(define (draw-plain-bg)
+  (foldl (λ (image base)
+           (place-image image
+                        (random 24) (random 18)
+                        base))
+         (rectangle 24 18 'solid (color 190 143 82))
+         (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
+               )))
+
+(define (plain-bg #:bg-img     [bg (draw-plain-bg)]
+                  #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
+                  #:rows       [rows 3]
+                  #:columns    [cols 3]
+                  #:start-tile [t 0]
+                  #:components [c #f]
+                  . custom-components)
+  (add-components (bg->backdrop-entity bg
+                                       #:rows       rows
+                                       #:columns    cols
+                                       #:start-tile t
+                                       #:scale scale)
+                  (cons c custom-components)))
+
+
 (define/contract/doc (custom-background #:bg-img     [bg FOREST-BG]
                                         #:rows       [rows 3]
                                         #:columns    [cols 3]
@@ -595,18 +637,17 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
-        #:components [first-component component-or-system?])
+        #:components [first-component (or/c component-or-system? (listof false?))])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background}
   
-
-  (bg->backdrop-entity (scale 0.25 bg)
-                       #:rows       rows
-                       #:columns    cols
-                       #:start-tile t
-                       #:scale 4))
+ (bg->backdrop-entity (scale 0.25 bg)
+                         #:rows       rows
+                         #:columns    cols
+                         #:start-tile t
+                         #:scale 4))
 
 
 
@@ -630,7 +671,7 @@
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
         #:item-slots [item-slots number?]
-        #:components [first-component component-or-system?]
+        #:components [first-component (or/c component-or-system? false? (listof false?))]
         )
        #:rest (rest (listof component-or-system?))
        [returns entity?])
@@ -706,7 +747,7 @@
   (battle-arena-game
    #:headless       [headless #f]
    #:bg             [bg-ent (custom-background)]
-   #:avatar         [p (custom-avatar)]
+   #:avatar         [p #f]
    #:enemy-list     [e-list (list (custom-enemy)
                                   (custom-enemy #:weapon (custom-weapon #:name "Sword"
                                                                         #:dart (sword))))]
@@ -718,11 +759,11 @@
   (->i ()
        (#:headless [headless boolean?]
         #:bg [bg entity?]
-        #:avatar [avatar entity?]
+        #:avatar [avatar (or/c entity? false?)]
         #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
         #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
-        #:other-entities [other-entities (or/c #f entity?)])
+        #:other-entities [other-entities (or/c #f entity? (listof false?))])
        #:rest [rest (listof entity?)]
        [res () game?])
 
@@ -768,11 +809,11 @@
                       (map armor-entity->player-system armor-list)
                       (map item-entity->player-system powerups-list)))
 
-  (define move-keys (if (eq? (get-key-mode p) 'wasd)
+  (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
                         "WASD KEYS"
                         "ARROW KEYS"))
 
-  (define shoot-key (if (get-component player-with-weapons on-mouse?)
+  (define shoot-key (if (and player-with-weapons (get-component player-with-weapons on-mouse?))
                         "LEFT-CLICK"
                         "F"))
 
@@ -781,7 +822,8 @@
          (eq? (on-rule-rule? c) mouse-in-game?)
          (eq? (on-rule-func c) point-to-mouse)))
 
-  (define mouse-aim? (get-component p mouse-aim-component?))
+  (define mouse-aim? (and p
+                          (get-component p mouse-aim-component?)))
 
   (define (add-random-start-pos e)
     (define world-amt (get-storage-data "amount-in-world" e))
@@ -1020,9 +1062,9 @@
        
 
 
-#;(module+ test
+(module+ test
   (battle-arena-game
-   #:bg              (custom-background)
+   #:bg              (custom-background #:bg-img SNOW-BG)
    #:avatar          (custom-avatar)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"
@@ -1384,7 +1426,7 @@
         (set-stat "shield" e 100))))
 
 
-(module test racket
+#;(module test racket
   (displayln "TEST!!!")
   )
 

@@ -39,9 +39,6 @@
          )
 
 ;; ---- copied from battle-arena to make katas work
-(define sprite?
-  (or/c image? animated-sprite?))
-
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
 

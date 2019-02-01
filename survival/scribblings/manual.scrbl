@@ -9,7 +9,7 @@
 
 @defmodulelang[survival]
 
-@(include-extracted "../jam/survival-game-jam.rkt")
+@(include-extracted "../lang/main.rkt")
 
 @section{Image Assets}
 

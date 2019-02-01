@@ -6,8 +6,10 @@
 (require (for-doc racket/base scribble/manual))
 
 (module reader syntax/module-reader
-  survival/jam-lang)
+  survival/lang)
 
-(provide (all-from-out "./jam-lang.rkt"))
+(provide (all-from-out "./lang.rkt"
+                       "./browsable-assets.rkt"))
 
-(require "./jam-lang.rkt")
+(require "./lang.rkt"
+         "./browsable-assets.rkt")

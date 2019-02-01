@@ -1,0 +1,1 @@
+("7.1" ("2db1ef955c713a3d62f855dfa9567323f97f4f31" . "f458bcf14df53e7917e2c14ff30f7414c66c65a1") (collects #"battle-arena" #"examples.rkt") (collects #"battle-arena-starwars" #"lang" #"main.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"rackunit" #"main.rkt") (collects #"ts-kata-util" #"main.rkt"))

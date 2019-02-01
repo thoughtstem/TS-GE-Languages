@@ -9,7 +9,13 @@
          plain-forest-bg
          carrot
          carrot-stew
-         carrot-stew-recipe)
+         carrot-stew-recipe
+         fish
+         acid-spitter
+         sky?
+         plain-forest-bg
+         draw-plain-forest-bg
+         ai-level?)
 
 (require scribble/srcdoc)
 
@@ -32,7 +38,6 @@
 (define (HEIGHT)      360)
 (define (TOTAL-TILES) 9)
 
-(define sprite? (or/c image? animated-sprite?))
 
 (define dialog? (or/c (listof string?) (listof (listof string?))))
 
@@ -425,7 +430,7 @@
         #:speed [speed number?]
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
-        #:components [first-component component-or-system?]
+        #:components [first-component (or/c component-or-system? false? (listof false?))]
         )
        #:rest (rest (listof component-or-system?))
        [returns entity?])
@@ -502,7 +507,7 @@
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
-        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
@@ -738,17 +743,17 @@
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
-       (#:headless [headless boolean?]
-        #:bg [bg entity?]
-        #:avatar [avatar entity?]
-        #:starvation-rate [starvation-rate number?]
-        #:sky        [sky sky?]
-        #:npc-list   [npc-list     (listof (or/c entity? procedure?))]
-        #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
-        #:coin-list  [coin-list    (listof (or/c entity? procedure?))]
-        #:food-list  [food-list   (listof (or/c entity? procedure?))]
-        #:crafter-list [crafter-list (listof (or/c entity? procedure?))]
-        #:other-entities [other-entities (or/c #f entity?)])
+       (#:headless         [headless boolean?]
+        #:bg               [bg entity?]
+        #:avatar           [avatar (or/c entity? #f)]
+        #:starvation-rate  [starvation-rate number?]
+        #:sky              [sky sky?]
+        #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
+        #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
+        #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
+        #:food-list        [food-list   (listof (or/c entity? procedure?))]
+        #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
+        #:other-entities   [other-entities (or/c #f entity? (listof #f))])
        #:rest [rest (listof entity?)]
        [res () game?])
 
@@ -781,12 +786,14 @@
   (define starvation-period (max 1 (- 100 (min 100 sr))))
 
   (define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
+
+  (define known-products-list (map recipe-product known-recipes-list))
   
   (define player-with-recipes
     (if p
         (add-components p (map recipe->system known-recipes-list)
                           (apply precompiler f-list)
-                          (map food->component f-list)
+                          (map food->component (append f-list known-products-list))
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
@@ -929,26 +936,19 @@
                  ;          recipes
                            ))
 
-(define default-crafting-menu
-  (crafting-menu-set! #:recipe-list (list (recipe #:product (carrot-stew-entity)
-                                                  #:build-time 30
-                                                  #:ingredients (list "Carrot")))))
-
 (define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
-                                     ;#:menu       [menu  default-crafting-menu]
-                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew-entity)
+                                     #:recipe-list [r-list (list (recipe #:product (carrot-stew)
                                                                          #:build-time 30
-                                                                         #:ingredients (list "Carrot")))]
+                                                                         ))]
                                      #:components [c #f] . custom-components)
   (->i ()
        (#:position   [position posn?]
         #:tile       [tile number?]
         #:name       [name string?]
         #:sprite     [sprite sprite?]
-        ;#:menu       [menu (listof (or/c component-or-system? precompiler? on-key? observe-change?))]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1044,7 +1044,7 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
-        #:components [first-component component-or-system?])
+        #:components [first-component (or/c component-or-system? #f (listof #f))])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
@@ -1068,7 +1068,7 @@
                                   #:position         [p #f]
                                   #:name             [n #f]
                                   #:tile             [t #f]
-                                  #:amount-in-world  [world-amt 0]
+                                  #:amount-in-world  [world-amt 1]
                                   #:heals-by         [heal-amt 10]
                                   #:respawn?         [respawn? #t]
                                   #:components       [c #f]
@@ -1114,7 +1114,7 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-(define/contract/doc (custom-coin #:entity           [base-entity (coin-entity)]
+(define/contract/doc (custom-coin #:entity           [base-entity (copper-coin-entity)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
                                   #:name             [n #f]
@@ -1193,16 +1193,68 @@
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
 
+(define (acid-spitter  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
+                                                 -3 3
+                                                 (overlay (circle 10 'outline 'green)
+                                                          (circle 10 'solid (make-color 180 200 0 128))))]
+                       #:damage      [dmg 10]
+                       #:durability  [dur 5]
+                       #:speed       [spd 3]
+                       #:range       [rng 100]
+                       #:name              [n "Acid Spitter"]
+                       #:fire-mode         [fm 'normal]
+                       #:fire-rate         [fr 3]
+                       #:fire-key          [key 'f]
+                       #:mouse-fire-button [button #f]
+                       #:point-to-mouse?   [ptm? #f]
+                       #:rapid-fire?       [rf? #t]
+                       #:rarity            [rarity 'common])
+  (define acid-dart
+    (custom-dart #:position (posn 25 0)
+                 #:sprite     s
+                 #:damage     dmg
+                 #:durability dur
+                 #:speed      spd
+                 #:range      rng
+                 #:components (on-start (random-size 0.5 1))))
+  (custom-weapon #:sprite (make-icon "AS")
+                 #:dart   acid-dart
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-key key
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
+
 ; ==== PREBUILT FOOD AND RECIPES ===
 (define (carrot #:sprite           [s carrot-sprite]
                 #:position         [p (posn 100 100)]
                 #:name             [n "Carrot"]
                 #:tile             [t 0]
-                #:amount-in-world  [world-amt 0]
+                #:amount-in-world  [world-amt 1]
                 #:heals-by         [heal-amt 20]
                 #:respawn?         [respawn? #t]
                 #:components       [c #f]
                 . custom-entities)
+  (custom-food  #:sprite           s 
+                #:position         p 
+                #:name             n
+                #:tile             t
+                #:amount-in-world  world-amt
+                #:heals-by         heal-amt
+                #:respawn?         respawn?
+                #:components       (cons c custom-entities)))
+
+(define (fish #:sprite           [s fish-sprite]
+              #:position         [p (posn 100 100)]
+              #:name             [n "Fish"]
+              #:tile             [t 0]
+              #:amount-in-world  [world-amt 1]
+              #:heals-by         [heal-amt 20]
+              #:respawn?         [respawn? #t]
+              #:components       [c #f]
+              . custom-entities)
   (custom-food  #:sprite           s 
                 #:position         p 
                 #:name             n
@@ -1231,7 +1283,7 @@
                 #:components       (cons c custom-entities)))
 
 (define carrot-stew-recipe
-  (recipe #:product (carrot-stew-entity)
+  (recipe #:product (carrot-stew)
           #:build-time 30
           #:ingredients (list "Carrot")))
 

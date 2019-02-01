@@ -6,10 +6,7 @@
  (survival-game
    #:avatar (custom-avatar)))
 
-
-
-
-(define-example-code survival avatar-2
+(define-example-code survival avatar-2 
 
   (define (my-avatar)
     (custom-avatar #:sprite (star 30 'solid 'yellow)))
@@ -21,21 +18,18 @@
 (define-example-code survival avatar-3
 
   (define (my-avatar)
-    (custom-avatar #:sprite bat-sprite))
+    (custom-avatar #:sprite (random-character-sprite)))
   
  (survival-game
    #:avatar (my-avatar)))
 
-                                         
-
- 
+                                       
 (define-example-code survival avatar-4
- (define (my-avatar)
-   (custom-avatar #:sprite (circle 40 "solid" "red")))
+  (define (my-avatar)
+    (custom-avatar #:sprite STUDENT-IMAGE-HERE))
 
- (survival-game
-   #:avatar (my-avatar)))
-
+   (survival-game
+     #:avatar (my-avatar)))
 
 (define-example-code survival avatar-5
   (define (my-avatar)
@@ -53,7 +47,6 @@
    #:coin-list  (list (custom-coin))))
 
 
-
  
 (define-example-code survival coin-2
   
@@ -66,11 +59,10 @@
 
 
 
-
 (define-example-code survival coin-3
   (define (my-coin)
-    (custom-coin #:sprite          copper-coin-sprite
-                 #:name            "copper coin"
+    (custom-coin #:sprite          silver-coin-sprite
+                 #:name            "Silver Coin"
                  #:value           500
                  #:amount-in-world 20))
 
@@ -79,16 +71,15 @@
    #:coin-list  (list (my-coin))))
 
 
-
 (define-example-code survival coin-4
   
   (define (my-coin)
-    (custom-coin #:sprite copper-coin-sprite
-                 #:name   "copper coin"))
+    (custom-coin #:sprite silver-coin-sprite
+                 #:name   "Silver Coin"))
 
-  (define (special-coin)
-    (custom-coin #:sprite          bat-sprite
-                 #:name            "bat coin"
+  (define (my-special-coin)
+    (custom-coin #:sprite          gold-coin-sprite
+                 #:name            "Gold Coin"
                  #:value           1000
                  #:amount-in-world 1
                  #:respawn?        #f))
@@ -96,8 +87,7 @@
   (survival-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)
-                      (special-coin))))
-
+                      (my-special-coin))))
 
 
 (define-example-code survival crafter-1
@@ -106,122 +96,102 @@
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter))))
 
-
-
-
 (define-example-code survival crafter-2
-  (define (carrot-cake)
-    (custom-food #:sprite          (rectangle 40 20 "solid" "brown")
-                 #:name            "Carrot Cake"
-                 #:heals-by        25
-                 #:amount-in-world 1))
-
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (custom-crafter))))
-
-
+   #:food-list    (list (carrot #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter
+                         #:recipe-list (list carrot-stew-recipe)))))
  
 (define-example-code survival crafter-3
 
-  (define (carrot-cake)
-    (custom-food #:sprite   (rectangle 40 20 "solid" "brown")
-                 #:name     "Carrot Cake"
-                 #:heals-by 25))
+  (define (fish-stew)
+    (custom-food #:name "Fish Stew"
+                 #:sprite fish-stew-sprite
+                 #:respawn? #f
+                 #:heals-by 50))
 
-  (define carrot-cake-recipe
-    (recipe #:product     (carrot-cake)
-            #:build-time  5
-            #:ingredients (list "Carrot")))
-
-  (define (my-oven)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes carrot-cake-recipe))) 
+  (define fish-stew-recipe
+    (recipe #:product (fish-stew)
+            #:build-time 40
+            #:ingredients (list "Fish")))
 
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (my-oven))))
+   #:food-list    (list (fish #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
+                                        #:recipe-list (list red-curry-recipe)))))
 
 
 
 (define-example-code survival crafter-4
-  (define (carrot-cake)
-    (custom-food #:sprite   (rectangle 40 20 "solid" "brown")
-                 #:name     "Carrot Cake"
-                 #:heals-by 25))
+  
+  (define (fish-stew)
+    (custom-food #:name "Fish Stew"
+                 #:sprite fish-stew-sprite
+                 #:respawn? #f
+                 #:heals-by 50))
 
-  (define carrot-cake-recipe
-    (recipe #:product     (carrot-cake)
-            #:build-time  5
-            #:ingredients (list "Carrot")
-            ))
+  (define fish-stew-recipe
+    (recipe #:product (fish-stew)
+            #:build-time 40
+            #:ingredients (list "Fish")))
 
-  (define (carrot-cupcake)
-    (custom-food #:sprite   (square 10 "solid" "brown")
-                 #:name     "Carrot Cupcake"
-                 #:heals-by 15))
+  (define (my-cauldron)
+    (custom-crafter #:sprite      cauldron-sprite
+                    #:position    (posn 200 200)
+                    #:tile        2
+                    #:recipe-list (list carrot-stew-recipe
+                                        fish-stew-recipe)))
+  
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:food-list    (list (carrot #:amount-in-world 10)
+                        (fish   #:amount-in-world 10))
+   #:crafter-list (list (my-cauldron))))
 
-  (define carrot-cupcake-recipe
-    (recipe #:product     (carrot-cupcake)
-            #:build-time  10
-            #:ingredients (list "Carrot Cake")
-            ))
 
-  (define (my-oven)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes carrot-cake-recipe
-                                               carrot-cupcake-recipe))) 
+
+; Make a survival game with an avatar and a slow changing sky
+(define-example-code survival sky-1 
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:sky    (custom-sky #:length-of-day 5000))
+   )
+
+; Make a survival game with an avatar and a fast changing sky with max-darkness
+(define-example-code survival sky-2 
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:sky    (custom-sky #:length-of-day 500
+                        #:max-darkness  255)))
+
+; Make a survival game with an avatar and a darkmagenta night-sky with 150 darkness
+(define-example-code survival sky-3 
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:sky (custom-sky #:night-sky-color  'darkmagenta
+                     #:max-darkness     150)))
+
+; Make a survival game with an avatar and a very short night-time and an enemy that only comes out at night.
+(define-example-code survival sky-4 
 
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (custom-food #:amount-in-world 10)
-                        (carrot-cake))
-   #:crafter-list (list (my-oven))))
+   #:enemy-list   (list (custom-enemy #:amount-in-world 20
+                                      #:night-only? #t))
+   #:sky          (custom-sky #:length-of-day    2400
+                              #:start-of-daytime 200
+                              #:end-of-daytime   2200)))
 
-
-(define-example-code survival day-night-cycle  
-  (define (my-stew)
-    (custom-food #:name "Carrot Stew"
-                 #:sprite carrot-stew-sprite
-                 #:heals-by 40
-                 #:respawn? #f))
-  
+; Make a a survival game with the fastest starvation rate
+(define-example-code survival starvation-rate
   (survival-game
-   #:bg     (custom-background #:bg-img FOREST-BG)
-   #:avatar (custom-avatar #:sprite (random-character-sprite)
-                           #:key-mode 'wasd
-                           #:mouse-aim? #t)
-   #:starvation-rate 20
-   
-   #:sky (custom-sky #:night-sky-color  'darkmagenta
-                     #:length-of-day    4000
-                     #:start-of-daytime 1000
-                     #:end-of-daytime   3000 
-                     #:max-darkness     150)
-   
-   #:coin-list  (list (custom-coin))
-   #:npc-list   (list (custom-npc))
-   #:enemy-list (list (custom-enemy #:sprite slime-sprite
-                                    #:amount-in-world 10
-                                    #:ai 'easy
-                                    #:weapon (custom-weapon #:dart (acid #:damage 0))
-                                    #:night-only? #t))
-   #:food-list  (list (custom-food #:name "Carrot"
-                                   #:sprite carrot-sprite
-                                   #:amount-in-world 10)
-                      (my-stew) )
-   #:crafter-list (list (custom-crafter
-                         #:menu (crafting-menu-set!
-                                 #:recipes (recipe #:product (my-stew)
-                                                   #:build-time 20
-                                                   #:ingredients (list "Carrot")))))
-   ))
-
-
-
-
+   #:avatar          (custom-avatar)
+   #:starvation-rate 100))
  
 (define-example-code survival enemy-1
 
@@ -229,10 +199,14 @@
    #:avatar     (custom-avatar)
    #:enemy-list (list (custom-enemy))))
 
-
-
-
 (define-example-code survival enemy-2
+
+  (survival-game
+   #:avatar     (custom-avatar)
+   #:enemy-list (list (curry custom-enemy #:amount-in-world 10))))
+
+
+(define-example-code survival enemy-3
   
   (define (my-enemy)
     (custom-enemy #:ai              'medium
@@ -243,24 +217,35 @@
    #:avatar     (custom-avatar)
    #:enemy-list (list (my-enemy))))
 
+(define-example-code survival enemy-4
 
-
-(define-example-code survival enemy-3
-
-  (define (my-weapon)
-    (custom-weapon #:name "Acidtron"
-                   #:dart (custom-dart #:damage 50
-                                       #:speed  20)))
- 
-  (define (my-enemy)
+  (define (easy-enemy)
+    (custom-enemy #:ai           'easy
+                  #:sprite       slime-sprite
+                  #:amount-in-world 5))
+  
+  (define (medium-enemy)
     (custom-enemy #:ai              'medium
                   #:sprite          bat-sprite
                   #:amount-in-world 5
-                  #:weapon          (my-weapon)))
+                  #:night-only? #t))
  
   (survival-game
    #:avatar     (custom-avatar)
-   #:enemy-list   (list (my-enemy))))
+   #:enemy-list (list (easy-enemy)
+                      (medium-enemy))))
+
+(define-example-code survival enemy-5
+ 
+  (define (hard-enemy)
+    (custom-enemy #:ai              'hard
+                  #:sprite          snake-sprite
+                  #:amount-in-world 5
+                  #:weapon          (acid-spitter #:damage 50)))
+ 
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:enemy-list   (list (hard-enemy))))
 
 
 
@@ -336,14 +321,6 @@
 
   (require 2htdp/image)
   (circle 80 'solid 'red))
-
-
-
- 
-(define-example-code survival starvation-rate
-  (survival-game
-   #:avatar          (custom-avatar)
-   #:starvation-rate 100))
 
 
 

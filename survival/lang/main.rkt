@@ -21,7 +21,8 @@
 
 (require (for-doc racket/base scribble/manual ))
 
-(require ts-kata-util)
+(require ts-kata-util
+         "../assets.rkt")
 
 (require (except-in game-engine
                     change-health-by)

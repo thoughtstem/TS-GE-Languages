@@ -125,9 +125,7 @@
 
   
   @{Creates a custom npc that can be used in the npc list
-         of survival-game}
-  ;broken???
- @;@racket[survival-game].}
+         of @racket[survival-game].}
 
   (define dialog
     (if (not d)

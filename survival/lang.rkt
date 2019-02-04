@@ -8,8 +8,9 @@
  (all-from-out racket)
  #%module-begin)
 
-(require "./lang/main.rkt")
-(require "./browsable-assets.rkt")
+(require "./lang/main.rkt"
+         "./browsable-assets.rkt")
+
 (require (except-in game-engine
                     change-health-by))
 (require game-engine-demos-common)

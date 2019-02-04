@@ -57,8 +57,6 @@
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
 
-
-
 (define fire-mode?    (or/c 'normal 'random 'spread 'homing))
 
 

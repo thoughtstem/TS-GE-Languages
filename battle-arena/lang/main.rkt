@@ -46,7 +46,6 @@
          rocket
          rocket-sprite
 
-         sprite?
          fire-mode?    
          rarity-level?
          ai-level?
@@ -55,12 +54,8 @@
          plain-bg
          )
 
-(define sprite? (or/c image? animated-sprite?))
-
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
-
-
 
 (define fire-mode?    (or/c 'normal 'random 'spread 'homing))
 

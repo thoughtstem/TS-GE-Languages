@@ -1,5 +1,5 @@
 980
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q starwars-game)) q (4802 . 18)) ((c def c (c (? . 0) q stormtrooper)) q (5966 . 2)) ((c def c (c (? . 0) q twileck-jedi)) q (5996 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4158 . 14)) ((c def c (c (? . 0) q custom-villain)) q (1040 . 19)) ((c def c (c (? . 0) q boba-fett)) q (5730 . 2)) ((c def c (c (? . 0) q r2-d2)) q (5943 . 2)) ((c def c (c (? . 0) q darth-maul)) q (5757 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2016 . 23)) ((c def c (c (? . 0) q princess-leia)) q (5912 . 2)) ((c def c (c (? . 0) q yoda)) q (6026 . 2)) ((c def c (c (? . 0) q padawan)) q (5887 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q luke)) q (5840 . 2)) ((c def c (c (? . 0) q darth-vader)) q (5785 . 2)) ((c def c (c (? . 0) q han-solo)) q (5814 . 2)) ((c def c (c (? . 0) q custom-blaster)) q (3109 . 23)) ((c def c (c (? . 0) q obi-wan)) q (5862 . 2))))
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q starwars-game)) q (4815 . 18)) ((c def c (c (? . 0) q stormtrooper)) q (5979 . 2)) ((c def c (c (? . 0) q twileck-jedi)) q (6009 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4171 . 14)) ((c def c (c (? . 0) q custom-villain)) q (1040 . 19)) ((c def c (c (? . 0) q boba-fett)) q (5743 . 2)) ((c def c (c (? . 0) q r2-d2)) q (5956 . 2)) ((c def c (c (? . 0) q darth-maul)) q (5770 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2032 . 23)) ((c def c (c (? . 0) q princess-leia)) q (5925 . 2)) ((c def c (c (? . 0) q yoda)) q (6039 . 2)) ((c def c (c (? . 0) q padawan)) q (5900 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q luke)) q (5853 . 2)) ((c def c (c (? . 0) q darth-vader)) q (5798 . 2)) ((c def c (c (? . 0) q han-solo)) q (5827 . 2)) ((c def c (c (? . 0) q custom-blaster)) q (3120 . 23)) ((c def c (c (? . 0) q obi-wan)) q (5875 . 2))))
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -10,7 +10,7 @@ procedure
               #:item-slots item-slots                 
               #:components first-component]           
               rest ...)                           -> entity?
-  sprite : sprite? = (circle 30 'solid 'red)
+  sprite : sprite? = (circle 10 'solid 'red)
   damage-processor : damage-processor?
                    = (divert-damage #:filter-out '(friendly-team passive))
   position : posn? = (posn 100 100)
@@ -35,7 +35,7 @@ procedure
   ai-level : ai-level? = 'easy
   health : positive? = 100
   shield : positive? = 100
-  weapon : entity? = (custom-blaster)
+  weapon : entity? = (custom-blaster #:color "red")
   death-particles : entity? = (custom-particles)
   first-component : component-or-system? = #f
   more-components : (listof component-or-system?)
@@ -53,7 +53,7 @@ procedure
                     #:rarity rarity])          -> entity?
   name : string? = "Lightsaber"
   sprite : sprite? = (make-icon "LS" "green")
-  color : string? = "lightgreen"
+  color : string? = "green"
   dart : entity? = (lightsaber #:color c)
   fire-mode : fire-mode? = 'normal
   fire-rate : number? = 3
@@ -76,7 +76,7 @@ procedure
                  #:rarity rarity])          -> entity?
   name : string? = "Blaster"
   sprite : sprite? = (make-icon "B" "red")
-  color : string? = "red"
+  color : string? = "green"
   dart : entity? = (blaster-dart #:color c)
   fire-mode : fire-mode? = 'normal
   fire-rate : number? = 3

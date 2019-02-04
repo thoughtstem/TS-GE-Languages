@@ -4,7 +4,7 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         2htdp/image 
+         ;2htdp/image 
          "../assets.rkt"
          battle-arena)
 
@@ -21,8 +21,9 @@
 
 (provide lightsaber
          blaster-dart
-         swinging-lightsaber-sprite
-         blaster-dart-sprite
+         ;swinging-lightsaber-sprite
+         ;blaster-dart-sprite
+         double-lightsaber
          
          boba-fett-sprite
          darth-maul-sprite
@@ -38,16 +39,7 @@
          yoda-sprite        
          )
 
-;; ---- copied from battle-arena to make katas work
-(define rarity-level?
-  (or/c 'common 'uncommon 'rare 'epic 'legendary))
-
-(define fire-mode?
-  (or/c 'normal 'random 'spread 'homing))
-
-(define (ai-level? v)
-  (or/c 'easy 'medium 'hard))
-
+;; ---- copied from battle-arena
 (define (draw-plain-bg)
   (foldl (λ (image base)
            (place-image image
@@ -82,7 +74,7 @@
 ;; -----------------------------
 
 
-(define/contract/doc (custom-hero #:sprite           (sprite (circle 30 'solid 'red))
+(define/contract/doc (custom-hero #:sprite           (sprite (circle 10 'solid 'red))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
@@ -119,7 +111,7 @@
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
-                                     #:weapon (weapon (custom-blaster))
+                                     #:weapon (weapon (custom-blaster #:color "red"))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
                                           . custom-components
@@ -151,7 +143,7 @@
 
 (define/contract/doc (custom-lightsaber #:name              [n "Lightsaber"]
                                         #:icon              [s (make-icon "LS" "green")]
-                                        #:color             [c "lightgreen"]
+                                        #:color             [c "green"]
                                         #:dart              [b (lightsaber #:color c)]
                                         #:fire-mode         [fm 'normal]
                                         #:fire-rate         [fr 3]
@@ -188,7 +180,7 @@
 
 (define/contract/doc (custom-blaster #:name              [n "Blaster"]
                                      #:icon              [s (make-icon "B" "red")]
-                                     #:color             [c "red"]
+                                     #:color             [c "green"]
                                      #:dart              [b (blaster-dart #:color c)]
                                      #:fire-mode         [fm 'normal]
                                      #:fire-rate         [fr 3]
@@ -334,35 +326,60 @@
                      (rectangle 8 4 "solid" "black")
                      (rectangle 28 4 "solid" c))))
 
+(define (double-lightsaber-sprite c)
+  (rotate 90 (beside (rectangle 12 40 "solid" "transparent")
+                     (rectangle 28 4 "solid" c)
+                     (rectangle 8 4 "solid" "black")
+                     (rectangle 28 4 "solid" c))))
+
 (define (blaster-dart-sprite c)
   (rectangle 10 2 "solid" c))
 
-
-(define (lightsaber
-         #:color     [c "lightgreen"])
+(define (double-lightsaber
+         #:color     [c "red"]
+         #:sprite    [s (double-lightsaber-sprite c)])
   
-  ;@{This returns a sword skinned as a lightsaber.}
-  (sword #:sprite     (swinging-lightsaber-sprite c)
+  ;@{This returns a sword skinned as a double lightsaber.}
+  (sword #:sprite     s
          #:damage     50
          #:durability 20
          #:speed      0
          #:range      10))
 
+(define (lightsaber
+         #:color      [c "lightgreen"]
+         #:sprite     [s (swinging-lightsaber-sprite c)]
+         #:damage     [dmg 50]
+         #:durability [dur 20]
+         #:speed      [spd  0]
+         #:range      [rng 10])
+  
+  ;@{This returns a sword skinned as a lightsaber.}
+  (sword #:sprite     s
+         #:damage     dmg
+         #:durability dur
+         #:speed      spd
+         #:range      rng))
+
 (define (blaster-dart
-         #:color    [c "red"])
+         #:color      [c "green"]
+         #:damage     [dmg 10]
+         #:durability [dur 20]
+         #:speed      [spd  5]
+         #:range      [rng 50])
   
   ;@{This returns a red dart.}
   (custom-dart #:sprite     (blaster-dart-sprite c)
-               #:damage     10
-               #:durability 20
-               #:speed      5
-               #:range      50))
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng))
 
 
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar #f] ;fix #:jedi in examples
+                      #:hero             [avatar #f]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
                       #:villain-list     [e-list (list (custom-villain))]
@@ -374,7 +391,7 @@
   (->i ()
        (#:headless       [headless boolean?]
         #:planet         [planet entity?]
-        #:hero           [avatar (or/c entity? false?)]  ;fix #:jedi in examples
+        #:hero           [avatar (or/c entity? false?)]
         #:villain-list   [enemy-list   (listof (or/c entity? procedure?))]
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]

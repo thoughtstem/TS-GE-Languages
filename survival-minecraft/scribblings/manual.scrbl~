@@ -3,7 +3,7 @@
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
 
-@title{survival-minecraft docs}
+@title{Survival: Minecraft}
 @author{thoughtstem}
 
 @defmodulelang[survival-minecraft]

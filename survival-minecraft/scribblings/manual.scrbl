@@ -10,7 +10,8 @@
 
 @section{Functions}
 
-@(include-extracted "../lang/main.rkt")
+@;throws error -- contract requires number, getting #f
+@;(include-extracted "../lang/main.rkt")
 
 @section{Image Assets}
 

@@ -14,7 +14,8 @@
                    [custom-npc         custom-entity]
                    [custom-enemy       custom-mob]
                    [custom-coin        custom-ore]
-                   [survival-game      minecraft-game])
+                   [survival-game      minecraft-game]
+                   )
 
 
 
@@ -124,13 +125,13 @@
        [returns entity?])
 
   
-  @{Creates a custom npc that can be used in the npc list
-         of @racket[survival-game].}
+  @{Creates a custom entity that can be used in the entity list
+         of @racket[minecraft-game].}
 
   (define dialog
     (if (not d)
         (dialog->sprites (first (shuffle (list (list "bwaawk bwawk bwawk bwaawk")
-                                               (list "That's a nice diamond sword you got there.")
+                                               (list "Sorry, I don't have anything to trade.\nI'm a chicken.")
                                                (list "baKAWK")
                                                (list "bwawk bwawk bwawwwk"))))
                      #:game-width GAME-WIDTH
@@ -161,19 +162,20 @@
 
 
 ;========= custom-mob to replace custom-enemy ==========
-;need default mob asset (creeper?) (skeleton with arrows)
+;add additional mob assets (creeper?) (skeleton with arrows)
 ;(ghast w/ fireball) (wither w/) (enderdragon w/ fireball)
 
 (define/contract/doc (custom-mob #:amount-in-world (amount-in-world 1)
-                                 ;edit default sprite to animated creeper
-                                 #:sprite          (s (first (shuffle (list slime-sprite bat-sprite snake-sprite))))
+                                 #:sprite          (s (row->sprite (scale .75 creeper-sheet)
+                                                                   #:columns 4
+                                                                   #:delay 4))
                                  #:ai              (ai-level 'medium)
                                  #:health          (health 100)
                                  #:weapon          (weapon (custom-weapon #:name "Spitter"
                                                                           #:dart (acid)))
                                  
                                  #:death-particles (particles (custom-particles))
-                                 #:night-only?     (night-only? #t)
+                                 #:night-only?     (night-only? #f)
                                  #:components      (c #f)
                                                    . custom-components)
 
@@ -188,10 +190,8 @@
        #:rest [more-components (listof any/c)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of survival-game.}
-  ;broken??
-  @;@racket[survival-game].}
+  @{Creates a custom mob that can be used in the mob list
+         of @racket[minecraft-game].}
   
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite          s 
@@ -205,20 +205,17 @@
 ;custom-ore-entity for default #:entity in custom-ore
 
 (define (ore-entity)
-  (sprite->entity iron-ore
+  (sprite->entity iron-ore-sprite
                   #:position   (posn 0 0)
                   #:name       "Iron Ore"
                   #:components (active-on-bg 0)
-                  ;does it need a physical collider?
                                (physical-collider)))
 
 ;======== custom-ore to replace custom-coin ========
-;need default ore asset (iron?)
 ;would be nice to have a bunch of assets for this -- iron, copper, gold, diamond, etc
 
-(define/contract/doc (custom-ore #:entity           [base-entity (ore-entity)]
+#;(define/contract/doc (custom-ore #:entity           [base-entity (ore-entity)]
                                  #:sprite           [s #f]
-                                 ;or replace sprite? make that the default?
                                  #:position         [p #f]
                                  #:name             [n #f]
                                  #:tile             [t #f]
@@ -240,14 +237,10 @@
         #:rest [more-components (listof component-or-system?)]
         [returns entity?])
 
-  @{Returns a custom coin, which will be placed into the world
-          automatically if it is passed into battle-arena-game
-          @;broken?
-          @;@racket[battle-arena-game]
-          via the #:coin-list
-          @;broken?
-          @;@racket[#:coin-list]
-          parameter.}
+  @{Returns a custom ore, which will be placed into the world
+          automatically if it is passed into @racket[minecraft-game]
+          via the @racket[#:ore-list] parameter.}
+
   
   (custom-coin #:entity    base-entity
                #:sprite    s 
@@ -272,7 +265,7 @@
                   #:starvation-rate [sr 50]
                   #:sky             [sky (custom-sky)]
                   #:entity-list     [entity-list  '()]
-                  #:mob-list        [mob-list (list (custom-enemy))] ; starting with enemy??
+                  #:mob-list        [mob-list '()] 
                   #:ore-list        [ore-list  '() ]
                   #:food-list       [f-list    '() ]
                   #:crafter-list    [c-list    '() ]
@@ -293,7 +286,7 @@
        #:rest  [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the survival-game language.
+  @{The top-level function for the minecraft-game language.
          Can be run with no parameters to get a basic, default game
          with nothing in it!}
   (survival-game

@@ -15,7 +15,8 @@
          sky?
          plain-forest-bg
          draw-plain-forest-bg
-         ai-level?)
+         ai-level?
+         safe-update-entity)
 
 (require scribble/srcdoc)
 
@@ -1134,7 +1135,9 @@
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
-            #:components [first-component component-or-system?])
+            #:components [first-component (or/c component-or-system?
+                                                false?
+                                                (listof false?))])
         #:rest [more-components (listof component-or-system?)]
         [returns entity?])
 

@@ -120,6 +120,6 @@
                        (code snake-sprite)))))))
 
 (module+ test
-  ;(show-coin-sprites)
-  ;(show-food-sprites)
+  (show-coin-sprites)
+  (show-food-sprites)
   (show-enemy-sprites))

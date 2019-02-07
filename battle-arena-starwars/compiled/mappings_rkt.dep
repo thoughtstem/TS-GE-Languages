@@ -1,1 +1,1 @@
-("7.0" ("8eef7913f1993f276111c23db0756d4cf4f15e36" . "8aa0737977fa558e53e68799e84626ab5564ff5d") (collects #"battle-arena-starwars" #"lang" #"main.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
+("7.0" ("8eef7913f1993f276111c23db0756d4cf4f15e36" . "a1a809b202cfe22d19d905ab99bea1cc485e5a99") (collects #"battle-arena-starwars" #"lang" #"main.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

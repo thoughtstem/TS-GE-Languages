@@ -21,6 +21,8 @@
 
 (provide lightsaber
          blaster-dart
+         lightsaber-droid
+         blaster-droid
          ;swinging-lightsaber-sprite
          ;blaster-dart-sprite
          double-lightsaber
@@ -38,6 +40,7 @@
          twilek-sprite
          yoda-sprite
          c3po-sprite
+         c2po-sprite
          chewie-sprite
          rebelpilot-sprite
          lando-sprite
@@ -337,6 +340,13 @@
                  #:delay 5))
 
 ;==== NEW SPRITES ===
+(define c2po-sprite
+  (sheet->sprite c2po
+                 #:rows 4
+                 #:columns 4
+                 #:row-number 3
+                 #:delay 5))
+
 (define c3po-sprite
   (sheet->sprite c3po
                  #:rows 4
@@ -391,7 +401,7 @@
          #:range      10))
 
 (define (lightsaber
-         #:color      [c "lightgreen"]
+         #:color      [c "green"]
          #:sprite     [s (swinging-lightsaber-sprite c)]
          #:damage     [dmg 50]
          #:durability [dur 20]
@@ -407,23 +417,103 @@
 
 (define (blaster-dart
          #:color      [c "green"]
+         #:sprite     [s (blaster-dart-sprite c)]
          #:damage     [dmg 10]
          #:durability [dur 20]
          #:speed      [spd  5]
          #:range      [rng 50])
   
   ;@{This returns a red dart.}
-  (custom-dart #:sprite     (blaster-dart-sprite c)
+  (custom-dart #:sprite     s
                #:damage     dmg
                #:durability dur
                #:speed      spd
                #:range      rng))
 
 
+(define (lightsaber-droid #:color      [c "green"]
+                          #:sprite     [s (swinging-lightsaber-sprite c)]
+                          #:damage     [dmg 50]
+                          #:durability [dur 20]
+                          #:speed      [spd 5]
+                          #:range      [rng 20]
+                          #:fire-rate  [fire-rate 0.5])
+  (builder-dart #:entity (droid #:weapon (custom-lightsaber #:fire-rate fire-rate
+                                                            #:dart (lightsaber #:color      c
+                                                                               #:sprite     s
+                                                                               #:damage     dmg
+                                                                               #:durability dur
+                                                                               #:speed      spd
+                                                                               #:range      rng)))))
+
+(define (blaster-droid #:color      [c "green"]
+                       #:sprite     [s (blaster-dart-sprite c)]
+                       #:damage     [dmg 10]
+                       #:durability [dur 20]
+                       #:speed      [spd 5]
+                       #:range      [rng 50]
+                       #:fire-rate  [fire-rate 2])
+  (builder-dart #:entity (droid #:weapon (custom-blaster #:fire-rate fire-rate
+                                                         #:dart (blaster-dart #:color      c
+                                                                              #:sprite     s
+                                                                              #:damage     dmg
+                                                                              #:durability dur
+                                                                              #:speed      spd
+                                                                              #:range      rng)))))
+
+(define (crop-sprite img row col x-idx y-idx)
+  (define w (image-width  img))
+  (define h (image-height img))
+  (define crop-w (/ w col))
+  (define crop-h (/ h row))
+  (crop (* crop-w x-idx) (* crop-h y-idx) crop-w crop-h img))
+  
+(define (droid #:weapon (weapon (custom-weapon))
+               #:die-after (die-after 500))
+  (define droid-id (random 100000))
+  (define droid-name (~a "droid" droid-id))
+  (displayln (~a "DROID NAME: " droid-name))
+
+  (define droid-base (rectangle 20 1 'solid 'transparent))
+  
+  (define droid-top (crop-sprite c2po 4 4 2 2))
+
+  (define droid-top-entity
+    (sprite->entity droid-top
+                    #:name "Droid Top"
+                    #:position (posn 0 -20)
+                    #:components
+                    (layer "tops")
+                    (after-time die-after die)
+                    (on-rule (λ (g e) (not (get-entity droid-name g))) die)
+                    (active-on-bg)))
+
+  (precompile! droid-top
+               droid-base)
+
+
+  (define weapon-system (get-storage-data "Weapon" weapon))
+  
+  (sprite->entity droid-base
+
+                  #:name droid-name
+                  #:position (posn 0 0)
+                  #:components
+                  (direction 0)
+                  (speed 0)
+                  (active-on-bg)
+                  (use-weapon-against "Enemy" weapon-system)
+                  (static)
+                  (lock-to-grid 50)
+                  (physical-collider)
+                  (on-collide droid-name die)
+                  (after-time die-after die)
+                  (on-start (spawn-on-current-tile droid-top-entity))))
+
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar #f]
+                      #:hero             [avatar (custom-hero)]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
                       #:villain-list     [e-list (list (custom-villain))]
@@ -450,6 +540,7 @@
   (battle-arena-game #:bg planet-ent
                      #:avatar avatar
                      #:weapon-list weapon-list
-                     #:enemy-list e-list))
+                     #:enemy-list e-list
+                     #:item-list item-list))
 
 

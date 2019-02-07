@@ -1,5 +1,5 @@
-1502
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q bobafett)) q (5771 . 2)) ((c def c (c (? . 0) q r2d2)) q (6189 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2032 . 23)) ((c def c (c (? . 0) q darthmaul-2)) q (5843 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1040 . 19)) ((c def c (c (? . 0) q custom-blaster)) q (3120 . 23)) ((c def c (c (? . 0) q princessleia)) q (6135 . 2)) ((c def c (c (? . 0) q twilek)) q (6295 . 2)) ((c def c (c (? . 0) q lando)) q (6009 . 2)) ((c def c (c (? . 0) q twilek-2)) q (6269 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (5743 . 2)) ((c def c (c (? . 0) q padawan)) q (6078 . 2)) ((c def c (c (? . 0) q hansolo)) q (5984 . 2)) ((c def c (c (? . 0) q obiwan)) q (6054 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q princessleia-2)) q (6103 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4171 . 14)) ((c def c (c (? . 0) q starwars-game)) q (4815 . 18)) ((c def c (c (? . 0) q darthvader)) q (5929 . 2)) ((c def c (c (? . 0) q chewie)) q (5819 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (5899 . 2)) ((c def c (c (? . 0) q c3po)) q (5797 . 2)) ((c def c (c (? . 0) q darthmaul)) q (5872 . 2)) ((c def c (c (? . 0) q hansolo-2)) q (5957 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (6211 . 2)) ((c def c (c (? . 0) q stormtrooper)) q (6239 . 2)) ((c def c (c (? . 0) q luke)) q (6032 . 2)) ((c def c (c (? . 0) q yoda)) q (6319 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (6165 . 2))))
+1546
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q bobafett)) q (5782 . 2)) ((c def c (c (? . 0) q r2d2)) q (6222 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2032 . 23)) ((c def c (c (? . 0) q darthmaul-2)) q (5876 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1040 . 19)) ((c def c (c (? . 0) q custom-blaster)) q (3120 . 23)) ((c def c (c (? . 0) q princessleia)) q (6168 . 2)) ((c def c (c (? . 0) q twilek)) q (6328 . 2)) ((c def c (c (? . 0) q lando)) q (6042 . 2)) ((c def c (c (? . 0) q twilek-2)) q (6302 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (5754 . 2)) ((c def c (c (? . 0) q padawan)) q (6111 . 2)) ((c def c (c (? . 0) q hansolo)) q (6017 . 2)) ((c def c (c (? . 0) q obiwan)) q (6087 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q princessleia-2)) q (6136 . 2)) ((c def c (c (? . 0) q darthmaul)) q (5905 . 2)) ((c def c (c (? . 0) q starwars-game)) q (4815 . 18)) ((c def c (c (? . 0) q darthvader)) q (5962 . 2)) ((c def c (c (? . 0) q chewie)) q (5852 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (5932 . 2)) ((c def c (c (? . 0) q c2po)) q (5808 . 2)) ((c def c (c (? . 0) q c3po)) q (5830 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4171 . 14)) ((c def c (c (? . 0) q hansolo-2)) q (5990 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (6244 . 2)) ((c def c (c (? . 0) q stormtrooper)) q (6272 . 2)) ((c def c (c (? . 0) q luke)) q (6065 . 2)) ((c def c (c (? . 0) q yoda)) q (6352 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (6198 . 2))))
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -108,7 +108,7 @@ procedure
                 #:item-list item-list                
                 #:other-entities other-entities]     
                 rest ...)                        -> game?
-  headless : boolean? = #f
+  headless : boolean? = (custom-hero)
   planet : entity? = #f
   avatar : (or/c entity? false?) = (plain-bg)
   enemy-list : (listof (or/c entity? procedure?))
@@ -121,6 +121,8 @@ value
 bobafett-2 : image?
 value
 bobafett : image?
+value
+c2po : image?
 value
 c3po : image?
 value

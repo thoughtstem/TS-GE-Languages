@@ -154,5 +154,99 @@
    #:weapon-list (list my-blaster))
   )
 
+; ---------------
+
+(define-example-code battle-arena-starwars planet-1
+  (starwars-game
+   #:planet (custom-planet))
+  )
+
+(define-example-code battle-arena-starwars planet-2
+  (starwars-game
+   #:planet (custom-planet #:img LAVA-BG))
+  )
+
+
+(define-example-code battle-arena-starwars planet-3
+  (define my-planet
+    (custom-planet #:img        LAVA-BG
+                   #:rows       2
+                   #:columns    2
+                   #:start-tile 4))
+  
+  (starwars-game
+   #:planet my-planet)
+)
+
+; ---------------
+
+(define-example-code battle-arena-starwars heal-1
+  (starwars-game
+   #:item-list (list (custom-item #:name   "Force Heal"
+                                  #:sprite (make-icon "HP" 'green 'white) 
+                                  #:on-use (change-health-by 50))))
+  )
+
+(define-example-code battle-arena-starwars heal-2
+  (starwars-game
+   #:item-list (list (custom-item #:name   "Force Max Heal" 
+                                  #:sprite (make-icon "MHP" 'green 'white) 
+                                  #:on-use (set-health-to 100))))
+  )
+
+(define-example-code battle-arena-starwars heal-3
+  (define force-heal
+    (custom-item #:name     "Force Heal" 
+                 #:sprite   (make-icon "FH" 'green 'white) 
+                 #:on-use   (change-health-by 50) 
+                 #:rarity   'uncommon 
+                 #:respawn? #t))
+ 
+  (define force-max-heal
+    (custom-item #:name   "Force Max Heal" 
+                 #:sprite (make-icon "MHP" 'green 'white) 
+                 #:on-use (set-health-to 100) 
+                 #:rarity 'epic))
+ 
+  (starwars-game
+   #:item-list (list force-heal
+                     force-max-heal))
+  )
+
+; -----------------
+
+(define-example-code battle-arena-starwars boost-1
+  (starwars-game
+    #:item-list (list (custom-item #:name "Force Damage" 
+                                   #:sprite (make-icon "FD" 'orangered) 
+                                   #:on-use (change-damage-by 1000 #:for 200))))
+
+  )
+
+(define-example-code battle-arena-starwars boost-2
+  (starwars-game
+    #:item-list (list (custom-item #:name "Force Speed" 
+                                   #:sprite (make-icon "FS" 'yellow) 
+                                   #:on-use (multiply-speed-by 2 #:for 200))))
+  )
+
+(define-example-code battle-arena-starwars boost-3
+   (define force-damage
+     (custom-item #:name "Force Damage" 
+                  #:sprite (make-icon "FD" 'orangered) 
+                  #:on-use (change-damage-by 1000 #:for 200) 
+                  #:rarity 'epic))
+ 
+   (define force-speed
+     (custom-item #:name "Force Speed" 
+                  #:sprite (make-icon "FS" 'yellow) 
+                  #:on-use (multiply-speed-by 2 #:for 200) 
+                  #:rarity 'uncommon))
+ 
+  (starwars-game
+    #:item-list (list damage-boost
+                      speed-boost))
+  )
+
 ;We'll test that the examples all run as games for 10 ticks
 (test-all-examples-as-games 'battle-arena-starwars)

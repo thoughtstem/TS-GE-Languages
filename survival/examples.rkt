@@ -120,7 +120,7 @@
    #:avatar       (custom-avatar)
    #:food-list    (list (fish #:amount-in-world 10))
    #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
-                                        #:recipe-list (list red-curry-recipe)))))
+                                        #:recipe-list (list fish-stew-recipe)))))
 
 
 
@@ -289,7 +289,7 @@
 
   (define (my-food)
     (custom-food #:sprite          apples-sprite
-                 #:name            "Apple"
+                 #:name            "Apples"
                  #:amount-in-world 2
                  #:heals-by        20))
 

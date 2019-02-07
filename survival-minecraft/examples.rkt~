@@ -1,13 +1,21 @@
 #lang racket
 
 (require ts-kata-util
-  survival-minecraft)
+         "./lang/main.rkt"
+         survival-minecraft)
 
-;And you probably want your lang, not racket below.
-;  But technically you can make examples for any language
-(define-example-code racket my-example-1
-  (require 2htdp/image)
+;(define-example-code/from* survival/examples)
 
-  (circle 40 'solid 'red))
 
-;You can define as many examples as you want in this file
+#;(define-example-code survival-minecraft skin-1
+
+  (minecraft-game
+   #:skin (custom-skin))
+  )
+
+
+;Tests all examples as games for 10 ticks
+;(test-all-examples-as-games 'survival-minecraft)
+
+
+

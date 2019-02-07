@@ -679,6 +679,7 @@
 (define-example-code battle-arena magic-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Magic"
+                                      #:sprite (make-icon "LM")
                                       #:dart (ring-of-fire #:damage 20
                                                            #:range   20)
                                       #:rarity 'common))))
@@ -687,10 +688,11 @@
 (define-example-code battle-arena magic-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Magic"
+                                      #:sprite (make-icon "HM")
                                       #:dart (ring-of-fire #:sprite (scale 2 flame-sprite)
                                                            #:damage 200
                                                            #:range 36)
-                                      #:rarity 'uncommon))))
+                                      #:rarity 'epic))))
 
 (define-example-code battle-arena magic-balance-3
   (define (heavy-dart)
@@ -704,9 +706,11 @@
   
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Magic"
+                                      #:sprite (make-icon "HM")
                                       #:dart (heavy-dart)
-                                      #:rarity 'uncommon)
+                                      #:rarity 'epic)
                        (custom-weapon #:name "Light Magic"
+                                      #:sprite (make-icon "LM")
                                       #:dart (light-dart)
                                       #:rarity 'common))))
 
@@ -714,6 +718,7 @@
 (define-example-code battle-arena melee-balance-1
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Melee"
+                                      #:sprite (make-icon "LM")
                                       #:dart (sword #:damage 50
                                                     #:speed  1)
                                       #:rarity 'common))))
@@ -721,10 +726,11 @@
 (define-example-code battle-arena melee-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Melee"
+                                      #:sprite (make-icon "HM")
                                       #:dart (sword #:sprite (scale 2 swinging-sword-sprite)
                                                     #:damage 500
                                                     #:speed  2)
-                                      #:rarity 'uncommon))))
+                                      #:rarity 'epic))))
 
 (define-example-code battle-arena melee-balance-3
   (define (heavy-dart)
@@ -738,9 +744,11 @@
   
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Melee"
+                                      #:sprite (make-icon "HM")
                                       #:dart (heavy-dart)
-                                      #:rarity 'uncommon)
+                                      #:rarity 'epic)
                        (custom-weapon #:name "Light Melee"
+                                      #:sprite (make-icon "LM")
                                       #:dart (light-dart)
                                       #:rarity 'common))))
 

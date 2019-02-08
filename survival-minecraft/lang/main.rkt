@@ -1,5 +1,10 @@
  #lang at-exp racket
 
+(provide chicken-sprite
+         creeper-sprite
+         skeleton-sprite
+         pig-sprite)
+
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
@@ -92,13 +97,9 @@
 ;======== custom-entity to replace custom-npc ========
 ;create more custom entities?
 
-(define/contract/doc (custom-entity #:sprite     [s (row->sprite chicken-sheet
-                                                                 #:columns 4
-                                                                 #:delay 4)]
+(define/contract/doc (custom-entity #:sprite     [s (chicken-sprite)]
                                     #:position   [p (posn 0 0)]
-                                    #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
-                                                                             "Sydney" "Charlie" "Andy")))]
-                                    ;edit names?
+                                    #:name       [name "Chicken"]
                                     #:tile       [tile 0]
                                     #:dialog     [d  #f]
                                     #:mode       [mode 'wander]
@@ -107,13 +108,13 @@
                                     #:target     [target "player"]
                                     #:sound      [sound #t]
                                     #:scale      [scale 1]
-                                    #:components [c #f] . custom-components )
+                                    #:components [c (on-start (respawn 'anywhere))] . custom-components )
 
   (->i () (#:sprite     [sprite sprite?]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
-           #:dialog     [dialog dialog?]
+           #:dialog     [dialog dialog-str?]
            #:mode       [mode (or/c 'still 'wander 'pace 'follow)]
            #:game-width [game-width number?]
            #:speed      [speed number?]
@@ -166,9 +167,7 @@
 ;(ghast w/ fireball) (wither w/) (enderdragon w/ fireball)
 
 (define/contract/doc (custom-mob #:amount-in-world (amount-in-world 1)
-                                 #:sprite          (s (row->sprite (scale .75 creeper-sheet)
-                                                                   #:columns 4
-                                                                   #:delay 4))
+                                 #:sprite          (s (creeper-sprite))
                                  #:ai              (ai-level 'medium)
                                  #:health          (health 100)
                                  #:weapon          (weapon (custom-weapon #:name "Spitter"
@@ -202,19 +201,11 @@
                 #:night-only?     night-only?
                 #:components      (cons c custom-components)))
 
-;custom-ore-entity for default #:entity in custom-ore
-
-(define (ore-entity)
-  (sprite->entity iron-ore-sprite
-                  #:position   (posn 0 0)
-                  #:name       "Iron Ore"
-                  #:components (active-on-bg 0)
-                               (physical-collider)))
 
 ;======== custom-ore to replace custom-coin ========
 ;would be nice to have a bunch of assets for this -- iron, copper, gold, diamond, etc
 
-#;(define/contract/doc (custom-ore #:entity           [base-entity (ore-entity)]
+(define/contract/doc (custom-ore #:entity           [base-entity (ore-entity)]
                                  #:sprite           [s #f]
                                  #:position         [p #f]
                                  #:name             [n #f]
@@ -240,7 +231,6 @@
   @{Returns a custom ore, which will be placed into the world
           automatically if it is passed into @racket[minecraft-game]
           via the @racket[#:ore-list] parameter.}
-
   
   (custom-coin #:entity    base-entity
                #:sprite    s 
@@ -301,3 +291,32 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:other-entities  (cons ent custom-entities)))
+
+;================== ASSETS ======================
+
+(define (creeper-sprite)
+  (row->sprite (scale .75 creeper-sheet)
+               #:columns 4
+               #:delay 4))
+
+(define (chicken-sprite)
+  (row->sprite chicken-sheet
+               #:columns 4
+               #:delay 4))
+
+(define (pig-sprite)
+  (row->sprite pig-sheet
+               #:columns 4
+               #:delay 4))
+
+(define (ore-entity)
+  (sprite->entity (sheet->sprite ironore-sprite #:columns 1)
+                  #:position   (posn 0 0)
+                  #:name       "Iron Ore"
+                  #:components (active-on-bg 0)
+                               (physical-collider)))
+
+(define (skeleton-sprite)
+  (row->sprite (scale .75 skeleton-sheet)
+               #:columns 4
+               #:delay 2))

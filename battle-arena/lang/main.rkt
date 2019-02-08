@@ -35,6 +35,9 @@
 
          tower
 
+         lock-to-grid
+         round-nearest-posn
+         
          spear-tower-builder
          spike-mine-builder
          lava-builder
@@ -742,7 +745,7 @@
   (battle-arena-game
    #:headless       [headless #f]
    #:bg             [bg-ent (custom-background)]
-   #:avatar         [p #f]
+   #:avatar         [p (custom-avatar)]
    #:enemy-list     [e-list (list (custom-enemy)
                                   (custom-enemy #:weapon (custom-weapon #:name "Sword"
                                                                         #:dart (sword))))]

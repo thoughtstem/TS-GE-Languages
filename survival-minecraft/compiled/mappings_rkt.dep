@@ -1,1 +1,1 @@
-("7.1" ("46d563d143ae1410070cb467cd02b0bc515da898" . "899d7854326dae3b69d4015826050869af956c98") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"survival-minecraft" #"lang" #"main.rkt"))
+("7.1" ("46d563d143ae1410070cb467cd02b0bc515da898" . "b83123e5c85d69c0fa4d6acda87e88e63554797c") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"survival-minecraft" #"lang" #"main.rkt"))

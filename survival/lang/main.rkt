@@ -16,7 +16,15 @@
          plain-forest-bg
          draw-plain-forest-bg
          ai-level?
-         safe-update-entity)
+         dialog-str?
+
+         witch-sprite
+         darkelf-sprite
+         lightelf-sprite
+         madscientist-sprite
+         monk-sprite
+         pirate-sprite
+         wizard-sprite)
 
 (require scribble/srcdoc)
 
@@ -41,7 +49,7 @@
 (define (TOTAL-TILES) 9)
 
 
-(define dialog? (or/c (listof string?) (listof (listof string?))))
+(define dialog-str? (or/c (listof string?) (listof (listof string?))))
 
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
@@ -647,7 +655,7 @@
 
     (define c (~> e
                   (combatant
-                   #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -15)))) ;(default-health+shields-stats health shield)
+                   #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -30)))) ;(default-health+shields-stats health shield)
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team))
                              _)
                   ))
@@ -968,7 +976,7 @@
 
 
 (define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
-                                 #:position   [p (posn 0 0)]
+                                 #:position   [p (posn 200 200)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]
                                  #:tile       [tile 0]
@@ -979,13 +987,14 @@
                                  #:target     [target "player"]
                                  #:sound      [sound #t]
                                  #:scale      [scale 1]
-                                 #:components [c #f] . custom-components )
+                                 #:components [c (on-start (respawn 'anywhere))]
+                                 . custom-components )
 
   (->i () (#:sprite     [sprite sprite?]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
-           #:dialog     [dialog dialog?]
+           #:dialog     [dialog dialog-str?]
            #:mode       [mode (or/c 'still 'wander 'pace 'follow)]
            #:game-width [game-width number?]
            #:speed      [speed number?]
@@ -1127,11 +1136,13 @@
                                   #:components       [c #f]
                                   . custom-entities)
 
+
+  ;change contracts to accept #f
    (->i () (#:entity   [entity entity?]
-            #:sprite   [sprite sprite?]
-            #:position [position posn?]
-            #:name     [name string?]
-            #:tile     [tile number?]
+            #:sprite   [sprite (or/c sprite? #f)]
+            #:position [position (or/c posn? #f)]
+            #:name     [name (or/c string? #f)]
+            #:tile     [tile (or/c number? #f)]
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
@@ -1307,9 +1318,56 @@
   (displayln "TEST!!!")
   )
 
+;===== ASSETS ========
 
+(define (witch-sprite)
+  (sheet->sprite witch-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
 
+(define (darkelf-sprite)
+  (sheet->sprite darkelf-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
 
+(define (lightelf-sprite)
+  (sheet->sprite lightelf-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define (madscientist-sprite)
+  (sheet->sprite madscientist-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define (monk-sprite)
+  (sheet->sprite monk-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define (pirate-sprite)
+  (sheet->sprite pirate-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define (wizard-sprite)
+  (sheet->sprite wizard-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
 
 
 

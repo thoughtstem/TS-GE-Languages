@@ -171,16 +171,14 @@
 
 ;=============================================
 
-;ore is broken ATM
-
-#;(define-example-code survival-minecraft ore-1
+(define-example-code survival-minecraft ore-1
 
   (minecraft-game
    #:skin     (custom-skin)
    #:ore-list (list (custom-ore)))
   )
 
-#;(define-example-code survival-minecraft ore-2
+(define-example-code survival-minecraft ore-2
   
   (define (my-ore)
     (custom-ore #:value 50))
@@ -190,9 +188,9 @@
    #:ore-list (list (my-ore)))
   )
 
-#;(define-example-code survival-minecraft ore-3
+(define-example-code survival-minecraft ore-3
   (define (my-ore)
-    (custom-ore #:sprite          gold-ore-sprite
+    (custom-ore #:sprite          goldore-sprite
                 #:name            "Gold Ore"
                 #:value           200
                 #:amount-in-world 20))
@@ -202,23 +200,23 @@
    #:ore-list (list (my-ore)))
   )
 
-#;(define-example-code survival-minecraft ore-4
+(define-example-code survival-minecraft ore-4
   
-  (define (my-coin)
-    (custom-coin #:sprite silver-coin-sprite
-                 #:name   "Silver Coin"))
+  (define (gold-ore)
+    (custom-coin #:sprite goldore-sprite
+                 #:name   "Gold Ore"))
 
-  (define (my-special-coin)
-    (custom-coin #:sprite          gold-coin-sprite
-                 #:name            "Gold Coin"
+  (define (diamond)
+    (custom-coin #:sprite          diamond-sprite
+                 #:name            "Diamond"
                  #:value           1000
                  #:amount-in-world 1
                  #:respawn?        #f))
 
-  (survival-game
-   #:avatar     (custom-avatar)
-   #:coin-list  (list (my-coin)
-                      (my-special-coin))))
+  (minecraft-game
+   #:skin     (custom-skin)
+   #:ore-list (list (gold-ore)
+                    (diamond))))
 
 ;==================================================
 
@@ -317,11 +315,78 @@
                           #:end-of-daytime   2200))
   )
 
+;====================================================
+
 (define-example-code survival-minecraft starvation-rate
   (minecraft-game
    #:skin            (custom-skin)
    #:starvation-rate 100)
   )
+
+;====================================================
+
+(define-example-code survival-minecraft entity-1
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:entity-list (list (custom-entity))))
+
+;better sprite options
+(define-example-code survival-minecraft entity-2
+
+  (define (my-entity)
+    (custom-entity
+     #:sprite (witch-sprite)
+     #:name "Witch"))
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:entity-list (list (my-entity))))
+
+
+(define-example-code survival-minecraft entity-3
+  (define (my-entity)
+    (custom-entity
+     #:sprite (witch-sprite)
+     #:name "Witch"
+     #:tile 3
+     #:mode 'follow))
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:entity-list (list (my-entity))))
+
+
+(define-example-code survival-minecraft entity-4
+  (define (my-entity)
+    (custom-entity
+     #:dialog (list "Woah, who are you??"
+                    "Nevermind -- I'm too busy."
+                    "Move along, now!")))
+  (minecraft-game
+   #:skin (custom-skin)
+   #:entity-list (list (my-entity))))
+
+
+(define-example-code survival-minecraft entity-5
+  (define (my-entity)
+    (custom-entity
+     #:name "Francis"
+     #:tile 4
+     #:dialog (list "Greetings!"
+                    "You better find some food soon...")))
+
+  (define (another-entity)
+    (custom-entity
+     #:sprite (witch-sprite)
+     #:mode 'pace
+     #:dialog (list "Now where did I put it..."
+                    "Have you seen an eye of newt?"
+                    "Oh, I think I see it!")))
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:entity-list (list (my-entity) (another-entity))))
 
 
 ;Tests all examples as games for 10 ticks

@@ -1,3 +1,4 @@
 alex & steve (altered) -- minecraft game
 chicken (altered) -- https://opengameart.org/content/chick
 all ore and lump images -- https://wiki.minetest.net/Iron_Ore
+pig, skeleton, creeper -- drawn by Sara

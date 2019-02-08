@@ -4,7 +4,6 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         ;2htdp/image 
          "../assets.rkt"
          battle-arena)
 
@@ -12,9 +11,7 @@
 (language-mappings battle-arena       battle-arena-starwars
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
-                   ;[custom-weapon     custom-lightsaber]
-                   ;[custom-weapon     custom-blaster]
-                   [custom-background custom-planet] ;needed?
+                   [custom-background custom-planet]
                    [sword             lightsaber]
                    ;[#:avatar          #:jedi]
                    [battle-arena-game starwars-game])
@@ -23,8 +20,6 @@
          blaster-dart
          lightsaber-droid
          blaster-droid
-         ;swinging-lightsaber-sprite
-         ;blaster-dart-sprite
          double-lightsaber
          
          bobafett-sprite
@@ -46,40 +41,7 @@
          lando-sprite
          )
 
-;; ---- copied from battle-arena
-(define (draw-plain-bg)
-  (foldl (λ (image base)
-           (place-image image
-                        (random 24) (random 18)
-                        base))
-         (rectangle 24 18 'solid (color 190 143 82))
-         (list (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
-               (ellipse (random 20 30) (random 20 30) 'solid (color 53 137 55 120))
-               (ellipse (random 10 30) (random 10 30) 'solid (color 53 137 55 120))
-               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
-               (ellipse (random 10 20) (random 10 20) 'solid (color 2 89 61 120))
-               (ellipse (random 10 15) (random 10 15) 'solid (color 2 89 61 120))
-               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
-               (ellipse (random 10 15) (random 10 15) 'solid (color 100 164 44 120))
-               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
-               (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
-               )))
-
-(define (plain-bg #:bg-img     [bg (draw-plain-bg)]
-                  #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
-                  #:rows       [rows 3]
-                  #:columns    [cols 3]
-                  #:start-tile [t 0]
-                  #:components [c #f]
-                  . custom-components)
-  (add-components (bg->backdrop-entity bg
-                                       #:rows       rows
-                                       #:columns    cols
-                                       #:start-tile t
-                                       #:scale scale)
-                  (cons c custom-components)))
-;; -----------------------------
-
+;; ----- HERO
 
 (define/contract/doc (custom-hero #:sprite           (sprite (circle 10 'solid 'red))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
@@ -112,6 +74,8 @@
                  #:mouse-aim?       mouse-aim?
                  #:item-slots       w-slots
                  #:components       (cons c custom-components)))
+
+;; ----- VILLAIN
 
 (define/contract/doc (custom-villain #:amount-in-world (amount-in-world 1)
                                      #:sprite (sprite stormtrooper-sprite)
@@ -147,6 +111,7 @@
                 #:death-particles death-particles
                 #:components      (cons c custom-components)))
 
+;; ----- LIGHTSABER
 
 (define/contract/doc (custom-lightsaber #:name              [n "Lightsaber"]
                                         #:icon              [s (make-icon "LS" "green")]
@@ -185,6 +150,8 @@
                  #:rapid-fire?       rf?
                  #:rarity            rarity))
 
+;; ----- BLASTER
+
 (define/contract/doc (custom-blaster #:name              [n "Blaster"]
                                      #:icon              [s (make-icon "B" "red")]
                                      #:color             [c "green"]
@@ -222,6 +189,7 @@
                  #:rapid-fire?       rf?
                  #:rarity            rarity))
 
+;; ----- PLANET
 
 (define/contract/doc (custom-planet #:img        [bg (change-img-hue (random 360) (draw-plain-bg))]
                                     #:rows       [rows 3]
@@ -293,14 +261,14 @@
 (define luke-sprite
   (sheet->sprite luke
                  #:rows 4
-                 #:columns 3
+                 #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define obiwan-sprite
   (sheet->sprite obiwan
                  #:rows 4
-                 #:columns 3
+                 #:columns 4
                  #:row-number 3
                  #:delay 5))
 
@@ -339,7 +307,6 @@
                  #:row-number 3
                  #:delay 5))
 
-;==== NEW SPRITES ===
 (define c2po-sprite
   (sheet->sprite c2po
                  #:rows 4
@@ -375,6 +342,8 @@
                  #:row-number 3
                  #:delay 5))
 
+;; ----- WEAPONS & DARTS
+
 (define (swinging-lightsaber-sprite c)
   (rotate 90 (beside (rectangle 40 40 "solid" "transparent")
                      (rectangle 8 4 "solid" "black")
@@ -390,25 +359,27 @@
   (rectangle 10 2 "solid" c))
 
 (define (double-lightsaber
-         #:color     [c "red"]
-         #:sprite    [s (double-lightsaber-sprite c)])
-  
-  ;@{This returns a sword skinned as a double lightsaber.}
-  (sword #:sprite     s
-         #:damage     50
-         #:durability 20
-         #:speed      0
-         #:range      10))
-
-(define (lightsaber
-         #:color      [c "green"]
-         #:sprite     [s (swinging-lightsaber-sprite c)]
+         #:color      [c "red"]
+         #:sprite     [s (double-lightsaber-sprite c)]
          #:damage     [dmg 50]
          #:durability [dur 20]
          #:speed      [spd  0]
          #:range      [rng 10])
-  
-  ;@{This returns a sword skinned as a lightsaber.}
+
+  (sword #:sprite     s
+         #:damage     dmg
+         #:durability dur
+         #:speed      spd
+         #:range      rng))
+
+(define (lightsaber
+         #:color      [c "green"]
+         #:sprite     [s (swinging-lightsaber-sprite c)]
+         #:damage     [dmg 25]
+         #:durability [dur 20]
+         #:speed      [spd  0]
+         #:range      [rng 10])
+
   (sword #:sprite     s
          #:damage     dmg
          #:durability dur
@@ -422,8 +393,7 @@
          #:durability [dur 20]
          #:speed      [spd  5]
          #:range      [rng 50])
-  
-  ;@{This returns a red dart.}
+
   (custom-dart #:sprite     s
                #:damage     dmg
                #:durability dur
@@ -438,6 +408,7 @@
                           #:speed      [spd 5]
                           #:range      [rng 20]
                           #:fire-rate  [fire-rate 0.5])
+  
   (builder-dart #:entity (droid #:weapon (custom-lightsaber #:fire-rate fire-rate
                                                             #:dart (lightsaber #:color      c
                                                                                #:sprite     s
@@ -452,14 +423,19 @@
                        #:durability [dur 20]
                        #:speed      [spd 5]
                        #:range      [rng 50]
-                       #:fire-rate  [fire-rate 2])
+                       #:fire-rate  [fire-rate 2]
+                       #:fire-mode  [fire-mode 'normal])
+  
   (builder-dart #:entity (droid #:weapon (custom-blaster #:fire-rate fire-rate
+                                                         #:fire-mode fire-mode
                                                          #:dart (blaster-dart #:color      c
                                                                               #:sprite     s
                                                                               #:damage     dmg
                                                                               #:durability dur
                                                                               #:speed      spd
                                                                               #:range      rng)))))
+
+;; ----- DROIDS
 
 (define (crop-sprite img row col x-idx y-idx)
   (define w (image-width  img))
@@ -510,6 +486,7 @@
                   (after-time die-after die)
                   (on-start (spawn-on-current-tile droid-top-entity))))
 
+
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
@@ -537,10 +514,12 @@
          Can be run with no parameters to get a basic, default game
          with nothing in it!}
 
-  (battle-arena-game #:bg planet-ent
+  (battle-arena-game #:headless headless
+                     #:bg planet-ent
                      #:avatar avatar
                      #:weapon-list weapon-list
                      #:enemy-list e-list
-                     #:item-list item-list))
+                     #:item-list item-list
+                     #:other-entities  (cons ent custom-entities)))
 
 

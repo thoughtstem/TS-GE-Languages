@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ("7.0" ("d769a9e5fd1c3f1114c0b4ec6ed922ecabac5e2f" . "7bdda604b12d68c5e628bc73b7730fdeab45e093") (collects #"2htdp" #"image.rkt") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-starwars" #"lang" #"main.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
+=======
+("7.0" ("d769a9e5fd1c3f1114c0b4ec6ed922ecabac5e2f" . "9a0e229ccb04ee7a2e6db9b9bf682b8403253cf9") (collects #"2htdp" #"image.rkt") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-starwars" #"lang" #"main.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
+>>>>>>> 06926e575f4a0a774b2ce58751a786c747d0f488

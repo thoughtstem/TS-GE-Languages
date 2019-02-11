@@ -17,6 +17,7 @@
          draw-plain-forest-bg
          ai-level?
          dialog-str?
+         sword
 
          witch-sprite
          darkelf-sprite

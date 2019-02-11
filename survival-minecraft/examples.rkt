@@ -115,14 +115,11 @@
    #:mob-list (list (custom-mob)))
   )
 
-;as it currently stands, no curry needed. Add back in the following line
-;when custom-mob randomizes different sprites:
-;(curry custom-mob #:amount-in-world 10)
 (define-example-code survival-minecraft mob-2
 
   (minecraft-game
    #:skin     (custom-skin) 
-   #:mob-list (list (custom-mob #:amount-in-world 10)))
+   #:mob-list (list (curry custom-mob #:amount-in-world 10)))
   )
 
 
@@ -130,7 +127,7 @@
   
   (define (my-mob)
     (custom-mob #:ai              'medium
-                #:sprite          bat-sprite
+                #:sprite          skeleton-sprite
                 #:amount-in-world 5))
  
   (minecraft-game
@@ -142,25 +139,26 @@
 
   (define (easy-mob)
     (custom-mob #:ai              'easy
-                #:sprite          slime-sprite
+                #:sprite          creeper-sprite
                 #:amount-in-world 5))
   
   (define (medium-mob)
     (custom-mob #:ai              'medium
-                  #:sprite          bat-sprite
-                  #:amount-in-world 5
-                  #:night-only?     #t))
+                #:sprite          skeleton-sprite
+                #:amount-in-world 5
+                #:night-only?     #t))
  
   (minecraft-game
    #:skin     (custom-skin)
    #:mob-list (list (easy-mob) (medium-mob)))
   )
 
+;once added more mobs, change skeleton to other sprite
 (define-example-code survival-minecraft mob-5
  
   (define (hard-mob)
     (custom-mob #:ai              'hard
-                #:sprite          snake-sprite
+                #:sprite          skeleton-sprite
                 #:amount-in-world 5
                 #:weapon          (acid-spitter #:damage 50)))
  
@@ -331,13 +329,12 @@
    #:skin (custom-skin)
    #:entity-list (list (custom-entity))))
 
-;better sprite options
 (define-example-code survival-minecraft entity-2
 
   (define (my-entity)
     (custom-entity
-     #:sprite (witch-sprite)
-     #:name "Witch"))
+     #:sprite (pig-sprite)
+     #:name "Miss Piggy"))
 
   (minecraft-game
    #:skin (custom-skin)
@@ -347,8 +344,8 @@
 (define-example-code survival-minecraft entity-3
   (define (my-entity)
     (custom-entity
-     #:sprite (witch-sprite)
-     #:name "Witch"
+     #:sprite (pig-sprite)
+     #:name "Miss Piggy"
      #:tile 3
      #:mode 'follow))
 
@@ -361,8 +358,8 @@
   (define (my-entity)
     (custom-entity
      #:dialog (list "Woah, who are you??"
-                    "Nevermind -- I'm too busy."
-                    "Move along, now!")))
+                    "Wait, I'm a chicken..."
+                    "I can't talk!")))
   (minecraft-game
    #:skin (custom-skin)
    #:entity-list (list (my-entity))))
@@ -378,7 +375,7 @@
 
   (define (another-entity)
     (custom-entity
-     #:sprite (witch-sprite)
+     #:sprite (pig-sprite)
      #:mode 'pace
      #:dialog (list "Now where did I put it..."
                     "Have you seen an eye of newt?"

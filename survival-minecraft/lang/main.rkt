@@ -3,7 +3,8 @@
 (provide chicken-sprite
          creeper-sprite
          skeleton-sprite
-         pig-sprite)
+         pig-sprite
+         ghast-sprite)
 
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
@@ -97,7 +98,7 @@
 ;======== custom-entity to replace custom-npc ========
 ;create more custom entities?
 
-(define/contract/doc (custom-entity #:sprite     [s (chicken-sprite)]
+(define/contract/doc (custom-entity #:sprite     [s chicken-sprite]
                                     #:position   [p (posn 0 0)]
                                     #:name       [name "Chicken"]
                                     #:tile       [tile 0]
@@ -167,10 +168,12 @@
 ;(ghast w/ fireball) (wither w/) (enderdragon w/ fireball)
 
 (define/contract/doc (custom-mob #:amount-in-world (amount-in-world 1)
-                                 #:sprite          (s (creeper-sprite))
+                                 #:sprite          (s (first (shuffle (list creeper-sprite
+                                                                            skeleton-sprite
+                                                                            ghast-sprite))))
                                  #:ai              (ai-level 'medium)
                                  #:health          (health 100)
-                                 #:weapon          (weapon (custom-weapon #:name "Spitter"
+                                 #:weapon          (w  #f #;(custom-weapon #:name "Spitter"
                                                                           #:dart (acid)))
                                  
                                  #:death-particles (particles (custom-particles))
@@ -191,6 +194,15 @@
 
   @{Creates a custom mob that can be used in the mob list
          of @racket[minecraft-game].}
+
+  (define weapon
+    (if (not w)
+        (cond [(equal? (render s) (render ghast-sprite))
+               (custom-weapon #:name "Fireball" #:dart (fireball))]
+              [(equal? (render s) (render skeleton-sprite))
+               (custom-weapon #:name "Arrow" #:dart (arrow))]
+              [else (custom-weapon #:name "Spitter" #:dart (acid))])
+        w))
   
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite          s 
@@ -294,17 +306,17 @@
 
 ;================== ASSETS ======================
 
-(define (creeper-sprite)
+(define creeper-sprite
   (row->sprite (scale .75 creeper-sheet)
                #:columns 4
                #:delay 4))
 
-(define (chicken-sprite)
+(define chicken-sprite
   (row->sprite chicken-sheet
                #:columns 4
                #:delay 4))
 
-(define (pig-sprite)
+(define pig-sprite
   (row->sprite pig-sheet
                #:columns 4
                #:delay 4))
@@ -316,7 +328,44 @@
                   #:components (active-on-bg 0)
                                (physical-collider)))
 
-(define (skeleton-sprite)
+(define skeleton-sprite
   (row->sprite (scale .75 skeleton-sheet)
                #:columns 4
-               #:delay 2))
+               #:delay 3))
+
+(define ghast-sprite
+  (row->sprite ghast-sheet
+               #:columns 4
+               #:delay 6))
+
+;============== CUSTOM WEAPONS ================
+
+(define (arrow #:sprite     [s   (beside
+                                  (rectangle 25 3 'solid (make-color 70 40 0))
+                                  (rotate 270 (triangle 10 'solid 'silver)))]
+               #:damage     [dmg 10]
+               #:durability [dur 5]
+               #:speed      [spd 3]
+               #:range      [rng 100])
+  
+  (custom-dart #:position (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng))
+
+(define (fireball #:sprite     [s   (row->sprite fireball-sheet
+                                                 #:columns 4
+                                                 #:delay 2)]
+                  #:damage     [dmg 20]
+                  #:durability [dur 5]
+                  #:speed      [spd 4]
+                  #:range      [rng 100])
+  
+  (custom-dart #:position (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng))

@@ -16,6 +16,10 @@
          plain-forest-bg
          draw-plain-forest-bg
          ai-level?
+
+         safe-update-entity
+         random-food
+         random-coin
          dialog-str?
          sword
 
@@ -56,6 +60,14 @@
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
 
 (define fire-mode?    (or/c 'normal 'random 'spread 'homing))
+
+(define (name-eq? e1 e2)
+  (eq? (get-name e1) (get-name e2)))
+
+(define (render-eq? e1 e2)
+  (define s1 (get-component e1 animated-sprite?))
+  (define s2 (get-component e2 animated-sprite?))
+  (equal? (render s1) (render s2)))
 
 (struct sky (color day-length day-start day-end max-alpha))
 
@@ -771,7 +783,8 @@
   @{The top-level function for the surival-game language.
          Can be run with no parameters to get a basic, default game
          with nothing in it!}
-  
+
+  ; === AUTO INSTRUCTIONS ===
   (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
                         "WASD KEYS"
                         "ARROW KEYS"))
@@ -790,21 +803,27 @@
                                                                #:mouse-aim? mouse-aim?)
                                           #:relative? #f))))
 
+  (define updated-food-list  (clone-by-amount-in-world f-list))
+  (define updated-coin-list  (clone-by-amount-in-world coin-list))
+  (define updated-enemy-list (clone-by-amount-in-world e-list))
+
   (define (food->toast-entity f)
     (define heal-amt (get-storage-data "heals-by" f))
     (player-toast-entity (~a "+" heal-amt) #:color "green"))
 
   (define starvation-period (max 1 (- 100 (min 100 sr))))
 
-  (define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
+  ;(define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
 
   (define known-products-list (map recipe-product known-recipes-list))
   
   (define player-with-recipes
     (if p
         (add-components p (map recipe->system known-recipes-list)
-                          (apply precompiler f-list)
-                          (map food->component (append f-list known-products-list))
+                          ;(apply precompiler (remove-duplicates updated-food-list render-eq?))                                ;f-list
+                          (map food->component (append (remove-duplicates updated-food-list
+                                                                          name-eq?)
+                                                       known-products-list))                   ;f-list
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
@@ -863,12 +882,8 @@
                                  (new-sprite "Gold: 0" #:y-offset -7 #:scale 0.7 #:color 'yellow)
                                  (counter 0)
                                  (layer "ui")
-                                 (map coin->component coin-list)))
-  
-  (define updated-food-list (map add-random-start-pos f-list))
-  (define updated-coin-list (map add-random-start-pos coin-list))
-  (define updated-enemy-list (map maybe-add-night-only e-list))
-
+                                 (map coin->component (remove-duplicates updated-coin-list name-eq?))))
+ 
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile (clone-by-amount-in-world e-list))))
 
@@ -915,9 +930,11 @@
               
                        c-list
               
-                       (clone-by-amount-in-world updated-coin-list)
-                       (clone-by-amount-in-world updated-food-list)
-                       (clone-by-amount-in-world updated-enemy-list)
+                       ;(clone-by-amount-in-world updated-coin-list)
+                       ;(clone-by-amount-in-world updated-food-list)
+                       (map add-random-start-pos updated-food-list)
+                       (map add-random-start-pos updated-coin-list)
+                       (map maybe-add-night-only updated-enemy-list)
 
                        (cons ent custom-entities)
               
@@ -1302,6 +1319,46 @@
   (recipe #:product (carrot-stew)
           #:build-time 30
           #:ingredients (list "Carrot")))
+
+; We could use some more naturally occuring food like
+;  seeds, berries, nuts, fruit, etc
+(define (random-food #:amount-in-world [amt 1]
+                     #:position        [p (posn 100 100)]
+                     #:tile            [t 0]
+                     #:respawn?        [respawn? #f]
+                     #:components      [c #f]
+                     . custom-components)
+  (define food-sets (list (list "Carrot" carrot-sprite 10)
+                          (list "Fish"  fish-sprite 20)
+                          (list "Carrot Stew" carrot-stew-sprite 30)))
+  (define choice (random (length food-sets)))
+  (custom-food #:name     (first (list-ref food-sets choice))
+               #:sprite   (second (list-ref food-sets choice))
+               #:heals-by (third (list-ref food-sets choice))
+               #:amount-in-world amt
+               #:position p
+               #:tile t
+               #:respawn? respawn?
+               #:components (cons c custom-components)))
+
+(define (random-coin #:amount-in-world [amt 1]
+                     #:position        [p (posn 100 100)]
+                     #:tile            [t 0]
+                     #:respawn?        [respawn? #f]
+                     #:components      [c #f]
+                     . custom-components)
+  (define coin-sets (list (list "Copper Coin" copper-coin-sprite 1)
+                          (list "Silver Coin" silver-coin-sprite 10)
+                          (list "Gold Coin"   gold-coin-sprite   25)))
+  (define choice (random (length coin-sets)))
+  (custom-coin #:name     (first (list-ref coin-sets choice))
+               #:sprite   (second (list-ref coin-sets choice))
+               #:value    (third (list-ref coin-sets choice))
+               #:amount-in-world amt
+               #:position p
+               #:tile t
+               #:respawn? respawn?
+               #:components (cons c custom-components)))
 
 ; ==== HEALTH HANDLERS ====
 (define (set-health-to amt)

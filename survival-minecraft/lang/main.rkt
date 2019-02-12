@@ -14,13 +14,13 @@
          "../assets.rkt"
          survival)
 
-(language-mappings survival            survival-minecraft
-                   [custom-background  custom-biome]
-                   [custom-avatar      custom-skin]
-                   [custom-npc         custom-entity]
-                   [custom-enemy       custom-mob]
-                   [custom-coin        custom-ore]
-                   [survival-game      minecraft-game]
+(language-mappings survival          survival-minecraft
+                   [custom-bg        custom-biome]
+                   [custom-avatar    custom-skin]
+                   [custom-npc       custom-entity]
+                   [custom-enemy     custom-mob]
+                   [custom-coin      custom-ore]
+                   [survival-game    minecraft-game]
                    )
 
 
@@ -29,9 +29,9 @@
   (list FOREST-BG SNOW-BG DESERT-BG LAVA-BG))
 
 
-;======== custom-biome to replace custom-background ========
+;======== custom-biome to replace custom-bg ========
 
-(define/contract/doc (custom-biome #:biome-img  [img (first (shuffle bg-list))]
+(define/contract/doc (custom-biome #:image      [img (first (shuffle bg-list))]
                                    #:rows       [rows 3]
                                    #:columns    [cols 3]
                                    #:start-tile [t 0]
@@ -39,7 +39,7 @@
                                    . custom-components)
 
   (->i ()
-       (#:biome-img  [img image?]
+       (#:image      [img image?]
         #:rows       [rows number?]
         #:columns    [columns number?]
         #:start-tile [start-tile number?]
@@ -49,11 +49,11 @@
 
   @{Returns a custom background}
   
-  (custom-background #:bg-img     img
-                     #:rows       rows
-                     #:columns    cols
-                     #:start-tile t 
-                     #:components (cons c custom-components)))
+  (custom-bg #:image      img
+             #:rows       rows
+             #:columns    cols
+             #:start-tile t 
+             #:components (cons c custom-components)))
 
 ;======== custom-skin to replace custom-avatar ========
 
@@ -262,7 +262,7 @@
 ;minecraft-game to replace survival-game
 (define/contract/doc
   (minecraft-game #:headless        [headless #f]
-                  #:biome           [biome-ent (plain-forest-bg #:bg-img (random-forest))]
+                  #:biome           [biome-ent (plain-forest-bg #:image (random-forest))]
                   #:skin            [skin #f]
                   #:starvation-rate [sr 50]
                   #:sky             [sky (custom-sky)]

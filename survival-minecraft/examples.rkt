@@ -153,12 +153,11 @@
    #:mob-list (list (easy-mob) (medium-mob)))
   )
 
-;once added more mobs, change skeleton to other sprite
 (define-example-code survival-minecraft mob-5
  
   (define (hard-mob)
     (custom-mob #:ai              'hard
-                #:sprite          skeleton-sprite
+                #:sprite          ghast-sprite
                 #:amount-in-world 5
                 #:weapon          (acid-spitter #:damage 50)))
  
@@ -333,7 +332,7 @@
 
   (define (my-entity)
     (custom-entity
-     #:sprite (pig-sprite)
+     #:sprite pig-sprite
      #:name "Miss Piggy"))
 
   (minecraft-game
@@ -344,8 +343,8 @@
 (define-example-code survival-minecraft entity-3
   (define (my-entity)
     (custom-entity
-     #:sprite (pig-sprite)
-     #:name "Miss Piggy"
+     #:sprite pig-sprite
+     #:name "Sir Pigsnoot"
      #:tile 3
      #:mode 'follow))
 
@@ -371,19 +370,50 @@
      #:name "Francis"
      #:tile 4
      #:dialog (list "Greetings!"
-                    "You better find some food soon...")))
+                    "Gee, you look hungry."
+                    "I'd offer you some chicken feed...\nbut I don't think you'd like it.")))
 
   (define (another-entity)
     (custom-entity
-     #:sprite (pig-sprite)
+     #:sprite pig-sprite
+     #:name "Mr. Piggstockerton III"
      #:mode 'pace
-     #:dialog (list "Now where did I put it..."
-                    "Have you seen an eye of newt?"
-                    "Oh, I think I see it!")))
+     #:dialog (list "oink oink oink oink"
+                    "oink OINK OINK"
+                    "oooOIINK")))
 
   (minecraft-game
    #:skin (custom-skin)
    #:entity-list (list (my-entity) (another-entity))))
+
+
+;==========================================================
+
+(define-example-code survival-minecraft biome-1
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:biome (custom-biome))
+  )
+
+
+(define-example-code survival-minecraft biome-2
+  (minecraft-game
+   #:skin (custom-skin)
+   #:biome (custom-biome #:image DESERT-BG))
+  )
+
+
+(define-example-code survival-minecraft biome-3
+  (define (my-biome)
+    (custom-biome
+     #:image LAVA-BG
+     #:start-tile 4))
+
+  (minecraft-game
+   #:skin (custom-skin)
+   #:biome (my-biome))
+  )
 
 
 ;Tests all examples as games for 10 ticks

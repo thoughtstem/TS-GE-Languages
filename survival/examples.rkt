@@ -257,8 +257,6 @@
    #:food-list  (list (custom-food #:amount-in-world 10))))
 
 
-
- 
 (define-example-code survival food-2
   (define (my-food)
     (custom-food #:amount-in-world 2
@@ -281,8 +279,6 @@
   (survival-game
    #:avatar     (custom-avatar)
    #:food-list  (list (my-food))))
-
-
 
  
 (define-example-code survival food-4
@@ -369,6 +365,29 @@
   (survival-game
    #:avatar   (custom-avatar)
    #:npc-list (list (my-npc) (another-npc))))
+
+
+
+(define-example-code survival bg-1
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:bg (custom-bg)))
+
+(define-example-code survival bg-2
+  (survival-game
+   #:avatar (custom-avatar)
+   #:bg (custom-bg #:image DESERT-BG)))
+
+(define-example-code survival bg-3
+  (define (my-bg)
+    (custom-bg
+     #:image LAVA-BG
+     #:start-tile 4))
+
+  (survival-game
+   #:avatar (custom-avatar)
+   #:bg (my-bg)))
   
 
 

@@ -195,7 +195,7 @@
                   ))
 
 ; === ENTITY DEFINITIONS ===
-(define (plain-bg #:bg-img     [bg (rectangle 4 3
+(define (plain-bg #:image     [bg (rectangle 4 3
                                   'solid 'darkgreen)]
                   #:scale      [scale 360] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
@@ -221,7 +221,7 @@
                  (rectangle 4 3 'solid (color 7 74 141))
                  (rectangle 4 3 'solid (color 8 151 118)))))
 
-(define (plain-color-bg #:bg-img     [bg (draw-color-bg)]
+(define (plain-color-bg #:image     [bg (draw-color-bg)]
                         #:scale      [scale 120] ; should scale to 3x 480 by 360 or 1440 by 1080
                         #:rows       [rows 3]
                         #:columns    [cols 3]
@@ -253,7 +253,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-forest-bg #:bg-img     [bg (draw-plain-forest-bg)]
+(define (plain-forest-bg #:image     [bg (draw-plain-forest-bg)]
                          #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                          #:rows       [rows 3]
                          #:columns    [cols 3]
@@ -1061,15 +1061,15 @@
               #:scale       scale
               #:components  (cons c custom-components)))
 
-(define/contract/doc (custom-background #:bg-img     [bg FOREST-BG]
-                                        #:rows       [rows 3]
-                                        #:columns    [cols 3]
-                                        #:start-tile [t 0]
-                                        #:components [c #f]
-                                        . custom-components)
+(define/contract/doc (custom-bg #:image      [bg FOREST-BG]
+                                #:rows       [rows 3]
+                                #:columns    [cols 3]
+                                #:start-tile [t 0]
+                                #:components [c #f]
+                                . custom-components)
 
   (->i ()
-       (#:bg-img [bg-img image?]
+       (#:image [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]

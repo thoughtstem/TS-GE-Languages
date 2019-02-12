@@ -879,7 +879,8 @@
                     #:name       "score"
                     #:position   (posn 380 20)
                     #:components (static)
-                                 (new-sprite "Gold: 0" #:y-offset -7 #:scale 0.7 #:color 'yellow)
+                                 (new-sprite "Gold: 0" #:y-offset 0 ;-7
+                                             #:scale 0.7 #:color 'yellow)
                                  (counter 0)
                                  (layer "ui")
                                  (map coin->component (remove-duplicates updated-coin-list name-eq?))))
@@ -1034,16 +1035,16 @@
                                                (list "I'm hungry..."))))
                      #:game-width GAME-WIDTH
                      #:animated #t
-                     #:speed 4)
+                     #:speed 1)
         (if (string? (first d))
             (dialog->sprites d
                              #:game-width GAME-WIDTH
                              #:animated #t
-                             #:speed    4)
+                             #:speed    1)
             (dialog->response-sprites d
                                       #:game-width GAME-WIDTH
                                       #:animated #t
-                                      #:speed 4))))
+                                      #:speed 1))))
   
   (define sprite (if (image? s)
                      (new-sprite s)

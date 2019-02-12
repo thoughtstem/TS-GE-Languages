@@ -21,6 +21,7 @@
          random-food
          random-coin
          dialog-str?
+         sword
 
          witch-sprite
          darkelf-sprite

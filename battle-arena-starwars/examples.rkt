@@ -469,5 +469,71 @@
    #:item-list    (list (b-armor)))
   )
 
+; ----------
+
+(define-example-code battle-arena-starwars lava-pit-1
+  (starwars-game
+   #:weapon-list (list (custom-weapon #:name   "Lava Pit"
+                                      #:sprite (make-icon "LP")
+                                      #:dart   (lava-builder))))
+  )
+
+(define-example-code battle-arena-starwars lava-pit-2
+  (define (my-lava-pit)
+    (custom-weapon #:name   "Lava Pit"
+                   #:sprite (make-icon "LP" 'red)
+                   #:dart   (lava-builder #:damage 25
+                                          #:size   2)))
+  
+  (starwars-game
+   #:weapon-list (list (my-lava-pit)))
+  )
+
+(define-example-code battle-arena-starwars lava-pit-3
+  (define (my-lava-pit)
+    (custom-weapon #:name "Lava Pit"
+                   #:sprite (make-icon "LP" 'red 'white)
+                   #:dart (lava-builder #:damage  25
+                                        #:size    1
+                                        #:sprite  (square 10 'solid 'black)
+                                        #:range   10)))
+  
+  (starwars-game
+   #:weapon-list (list (my-lava-pit)))
+  )
+
+; ----------
+
+(define-example-code battle-arena-starwars spike-mine-1
+  (starwars-game
+   #:weapon-list (list (custom-weapon #:name   "Spike Mine"
+                                      #:sprite (make-icon "SM")
+                                      #:dart   (spike-mine-builder))))
+  )
+
+(define-example-code battle-arena-starwars spike-mine-2
+  (define (my-spike-mine)
+    (custom-weapon #:name   "Spike Mine"
+                   #:sprite (make-icon "SM" 'gray)
+                   #:dart   (spike-mine-builder #:speed 10 
+                                                #:range 50)))
+  
+  (starwars-game
+   #:weapon-list (list (my-spike-mine)))
+  )
+
+(define-example-code battle-arena-starwars spike-mine-3
+  (define (my-spike-mine)
+    (custom-weapon #:name   "Spike Mine"
+                   #:sprite (make-icon "SM" 'gray 'white)
+                   #:dart   (spike-mine-builder #:sprite STUDENT-IMAGE-HERE
+                                                #:damage 100
+                                                #:speed 10
+                                                #:range 50)))
+  (starwars-game
+   #:weapon-list (list (my-spike-mine)))
+  )
+
+
 ;We'll test that the examples all run as games for 10 ticks
 (test-all-examples-as-games 'battle-arena-starwars)

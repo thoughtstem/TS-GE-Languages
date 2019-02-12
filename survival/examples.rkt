@@ -120,7 +120,7 @@
    #:avatar       (custom-avatar)
    #:food-list    (list (fish #:amount-in-world 10))
    #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
-                                        #:recipe-list (list red-curry-recipe)))))
+                                        #:recipe-list (list fish-stew-recipe)))))
 
 
 
@@ -289,7 +289,7 @@
 
   (define (my-food)
     (custom-food #:sprite          apples-sprite
-                 #:name            "Apple"
+                 #:name            "Apples"
                  #:amount-in-world 2
                  #:heals-by        20))
 
@@ -304,6 +304,71 @@
    #:avatar     (custom-avatar)
    #:food-list  (list (my-food)
                       (special-food))))
+
+
+
+(define-example-code survival npc-1
+
+  (survival-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (custom-npc))))
+
+
+(define-example-code survival npc-2
+
+  (define (my-npc)
+    (custom-npc
+     #:sprite (witch-sprite)
+     #:name   "Witch"))
+
+  (survival-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (my-npc))))
+
+
+(define-example-code survival npc-3
+  (define (my-npc)
+    (custom-npc
+     #:sprite (witch-sprite)
+     #:name   "Witch"
+     #:tile   3
+     #:mode   'follow))
+
+  (survival-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (my-npc))))
+
+
+(define-example-code survival npc-4
+  (define (my-npc)
+    (custom-npc
+     #:dialog (list "Woah, who are you??"
+                    "Nevermind -- I'm too busy."
+                    "Move along, now!")))
+  (survival-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (my-npc))))
+
+
+(define-example-code survival npc-5
+  (define (my-npc)
+    (custom-npc
+     #:name   "Francis"
+     #:tile   4
+     #:dialog (list "Greetings!"
+                    "You better find some food soon...")))
+
+  (define (another-npc)
+    (custom-npc
+     #:sprite (witch-sprite)
+     #:mode   'pace
+     #:dialog (list "Now where did I put it..."
+                    "Have you seen an eye of newt?"
+                    "Oh, I think I see it!")))
+
+  (survival-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (my-npc) (another-npc))))
   
 
 

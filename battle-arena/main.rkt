@@ -6,10 +6,10 @@
 (require (for-doc racket/base scribble/manual))
 
 (module reader syntax/module-reader
-    battle-arena/jam-lang)
+    battle-arena/lang)
 
-(provide (all-from-out "./jam-lang.rkt"))
+(provide (all-from-out "./lang.rkt"))
 (provide (all-from-out "./assets.rkt"))
 
-(require "./jam-lang.rkt")
+(require "./lang.rkt")
 (require "./assets.rkt")

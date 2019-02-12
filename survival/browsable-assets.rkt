@@ -8,7 +8,8 @@
          pict/code)
 
 (provide show-coin-sprites
-         show-food-sprites)
+         show-food-sprites
+         show-enemy-sprites)
 
 
 ;TODO get rid of purple loading text
@@ -19,9 +20,7 @@
 
   (define a (inset-frame (draw-entity (copper-coin-entity))))
   (define b (inset-frame (draw-entity (silver-coin-entity))))
-  (define c (inset-frame (draw-entity (cat))))
-  (define d (inset-frame (draw-entity (bat))))
-  (define f (inset-frame (draw-entity (snake)))) 
+  (define c (inset-frame (draw-entity (gold-coin-entity))))
 
   (inset-frame
    (vl-append
@@ -38,19 +37,7 @@
     (code+hints c #:settings hints-on-right
                 (list c
                       (hint
-                       (vl-append
-                        (code cat-sprite)
-                        (text "Also try:")
-                        (code white-cat-sprite)
-                        (code black-cat-sprite)))))
-    (code+hints d #:settings hints-on-right
-                (list d
-                      (hint
-                       (code bat-sprite))))
-    (code+hints f #:settings hints-on-right
-                (list f
-                      (hint
-                       (code snake-sprite)))))))
+                        (code gold-coin-sprite)))))))
 
 ;=== food sprite list ====
 (define (show-food-sprites)
@@ -133,6 +120,6 @@
                        (code snake-sprite)))))))
 
 (module+ test
-  ;(show-coin-sprites)
-  ;(show-food-sprites)
+  (show-coin-sprites)
+  (show-food-sprites)
   (show-enemy-sprites))

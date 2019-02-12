@@ -13,9 +13,7 @@
                    [custom-enemy      custom-villain]
                    [custom-background custom-planet]
                    [sword             lightsaber]
-                   [#:avatar          #:hero]
-                   [#:enemy-list      #:villain-list]
-                   [#:bg              #:planet]
+                   ;[#:avatar          #:jedi]
                    [battle-arena-game starwars-game])
 
 (provide lightsaber

@@ -5,12 +5,26 @@
          battle-arena-starwars)
 
 
-;(define-example-code/from* battle-arena/examples) making my own examples here
+(define-example-code/from* battle-arena/examples) ;making my own examples here
+
+(define-example-code battle-arena-starwars alt/avatar-4
+  (define (my-hero)
+    (custom-hero #:sprite     yoda-sprite
+                 #:speed      15
+                 #:key-mode   'arrow-keys
+                 #:item-slots 5))
+  (starwars-game
+   #:hero (my-hero))
+  )
+
+
 
 ;If you want to hook into any of the exported
 ;  syntax:kata-names, this would be the file to do that.
 ;You can't see them, but they are here, defined by
 ;  define-example-code/from*
+
+#;(
 
 (define-example-code battle-arena-starwars hero-1
  (starwars-game
@@ -534,6 +548,8 @@
    #:weapon-list (list (my-spike-mine)))
   )
 
+)
 
 ;We'll test that the examples all run as games for 10 ticks
 (test-all-examples-as-games 'battle-arena-starwars)
+

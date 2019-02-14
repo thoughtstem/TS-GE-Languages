@@ -1,0 +1,12 @@
+#lang at-exp racket
+
+(require scribble/srcdoc)
+(require (for-doc racket/base scribble/manual ))
+
+(require ts-kata-util
+         ;2htdp/image ;not needed
+         "../assets.rkt" ;was not added automatically
+         battle-arena ;was not added automatically
+         )
+
+

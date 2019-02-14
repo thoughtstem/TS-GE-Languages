@@ -702,7 +702,7 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-background #:bg-img     [bg FOREST-BG]
+(define/contract/doc (custom-bg #:bg-img     [bg FOREST-BG]
                                         #:rows       [rows 3]
                                         #:columns    [cols 3]
                                         #:start-tile [t 0]
@@ -823,7 +823,7 @@
 (define/contract/doc
   (battle-arena-game
    #:headless       [headless #f]
-   #:bg             [bg-ent (custom-background)]
+   #:bg             [bg-ent (custom-bg)]
    #:avatar         [p (custom-avatar)]
    #:enemy-list     [e-list (list (custom-enemy)
                                   (custom-enemy #:weapon (custom-weapon #:name "Sword"
@@ -1141,7 +1141,7 @@
 
 (module+ test
   (battle-arena-game
-   #:bg              (custom-background #:bg-img SNOW-BG)
+   #:bg              (custom-bg #:bg-img SNOW-BG)
    #:avatar          (custom-avatar)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"

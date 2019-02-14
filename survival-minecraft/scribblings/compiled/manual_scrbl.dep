@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-("7.1" ("9857ef594977056cdbbe6ac996739fd46c740f35" . "8ff19ea4626afeb0daedf8a8af0564ca819f882f") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt") (collects #"survival-minecraft" #"assets.rkt") (collects #"survival-minecraft" #"main.rkt"))
-=======
-("7.1" ("9857ef594977056cdbbe6ac996739fd46c740f35" . "dd03f806eeb059b7173a9c8bba63d678fd9270d8") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt") (collects #"survival-minecraft" #"assets.rkt") (collects #"survival-minecraft" #"main.rkt"))
->>>>>>> 7e576407b461114b85114cf6071415bd6b636218
+("7.1" ("9857ef594977056cdbbe6ac996739fd46c740f35" . "7b94d2b9b8ceaef9d6bf3fe13dc0558222fa67f2") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt") (collects #"survival-minecraft" #"assets.rkt") (collects #"survival-minecraft" #"main.rkt"))

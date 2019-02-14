@@ -1,10 +1,5 @@
 #lang at-exp racket
 
-(require scribble/srcdoc
-         scribble/extract)
-
-(require (for-doc racket/base scribble/manual))
-
 (module reader syntax/module-reader
     battle-arena/lang)
 

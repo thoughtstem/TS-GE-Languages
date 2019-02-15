@@ -1,0 +1,1 @@
+("7.0" ("2af21564f0c916c2f3cbefd31d752fed79118545" . "2121bc99e93322e98f654408d67f77e9c97982cc") (collects #"battle-arena-starwars" #"assets.rkt") (collects #"game-engine" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt"))

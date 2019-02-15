@@ -1,27 +1,8 @@
 #lang at-exp racket
 
-(require ts-kata-util/assets/main
-         battle-arena)
+(require ts-kata-util/assets/main)
 
 (define-assets-from "assets")
-
-(provide bobafett-sprite
-         darthmaul-sprite
-         darthvader-sprite
-         hansolo-sprite
-         luke-sprite
-         obiwan-sprite
-         padawan-sprite
-         princessleia-sprite
-         r2d2-sprite
-         stormtrooper-sprite
-         twilek-sprite
-         yoda-sprite
-         c3po-sprite
-         c2po-sprite
-         chewie-sprite
-         rebelpilot-sprite
-         lando-sprite)       
 
 ; ==== CUSTOM ASSETS ====
 (define twilek-sprite

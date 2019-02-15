@@ -5,29 +5,16 @@
          battle-arena-starwars)
 
 
-;(define-example-code/from* battle-arena/examples) making my own examples here
+(define-example-code/from* battle-arena/examples) ;making my own examples here
 
-;If you want to hook into any of the exported
-;  syntax:kata-names, this would be the file to do that.
-;You can't see them, but they are here, defined by
-;  define-example-code/from*
+; ---------------
 
-(define-example-code battle-arena-starwars hero-1
- (starwars-game
-   #:hero (custom-hero))
-  )
-
-(define-example-code battle-arena-starwars hero-2
- (starwars-game
-   #:hero (custom-hero #:sprite (star 20 'solid 'yellow)))
-  )
-
-(define-example-code battle-arena-starwars hero-3
+(define-example-code battle-arena-starwars alt/avatar-3
  (starwars-game
    #:hero (custom-hero #:sprite yoda-sprite))
   )
 
-(define-example-code battle-arena-starwars hero-4
+(define-example-code battle-arena-starwars alt/avatar-4
   (define (my-hero)
     (custom-hero #:sprite     yoda-sprite
                  #:speed      15
@@ -39,23 +26,7 @@
 
 ; ---------------
 
-(define-example-code battle-arena-starwars enemy-1
- (starwars-game
-   #:villain-list (list (custom-villain)))
-  )
-
-(define-example-code battle-arena-starwars enemy-2
-  (define (my-enemy)
-    (custom-villain #:ai              'easy
-                    #:health          200
-                    #:shield          100
-                    #:amount-in-world 5))
-
-  (starwars-game 
-   #:villain-list (list (my-enemy)))
-  )
-
-(define-example-code battle-arena-starwars enemy-3
+(define-example-code battle-arena-starwars alt/enemy-3
   (define (my-enemy)
     (custom-villain #:sprite          darthvader-sprite
                     #:ai              'medium
@@ -69,14 +40,14 @@
 
 ; ---------------
 
-(define-example-code battle-arena-starwars enemy-weapon-1
+(define-example-code battle-arena-starwars alt/enemy-weapon-1
   (starwars-game 
    #:villain-list (list (custom-villain
                        #:weapon (custom-blaster
                                  #:color "yellow"))))
   )
 
-(define-example-code battle-arena-starwars enemy-weapon-2
+(define-example-code battle-arena-starwars alt/enemy-weapon-2
   (starwars-game 
    #:villain-list (list (custom-villain
                        #:sprite darthvader-sprite
@@ -84,7 +55,7 @@
                                  #:color "red"))))
   )
 
-(define-example-code battle-arena-starwars enemy-weapon-3 
+(define-example-code battle-arena-starwars alt/enemy-weapon-3 
   (define (my-weapon)
     (custom-lightsaber 
      #:dart (double-lightsaber)))
@@ -97,12 +68,12 @@
 
 ; ---------------
 
-(define-example-code battle-arena-starwars lightsaber-1
+(define-example-code battle-arena-starwars alt/sword-1
   (starwars-game
    #:weapon-list (list (custom-lightsaber)))
   )
 
-(define-example-code battle-arena-starwars lightsaber-2
+(define-example-code battle-arena-starwars alt/sword-2
   (define (my-lightsaber)
     (custom-lightsaber #:name   "Flashy"
                        #:icon   (make-icon "F" "blue")
@@ -113,7 +84,7 @@
   )
 
 
-(define-example-code battle-arena-starwars lightsaber-3
+(define-example-code battle-arena-starwars alt/sword-3
   (define (my-blade)
     (lightsaber #:color      "blue"
                 #:damage     25
@@ -131,6 +102,46 @@
 
 ; ---------------
 
+(define-example-code battle-arena-starwars alt/sword-armor-1  
+  (starwars-game
+   #:item-list (list (custom-armor #:name          "Lightsaber Armor"
+                                   #:protects-from "Ligthsaber"
+                                   #:sprite        (make-icon "LA"))))
+  )
+
+(define-example-code battle-arena-starwars alt/sword-armor-2
+  (define (l-armor)
+    (custom-armor #:name          "Lightsaber Armor"
+                  #:protects-from "Ligthsaber"
+                  #:sprite        (make-icon "LA")
+                  #:change-damage (subtract-by 30)
+                  #:rarity        'rare))
+  
+  (starwars-game
+   #:item-list (list (l-armor)))  
+  )
+
+(define-example-code battle-arena-starwars alt/sword-armor-3
+  (define (l-armor)
+    (custom-armor #:name          "Lightsaber Armor"
+                  #:protects-from "Ligthsaber"
+                  #:sprite        (make-icon "LA")
+                  #:change-damage (subtract-by 30)
+                  #:rarity        'rare))
+  
+  (starwars-game
+   #:villain-list (list (custom-villain #:sprite darthvader-sprite
+                                        #:weapon (custom-lightsaber #:color "red")))
+   #:item-list    (list (l-armor)))
+  )
+
+; ----------
+
+;If you want to hook into any of the exported
+;  syntax:kata-names, this would be the file to do that.
+;You can't see them, but they are here, defined by
+;  define-example-code/from*
+
 (define-example-code battle-arena-starwars blaster-1
   (starwars-game
    #:weapon-list (list (custom-blaster)))
@@ -146,7 +157,6 @@
   (starwars-game
    #:weapon-list (list (my-blaster)))
   )
-
 
 (define-example-code battle-arena-starwars blaster-3
   (define (my-dart)
@@ -191,111 +201,6 @@
 )
 
 ; ---------------
-
-(define-example-code battle-arena-starwars heal-1
-  (starwars-game
-   #:item-list (list (custom-item #:name   "Force Heal"
-                                  #:sprite (make-icon "HP" 'green 'white) 
-                                  #:on-use (change-health-by 50))))
-  )
-
-(define-example-code battle-arena-starwars heal-2
-  (starwars-game
-   #:item-list (list (custom-item #:name   "Force Max Heal" 
-                                  #:sprite (make-icon "xHP" 'green 'white) 
-                                  #:on-use (set-health-to 100))))
-  )
-
-(define-example-code battle-arena-starwars heal-3
-  (define (force-heal)
-    (custom-item #:name     "Force Heal" 
-                 #:sprite   (make-icon "HP" 'green 'white) 
-                 #:on-use   (change-health-by 50) 
-                 #:rarity   'uncommon 
-                 #:respawn? #t))
- 
-  (define (force-max-heal)
-    (custom-item #:name   "Force Max Heal" 
-                 #:sprite (make-icon "xHP" 'green 'white) 
-                 #:on-use (set-health-to 100) 
-                 #:rarity 'epic))
- 
-  (starwars-game
-   #:item-list (list (force-heal)
-                     (force-max-heal)))
-  )
-
-; -----------------
-
-(define-example-code battle-arena-starwars boost-1
-  (starwars-game
-    #:item-list (list (custom-item #:name "Force Damage" 
-                                   #:sprite (make-icon "FD" 'orangered) 
-                                   #:on-use (change-damage-by 1000 #:for 200))))
-
-  )
-
-(define-example-code battle-arena-starwars boost-2
-  (starwars-game
-    #:item-list (list (custom-item #:name "Force Speed" 
-                                   #:sprite (make-icon "FS" 'yellow) 
-                                   #:on-use (multiply-speed-by 2 #:for 200))))
-  )
-
-(define-example-code battle-arena-starwars boost-3
-   (define (force-damage)
-     (custom-item #:name "Force Damage" 
-                  #:sprite (make-icon "FD" 'orangered) 
-                  #:on-use (change-damage-by 1000 #:for 200) 
-                  #:rarity 'epic))
- 
-   (define (force-speed)
-     (custom-item #:name "Force Speed" 
-                  #:sprite (make-icon "FS" 'yellow) 
-                  #:on-use (multiply-speed-by 2 #:for 200) 
-                  #:rarity 'uncommon))
- 
-  (starwars-game
-    #:item-list (list (force-damage)
-                      (force-speed)))
-  )
-
-; -----------------
-
-(define-example-code battle-arena-starwars shield-1
-  (starwars-game
-   #:item-list (list (custom-item #:name    "Shield" 
-                                  #:sprite  (make-icon "S" 'blue 'white)
-                                  #:on-use  (change-shield-by 50))))
-  )
-
-(define-example-code battle-arena-starwars shield-2
-  (starwars-game
-    #:item-list (list (custom-item #:name  "Max Shield"
-                                  #:sprite (make-icon "xS" 'blue 'white)
-                                  #:on-use (set-shield-to 100))))
-  )
-
-(define-example-code battle-arena-starwars shield-3
-  (define (shield-bump)
-    (custom-item #:name     "Shield" 
-                 #:sprite   (make-icon "S" 'blue 'white)
-                 #:on-use   (change-shield-by 50)
-                 #:rarity   'uncommon
-                 #:respawn? #t))
-
-  (define (max-shield)
-    (custom-item #:name     "Max Shield"
-                 #:sprite   (make-icon "xS" 'blue 'white)
-                 #:on-use   (set-shield-to 100)
-                 #:rarity   'epic))
-  
-  (starwars-game
-   #:item-list (list (shield-bump)
-                     (max-shield)))
-  )
-
-; -----------------
 
 (define-example-code battle-arena-starwars force-field-1
   (starwars-game
@@ -403,40 +308,7 @@
   )
 
 ; ----------
-(define-example-code battle-arena-starwars lightsaber-armor-1  
-  (starwars-game
-   #:item-list (list (custom-armor #:name          "Lightsaber Armor"
-                                   #:protects-from "Ligthsaber"
-                                   #:sprite        (make-icon "LA"))))
-  )
-
-(define-example-code battle-arena-starwars lightsaber-armor-2
-  (define (l-armor)
-    (custom-armor #:name          "Lightsaber Armor"
-                  #:protects-from "Ligthsaber"
-                  #:sprite        (make-icon "LA")
-                  #:change-damage (subtract-by 30)
-                  #:rarity        'rare))
-  
-  (starwars-game
-   #:item-list (list (l-armor)))  
-  )
-
-(define-example-code battle-arena-starwars lightsaber-armor-3
-  (define (l-armor)
-    (custom-armor #:name          "Lightsaber Armor"
-                  #:protects-from "Ligthsaber"
-                  #:sprite        (make-icon "LA")
-                  #:change-damage (subtract-by 30)
-                  #:rarity        'rare))
-  
-  (starwars-game
-   #:villain-list (list (custom-villain #:sprite darthvader-sprite
-                                        #:weapon (custom-lightsaber #:color "red")))
-   #:item-list    (list (l-armor)))
-  )
-
-; ----------
+   
 (define-example-code battle-arena-starwars blaster-armor-1 
   (starwars-game
    #:item-list (list (custom-armor #:name          "Blaster Armor"
@@ -471,69 +343,6 @@
 
 ; ----------
 
-(define-example-code battle-arena-starwars lava-pit-1
-  (starwars-game
-   #:weapon-list (list (custom-weapon #:name   "Lava Pit"
-                                      #:sprite (make-icon "LP")
-                                      #:dart   (lava-builder))))
-  )
-
-(define-example-code battle-arena-starwars lava-pit-2
-  (define (my-lava-pit)
-    (custom-weapon #:name   "Lava Pit"
-                   #:sprite (make-icon "LP" 'red)
-                   #:dart   (lava-builder #:damage 25
-                                          #:size   2)))
-  
-  (starwars-game
-   #:weapon-list (list (my-lava-pit)))
-  )
-
-(define-example-code battle-arena-starwars lava-pit-3
-  (define (my-lava-pit)
-    (custom-weapon #:name "Lava Pit"
-                   #:sprite (make-icon "LP" 'red 'white)
-                   #:dart (lava-builder #:damage  25
-                                        #:size    1
-                                        #:sprite  (square 10 'solid 'black)
-                                        #:range   10)))
-  
-  (starwars-game
-   #:weapon-list (list (my-lava-pit)))
-  )
-
-; ----------
-
-(define-example-code battle-arena-starwars spike-mine-1
-  (starwars-game
-   #:weapon-list (list (custom-weapon #:name   "Spike Mine"
-                                      #:sprite (make-icon "SM")
-                                      #:dart   (spike-mine-builder))))
-  )
-
-(define-example-code battle-arena-starwars spike-mine-2
-  (define (my-spike-mine)
-    (custom-weapon #:name   "Spike Mine"
-                   #:sprite (make-icon "SM" 'gray)
-                   #:dart   (spike-mine-builder #:speed 10 
-                                                #:range 50)))
-  
-  (starwars-game
-   #:weapon-list (list (my-spike-mine)))
-  )
-
-(define-example-code battle-arena-starwars spike-mine-3
-  (define (my-spike-mine)
-    (custom-weapon #:name   "Spike Mine"
-                   #:sprite (make-icon "SM" 'gray 'white)
-                   #:dart   (spike-mine-builder #:sprite STUDENT-IMAGE-HERE
-                                                #:damage 100
-                                                #:speed 10
-                                                #:range 50)))
-  (starwars-game
-   #:weapon-list (list (my-spike-mine)))
-  )
-
-
 ;We'll test that the examples all run as games for 10 ticks
 (test-all-examples-as-games 'battle-arena-starwars)
+

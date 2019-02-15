@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-("7.0" ("e85ffc9174b10ee039abe21d20de0255dc05adb0" . "72b8c710d87c61d3338f184cc239417c20835c46") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-starwars" #"assets.rkt") (collects #"battle-arena-starwars" #"lang.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"module-reader.rkt"))
-=======
-("7.0" ("e85ffc9174b10ee039abe21d20de0255dc05adb0" . "65d8153a92882c289ef79b13c447b693e56575cd") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-starwars" #"assets.rkt") (collects #"battle-arena-starwars" #"lang.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"module-reader.rkt"))
->>>>>>> 06926e575f4a0a774b2ce58751a786c747d0f488
+("7.0" ("e85ffc9174b10ee039abe21d20de0255dc05adb0" . "2b517905432b2b4cc1e4744f11b69f243c7170d2") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-starwars" #"assets.rkt") (collects #"battle-arena-starwars" #"lang.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"module-reader.rkt"))

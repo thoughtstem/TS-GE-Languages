@@ -35,6 +35,10 @@
 
          tower
 
+         force-field
+         lock-to-grid
+         round-nearest-posn
+         
          spear-tower-builder
          spike-mine-builder
          lava-builder
@@ -53,6 +57,84 @@
          draw-plain-bg
          plain-bg
          )
+
+(define (force-field [width 80]
+                     [height 120]
+                     #:allow-friendly-dart? [afd? #f]
+                     #:duration [delay 500])
+
+  (define L-ELLIPSE (overlay (ellipse width height 'outline (pen (color 255 255 255 100) 2 'solid "round" "bevel"))
+                             (ellipse width height 'outline (pen (color 0 255 255 100) 4 'solid "round" "bevel"))
+                             (ellipse width height 'outline (pen (color 0 255 255 100) 8 'solid "round" "bevel"))
+                             (ellipse (+ width 8) (+ height 8) 'solid  'transparent)))
+  (define R-ELLIPSE (overlay (ellipse width height 'outline (pen (color 255 255 255 180) 2 'solid "round" "bevel"))
+                             (ellipse width height 'outline (pen (color 0 255 255 100) 6 'solid "round" "bevel"))
+                             (ellipse width height 'outline (pen (color 0 255 255 100) 8 'solid "round" "bevel"))
+                             (ellipse (+ width 8) (+ height 8) 'solid  'transparent)))
+  (define LR-COLLIDER (rectangle 10 height 'solid 'transparent))
+  (define TB-COLLIDER (rectangle width 10 'solid 'transparent))
+  
+  (precompile! L-ELLIPSE
+               R-ELLIPSE
+               LR-COLLIDER
+               TB-COLLIDER)
+  
+  (define (shield-collider-left)
+    (sprite->entity LR-COLLIDER
+                    #:name       "Collider Left"
+                    #:position   (posn (- (/ width 2)) 0)
+                    #:components (physical-collider)
+                    (damager 1000 (if afd?
+                                      (list 'passive 'friendly-team)
+                                      (list 'passive)))
+                    (lock-to "player" #:offset (posn (- (/ width 2)) 0))
+                    (after-time delay die)))
+
+  (define (shield-collider-right)
+    (sprite->entity LR-COLLIDER
+                    #:name "Collider Right"
+                    #:position (posn (/ width 2) 0)
+                    #:components (physical-collider)
+                    (damager 1000 (if afd?
+                                      (list 'passive 'friendly-team)
+                                      (list 'passive)))
+                    (lock-to "player" #:offset (posn (/ width 2) 0))
+                    (after-time delay die)))
+
+  (define (shield-collider-top)
+    (sprite->entity TB-COLLIDER
+                    #:name "Collider Top"
+                    #:position (posn 0 (- (/ height 2)))
+                    #:components (physical-collider)
+                    (damager 1000 (if afd?
+                                      (list 'passive 'friendly-team)
+                                      (list 'passive)))
+                    (lock-to "player" #:offset (posn 0 (- (/ height 2))))
+                    (after-time delay die)))
+
+  (define (shield-collider-bottom)
+    (sprite->entity TB-COLLIDER
+                    #:name "Collider Bottom"
+                    #:position (posn 0 (/ height 2))
+                    #:components (physical-collider)
+                    (damager 1000 (if afd?
+                                      (list 'passive 'friendly-team)
+                                      (list 'passive)))
+                    (lock-to "player" #:offset (posn 0 (/ height 2)))
+                    (after-time delay die)))
+  
+  (sprite->entity (sheet->sprite (beside L-ELLIPSE R-ELLIPSE)
+                                 #:columns 2
+                                 #:delay 5)
+                  #:name "Force Field"
+                  #:position (posn 0 0)
+                  #:components (lock-to "player")
+                  (after-time delay die)
+                  (spawn-once (shield-collider-left))
+                  (spawn-once (shield-collider-right))
+                  (spawn-once (shield-collider-top))
+                  (spawn-once (shield-collider-bottom))))
+
 
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))
@@ -742,7 +824,7 @@
   (battle-arena-game
    #:headless       [headless #f]
    #:bg             [bg-ent (custom-background)]
-   #:avatar         [p #f]
+   #:avatar         [p (custom-avatar)]
    #:enemy-list     [e-list (list (custom-enemy)
                                   (custom-enemy #:weapon (custom-weapon #:name "Sword"
                                                                         #:dart (sword))))]
@@ -869,9 +951,9 @@
                        player-with-weapons
               
               
-                       (pine-tree (posn 400 140) #:tile 2 (damager 5 (list 'passive)))
-                       (pine-tree (posn 93 136)  #:tile 4 (damager 5 (list 'passive)))
-                       (round-tree (posn 322 59) #:tile 4 (damager 5 (list 'passive)))
+                       ;(pine-tree (posn 400 140) #:tile 2 (damager 5 (list 'passive)))
+                       ;(pine-tree (posn 93 136)  #:tile 4 (damager 5 (list 'passive)))
+                       ;(round-tree (posn 322 59) #:tile 4 (damager 5 (list 'passive)))
 
                        ;(map (λ (w) (entity-cloner w 3)) weapon-list)
                        (clone-by-rarity weapon-list)

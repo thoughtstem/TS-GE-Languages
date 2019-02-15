@@ -1,5 +1,39 @@
-1546
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q bobafett)) q (5782 . 2)) ((c def c (c (? . 0) q r2d2)) q (6222 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2032 . 23)) ((c def c (c (? . 0) q darthmaul-2)) q (5876 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1040 . 19)) ((c def c (c (? . 0) q custom-blaster)) q (3120 . 23)) ((c def c (c (? . 0) q princessleia)) q (6168 . 2)) ((c def c (c (? . 0) q twilek)) q (6328 . 2)) ((c def c (c (? . 0) q lando)) q (6042 . 2)) ((c def c (c (? . 0) q twilek-2)) q (6302 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (5754 . 2)) ((c def c (c (? . 0) q padawan)) q (6111 . 2)) ((c def c (c (? . 0) q hansolo)) q (6017 . 2)) ((c def c (c (? . 0) q obiwan)) q (6087 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q princessleia-2)) q (6136 . 2)) ((c def c (c (? . 0) q darthmaul)) q (5905 . 2)) ((c def c (c (? . 0) q starwars-game)) q (4815 . 18)) ((c def c (c (? . 0) q darthvader)) q (5962 . 2)) ((c def c (c (? . 0) q chewie)) q (5852 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (5932 . 2)) ((c def c (c (? . 0) q c2po)) q (5808 . 2)) ((c def c (c (? . 0) q c3po)) q (5830 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4171 . 14)) ((c def c (c (? . 0) q hansolo-2)) q (5990 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (6244 . 2)) ((c def c (c (? . 0) q stormtrooper)) q (6272 . 2)) ((c def c (c (? . 0) q luke)) q (6065 . 2)) ((c def c (c (? . 0) q yoda)) q (6352 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (6198 . 2))))
+2444
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q lando-sprite)) q (377 . 2)) ((c def c (c (? . 0) q darthmaul-2)) q (6589 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1753 . 19)) ((c def c (c (? . 0) q custom-blaster)) q (3833 . 23)) ((c def c (c (? . 0) q lando)) q (6755 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (6467 . 2)) ((c def c (c (? . 0) q hansolo-sprite)) q (202 . 2)) ((c def c (c (? . 0) q obiwan)) q (6800 . 2)) ((c def c (c (? . 0) q custom-hero)) q (713 . 20)) ((c def c (c (? . 0) q darthmaul)) q (6618 . 2)) ((c def c (c (? . 0) q darthmaul-sprite)) q (579 . 2)) ((c def c (c (? . 0) q c2po-sprite)) q (495 . 2)) ((c def c (c (? . 0) q starwars-game)) q (5528 . 18)) ((c def c (c (? . 0) q twilek)) q (7041 . 2)) ((c def c (c (? . 0) q yoda-sprite)) q (80 . 2)) ((c def c (c (? . 0) q chewie)) q (6565 . 2)) ((c def c (c (? . 0) q c3po-sprite)) q (456 . 2)) ((c def c (c (? . 0) q c3po)) q (6543 . 2)) ((c def c (c (? . 0) q r2d2-sprite)) q (417 . 2)) ((c def c (c (? . 0) q princessleia-2)) q (6849 . 2)) ((c def c (c (? . 0) q princessleia-sprite)) q (285 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (6957 . 2)) ((c def c (c (? . 0) q twilek-sprite)) q (119 . 2)) ((c def c (c (? . 0) q luke)) q (6778 . 2)) ((c def c (c (? . 0) q yoda)) q (7065 . 2)) ((c def c (c (? . 0) q bobafett)) q (6495 . 2)) ((c def c (c (? . 0) q padawan-sprite)) q (160 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4884 . 14)) ((c def c (c (? . 0) q princessleia)) q (6881 . 2)) ((c def c (c (? . 0) q bobafett-sprite)) q (623 . 2)) ((c def c (c (? . 0) q stormtrooper-sprite)) q (666 . 2)) ((c def c (c (? . 0) q obiwan-sprite)) q (39 . 2)) ((c def c (c (? . 0) q padawan)) q (6824 . 2)) ((c def c (c (? . 0) q chewie-sprite)) q (244 . 2)) ((c def c (c (? . 0) q hansolo)) q (6730 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2745 . 23)) ((c def c (c (? . 0) q luke-sprite)) q (0 . 2)) ((c def c (c (? . 0) q darthvader)) q (6675 . 2)) ((c def c (c (? . 0) q twilek-2)) q (7015 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (6645 . 2)) ((c def c (c (? . 0) q c2po)) q (6521 . 2)) ((c def c (c (? . 0) q rebelpilot-sprite)) q (332 . 2)) ((c def c (c (? . 0) q r2d2)) q (6935 . 2)) ((c def c (c (? . 0) q hansolo-2)) q (6703 . 2)) ((c def c (c (? . 0) q stormtrooper)) q (6985 . 2)) ((c def c (c (? . 0) q darthvader-sprite)) q (534 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (6911 . 2))))
+value
+luke-sprite : animated-sprite?
+value
+obiwan-sprite : animated-sprite?
+value
+yoda-sprite : animated-sprite?
+value
+twilek-sprite : animated-sprite?
+value
+padawan-sprite : animated-sprite?
+value
+hansolo-sprite : animated-sprite?
+value
+chewie-sprite : animated-sprite?
+value
+princessleia-sprite : animated-sprite?
+value
+rebelpilot-sprite : animated-sprite?
+value
+lando-sprite : animated-sprite?
+value
+r2d2-sprite : animated-sprite?
+value
+c3po-sprite : animated-sprite?
+value
+c2po-sprite : animated-sprite?
+value
+darthvader-sprite : animated-sprite?
+value
+darthmaul-sprite : animated-sprite?
+value
+bobafett-sprite : animated-sprite?
+value
+stormtrooper-sprite : animated-sprite?
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     

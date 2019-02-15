@@ -3,7 +3,7 @@
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
 
-@title{battle-arena-avengers docs}
+@title{Battle Arena: Avengers}
 @author{thoughtstem}
 
 @defmodulelang[battle-arena-avengers]

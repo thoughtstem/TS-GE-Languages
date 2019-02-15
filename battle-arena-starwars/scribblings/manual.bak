@@ -3,7 +3,7 @@
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
 
-@title{Battle Arena: Starwars}
+@title{Battle Arena: Star Wars}
 @author{thoughtstem}
 
 @defmodulelang[battle-arena-starwars]
@@ -16,4 +16,20 @@
 
 @(include-extracted "../assets.rkt")
 
-
+bobafett-sprite
+darthmaul-sprite
+darthvader-sprite
+hansolo-sprite
+luke-sprite
+obiwan-sprite
+padawan-sprite
+princessleia-sprite
+r2d2-sprite
+stormtrooper-sprite
+twilek-sprite
+yoda-sprite
+c3po-sprite
+c2po-sprite
+chewie-sprite
+rebelpilot-sprite
+lando-sprite

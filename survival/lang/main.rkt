@@ -436,7 +436,7 @@
       #f))
 
 (define/contract/doc
-  (custom-avatar #:sprite     [sprite (circle 10 'solid 'red)]
+  (custom-avatar #:sprite     [sprite (random-character-sprite)]
                  #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
                                                               #:show-damage? #t
                                                               )]
@@ -754,15 +754,14 @@
 (define/contract/doc
   (survival-game #:headless        [headless #f]
                  #:bg              [bg-ent (plain-forest-bg)]
-                 #:avatar          [p         #f #;(custom-avatar)]
+                 #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                  #:starvation-rate [sr 50]
                  #:sky             [sky (custom-sky)]
-                 #:npc-list        [npc-list  '() #;(list (random-npc (posn 200 200)))]
-                 #:enemy-list      [e-list (list (custom-enemy))]
-                 #:coin-list       [coin-list '() #;(list (coin #:entity (coin-entity) #:amount-in-world 10))]
-                 #:food-list       [f-list    '() #;(list (food #:entity (carrot-entity) #:amount-in-world 10)
-                                                         (food #:entity carrot-stew #:heals-by 20))]
-                 #:crafter-list    [c-list    '() #;(list (custom-crafter))]
+                 #:npc-list        [npc-list  '()]
+                 #:enemy-list      [e-list    '()]
+                 #:coin-list       [coin-list '()]
+                 #:food-list       [f-list    '()]
+                 #:crafter-list    [c-list    '()]
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()

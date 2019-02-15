@@ -1,12 +1,15 @@
 #lang racket
 
 (require ts-kata-util survival)
+
+(define-example-code survival hello-world-1
+  (survival-game))
  
 (define-example-code survival avatar-1
  (survival-game
    #:avatar (custom-avatar)))
 
-(define-example-code survival avatar-2 
+#;(define-example-code survival avatar-2 
 
   (define (my-avatar)
     (custom-avatar #:sprite (star 30 'solid 'yellow)))
@@ -15,7 +18,7 @@
    #:avatar (my-avatar)))
 
 
-(define-example-code survival avatar-3
+#;(define-example-code survival avatar-3
 
   (define (my-avatar)
     (custom-avatar #:sprite (random-character-sprite)))
@@ -24,9 +27,26 @@
    #:avatar (my-avatar)))
 
                                        
-(define-example-code survival avatar-4
+(define-example-code survival avatar-2
   (define (my-avatar)
     (custom-avatar #:sprite wizard-sprite))
+
+   (survival-game
+     #:avatar (my-avatar)))
+
+(define-example-code survival avatar-3
+  (define (my-avatar)
+    (custom-avatar #:sprite pirate-sprite
+                   #:speed  20))
+
+   (survival-game
+     #:avatar (my-avatar)))
+
+(define-example-code survival avatar-4
+  (define (my-avatar)
+    (custom-avatar #:sprite monk-sprite
+                   #:speed  20
+                   #:key-mode 'wasd))
 
    (survival-game
      #:avatar (my-avatar)))

@@ -3,9 +3,9 @@
 (require ts-kata-util
          "./lang/main.rkt")
 
-;(define-example-code/from* survival/examples)
+(define-example-code/from* survival/examples)
 
-
+#|
 (define-example-code survival-minecraft hero-1
 
   (minecraft-game
@@ -414,7 +414,7 @@
    #:skin (custom-skin)
    #:biome (my-biome))
   )
-
+|#
 
 ;Tests all examples as games for 10 ticks
 ;(test-all-examples-as-games 'survival-minecraft)

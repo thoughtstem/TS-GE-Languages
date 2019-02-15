@@ -1,0 +1,6 @@
+*.dep
+*.zo
+*.bak
+*.scrbl~
+*.rkt~
+*.DS_Store

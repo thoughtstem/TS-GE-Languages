@@ -26,12 +26,12 @@
                                        
 (define-example-code survival avatar-4
   (define (my-avatar)
-    (custom-avatar #:sprite STUDENT-IMAGE-HERE))
+    (custom-avatar #:sprite wizard-sprite))
 
    (survival-game
      #:avatar (my-avatar)))
 
-(define-example-code survival avatar-5
+#;(define-example-code survival avatar-5
   (define (my-avatar)
     (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
                                            #:columns 4)))
@@ -410,8 +410,7 @@
 
 (define-example-code survival game-jam-2
   (define (my-avatar)
-    (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
-                                           #:columns 4)))
+    (custom-avatar #:sprite wizard-sprite))
 
   (define (red-coin)
     (custom-coin #:sprite (circle 5 'solid 'red)

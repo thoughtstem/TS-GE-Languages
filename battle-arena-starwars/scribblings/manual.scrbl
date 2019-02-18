@@ -10,11 +10,11 @@
 
 @defmodulelang[battle-arena-starwars]
 
-@(include-section "available-sprites.rkt")
-
 @section{Functions}
 
 @(include-extracted "../lang/main.rkt")
+
+@(include-section "assets-library.rkt")
 
 @section{Image Assets}
 

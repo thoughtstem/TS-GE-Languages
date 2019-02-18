@@ -359,7 +359,7 @@
                       #:hero             [avatar (custom-hero)]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
-                      #:villain-list     [e-list (list (custom-villain))]
+                      #:villain-list     [e-list '()]
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
                       #:other-entities   [ent #f]
@@ -369,7 +369,7 @@
        (#:headless       [headless boolean?]
         #:planet         [planet entity?]
         #:hero           [avatar (or/c entity? false?)]
-        #:villain-list   [enemy-list   (listof (or/c entity? procedure?))]
+        #:villain-list   [enemy-list   (listof (or/c #f entity? procedure?))]
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:other-entities [other-entities (or/c #f entity?)])

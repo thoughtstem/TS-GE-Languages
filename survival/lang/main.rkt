@@ -29,7 +29,8 @@
          madscientist-sprite
          monk-sprite
          pirate-sprite
-         wizard-sprite)
+         wizard-sprite
+         mystery-sprite)
 
 (require scribble/srcdoc)
 
@@ -1422,6 +1423,13 @@
 
 (define wizard-sprite
   (sheet->sprite wizard-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define mystery-sprite
+  (sheet->sprite mystery-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3

@@ -13,4 +13,6 @@
 
 @section{Image Assets}
 
+@(include-section "assets-library.rkt")
 @(include-extracted "../assets.rkt")
+

@@ -21,6 +21,11 @@
                    [custom-enemy     custom-mob]
                    [custom-coin      custom-ore]
                    [survival-game    minecraft-game]
+                   [#:avatar         #:skin]
+                   [#:bg             #:biome]
+                   [#:enemy-list     #:mob-list]
+                   [#:npc-list       #:enitity-list]
+                   [#:coin-list      #:ore-list]
                    )
 
 

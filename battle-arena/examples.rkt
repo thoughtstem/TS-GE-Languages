@@ -2,6 +2,11 @@
 
 (require ts-kata-util battle-arena)
 
+
+(define-example-code battle-arena hello-world-1
+  (battle-arena-game)
+  )
+
 ;-----------------
 
 (define-example-code battle-arena avatar-1

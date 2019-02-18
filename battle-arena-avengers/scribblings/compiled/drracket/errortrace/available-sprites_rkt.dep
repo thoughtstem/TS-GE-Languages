@@ -1,0 +1,1 @@
+("7.0" ("b55a40b872ac75ad2a75932a66ef8916a2345205" . "ca7e9041d31f106ea2d9952e543347d59f8e6869") (collects #"battle-arena-avengers" #"assets.rkt") (collects #"game-engine" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"scribble" #"extract.rkt") (collects #"scribble" #"manual" #"lang" #"reader.rkt") (collects #"scribble" #"manual" #"lang.rkt"))

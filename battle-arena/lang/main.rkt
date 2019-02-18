@@ -702,7 +702,7 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:bg-img     [bg FOREST-BG]
+(define/contract/doc (custom-bg #:bg-img     [bg (draw-plain-bg)]
                                         #:rows       [rows 3]
                                         #:columns    [cols 3]
                                         #:start-tile [t 0]
@@ -720,17 +720,23 @@
 
   @{Returns a custom background}
   
- (bg->backdrop-entity (scale 0.25 bg)
+ (if (> (image-width bg) 24)
+    (bg->backdrop-entity (scale 0.25 bg)
                          #:rows       rows
                          #:columns    cols
                          #:start-tile t
-                         #:scale 4))
+                         #:scale 4)
+    (bg->backdrop-entity bg
+                         #:rows       rows
+                         #:columns    cols
+                         #:start-tile t
+                         #:scale 60)))
 
 
 
 
 (define/contract/doc (custom-avatar
-                      #:sprite       [sprite (circle 10 'solid 'red)]
+                      #:sprite       [sprite (random-character-sprite)]
                       #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                       #:position     [p   (posn 100 100)]
                       #:speed        [spd 10]
@@ -824,10 +830,8 @@
   (battle-arena-game
    #:headless       [headless #f]
    #:bg             [bg-ent (custom-bg)]
-   #:avatar         [p (custom-avatar)]
-   #:enemy-list     [e-list (list (custom-enemy)
-                                  (custom-enemy #:weapon (custom-weapon #:name "Sword"
-                                                                        #:dart (sword))))]
+   #:avatar         [p (custom-avatar #:sprite (circle 10 'solid 'red))]
+   #:enemy-list     [e-list '()]
    #:weapon-list    [weapon-list '()]
    #:item-list      [item-list '()]
    #:other-entities [ent #f]
@@ -837,7 +841,7 @@
        (#:headless [headless boolean?]
         #:bg [bg entity?]
         #:avatar [avatar (or/c entity? false?)]
-        #:enemy-list [enemy-list   (listof (or/c entity? procedure?))]
+        #:enemy-list [enemy-list   (listof (or/c false? entity? procedure?))]
         #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
         #:other-entities [other-entities (or/c #f entity? (listof false?))])
@@ -961,6 +965,7 @@
                        (clone-by-rarity item-list)
 
                        (clone-by-amount-in-world e-list)
+                        
 
                        (cons ent custom-entities)
 

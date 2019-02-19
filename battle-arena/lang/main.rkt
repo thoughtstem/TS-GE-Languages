@@ -75,6 +75,7 @@
          pirategirl-sprite
          steampunkboy-sprite
          steampunkgirl-sprite
+         mystery-sprite
          )
 
 (define (force-field [width 80]
@@ -1665,6 +1666,11 @@
                  #:columns 4
                  #:rows 4
                  #:row-number 3
+                 #:delay 2))
+
+(define mystery-sprite
+  (row->sprite mystery-sheet
+                 #:columns 4
                  #:delay 2))
 
 

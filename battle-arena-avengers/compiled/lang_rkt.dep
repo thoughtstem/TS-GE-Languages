@@ -1,1 +1,0 @@
-("7.0" ("d769a9e5fd1c3f1114c0b4ec6ed922ecabac5e2f" . "bd6c75580793640d08a4dd88ff34357f7a3c99ee") (collects #"2htdp" #"image.rkt") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-avengers" #"lang" #"main.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

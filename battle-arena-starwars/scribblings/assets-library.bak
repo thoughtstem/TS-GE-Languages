@@ -1,0 +1,63 @@
+#lang scribble/manual
+
+@require[scribble/extract]
+@require[ game-engine
+         "../assets.rkt"]
+
+@title{Assets Library}
+
+@section{Heros}
+
+@defthing[luke-sprite animated-sprite?]
+@(render luke-sprite)
+
+@defthing[obiwan-sprite animated-sprite?]
+@(render obiwan-sprite)
+
+@defthing[yoda-sprite animated-sprite?]
+@(render yoda-sprite)
+
+@defthing[twilek-sprite animated-sprite?]
+@(render twilek-sprite)
+
+@defthing[padawan-sprite animated-sprite?]
+@(render padawan-sprite)
+
+@defthing[hansolo-sprite animated-sprite?]
+@(render hansolo-sprite)
+
+@defthing[chewie-sprite animated-sprite?]
+@(render chewie-sprite)
+
+@defthing[princessleia-sprite animated-sprite?]
+@(render princessleia-sprite)
+
+@defthing[rebelpilot-sprite animated-sprite?]
+@(render rebelpilot-sprite)
+
+@defthing[lando-sprite animated-sprite?]
+@(render lando-sprite)
+
+@defthing[r2d2-sprite animated-sprite?]
+@(render r2d2-sprite)
+
+@defthing[c3po-sprite animated-sprite?]
+@(render c3po-sprite)
+
+@defthing[c2po-sprite animated-sprite?]
+@(render c2po-sprite)
+
+@section{Villains}
+
+@defthing[darthvader-sprite animated-sprite?]
+@(render darthvader-sprite)
+
+@defthing[darthmaul-sprite animated-sprite?]
+@(render darthmaul-sprite)
+
+@defthing[bobafett-sprite animated-sprite?]
+@(render bobafett-sprite)
+
+@defthing[stormtrooper-sprite animated-sprite?]
+@(render stormtrooper-sprite)
+

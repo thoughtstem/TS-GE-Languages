@@ -29,7 +29,8 @@
          madscientist-sprite
          monk-sprite
          pirate-sprite
-         wizard-sprite)
+         wizard-sprite
+         mystery-sprite)
 
 (require scribble/srcdoc)
 
@@ -436,7 +437,7 @@
       #f))
 
 (define/contract/doc
-  (custom-avatar #:sprite     [sprite (circle 10 'solid 'red)]
+  (custom-avatar #:sprite     [sprite (random-character-sprite)]
                  #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
                                                               #:show-damage? #t
                                                               )]
@@ -754,15 +755,14 @@
 (define/contract/doc
   (survival-game #:headless        [headless #f]
                  #:bg              [bg-ent (plain-forest-bg)]
-                 #:avatar          [p         #f #;(custom-avatar)]
+                 #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                  #:starvation-rate [sr 50]
                  #:sky             [sky (custom-sky)]
-                 #:npc-list        [npc-list  '() #;(list (random-npc (posn 200 200)))]
-                 #:enemy-list      [e-list (list (custom-enemy))]
-                 #:coin-list       [coin-list '() #;(list (coin #:entity (coin-entity) #:amount-in-world 10))]
-                 #:food-list       [f-list    '() #;(list (food #:entity (carrot-entity) #:amount-in-world 10)
-                                                         (food #:entity carrot-stew #:heals-by 20))]
-                 #:crafter-list    [c-list    '() #;(list (custom-crafter))]
+                 #:npc-list        [npc-list  '()]
+                 #:enemy-list      [e-list    '()]
+                 #:coin-list       [coin-list '()]
+                 #:food-list       [f-list    '()]
+                 #:crafter-list    [c-list    '()]
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -1379,50 +1379,57 @@
 
 ;===== ASSETS ========
 
-(define (witch-sprite)
+(define witch-sprite
   (sheet->sprite witch-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (darkelf-sprite)
+(define darkelf-sprite
   (sheet->sprite darkelf-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (lightelf-sprite)
+(define lightelf-sprite
   (sheet->sprite lightelf-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (madscientist-sprite)
+(define madscientist-sprite
   (sheet->sprite madscientist-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (monk-sprite)
+(define monk-sprite
   (sheet->sprite monk-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (pirate-sprite)
+(define pirate-sprite
   (sheet->sprite pirate-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3
                  #:delay 2))
 
-(define (wizard-sprite)
+(define wizard-sprite
   (sheet->sprite wizard-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define mystery-sprite
+  (sheet->sprite mystery-sheet
                  #:columns 4
                  #:rows 4
                  #:row-number 3

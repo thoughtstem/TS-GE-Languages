@@ -2,6 +2,8 @@
 
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
+@require["../assets.rkt"]
+@require["../main.rkt"]
 
 @title{Battle Arena: Star Wars}
 @author{thoughtstem}
@@ -11,6 +13,8 @@
 @section{Functions}
 
 @(include-extracted "../lang/main.rkt")
+
+@(include-section "assets-library.rkt")
 
 @section{Image Assets}
 

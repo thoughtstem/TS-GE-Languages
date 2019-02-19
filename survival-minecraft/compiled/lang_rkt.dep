@@ -1,1 +1,0 @@
-("7.1" ("d769a9e5fd1c3f1114c0b4ec6ed922ecabac5e2f" . "4110a56e21903f38ea03bf1c5a16f0b512ef2f82") (collects #"2htdp" #"image.rkt") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"survival-minecraft" #"lang" #"main.rkt"))

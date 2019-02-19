@@ -9,7 +9,9 @@
 
 (require (for-doc racket/base scribble/manual ))
 
-(require ts-kata-util)
+(require ts-kata-util
+         (only-in racket/draw make-font)
+         "../assets.rkt")
 
 ;Instead of using provide,
 ;  use define/contract/doc on your functions.
@@ -56,6 +58,23 @@
 
          draw-plain-bg
          plain-bg
+
+         witch-sprite
+         darkelf-sprite
+         lightelf-sprite
+         madscientist-sprite
+         monk-sprite
+         wizard-sprite
+
+         caitsith-sprite
+         darkknight-sprite
+         kavi-sprite
+         moderngirl-sprite
+         moogle-sprite
+         pirateboy-sprite
+         pirategirl-sprite
+         steampunkboy-sprite
+         steampunkgirl-sprite
          )
 
 (define (force-field [width 80]
@@ -916,28 +935,57 @@
         e))
   
 
-  (define (enemy-counter-entity)
-    (define bg (~> (rectangle 1 1 'solid (make-color 0 0 0 100))
-                   (new-sprite _ #:animate #f)
-                   (set-x-scale 140 _)
-                   (set-y-scale 20 _)
-                   ))
+  
 
     (define (enemy-died? g e)
       (get-entity "Enemy Death Broadcast" g))
 
          
-    (define total-enemies (get-total-by-amount-in-world e-list))
+  (define total-enemies (get-total-by-amount-in-world e-list))
+
+  (define (enemy-counter-entity)
+    (define outer-border-img (square 1 'solid 'black))
+    (define inner-border-img (square 1 'solid 'white))
+    (define box-img (square 1 'solid 'dimgray))
+    (define counter-sprite
+      (list (new-sprite (~a "Enemies Left: " total-enemies) #:color 'yellow)
+            (new-sprite  box-img
+                        #:animate #f
+                        #:x-scale 180
+                        #:y-scale 24)
+            (new-sprite inner-border-img
+                        #:animate #f
+                        #:x-scale 184
+                        #:y-scale 28)
+            (new-sprite outer-border-img
+                        #:animate #f
+                        #:x-scale 186
+                        #:y-scale 30)
+                   ))
+    #|(define bold-font (make-font #:size 14 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+    (register-fonts! bold-font)
+
+    (define (do-font-fx)
+      (lambda (g e)
+        (define current-sprite (get-component e string-animated-sprite?))
+        (define current-text-frame (render-text-frame current-sprite))
+        (define new-text-frame (render-text-frame (set-font bold-font current-sprite)))
+        (~> e
+            (update-entity _ (is-component? current-sprite)
+                             (new-sprite (list new-text-frame
+                                               current-text-frame) 2 #:color 'yellow))
+            (add-components _ (after-time 10 (change-sprite (new-sprite current-text-frame #:color 'yellow)))))))|#
     
-    (sprite->entity bg
+    (sprite->entity counter-sprite
                     #:name       "score"
-                    #:position   (posn 340 20)
+                    #:position   (posn 330 24)
                     #:components (static)
-                                 (new-sprite (~a "Enemies Left: " total-enemies) #:y-offset -7 #:scale 0.8 #:color 'yellow)
                                  (counter total-enemies)
                                  (layer "ui")
                                  (on-rule enemy-died? (do-many (change-counter-by -0.5)
-                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)))
+                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)
+                                                               ;(do-font-fx)
+                                                               ))
                                  ))
 
    (define bg-with-instructions
@@ -1511,4 +1559,112 @@
 #;(module test racket
   (displayln "TEST!!!")
   )
+
+;===== ASSETS ========
+
+(define witch-sprite
+  (sheet->sprite witch-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define darkelf-sprite
+  (sheet->sprite darkelf-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define lightelf-sprite
+  (sheet->sprite lightelf-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define madscientist-sprite
+  (sheet->sprite madscientist-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define monk-sprite
+  (sheet->sprite monk-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define wizard-sprite
+  (sheet->sprite wizard-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define caitsith-sprite
+  (sheet->sprite caitsith-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define darkknight-sprite
+  (sheet->sprite darkknight-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define kavi-sprite
+  (sheet->sprite kavi-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define moderngirl-sprite
+  (sheet->sprite moderngirl-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define moogle-sprite
+  (sheet->sprite moogle-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define pirateboy-sprite
+  (sheet->sprite pirateboy-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define pirategirl-sprite
+  (sheet->sprite pirategirl-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define steampunkboy-sprite
+  (sheet->sprite steampunkboy-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
+(define steampunkgirl-sprite
+  (sheet->sprite steampunkgirl-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))
+
 

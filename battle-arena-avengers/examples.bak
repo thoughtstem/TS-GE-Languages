@@ -1,13 +1,11 @@
 #lang racket
 
 (require ts-kata-util
-  battle-arena-avengers)
+         "./lang/main.rkt"
+         battle-arena-avengers)
 
-;And you probably want your lang, not racket below.
-;  But technically you can make examples for any language
-(define-example-code racket my-example-1
-  (require 2htdp/image)
+(define-example-code/from* battle-arena/examples)
 
-  (circle 40 'solid 'red))
 
-;You can define as many examples as you want in this file
+;We'll test that the examples all run as games for 10 ticks
+(test-all-examples-as-games 'battle-arena-avengers)

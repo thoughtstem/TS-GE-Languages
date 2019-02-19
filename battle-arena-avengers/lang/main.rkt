@@ -4,20 +4,26 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         ;2htdp/image ;not needed
          "../assets.rkt"
-         battle-arena
-         )
+         battle-arena)
+
 
 (language-mappings battle-arena       battle-arena-avengers
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
                    [custom-weapon     custom-power]
                    [custom-background custom-planet]
+                   [#:avatar          #:hero]
+                   [#:enemy-list      #:villain-list]
+                   [#:bg              #:planet]
+                   [#:weapon-list     #:power-list]
                    [battle-arena-game avengers-game])
 
-(provide  energy-dart
-
+(provide  energy-blast
+          star-bit
+          energy-droid
+          flying-hammer
+          magic-orb
           )
 
 ;; ----- HERO
@@ -44,7 +50,10 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   
-  @{This returns an avatar.}
+    @{Returns a custom hero, which will be placed in to the world
+         automatically if it is passed into @racket[avengers-game]
+         via the @racket[#:hero] parameter.}
+  
   (custom-avatar #:sprite           sprite
                  #:damage-processor dp
                  #:position         p
@@ -61,7 +70,7 @@
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
-                                     #:weapon (weapon (custom-power #:color "red"))
+                                     #:power (power (custom-power #:color "red"))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
                                      . custom-components
@@ -72,21 +81,22 @@
            #:ai [ai-level ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
-           #:weapon [weapon entity?]
+           #:power [power entity?]
            #:death-particles [death-particles entity?]
            #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[avengers-game].}
+    @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[avengers-game]
+         via the @racket[#:villain-list] parameter.}
 
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite sprite
                 #:ai ai-level
                 #:health health
                 #:shield shield
-                #:weapon weapon
+                #:weapon power
                 #:death-particles death-particles
                 #:components      (cons c custom-components)))
 
@@ -95,7 +105,7 @@
 (define/contract/doc (custom-power #:name              [n "Energy Blast"]
                                    #:icon              [s (make-icon "EB" "green")]
                                    #:color             [c "blue"]
-                                   #:dart              [b (energy-dart #:color c)]
+                                   #:dart              [b (energy-blast #:color c)]
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
@@ -117,7 +127,10 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
   
-  @{This returns a custom weapon.}
+  @{Returns a custom power, which will be placed in to the world
+         automatically if it is passed into @racket[avengers-game]
+         via the @racket[#:power-list] parameter.}
+  
   (custom-weapon #:name              n
                  #:sprite            s
                  #:dart              b
@@ -147,7 +160,10 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+
+    @{Returns a custom planet, which will be used
+         automatically if it is passed into @racket[avengers-game]
+         via the @racket[#:planet] parameter.}
   
   (if (> (image-width bg) 24)
       (bg->backdrop-entity (scale 0.25 bg)
@@ -163,29 +179,76 @@
 
 ;; ----- WEAPONS & DARTS
 
-(define (energy-dart-sprite c)
+(define (star-bit-sprite [c 'white])
+  (sheet->sprite (tint-img c (scale 0.5 energyball))
+                 #:rows 1
+                 #:columns 8
+                 #:row-number 1
+                 #:delay 5))
+
+(define (energy-blast-sprite c)
   (define cc (name->color c))
   (define outer-layer (make-color (color-red cc) (color-green cc) (color-blue cc) 64))
   (define middle-layer (make-color (color-red cc) (color-green cc) (color-blue cc) 128))
-  (beside (overlay (circle 2 "solid" c)
-                   (circle 4 "solid" middle-layer)
-                   (circle 6 "solid" outer-layer))
-          (overlay (circle 2 "solid" outer-layer)
-                   (circle 4 "solid" c)
-                   (circle 6 "solid" middle-layer))
-          (overlay (circle 2 "solid" c)
-                   (circle 4 "solid" middle-layer)
-                   (circle 6 "solid" outer-layer))
-          ))
+  (define sheet (beside (overlay (circle 2 "solid" c)
+                                 (circle 4 "solid" middle-layer)
+                                 (circle 6 "solid" outer-layer))
+                        (overlay (circle 2 "solid" outer-layer)
+                                 (circle 4 "solid" c)
+                                 (circle 6 "solid" middle-layer))
+                        (overlay (circle 2 "solid" c)
+                                 (circle 4 "solid" middle-layer)
+                                 (circle 6 "solid" outer-layer))))
+  (sheet->sprite sheet
+                 #:rows 1
+                 #:columns 3
+                 #:row-number 1))
 
-(define (energy-dart
+(define flying-hammer-sprite
+  (beside
+   (rectangle 8 4 "solid" "black")
+   (rectangle 8 12 "solid" "gray")))
+
+(define (flame-sprite c)
+  (overlay (circle 5 "solid" c)
+           (circle 6 "solid" "orange")
+           (circle 7 "solid" "red")))
+
+(define (magic-orb #:color      [c "yellow"]
+                   #:sprite     [s   (flame-sprite c)]
+                   #:damage     [dmg 5]
+                   #:durability [dur 20]
+                   #:speed      [spd 10]
+                   #:range      [rng 36])
+  (custom-dart #:position   (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (do-many (scale-sprite 1.05)
+                                    (change-direction-by 10)))))
+
+(define (flying-hammer #:position   [p   (posn 20 0)]
+                       #:sprite     [s   flying-hammer-sprite]
+                       #:damage     [dmg 10]
+                       #:durability [dur 20]
+                       #:speed      [spd 5]
+                       #:range      [rng 40])
+  (custom-dart #:position p
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (do-every 10 (random-direction 0 360))))
+
+(define (star-bit
          #:color      [c "green"]
-         #:sprite     [s (sheet->sprite (energy-dart-sprite c)
-                                        #:rows 1
-                                        #:columns 3
-                                        #:row-number 1)]
-         #:damage     [dmg 10]
-         #:durability [dur 20]
+         #:sprite     [s (star-bit-sprite c)]
+         #:damage     [dmg 25]
+         #:durability [dur 10]
          #:speed      [spd  5]
          #:range      [rng 50])
 
@@ -195,23 +258,39 @@
                #:speed      spd
                #:range      rng))
 
-(define (blaster-droid #:color      [c "green"]
-                       #:sprite     [s (energy-dart-sprite c)]
-                       #:damage     [dmg 10]
-                       #:durability [dur 20]
-                       #:speed      [spd 5]
-                       #:range      [rng 50]
-                       #:fire-rate  [fire-rate 2]
-                       #:fire-mode  [fire-mode 'normal])
+(define (energy-blast
+         #:color      [c "green"]
+         #:sprite     [s (energy-blast-sprite c)]
+         #:damage     [dmg 10]
+         #:durability [dur 10]
+         #:speed      [spd 5]
+         #:range      [rng 30])
+
+  (custom-dart #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (scale-sprite 1.1))))
+
+(define (energy-droid #:color       [c "green"]
+                      #:sprite     [s (energy-blast-sprite c)]
+                      #:damage     [dmg 10]
+                      #:durability [dur 10]
+                      #:speed      [spd 10]
+                      #:range      [rng 30]
+                      #:fire-rate  [fire-rate 1]
+                      #:fire-mode  [fire-mode 'normal])
   
   (builder-dart #:entity (droid #:weapon (custom-power #:fire-rate fire-rate
-                                                         #:fire-mode fire-mode
-                                                         #:dart (energy-dart #:color      c
-                                                                             #:sprite     s
-                                                                             #:damage     dmg
-                                                                             #:durability dur
-                                                                             #:speed      spd
-                                                                             #:range      rng)))))
+                                                       #:fire-mode fire-mode
+                                                       #:dart (energy-blast #:color      c
+                                                                            #:sprite     s
+                                                                            #:damage     dmg
+                                                                            #:durability dur
+                                                                            #:speed      spd
+                                                                            #:range      rng)))))
 
 ;; ----- DROIDS
 
@@ -288,9 +367,8 @@
        #:rest           [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+  @{The top-level function for the battle-arena-avengers language.
+         Can be run with no parameters to get a basic, default game.}
 
   (battle-arena-game #:headless headless
                      #:bg planet-ent

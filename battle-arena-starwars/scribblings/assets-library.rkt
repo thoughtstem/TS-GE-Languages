@@ -1,13 +1,10 @@
 #lang scribble/manual
 
 @require[scribble/extract]
-@require[ game-engine
+@require[game-engine
          "../assets.rkt"]
 
 @title{Assets Library}
-
-@defproc[(random-character-sprite) animated-sprite?]
-Use this function to get a random character each time.
 
 @section{Heros}
 
@@ -64,3 +61,8 @@ Use this function to get a random character each time.
 @defthing[stormtrooper-sprite animated-sprite?]
 @(sprite->sheet stormtrooper-sprite)
 
+@(include-section battle-arena/scribblings/assets-library)
+
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

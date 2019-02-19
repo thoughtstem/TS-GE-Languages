@@ -12,18 +12,17 @@
 
 @section{Functions}
 
-@defproc[(builder-dart [ingredient sauerkraut?] ...
-                       [#:veggie? veggie? any/c #f])
-         sandwich?]{
- Produces a reuben given some number of @racket[ingredient]s.
+@;@defproc[(builder-dart [ingredient sauerkraut?] ...
+@;                       [#:veggie? veggie? any/c #f])
+@;         sandwich?]{
+@; Produces a reuben given some number of @racket[ingredient]s.
  
- If @racket[veggie?] is @racket[#f], produces a standard
- reuben with corned beef. Otherwise, produces a vegetable
- reuben.
-}
+@; If @racket[veggie?] is @racket[#f], produces a standard
+@; reuben with corned beef. Otherwise, produces a vegetable
+@; reuben.
+@;}
 
 @(include-extracted "../lang/main.rkt")
 
-@section{Image Assets}
+@(include-section "assets-library.rkt")
 
-@(include-extracted "../assets.rkt")

@@ -234,9 +234,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[battle-arena-game].}
-  
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:enemy-list] parameter.}
 
   
  
@@ -448,7 +448,9 @@
          #:rarity        [rarity rarity-level?])
        [returns entity?])
 
-  @{Returns custom armor}
+  @{Returns a custom armor, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
 
   
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
@@ -501,8 +503,9 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom weapon}
-
+  @{Returns a custom weapon, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:weapon-list] parameter.}
 
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
                              [(eq? rarity 'epic)      (~a "Epic " n)]
@@ -555,9 +558,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Returns a custom item, which will be placed int othe world
-              automatically if it is passed into @racket[battle-arena-game]
-              via the @racket[#:item-list] parameter.}
+  @{Returns a custom item, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
   
   (define new-entity
     (sprite->entity s
@@ -718,7 +721,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom background, which will be used
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:bg] parameter.}
   
  (if (> (image-width bg) 24)
     (bg->backdrop-entity (scale 0.25 bg)
@@ -759,7 +764,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+    @{Returns a custom avatar, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:avatar] parameter.}
   
 
   
@@ -849,8 +856,7 @@
        [res () game?])
 
   @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+         Can be run with no parameters to get a basic, default game.}
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))

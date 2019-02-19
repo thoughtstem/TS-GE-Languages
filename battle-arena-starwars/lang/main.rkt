@@ -23,14 +23,11 @@
          lightsaber-droid
          blaster-droid
          double-lightsaber
-
-         crop-sprite
-        
          )
 
 ;; ----- HERO
 
-(define/contract/doc (custom-hero #:sprite           (sprite (circle 10 'solid 'red))
+(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
@@ -52,7 +49,10 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   
-  @{This returns an avatar.}
+  @{Returns a custom hero, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:hero] parameter.}
+  
   (custom-avatar #:sprite           sprite
                  #:damage-processor dp
                  #:position         p
@@ -72,8 +72,8 @@
                                      #:weapon (weapon (custom-blaster #:color "red"))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
-                                          . custom-components
-                                   )
+                                     . custom-components
+                                     )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
            #:sprite [sprite sprite?]
@@ -86,8 +86,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[starwars-game].}
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:villain-list] parameter.}
 
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite sprite
@@ -111,7 +112,7 @@
                                         #:point-to-mouse?   [ptm? #t]
                                         #:rapid-fire?       [rf? #t]
                                         #:rarity            [rarity 'common])
-(->i ()
+  (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
         #:color       [color string?]
@@ -124,8 +125,11 @@
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
        [result entity?])
+
+  @{Returns a custom lightsaber, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:weapon-list] parameter.}
   
-  @{This returns a custom weapon.}
   (custom-weapon #:name              n
                  #:sprite            s
                  #:dart              b
@@ -150,7 +154,7 @@
                                      #:point-to-mouse?   [ptm? #t]
                                      #:rapid-fire?       [rf? #t]
                                      #:rarity            [rarity 'common])
-(->i ()
+  (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
         #:color       [color string?]
@@ -164,7 +168,10 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
   
-  @{This returns a custom weapon.}
+  @{Returns a custom blaster, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:weapon-list] parameter.}
+  
   (custom-weapon #:name              n
                  #:sprite            s
                  #:dart              b
@@ -194,19 +201,21 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom planet, which will be used
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:planet] parameter.}
   
   (if (> (image-width bg) 24)
-    (bg->backdrop-entity (scale 0.25 bg)
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 4)
-    (bg->backdrop-entity bg
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 60)))
+      (bg->backdrop-entity (scale 0.25 bg)
+                           #:rows       rows
+                           #:columns    cols
+                           #:start-tile t
+                           #:scale 4)
+      (bg->backdrop-entity bg
+                           #:rows       rows
+                           #:columns    cols
+                           #:start-tile t
+                           #:scale 60)))
 
 ;; ----- WEAPONS & DARTS
 
@@ -356,7 +365,7 @@
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar (custom-hero)]
+                      #:hero             [avatar (custom-hero #:sprite (circle 10 'solid 'red))]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
                       #:villain-list     [e-list '()]
@@ -376,9 +385,8 @@
        #:rest           [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+  @{The top-level function for the battle-arena-starwars language.
+         Can be run with no parameters to get a basic, default game.}
 
   (battle-arena-game #:headless headless
                      #:bg planet-ent

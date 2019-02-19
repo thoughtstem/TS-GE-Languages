@@ -4,10 +4,9 @@
 @require[ game-engine
          "../assets.rkt"]
 
-@title{Sprite Options}
+@title{Assets Library}
 
 @section{Heros}
-
 
 @defthing[tonystark-sprite animated-sprite?]
 @(sprite->sheet tonystark-sprite)
@@ -71,4 +70,8 @@
 @defthing[ronan-sprite animated-sprite?]
 @(sprite->sheet ronan-sprite)
 
+@(include-section battle-arena/scribblings/assets-library)
 
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

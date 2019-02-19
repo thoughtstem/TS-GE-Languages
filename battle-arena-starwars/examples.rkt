@@ -5,7 +5,7 @@
          battle-arena-starwars)
 
 
-(define-example-code/from* battle-arena/examples) ;making my own examples here
+(define-example-code/from* battle-arena/examples)
 
 ; ---------------
 

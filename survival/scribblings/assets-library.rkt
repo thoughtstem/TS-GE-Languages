@@ -9,7 +9,7 @@
 @section{Avatars, Enemies and NPCs}
 
 @defproc[(random-character-sprite) animated-sprite?]
-@;add mystery character silhouette
+@(sprite->sheet mystery-sprite)
 
 @defthing[witch-sprite animated-sprite?]
 @(sprite->sheet witch-sprite)

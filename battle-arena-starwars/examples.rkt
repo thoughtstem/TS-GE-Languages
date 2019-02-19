@@ -9,12 +9,12 @@
 
 ; ---------------
 
-(define-example-code battle-arena-starwars alt/avatar-3
+(define-example-code battle-arena-starwars alt/avatar-2
  (starwars-game
    #:hero (custom-hero #:sprite yoda-sprite))
   )
 
-(define-example-code battle-arena-starwars alt/avatar-4
+(define-example-code battle-arena-starwars alt/avatar-3
   (define (my-hero)
     (custom-hero #:sprite     yoda-sprite
                  #:speed      15

@@ -16,12 +16,15 @@
 
 (define-example-code battle-arena avatar-2
   (battle-arena-game
-   #:avatar (custom-avatar #:sprite (circle 30 'solid 'blue)))
+   #:avatar (custom-avatar #:sprite pirateboy-sprite))
   )
 
 (define-example-code battle-arena avatar-3
   (define (my-avatar)
-    (custom-avatar #:sprite (random-character-sprite)))
+    (custom-avatar #:sprite (random-character-sprite)
+                   #:speed 20
+                   #:key-mode 'arrow-keys
+                   #:item-slots 5))
   
   (battle-arena-game
    #:avatar (my-avatar))
@@ -48,7 +51,7 @@
      #:avatar (my-avatar))
     )
 
-(define-example-code battle-arena avatar-4  
+#;(define-example-code battle-arena avatar-4  
   (define (my-avatar)
     (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
                                            #:columns 4)))

@@ -1,0 +1,7 @@
+#lang racket
+
+(require ts-kata-util
+  k2/lang/ocean)
+
+(define-example-code racket k2/lang/ocean
+  (beside fish1 fish2))

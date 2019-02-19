@@ -2,14 +2,16 @@
 
 
 (require scribble/srcdoc)
+(require (for-doc racket/base scribble/manual ))
 
 (require (except-in game-engine
                     change-health-by)
          game-engine-demos-common)
 
-(require (for-doc racket/base scribble/manual ))
 
-(require ts-kata-util)
+(require ts-kata-util
+         (only-in racket/draw make-font)
+         "../assets.rkt")
 
 ;Instead of using provide,
 ;  use define/contract/doc on your functions.
@@ -922,28 +924,57 @@
         e))
   
 
-  (define (enemy-counter-entity)
-    (define bg (~> (rectangle 1 1 'solid (make-color 0 0 0 100))
-                   (new-sprite _ #:animate #f)
-                   (set-x-scale 140 _)
-                   (set-y-scale 20 _)
-                   ))
+  
 
     (define (enemy-died? g e)
       (get-entity "Enemy Death Broadcast" g))
 
          
-    (define total-enemies (get-total-by-amount-in-world e-list))
+  (define total-enemies (get-total-by-amount-in-world e-list))
+
+  (define (enemy-counter-entity)
+    (define outer-border-img (square 1 'solid 'black))
+    (define inner-border-img (square 1 'solid 'white))
+    (define box-img (square 1 'solid 'dimgray))
+    (define counter-sprite
+      (list (new-sprite (~a "Enemies Left: " total-enemies) #:color 'yellow)
+            (new-sprite  box-img
+                        #:animate #f
+                        #:x-scale 180
+                        #:y-scale 24)
+            (new-sprite inner-border-img
+                        #:animate #f
+                        #:x-scale 184
+                        #:y-scale 28)
+            (new-sprite outer-border-img
+                        #:animate #f
+                        #:x-scale 186
+                        #:y-scale 30)
+                   ))
+    #|(define bold-font (make-font #:size 14 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+    (register-fonts! bold-font)
+
+    (define (do-font-fx)
+      (lambda (g e)
+        (define current-sprite (get-component e string-animated-sprite?))
+        (define current-text-frame (render-text-frame current-sprite))
+        (define new-text-frame (render-text-frame (set-font bold-font current-sprite)))
+        (~> e
+            (update-entity _ (is-component? current-sprite)
+                             (new-sprite (list new-text-frame
+                                               current-text-frame) 2 #:color 'yellow))
+            (add-components _ (after-time 10 (change-sprite (new-sprite current-text-frame #:color 'yellow)))))))|#
     
-    (sprite->entity bg
+    (sprite->entity counter-sprite
                     #:name       "score"
-                    #:position   (posn 340 20)
+                    #:position   (posn 330 24)
                     #:components (static)
-                                 (new-sprite (~a "Enemies Left: " total-enemies) #:y-offset -7 #:scale 0.8 #:color 'yellow)
                                  (counter total-enemies)
                                  (layer "ui")
                                  (on-rule enemy-died? (do-many (change-counter-by -0.5)
-                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)))
+                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)
+                                                               ;(do-font-fx)
+                                                               ))
                                  ))
 
    (define bg-with-instructions
@@ -1153,7 +1184,7 @@
 (module+ test
   (battle-arena-game
    #:bg              (custom-bg #:bg-img SNOW-BG)
-   #:avatar          (custom-avatar)
+   #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"
                                           #:sprite (make-icon "LR" "purple")
@@ -1517,4 +1548,7 @@
 #;(module test racket
   (displayln "TEST!!!")
   )
+
+
+
 

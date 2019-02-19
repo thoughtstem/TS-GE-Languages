@@ -2,16 +2,57 @@
 
 @require[scribble/extract]
 @require[game-engine
-         game-engine-demos-common]
+         game-engine-demos-common
+         "../assets.rkt"]
 
 @title{Battle Arena Assets}
 
-@section{Random Character}
+@section{Avatars and Enemies}
 
 @defproc[(random-character-sprite) animated-sprite?]
-Use this function to get a random character each time.
+@(sprite->sheet mystery-sprite)
 
-@(include-extracted "../assets.rkt")
+@defthing[witch-sprite animated-sprite?]
+@(sprite->sheet witch-sprite)
+
+@defthing[darkelf-sprite animated-sprite?]
+@(sprite->sheet darkelf-sprite)
+
+@defthing[wizard-sprite animated-sprite?]
+@(sprite->sheet wizard-sprite)
+
+@defthing[monk-sprite animated-sprite?]
+@(sprite->sheet monk-sprite)
+
+@defthing[madscientist-sprite animated-sprite?]
+@(sprite->sheet madscientist-sprite)
+
+@defthing[lightelf-sprite animated-sprite?]
+@(sprite->sheet lightelf-sprite)
+
+@defthing[darkknight-sprite animated-sprite?]
+@(sprite->sheet darkknight-sprite)
+
+@defthing[kavi-sprite animated-sprite?]
+@(sprite->sheet kavi-sprite)
+
+@defthing[moderngirl-sprite animated-sprite?]
+@(sprite->sheet moderngirl-sprite)
+
+@defthing[moogle-sprite animated-sprite?]
+@(sprite->sheet moogle-sprite)
+
+@defthing[pirateboy-sprite animated-sprite?]
+@(sprite->sheet pirateboy-sprite)
+
+@defthing[pirategirl-sprite animated-sprite?]
+@(sprite->sheet pirategirl-sprite)
+
+@defthing[steampunkboy-sprite animated-sprite?]
+@(sprite->sheet steampunkboy-sprite)
+
+@defthing[steampunkgirl-sprite animated-sprite?]
+@(sprite->sheet steampunkgirl-sprite)
 
 @section{Backgrounds}
 
@@ -29,3 +70,7 @@ Use this function to get a random character each time.
 
 @defthing[PINK-BG image?]
 @(scale .25 PINK-BG)
+
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

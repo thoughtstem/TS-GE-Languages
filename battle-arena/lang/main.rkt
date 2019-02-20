@@ -692,7 +692,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-bg #:bg-img     [bg (draw-plain-bg)]
+(define (plain-bg #:img     [bg (draw-plain-bg)]
                   #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
                   #:columns    [cols 3]
@@ -707,15 +707,15 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:bg-img     [bg (draw-plain-bg)]
-                                        #:rows       [rows 3]
-                                        #:columns    [cols 3]
-                                        #:start-tile [t 0]
-                                        #:components [c #f]
-                                        . custom-components)
+(define/contract/doc (custom-bg #:img     [bg (draw-plain-bg)]
+                                #:rows       [rows 3]
+                                #:columns    [cols 3]
+                                #:start-tile [t 0]
+                                #:components [c #f]
+                                . custom-components)
 
   (->i ()
-       (#:bg-img [bg-img image?]
+       (#:img [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -1183,7 +1183,7 @@
 
 (module+ test
   (battle-arena-game
-   #:bg              (custom-bg #:bg-img SNOW-BG)
+   #:bg              (custom-bg #:img SNOW-BG)
    #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"

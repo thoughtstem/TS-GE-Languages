@@ -1,5 +1,5 @@
-4406
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q lando-sprite)) q (6149 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (7310 . 2)) ((c def c (c (? . 0) q FOREST-BG)) q (7149 . 2)) ((c def c (c (? . 0) q r2d2)) q (8261 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (7471 . 2)) ((c def c (c (? . 0) q darthmaul-2)) q (7915 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q custom-blaster)) q (3119 . 23)) ((c def c (c (? . 0) q monk-sprite)) q (6666 . 2)) ((c def c (c (? . 0) q caitsith-sheet)) q (7278 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (7734 . 2)) ((c def c (c (? . 0) q lando)) q (8081 . 2)) ((c def c (c (? . 0) q twilek-2)) q (8341 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (7793 . 2)) ((c def c (c (? . 0) q hansolo-sprite)) q (5974 . 2)) ((c def c (c (? . 0) q hansolo)) q (8056 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (7505 . 2)) ((c def c (c (? . 0) q c3po-sprite)) q (6228 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q PINK-BG)) q (7253 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4170 . 14)) ((c def c (c (? . 0) q random-character-sprite)) q (6485 . 2)) ((c def c (c (? . 0) q darthmaul-sprite)) q (6351 . 2)) ((c def c (c (? . 0) q c2po-sprite)) q (6267 . 2)) ((c def c (c (? . 0) q starwars-game)) q (4814 . 18)) ((c def c (c (? . 0) q stormtrooper)) q (8311 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (7763 . 2)) ((c def c (c (? . 0) q yoda-sprite)) q (5852 . 2)) ((c def c (c (? . 0) q chewie)) q (7891 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (7697 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (7201 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (6965 . 2)) ((c def c (c (? . 0) q obiwan)) q (8126 . 2)) ((c def c (c (? . 0) q c3po)) q (7869 . 2)) ((c def c (c (? . 0) q r2d2-sprite)) q (6189 . 2)) ((c def c (c (? . 0) q custom-lightsaber)) q (2031 . 23)) ((c def c (c (? . 0) q pirategirl-sprite)) q (7009 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (8283 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (6879 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (7341 . 2)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (7054 . 2)) ((c def c (c (? . 0) q twilek-sprite)) q (5891 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (6543 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (6705 . 2)) ((c def c (c (? . 0) q yoda)) q (8391 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (8237 . 2)) ((c def c (c (? . 0) q moogle-sheet)) q (7533 . 2)) ((c def c (c (? . 0) q padawan-sprite)) q (5932 . 2)) ((c def c (c (? . 0) q darthmaul)) q (7944 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (7228 . 2)) ((c def c (c (? . 0) q princessleia-sprite)) q (6057 . 2)) ((c def c (c (? . 0) q princessleia)) q (8207 . 2)) ((c def c (c (? . 0) q twilek)) q (8367 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (6795 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (6752 . 2)) ((c def c (c (? . 0) q stormtrooper-sprite)) q (6438 . 2)) ((c def c (c (? . 0) q obiwan-sprite)) q (5811 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (6924 . 2)) ((c def c (c (? . 0) q chewie-sprite)) q (6016 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (7375 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (7563 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (7661 . 2)) ((c def c (c (? . 0) q luke-sprite)) q (5772 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (6840 . 2)) ((c def c (c (? . 0) q darthvader)) q (8001 . 2)) ((c def c (c (? . 0) q bobafett-sprite)) q (6395 . 2)) ((c def c (c (? . 0) q luke)) q (8104 . 2)) ((c def c (c (? . 0) q darthvader-sprite)) q (6306 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (7176 . 2)) ((c def c (c (? . 0) q bobafett)) q (7821 . 2)) ((c def c (c (? . 0) q c2po)) q (7847 . 2)) ((c def c (c (? . 0) q rebelpilot-sprite)) q (6104 . 2)) ((c def c (c (? . 0) q hansolo-2)) q (8029 . 2)) ((c def c (c (? . 0) q princessleia-2)) q (8175 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (6583 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (7594 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (7101 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (6625 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (7435 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (7627 . 2)) ((c def c (c (? . 0) q lightelf-sheet)) q (7403 . 2)) ((c def c (c (? . 0) q padawan)) q (8150 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (7971 . 2))))
+4392
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q lando-sprite)) q (6540 . 2)) ((c def c (c (? . 0) q blaster)) q (3213 . 32)) ((c def c (c (? . 0) q FOREST-BG)) q (7540 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (7862 . 2)) ((c def c (c (? . 0) q darthmaul-2)) q (8306 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q monk-sprite)) q (7057 . 2)) ((c def c (c (? . 0) q caitsith-sheet)) q (7669 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (8125 . 2)) ((c def c (c (? . 0) q lando)) q (8472 . 2)) ((c def c (c (? . 0) q twilek-2)) q (8732 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (8184 . 2)) ((c def c (c (? . 0) q hansolo-sprite)) q (6365 . 2)) ((c def c (c (? . 0) q hansolo)) q (8447 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (7896 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (7701 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q PINK-BG)) q (7644 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4561 . 14)) ((c def c (c (? . 0) q random-character-sprite)) q (6876 . 2)) ((c def c (c (? . 0) q darthmaul-sprite)) q (6742 . 2)) ((c def c (c (? . 0) q c2po-sprite)) q (6658 . 2)) ((c def c (c (? . 0) q starwars-game)) q (5205 . 18)) ((c def c (c (? . 0) q stormtrooper)) q (8702 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (8154 . 2)) ((c def c (c (? . 0) q yoda-sprite)) q (6243 . 2)) ((c def c (c (? . 0) q chewie)) q (8282 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (8088 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (7592 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (7356 . 2)) ((c def c (c (? . 0) q c3po-sprite)) q (6619 . 2)) ((c def c (c (? . 0) q c3po)) q (8260 . 2)) ((c def c (c (? . 0) q r2d2-sprite)) q (6580 . 2)) ((c def c (c (? . 0) q darthmaul)) q (8335 . 2)) ((c def c (c (? . 0) q pirategirl-sprite)) q (7400 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (8674 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (7270 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (7732 . 2)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (7445 . 2)) ((c def c (c (? . 0) q twilek-sprite)) q (6282 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (6934 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (7096 . 2)) ((c def c (c (? . 0) q yoda)) q (8782 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (8628 . 2)) ((c def c (c (? . 0) q moogle-sheet)) q (7924 . 2)) ((c def c (c (? . 0) q obiwan)) q (8517 . 2)) ((c def c (c (? . 0) q padawan-sprite)) q (6323 . 2)) ((c def c (c (? . 0) q princessleia-2)) q (8566 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (7619 . 2)) ((c def c (c (? . 0) q princessleia-sprite)) q (6448 . 2)) ((c def c (c (? . 0) q princessleia)) q (8598 . 2)) ((c def c (c (? . 0) q twilek)) q (8758 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (7186 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (7143 . 2)) ((c def c (c (? . 0) q stormtrooper-sprite)) q (6829 . 2)) ((c def c (c (? . 0) q obiwan-sprite)) q (6202 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (7315 . 2)) ((c def c (c (? . 0) q chewie-sprite)) q (6407 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (7766 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (7954 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (8052 . 2)) ((c def c (c (? . 0) q luke-sprite)) q (6163 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (7231 . 2)) ((c def c (c (? . 0) q darthvader)) q (8392 . 2)) ((c def c (c (? . 0) q bobafett-sprite)) q (6786 . 2)) ((c def c (c (? . 0) q luke)) q (8495 . 2)) ((c def c (c (? . 0) q darthvader-sprite)) q (6697 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (7567 . 2)) ((c def c (c (? . 0) q bobafett)) q (8212 . 2)) ((c def c (c (? . 0) q c2po)) q (8238 . 2)) ((c def c (c (? . 0) q rebelpilot-sprite)) q (6495 . 2)) ((c def c (c (? . 0) q hansolo-2)) q (8420 . 2)) ((c def c (c (? . 0) q r2d2)) q (8652 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (6974 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (7985 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (7492 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (7016 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (7826 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (8018 . 2)) ((c def c (c (? . 0) q lightsaber)) q (2024 . 27)) ((c def c (c (? . 0) q lightelf-sheet)) q (7794 . 2)) ((c def c (c (? . 0) q padawan)) q (8541 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (8362 . 2))))
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -35,26 +35,30 @@ procedure
   ai-level : ai-level? = 'easy
   health : positive? = 100
   shield : positive? = 100
-  weapon : entity? = (custom-blaster #:color "red")
+  weapon : entity? = (blaster #:color "red")
   death-particles : entity? = (custom-particles)
   first-component : component-or-system? = #f
   more-components : (listof component-or-system?)
 procedure
-(custom-lightsaber [#:name name                    
-                    #:icon sprite                  
-                    #:color color                  
-                    #:dart dart                    
-                    #:fire-mode fire-mode          
-                    #:fire-rate fire-rate          
-                    #:fire-key fire-key            
-                    #:mouse-fire-button button     
-                    #:point-to-mouse? ptm?         
-                    #:rapid-fire? rf?              
-                    #:rarity rarity])          -> entity?
+(lightsaber [#:name name                    
+             #:icon sprite                  
+             #:color color                  
+             #:damage dmg                   
+             #:durability dur               
+             #:dart dart                    
+             #:fire-mode fire-mode          
+             #:fire-rate fire-rate          
+             #:fire-key fire-key            
+             #:mouse-fire-button button     
+             #:point-to-mouse? ptm?         
+             #:rapid-fire? rf?              
+             #:rarity rarity])          -> entity?
   name : string? = "Lightsaber"
   sprite : sprite? = (make-icon "LS" "green")
   color : string? = "green"
-  dart : entity? = (lightsaber #:color c)
+  dmg : number? = 25
+  dur : number? = 20
+  dart : entity? = (lightsaber-dart #:color c #:damage dmg)
   fire-mode : fire-mode? = 'normal
   fire-rate : number? = 3
   fire-key : symbol? = 'f
@@ -63,21 +67,30 @@ procedure
   rf? : boolean? = #t
   rarity : rarity-level? = 'common
 procedure
-(custom-blaster [#:name name                    
-                 #:icon sprite                  
-                 #:color color                  
-                 #:dart dart                    
-                 #:fire-mode fire-mode          
-                 #:fire-rate fire-rate          
-                 #:fire-key fire-key            
-                 #:mouse-fire-button button     
-                 #:point-to-mouse? ptm?         
-                 #:rapid-fire? rf?              
-                 #:rarity rarity])          -> entity?
+(blaster [#:name name                    
+          #:icon sprite                  
+          #:color color                  
+          #:damage dmg                   
+          #:durability dur               
+          #:speed spd                    
+          #:range rng                    
+          #:dart dart                    
+          #:fire-mode fire-mode          
+          #:fire-rate fire-rate          
+          #:fire-key fire-key            
+          #:mouse-fire-button button     
+          #:point-to-mouse? ptm?         
+          #:rapid-fire? rf?              
+          #:rarity rarity])          -> entity?
   name : string? = "Blaster"
   sprite : sprite? = (make-icon "B" "red")
   color : string? = "green"
-  dart : entity? = (blaster-dart #:color c)
+  dmg : number? = 10
+  dur : number? = 20
+  spd : number? = 5
+  rng : number? = 50
+  dart : entity?
+       = (blaster-dart #:color c #:damage dmg #:durability dur #:speed spd #:range rng)
   fire-mode : fire-mode? = 'normal
   fire-rate : number? = 3
   fire-key : symbol? = 'f

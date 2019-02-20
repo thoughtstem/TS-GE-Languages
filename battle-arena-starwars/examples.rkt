@@ -43,7 +43,7 @@
 (define-example-code battle-arena-starwars alt/enemy-weapon-1
   (starwars-game 
    #:villain-list (list (custom-villain
-                       #:weapon (custom-blaster
+                       #:weapon (blaster
                                  #:color "yellow"))))
   )
 
@@ -51,13 +51,13 @@
   (starwars-game 
    #:villain-list (list (custom-villain
                        #:sprite darthvader-sprite
-                       #:weapon (custom-lightsaber
+                       #:weapon (lightsaber
                                  #:color "red"))))
   )
 
 (define-example-code battle-arena-starwars alt/enemy-weapon-3 
   (define (my-weapon)
-    (custom-lightsaber 
+    (lightsaber 
      #:dart (double-lightsaber)))
  
   (starwars-game 
@@ -68,51 +68,17 @@
 
 ; ---------------
 
-(define-example-code battle-arena-starwars alt/sword-1
-  (starwars-game
-   #:weapon-list (list (custom-lightsaber)))
-  )
-
-(define-example-code battle-arena-starwars alt/sword-2
-  (define (my-lightsaber)
-    (custom-lightsaber #:name   "Flashy"
-                       #:icon   (make-icon "F" "blue")
-                       #:rarity 'rare))
-  
-  (starwars-game
-   #:weapon-list (list (my-lightsaber)))
-  )
-
-
-(define-example-code battle-arena-starwars alt/sword-3
-  (define (my-blade)
-    (lightsaber #:color      "blue"
-                #:damage     25
-                #:durability 30))
-    
-  (define (my-lightsaber)
-    (custom-lightsaber #:name   "Flashy"
-                       #:icon   (make-icon "F" "blue")
-                       #:rarity 'rare
-                       #:dart   (my-blade)))
-  
-  (starwars-game
-   #:weapon-list (list (my-lightsaber)))
-  )
-
-; ---------------
-
 (define-example-code battle-arena-starwars alt/sword-armor-1  
   (starwars-game
    #:item-list (list (custom-armor #:name          "Lightsaber Armor"
-                                   #:protects-from "Ligthsaber"
+                                   #:protects-from "Lightsaber"
                                    #:sprite        (make-icon "LA"))))
   )
 
 (define-example-code battle-arena-starwars alt/sword-armor-2
   (define (l-armor)
     (custom-armor #:name          "Lightsaber Armor"
-                  #:protects-from "Ligthsaber"
+                  #:protects-from "Lightsaber"
                   #:sprite        (make-icon "LA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
@@ -124,14 +90,14 @@
 (define-example-code battle-arena-starwars alt/sword-armor-3
   (define (l-armor)
     (custom-armor #:name          "Lightsaber Armor"
-                  #:protects-from "Ligthsaber"
+                  #:protects-from "Lightsaber"
                   #:sprite        (make-icon "LA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
   (starwars-game
    #:villain-list (list (custom-villain #:sprite darthvader-sprite
-                                        #:weapon (custom-lightsaber #:color "red")))
+                                        #:weapon (lightsaber #:color "red")))
    #:item-list    (list (l-armor)))
   )
 
@@ -142,14 +108,44 @@
 ;You can't see them, but they are here, defined by
 ;  define-example-code/from*
 
+(define-example-code battle-arena-starwars lightsaber-1
+  (starwars-game
+   #:weapon-list (list (lightsaber)))
+  )
+
+(define-example-code battle-arena-starwars lightsaber-2
+  (define (my-lightsaber)
+    (lightsaber #:name   "Flashy"
+                #:icon   (make-icon "F" "blue")
+                #:rarity 'rare))
+  
+  (starwars-game
+   #:weapon-list (list (my-lightsaber)))
+  )
+
+
+(define-example-code battle-arena-starwars lightsaber-3
+  (define (my-lightsaber)
+    (lightsaber #:name       "Flashy"
+                #:icon       (make-icon "F" "blue")
+                #:rarity     'rare
+                #:color      "blue"
+                #:damage     50))
+  
+  (starwars-game
+   #:weapon-list (list (my-lightsaber)))
+  )
+
+; ----------
+
 (define-example-code battle-arena-starwars blaster-1
   (starwars-game
-   #:weapon-list (list (custom-blaster)))
+   #:weapon-list (list (blaster)))
   )
 
 (define-example-code battle-arena-starwars blaster-2
   (define (my-blaster)
-    (custom-blaster
+    (blaster
      #:name   "Blasty"
      #:icon   (make-icon "B" "orange")
      #:rarity 'legendary))
@@ -159,74 +155,21 @@
   )
 
 (define-example-code battle-arena-starwars blaster-3
-  (define (my-dart)
-    (blaster-dart #:color      "orange"
-                  #:damage     20
-                  #:durability 25
-                  #:speed      10
-                  #:range      70))
-  
   (define (my-blaster)
-    (custom-blaster  #:dart   (my-dart)
-                     #:name   "Blasty"
-                     #:rarity 'legendary
-                     #:icon   (make-icon "B" "orange")))
+    (blaster  #:name       "Blasty"
+              #:rarity     'legendary
+              #:icon       (make-icon "B" "orange")
+              #:color      "orange"
+              #:damage     20
+              #:durability 25
+              #:speed      10
+              #:range      70))
 
   (starwars-game
    #:weapon-list (list (my-blaster)))
   )
 
 ; ---------------
-
-(define-example-code battle-arena-starwars planet-1
-  (starwars-game
-   #:planet (custom-planet))
-  )
-
-(define-example-code battle-arena-starwars planet-2
-  (starwars-game
-   #:planet (custom-planet #:img LAVA-BG))
-  )
-
-
-(define-example-code battle-arena-starwars planet-3
-  (define (my-planet)
-    (custom-planet #:img        LAVA-BG
-                   #:rows       2
-                   #:columns    2
-                   #:start-tile 4))
-  
-  (starwars-game
-   #:planet (my-planet))
-)
-
-; ---------------
-
-(define-example-code battle-arena-starwars force-field-1
-  (starwars-game
-   #:item-list (list (custom-item #:name "Force Field"
-                                  #:on-use (spawn (force-field)))))
-  )
-
-(define-example-code battle-arena-starwars force-field-2
-  (starwars-game
-   #:item-list (list (custom-item #:name "Force Field"
-                                  #:sprite (make-icon "FF")
-                                  #:on-use (spawn (force-field #:duration 1000)))))
-  )
-
-(define-example-code battle-arena-starwars force-field-3
-  (define (force-field-item)
-    (custom-item #:name "Force Field"
-                 #:sprite (make-icon "FF")
-                 #:on-use (spawn (force-field #:allow-friendly-dart? #t
-                                              #:duration 1000))))
- 
-  (starwars-game
-    #:item-list (list (force-field-item)))
-  )
-
-;---------------------
 
 (define-example-code battle-arena-starwars lightsaber-droid-1
   (starwars-game
@@ -345,4 +288,3 @@
 
 ;We'll test that the examples all run as games for 10 ticks
 (test-all-examples-as-games 'battle-arena-starwars)
-

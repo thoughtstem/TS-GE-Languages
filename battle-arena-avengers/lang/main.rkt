@@ -17,6 +17,7 @@
                    [#:enemy-list      #:villain-list]
                    [#:bg              #:planet]
                    [#:weapon-list     #:power-list]
+                   [#:weapon          #:power]
                    [battle-arena-game avengers-game])
 
 (provide  energy-blast

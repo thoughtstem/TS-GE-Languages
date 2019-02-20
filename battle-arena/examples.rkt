@@ -7,6 +7,32 @@
   (battle-arena-game)
   )
 
+; ---------------
+
+(define-example-code battle-arena force-field-1
+  (battle-arena-game
+   #:item-list (list (custom-item #:name "Force Field"
+                                  #:on-use (spawn (force-field)))))
+  )
+
+(define-example-code battle-arena force-field-2
+  (battle-arena-game
+   #:item-list (list (custom-item #:name "Force Field"
+                                  #:sprite (make-icon "FF")
+                                  #:on-use (spawn (force-field #:duration 1000)))))
+  )
+
+(define-example-code battle-arena force-field-3
+  (define (force-field-item)
+    (custom-item #:name "Force Field"
+                 #:sprite (make-icon "FF")
+                 #:on-use (spawn (force-field #:allow-friendly-dart? #t
+                                              #:duration 1000))))
+ 
+  (battle-arena-game
+    #:item-list (list (force-field-item)))
+  )
+
 ;-----------------
 
 (define-example-code battle-arena avatar-1
@@ -243,21 +269,19 @@
   )
 
 (define-example-code battle-arena background-2
-  (define (my-bg)
-    (custom-bg #:bg-img LAVA-BG))
- 
-  (battle-arena-game #:bg (my-bg))
+  (battle-arena-game #:bg (custom-bg #:img LAVA-BG))
   )
 
 (define-example-code battle-arena background-3
   (define (my-bg)
-    (custom-bg #:bg-img LAVA-BG
+    (custom-bg #:img LAVA-BG
                #:rows 2
                #:columns 2
                #:start-tile 4))
  
   (battle-arena-game #:bg (my-bg))
   )
+
 ;-----------------
 
 

@@ -65,53 +65,49 @@
   )
 
 (define-example-code battle-arena enemy-2
-  (define (my-enemy)
-    (custom-enemy #:ai              'easy
-                  #:health          200
-                  #:shield          100
-                  #:amount-in-world 10))
-
   (battle-arena-game
-   #:enemy-list (list (my-enemy)))
+   #:enemy-list (list (curry custom-enemy #:amount-in-world 10)))
   )
-
-#;(define-example-code battle-arena enemy-3-bonus
-    (define (my-enemy)
-      (custom-enemy #:sprite          (sheet->sprite STUDENT-IMAGE-HERE
-                                                     #:columns 4)
-                    #:ai              'easy
-                    #:health          200
-                    #:shield          100
-                    #:amount-in-world 10))
-
-    (battle-arena-game
-     #:enemy-list (list (my-enemy)))
-    )
 
 (define-example-code battle-arena enemy-3
   (define (my-enemy)
-    (custom-enemy #:sprite          (star 30 'solid 'gold)
-                  #:ai              'easy
-                  #:health          200
-                  #:shield          100
-                  #:amount-in-world 10))
+    (custom-enemy #:sprite          darkknight-sprite
+                  #:ai              'medium
+                  #:amount-in-world 5))
 
   (battle-arena-game
    #:enemy-list (list (my-enemy)))
   )
 
-#;(define-example-code battle-arena enemy-4
-    (define (my-enemy)
-      (custom-enemy #:sprite          (sheet->sprite STUDENT-IMAGE-HERE
-                                                     #:columns 4)
-                    #:ai              'easy
-                    #:health          200
-                    #:shield          100
-                    #:amount-in-world 10))
-   
-    (battle-arena-game
-     #:enemy-list (list (my-enemy)))
-    )
+;Tip: you can also change shield instead of health
+(define-example-code battle-arena enemy-4
+  (define (easy-enemy)
+    (custom-enemy #:ai              'easy
+                  #:sprite          wizard-sprite
+                  #:health          50
+                  #:amount-in-world 5))
+  
+  (define (medium-enemy)
+    (custom-enemy #:ai              'medium
+                  #:sprite          darkknight-sprite
+                  #:health          200
+                  #:amount-in-world 5))
+ 
+  (battle-arena-game
+   #:enemy-list (list (easy-enemy)
+                      (medium-enemy))))
+
+(define-example-code battle-arena enemy-5
+ 
+  (define (hard-enemy)
+    (custom-enemy #:ai              'hard
+                  #:sprite          pirategirl-sprite
+                  #:amount-in-world 5
+                  #:weapon          (custom-weapon #:damage 50)))
+ 
+  (battle-arena-game
+   #:avatar       (custom-avatar)
+   #:enemy-list   (list (hard-enemy))))
 
 ;-----------------
 

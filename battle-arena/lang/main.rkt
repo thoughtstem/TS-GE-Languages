@@ -278,7 +278,13 @@
     (sprite->entity empty-image
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
-                    #:components (on-start die)))
+                    #:components (on-start die)
+                                 #;(counter 0)
+                                 #;(every-tick (do-many (change-counter-by 1)
+                                                      (λ(g e)
+                                                        (displayln (~a "I'M ALIVE: " (get-counter e)))
+                                                        e)))
+                    ))
   
   (define (die-if-health-is-0)
     (on-rule (λ(g e)
@@ -500,7 +506,14 @@
 
 (define/contract/doc (custom-weapon #:name              [n "Repeater"]
                                     #:sprite            [s chest-sprite]
-                                    #:dart              [b (custom-dart)]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
@@ -511,7 +524,11 @@
   (->i ()
        (#:name        [name string?]
         #:sprite      [sprite sprite?]
-        #:dart      [dart entity?]
+        #:dart-sprite [dart-sprite sprite?]
+        #:speed       [speed  number?]
+        #:damage      [damage number?]
+        #:range       [range  number?]
+        #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
@@ -936,20 +953,38 @@
         e))
   
 
+  (define (start-dead-component? c)
+    (and (on-start? c)
+         (eq? (on-start-func c) die)))
   
-
+  ;Add more checks to this.
     (define (enemy-died? g e)
-      (get-entity "Enemy Death Broadcast" g))
+      (define death-broadcast (get-entity "Enemy Death Broadcast" g))
+      #|(define (has-name? name)
+        (lambda (e)
+          (eq? (get-name e) name)))
+      (define all-death-broadcasts (filter (has-name? "Enemy Death Broadcast") (game-entities g)))
+      (if death-broadcast
+          (displayln (~a "ENEMY DEATHS DETECTED: " (length all-death-broadcasts)
+                         "\nFOUND DEATH COMPONENT: " (get-component death-broadcast start-dead-component?)))
+          #f)|#
+      (and death-broadcast
+           (get-component death-broadcast start-dead-component?))) ; This is still read twice in the same tick
 
          
   (define total-enemies (get-total-by-amount-in-world e-list))
+
+  (define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
+  (define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+   
 
   (define (enemy-counter-entity)
     (define outer-border-img (square 1 'solid 'black))
     (define inner-border-img (square 1 'solid 'white))
     (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite (~a "Enemies Left: " total-enemies) #:color 'yellow)
+      (list (new-sprite (~a "Enemies Left: " total-enemies)
+                        #:color 'yellow)
             (new-sprite  box-img
                         #:animate #f
                         #:x-scale 180
@@ -963,19 +998,35 @@
                         #:x-scale 186
                         #:y-scale 30)
                    ))
-    #|(define bold-font (make-font #:size 14 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+    
+    
     (register-fonts! bold-font)
+
+    (define (change-text-sprite s)
+      (lambda (g e)
+        (define current-sprite (get-component e string-animated-sprite?))
+        (update-entity e (is-component? current-sprite)
+                       s)))
 
     (define (do-font-fx)
       (lambda (g e)
         (define current-sprite (get-component e string-animated-sprite?))
         (define current-text-frame (render-text-frame current-sprite))
-        (define new-text-frame (render-text-frame (set-font bold-font current-sprite)))
+        (define regular-text-frame (~> current-text-frame
+                                       (set-text-frame-font score-font _)
+                                       (set-text-frame-color 'yellow _)))
+        (define bold-text-frame (~> current-text-frame
+                                    (set-text-frame-font bold-font _)
+                                    (set-text-frame-color 'orangered _)))
         (~> e
             (update-entity _ (is-component? current-sprite)
-                             (new-sprite (list new-text-frame
-                                               current-text-frame) 2 #:color 'yellow))
-            (add-components _ (after-time 10 (change-sprite (new-sprite current-text-frame #:color 'yellow)))))))|#
+                             (new-sprite (list bold-text-frame
+                                               regular-text-frame)
+                                         10
+                                         #:scale 1.1
+                                         ))
+            (add-components _ (after-time 20 (change-text-sprite (new-sprite regular-text-frame)))))))
+
     
     (sprite->entity counter-sprite
                     #:name       "score"
@@ -983,9 +1034,9 @@
                     #:components (static)
                                  (counter total-enemies)
                                  (layer "ui")
-                                 (on-rule enemy-died? (do-many (change-counter-by -0.5)
+                                 (on-rule enemy-died? (do-many (change-counter-by -0.5) ; still getting doubled counted
                                                                (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)
-                                                               ;(do-font-fx)
+                                                               (do-font-fx)
                                                                ))
                                  ))
 
@@ -1195,7 +1246,7 @@
 
 (module+ test
   (battle-arena-game
-   #:bg              (custom-bg #:bg-img SNOW-BG)
+   #:bg              (custom-bg #:bg-img LAVA-BG)
    #:avatar          (custom-avatar)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"

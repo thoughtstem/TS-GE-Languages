@@ -2,12 +2,12 @@
 
 
 (require scribble/srcdoc)
+(require (for-doc racket/base scribble/manual ))
 
 (require (except-in game-engine
                     change-health-by)
          game-engine-demos-common)
 
-(require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
          (only-in racket/draw make-font)
@@ -58,24 +58,6 @@
 
          draw-plain-bg
          plain-bg
-
-         witch-sprite
-         darkelf-sprite
-         lightelf-sprite
-         madscientist-sprite
-         monk-sprite
-         wizard-sprite
-
-         caitsith-sprite
-         darkknight-sprite
-         kavi-sprite
-         moderngirl-sprite
-         moogle-sprite
-         pirateboy-sprite
-         pirategirl-sprite
-         steampunkboy-sprite
-         steampunkgirl-sprite
-         mystery-sprite
          )
 
 (define (force-field [width 80]
@@ -254,9 +236,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[battle-arena-game].}
-  
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:enemy-list] parameter.}
 
   
  
@@ -474,7 +456,9 @@
          #:rarity        [rarity rarity-level?])
        [returns entity?])
 
-  @{Returns custom armor}
+  @{Returns a custom armor, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
 
   
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
@@ -538,8 +522,9 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom weapon}
-
+  @{Returns a custom weapon, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:weapon-list] parameter.}
 
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
                              [(eq? rarity 'epic)      (~a "Epic " n)]
@@ -592,9 +577,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Returns a custom item, which will be placed int othe world
-              automatically if it is passed into @racket[battle-arena-game]
-              via the @racket[#:item-list] parameter.}
+  @{Returns a custom item, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
   
   (define new-entity
     (sprite->entity s
@@ -724,7 +709,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-bg #:bg-img     [bg (draw-plain-bg)]
+(define (plain-bg #:img     [bg (draw-plain-bg)]
                   #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
                   #:columns    [cols 3]
@@ -739,15 +724,15 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:bg-img     [bg (draw-plain-bg)]
-                                        #:rows       [rows 3]
-                                        #:columns    [cols 3]
-                                        #:start-tile [t 0]
-                                        #:components [c #f]
-                                        . custom-components)
+(define/contract/doc (custom-bg #:img     [bg (draw-plain-bg)]
+                                #:rows       [rows 3]
+                                #:columns    [cols 3]
+                                #:start-tile [t 0]
+                                #:components [c #f]
+                                . custom-components)
 
   (->i ()
-       (#:bg-img [bg-img image?]
+       (#:img [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -755,7 +740,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom background, which will be used
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:bg] parameter.}
   
  (if (> (image-width bg) 24)
     (bg->backdrop-entity (scale 0.25 bg)
@@ -796,7 +783,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+    @{Returns a custom avatar, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:avatar] parameter.}
   
 
   
@@ -886,8 +875,7 @@
        [res () game?])
 
   @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+         Can be run with no parameters to get a basic, default game.}
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
@@ -1247,7 +1235,7 @@
 (module+ test
   (battle-arena-game
    #:bg              (custom-bg #:bg-img LAVA-BG)
-   #:avatar          (custom-avatar)
+   #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"
                                           #:sprite (make-icon "LR" "purple")
@@ -1612,116 +1600,6 @@
   (displayln "TEST!!!")
   )
 
-;===== ASSETS ========
 
-(define witch-sprite
-  (sheet->sprite witch-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define darkelf-sprite
-  (sheet->sprite darkelf-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define lightelf-sprite
-  (sheet->sprite lightelf-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define madscientist-sprite
-  (sheet->sprite madscientist-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define monk-sprite
-  (sheet->sprite monk-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define wizard-sprite
-  (sheet->sprite wizard-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define caitsith-sprite
-  (sheet->sprite caitsith-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define darkknight-sprite
-  (sheet->sprite darkknight-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define kavi-sprite
-  (sheet->sprite kavi-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define moderngirl-sprite
-  (sheet->sprite moderngirl-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define moogle-sprite
-  (sheet->sprite moogle-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define pirateboy-sprite
-  (sheet->sprite pirateboy-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define pirategirl-sprite
-  (sheet->sprite pirategirl-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define steampunkboy-sprite
-  (sheet->sprite steampunkboy-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define steampunkgirl-sprite
-  (sheet->sprite steampunkgirl-sheet
-                 #:columns 4
-                 #:rows 4
-                 #:row-number 3
-                 #:delay 2))
-
-(define mystery-sprite
-  (row->sprite mystery-sheet
-                 #:columns 4
-                 #:delay 2))
 
 

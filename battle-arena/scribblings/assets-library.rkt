@@ -1,11 +1,11 @@
 #lang scribble/manual
 
-@(require (except-in game-engine
-                    change-health-by)
-          game-engine-demos-common
-          "../lang/main.rkt")
+@require[scribble/extract]
+@require[game-engine
+         game-engine-demos-common
+         "../assets.rkt"]
 
-@title{Assets Library}
+@title{Battle Arena Assets}
 
 @section{Avatars and Enemies}
 
@@ -71,3 +71,6 @@
 @defthing[PINK-BG image?]
 @(scale .25 PINK-BG)
 
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

@@ -2,9 +2,11 @@
 
 @(require game-engine
           game-engine-demos-common
-          "../lang/main.rkt")
+          "../assets.rkt")
 
-@title{Assets Library}
+@require[scribble/extract]
+
+@title{Survival Game Assets}
 
 @section{Avatars, Enemies and NPCs}
 
@@ -123,3 +125,5 @@
 @defthing[PINK-BG image?]
 @(scale .25 PINK-BG)
 
+@section{Sprite Sheets}
+@(include-extracted "../assets.rkt")

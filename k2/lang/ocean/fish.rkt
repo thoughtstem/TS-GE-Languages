@@ -13,9 +13,7 @@
 ;This allows the lang to be used from Ratchet
 ;  #lang k2/lang/ocean/fish
 ;  ... Then press "Ratchet"
-(module editor racket
-  (provide (all-from-out ratchet)
-           (rename-out [fish-lang editor]))
+(module ratchet racket
   
   (require ratchet
            (submod "./ocean-lang.rkt" ocean-stuff)

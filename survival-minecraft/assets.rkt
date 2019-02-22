@@ -5,20 +5,29 @@
 
 (define-assets-from "assets")
 
-(provide chicken-sprite
+(provide steve-sprite
+         alex-sprite
+
+         chicken-sprite
+         pig-sprite
+         sheep-sprite
+         
          creeper-sprite
          skeleton-sprite
-         pig-sprite
          ghast-sprite
-         steve-sprite
+         
          ore-entity)
 
 
 (define steve-sprite
-  (row->sprite steve-animated
+  (row->sprite steve-sheet
                  #:columns 2
                  #:delay   3 ))
 
+(define alex-sprite
+  (row->sprite alex-sheet
+                 #:columns 2
+                 #:delay   3 ))
 
 (define creeper-sprite
   (row->sprite (scale .75 creeper-sheet)
@@ -32,6 +41,11 @@
 
 (define pig-sprite
   (row->sprite pig-sheet
+               #:columns 4
+               #:delay 4))
+
+(define sheep-sprite
+  (row->sprite sheep-sheet
                #:columns 4
                #:delay 4))
 
@@ -51,3 +65,4 @@
   (row->sprite ghast-sheet
                #:columns 4
                #:delay 6))
+

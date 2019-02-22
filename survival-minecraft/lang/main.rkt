@@ -168,9 +168,7 @@
                                                                             ghast-sprite))))
                                  #:ai              (ai-level 'medium)
                                  #:health          (health 100)
-                                 #:weapon          (w  #f #;(custom-weapon #:name "Spitter"
-                                                                          #:dart (acid)))
-                                 
+                                 #:weapon          (w  #f)
                                  #:death-particles (particles (custom-particles))
                                  #:night-only?     (night-only? #f)
                                  #:components      (c #f)

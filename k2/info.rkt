@@ -5,6 +5,7 @@
 
 (define deps '(
   "https://github.com/thoughtstem/TS-Kata-Collections.git?path=ts-kata-util"
+  "battle-arena-avengers"
   "ratchet"
   ))
 

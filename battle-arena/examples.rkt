@@ -143,15 +143,12 @@
 (define-example-code battle-arena enemy-weapon-1
   (battle-arena-game
    #:enemy-list (list (custom-enemy
-                       #:weapon (custom-weapon
-                                 #:dart (sword)))))
+                       #:weapon (sword))))
   )
 
 (define-example-code battle-arena enemy-weapon-2
   (define (my-weapon)
-    (custom-weapon
-     #:name      "Sword"
-     #:dart      (sword #:damage 40)))
+    (sword #:damage 40))
 
   (battle-arena-game
    #:enemy-list (list (custom-enemy
@@ -176,43 +173,24 @@
   )
 
 ;-----------------
-
+; These katas still need to be updated from sword-dart to sword (weapon)
 (define-example-code battle-arena sword-1  
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name    "Sword"
-                                      #:sprite  SWORD-ICON
-                                      #:dart    (sword))))
+   #:weapon-list (list (sword)))
   )
 
 (define-example-code battle-arena sword-2
-  (define (my-weapon-2)
-    (custom-weapon #:name    "Sword"
-                   #:sprite  SWORD-ICON
-                   #:dart    (sword)
-                   #:rarity  'rare))
+  (define (my-weapon)
+    (sword #:rarity  'rare))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-2)))
+   #:weapon-list (list (my-weapon)))
   )
-
-#;(define-example-code battle-arena sword-2b
-  (define (my-weapon-2)
-    (custom-weapon #:name              "Sword"
-                   #:sprite            SWORD-ICON
-                   #:dart              (sword)
-                   #:rarity            'rare
-                   #:mouse-fire-button 'left
-                   #:rapid-fire?        #f))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-2)))
-    )
 
 (define-example-code battle-arena sword-3
-
   (define (my-sword)
-    (sword #:damage     50
-           #:durability 20))
+    (sword-dart #:damage     50
+                #:durability 20))
   
   (define (my-weapon-2)
     (custom-weapon #:name   "Sword"
@@ -222,31 +200,14 @@
   (battle-arena-game
    #:weapon-list (list (my-weapon-2)))
   )
-
-#;(define-example-code battle-arena sword-3b
-  (define (my-sword)
-    (sword #:damage     50
-           #:durability 20
-           #:sprite     STUDENT-IMAGE-HERE
-           #:speed      0
-           #:range      10))
-  
-  (define (my-weapon-2)
-    (custom-weapon #:name   "Sword"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-sword)))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-2)))
-    )
 
 (define-example-code battle-arena sword-4
   (define (my-sword)
-    (sword #:damage     50
-           #:durability 20
-           #:sprite     STUDENT-IMAGE-HERE
-           #:speed      0
-           #:range      10))
+    (sword-dart #:damage     50
+                #:durability 20
+                #:sprite     STUDENT-IMAGE-HERE
+                #:speed      0
+                #:range      10))
   
   (define (my-weapon-2)
     (custom-weapon #:name   "Sword"
@@ -499,7 +460,7 @@
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Light Magic"
                                       #:sprite (make-icon "LM")
-                                      #:dart (ring-of-fire #:damage 20
+                                      #:dart (ring-of-fire-dart #:damage 20
                                                            #:range   20)
                                       #:rarity 'common))))
 
@@ -508,19 +469,19 @@
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Magic"
                                       #:sprite (make-icon "HM")
-                                      #:dart (ring-of-fire #:sprite (scale 2 flame-sprite)
+                                      #:dart (ring-of-fire-dart #:sprite (scale 2 flame-sprite)
                                                            #:damage 200
                                                            #:range 36)
                                       #:rarity 'epic))))
 
 (define-example-code battle-arena magic-balance-3
   (define (heavy-dart)
-    (ring-of-fire #:sprite (scale 2 flame-sprite)
+    (ring-of-fire-dart #:sprite (scale 2 flame-sprite)
                   #:damage 200
                   #:range  36))
 
   (define (light-dart)
-    (ring-of-fire #:damage 20
+    (ring-of-fire-dart #:damage 20
                   #:range  20))
   
   (battle-arena-game
@@ -536,40 +497,37 @@
 
 (define-example-code battle-arena melee-balance-1
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Light Melee"
-                                      #:sprite (make-icon "LM")
-                                      #:dart (sword #:damage 50
-                                                    #:speed  1)
-                                      #:rarity 'common))))
+   #:weapon-list (list (sword #:name "Light Sword"
+                              #:icon (make-icon "LS")
+                              #:damage 10
+                              #:rarity 'common))))
 
 (define-example-code battle-arena melee-balance-2
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Melee"
-                                      #:sprite (make-icon "HM")
-                                      #:dart (sword #:sprite (scale 2 swinging-sword-sprite)
-                                                    #:damage 500
-                                                    #:speed  2)
-                                      #:rarity 'epic))))
+   #:weapon-list (list (sword #:name "Heavy Sword"
+                              #:icon (make-icon "HS")
+                              #:sprite (scale 2 swinging-sword-sprite)
+                              #:damage 200
+                              #:rarity 'epic))))
 
 (define-example-code battle-arena melee-balance-3
-  (define (heavy-dart)
-    (sword #:sprite (scale 2 swinging-sword-sprite)
-           #:damage 500
-           #:speed  2))
+  (define (heavy-sword)
+    (sword #:name "Heavy Sword"
+           #:icon (make-icon "HS")
+           #:sprite (scale 2 swinging-sword-sprite)
+           #:damage 200
+           #:rarity 'epic))
 
-  (define (light-dart)
-    (sword #:damage 50
-           #:speed  1))
+  (define (light-sword)
+    (sword #:name "Light Sword"
+           #:icon (make-icon "LS")
+           #:damage 10
+           #:rarity 'common))
   
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Melee"
-                                      #:sprite (make-icon "HM")
-                                      #:dart (heavy-dart)
-                                      #:rarity 'epic)
-                       (custom-weapon #:name "Light Melee"
-                                      #:sprite (make-icon "LM")
-                                      #:dart (light-dart)
-                                      #:rarity 'common))))
+   #:weapon-list (list (heavy-sword)
+                       (light-sword)))
+  )
 
 
 (define-example-code battle-arena paint-thrower-1
@@ -577,7 +535,7 @@
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name   "Paint Thrower"
                                       #:sprite PAINT-THROWER-ICON
-                                      #:dart   (paint))))
+                                      #:dart   (paint-dart))))
   )
 
 
@@ -587,7 +545,7 @@
   (define (my-weapon-3)
     (custom-weapon #:name              "Paint Thrower"
                    #:sprite            PAINT-THROWER-ICON
-                   #:dart              (paint)
+                   #:dart              (paint-dart)
                    #:rarity            'epic
                    #:fire-rate         30
                    #:mouse-fire-button 'left))
@@ -603,7 +561,7 @@
   (define (my-weapon-3)
     (custom-weapon #:name   "Paint Thrower"
                    #:sprite PAINT-THROWER-ICON
-                   #:dart   (paint)
+                   #:dart   (paint-dart)
                    #:rarity 'epic))
   
   (battle-arena-game
@@ -615,7 +573,7 @@
 
 #;(define-example-code battle-arena paint-thrower-3-bonus
   (define (my-paint)
-    (paint #:damage     10
+    (paint-dart #:damage     10
            #:durability 20
            #:sprite     paint-sprite
            #:speed      3
@@ -636,8 +594,8 @@
 
 (define-example-code battle-arena paint-thrower-3
   (define (my-paint)
-    (paint #:damage     10
-           #:durability 20))
+    (paint-dart #:damage     10
+                #:durability 20))
   
   (define (my-weapon-3)
     (custom-weapon #:name   "Paint Thrower"
@@ -654,7 +612,7 @@
 
 (define-example-code battle-arena paint-thrower-4
   (define (my-paint)
-    (paint #:damage     10
+    (paint-dart #:damage     10
            #:durability 20
            #:sprite     paint-sprite
            #:speed      3
@@ -931,99 +889,42 @@
    #:weapon-list (list (single-shot))))
 
 
-
+;Tip: defaults: damage = 50, speed = 5, range 20
 (define-example-code battle-arena spear-1
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name   "Spear"
-                                      #:sprite SPEAR-ICON
-                                      #:dart   (spear))))
+   #:weapon-list (list (spear)))
   )
-
-
-
-#;(define-example-code battle-arena spear-2-bonus
-  (define (my-weapon-1)
-    (custom-weapon #:name              "Spear"
-                   #:sprite            SPEAR-ICON
-                   #:dart              (spear)
-                   #:rarity            'common
-                   #:mouse-fire-button 'left
-                   #:rapid-fire?       #f))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-1)))
-  )
-
-
 
 (define-example-code battle-arena spear-2
-  (define (my-weapon-1)
-    (custom-weapon #:name   "Spear"
-                   #:sprite SPEAR-ICON
-                   #:dart   (spear)
-                   #:rarity 'common))
-  
   (battle-arena-game
-   #:weapon-list (list (my-weapon-1)))
+   #:weapon-list (list (spear #:name "Heavy Spear"
+                              #:damage 50)))
   )
 
-
-
-#;(define-example-code battle-arena spear-3-bonus
-  (define (my-spear)
-    (spear #:damage     25
-           #:durability 10
-           #:sprite     spear-sprite
-           #:speed      5
-           #:range      20))
-  
-  (define (my-weapon-1)
-    (custom-weapon #:name   "Spear"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-spear)
-                   #:rarity 'common))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-1)))
-  )
-
-
-
+; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code battle-arena spear-3
   (define (my-spear)
-    (spear #:damage     25
-           #:durability 10))
-  
-  (define (my-weapon-1)
-    (custom-weapon #:name   "Spear"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-spear)
-                   #:rarity 'common))
+    (spear #:name   "Epic Heavy Spear"
+           #:damage 50
+           #:rarity 'epic))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-1))))
+   #:weapon-list (list (my-spear))))
 
-
-
+; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code battle-arena spear-4
   (define (my-spear)
-    (spear #:damage     25
-           #:durability 10
-           #:sprite     spear-sprite
-           #:speed      5
-           #:range      20))
-  
-  (define (my-weapon-1)
-    (custom-weapon #:name   "Spear"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-spear)
-                   #:rarity 'common))
+    (spear #:name   "Legendary Spear"
+           #:icon   (make-icon "LS" 'blue)
+           #:sprite (new-sprite SPEAR-IMG #:color 'blue)
+           #:damage 100
+           #:speed 20
+           #:range 10
+           #:rarity 'legendary))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-1)))
+   #:weapon-list (list (my-spear)))
   )
-
-
 
 (define-example-code battle-arena spear-tower-1
   (battle-arena-game
@@ -1031,8 +932,6 @@
                         #:name "Spear Tower"
                         #:sprite (make-icon "ST")
                         #:dart (spear-tower-builder)))))
-
-
 
 (define-example-code battle-arena spear-tower-2
   (battle-arena-game
@@ -1042,8 +941,6 @@
                         #:dart (spear-tower-builder
                                 #:speed 10 
                                 #:range 50)))))
-
-
 
 (define-example-code battle-arena spear-tower-3
   (battle-arena-game
@@ -1179,9 +1076,7 @@
   
   (battle-arena-game
    #:enemy-list (list (custom-enemy #:amount-in-world 10
-                                    #:weapon          (custom-weapon
-                                                       #:name "Sword"
-                                                       #:dart (sword))))
+                                    #:weapon       (sword)))
    #:item-list (list (custom-armor #:name          "Sword Armor"
                                    #:sprite        (make-icon "RA")
                                    #:protects-from "Sword"

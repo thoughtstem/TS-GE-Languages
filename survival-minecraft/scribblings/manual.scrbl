@@ -13,8 +13,6 @@
 @;throws error -- contract requires number, getting #f
 @;(include-extracted "../lang/main.rkt")
 
-@section{Image Assets}
-
-@(include-extracted "../assets.rkt")
+@(include-section "assets-library.rkt")
 
 

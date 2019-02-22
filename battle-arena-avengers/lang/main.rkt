@@ -104,7 +104,8 @@
 ;; ----- POWER
 
 (define/contract/doc (custom-power #:name              [n "Energy Blast"]
-                                   #:icon              [s (make-icon "EB" "green")]
+                                   #:sprite            [sprite  #f];HACK - REMOVE LINE AFTER BATTLE-ARENA CHANGES
+                                   #:icon              [icon (make-icon "EB" "green")]
                                    #:color             [c "blue"]
                                    #:dart              [b (energy-blast #:color c)]
                                    #:fire-mode         [fm 'normal]
@@ -116,8 +117,9 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:sprite      [sprite (or/c sprite? false?)]
+        #:icon        [icon sprite?]
+        #:color       [color image-color?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -131,9 +133,15 @@
   @{Returns a custom power, which will be placed in to the world
          automatically if it is passed into @racket[avengers-game]
          via the @racket[#:power-list] parameter.}
+
+
+  
+  
   
   (custom-weapon #:name              n
-                 #:sprite            s
+                 #:sprite            (if (equal? sprite #f) ;GET RID OF THIS LATER
+                                         icon
+                                         sprite)
                  #:dart              b
                  #:fire-mode         fm
                  #:fire-rate         fr
@@ -205,9 +213,9 @@
                  #:columns 3
                  #:row-number 1))
 
-(define flying-hammer-sprite
+(define (flying-hammer-sprite c)
   (beside
-   (rectangle 8 4 "solid" "black")
+   (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))
 
 (define (flame-sprite c)
@@ -231,8 +239,9 @@
                (every-tick (do-many (scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
-(define (flying-hammer #:position   [p   (posn 20 0)]
-                       #:sprite     [s   flying-hammer-sprite]
+(define (flying-hammer #:color      [c   'black]
+                       #:position   [p   (posn 20 0)]
+                       #:sprite     [s   (flying-hammer-sprite c)]
                        #:damage     [dmg 10]
                        #:durability [dur 20]
                        #:speed      [spd 5]
@@ -275,7 +284,7 @@
                #:components (on-start (set-size 0.5))
                (every-tick (scale-sprite 1.1))))
 
-(define (energy-droid #:color       [c "green"]
+(define (energy-droid #:color      [c "green"]
                       #:sprite     [s (energy-blast-sprite c)]
                       #:damage     [dmg 10]
                       #:durability [dur 10]

@@ -115,7 +115,7 @@
   (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:dart        [dart entity?]
@@ -167,7 +167,7 @@
   (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:speed       [spd number?]

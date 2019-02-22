@@ -2,14 +2,16 @@
 
 
 (require scribble/srcdoc)
+(require (for-doc racket/base scribble/manual ))
 
 (require (except-in game-engine
                     change-health-by)
          game-engine-demos-common)
 
-(require (for-doc racket/base scribble/manual ))
 
-(require ts-kata-util)
+(require ts-kata-util
+         (only-in racket/draw make-font)
+         "../assets.rkt")
 
 ;Instead of using provide,
 ;  use define/contract/doc on your functions.
@@ -234,9 +236,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[battle-arena-game].}
-  
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:enemy-list] parameter.}
 
   
  
@@ -258,7 +260,13 @@
     (sprite->entity empty-image
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
-                    #:components (on-start die)))
+                    #:components (on-start die)
+                                 #;(counter 0)
+                                 #;(every-tick (do-many (change-counter-by 1)
+                                                      (λ(g e)
+                                                        (displayln (~a "I'M ALIVE: " (get-counter e)))
+                                                        e)))
+                    ))
   
   (define (die-if-health-is-0)
     (on-rule (λ(g e)
@@ -448,7 +456,9 @@
          #:rarity        [rarity rarity-level?])
        [returns entity?])
 
-  @{Returns custom armor}
+  @{Returns a custom armor, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
 
   
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
@@ -480,7 +490,14 @@
 
 (define/contract/doc (custom-weapon #:name              [n "Repeater"]
                                     #:sprite            [s chest-sprite]
-                                    #:dart              [b (custom-dart)]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
@@ -491,7 +508,11 @@
   (->i ()
        (#:name        [name string?]
         #:sprite      [sprite sprite?]
-        #:dart      [dart entity?]
+        #:dart-sprite [dart-sprite sprite?]
+        #:speed       [speed  number?]
+        #:damage      [damage number?]
+        #:range       [range  number?]
+        #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
@@ -501,8 +522,9 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom weapon}
-
+  @{Returns a custom weapon, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:weapon-list] parameter.}
 
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
                              [(eq? rarity 'epic)      (~a "Epic " n)]
@@ -555,9 +577,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Returns a custom item, which will be placed int othe world
-              automatically if it is passed into @racket[battle-arena-game]
-              via the @racket[#:item-list] parameter.}
+  @{Returns a custom item, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:item-list] parameter.}
   
   (define new-entity
     (sprite->entity s
@@ -687,7 +709,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-bg #:bg-img     [bg (draw-plain-bg)]
+(define (plain-bg #:img     [bg (draw-plain-bg)]
                   #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
                   #:columns    [cols 3]
@@ -702,15 +724,15 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:bg-img     [bg (draw-plain-bg)]
-                                        #:rows       [rows 3]
-                                        #:columns    [cols 3]
-                                        #:start-tile [t 0]
-                                        #:components [c #f]
-                                        . custom-components)
+(define/contract/doc (custom-bg #:img     [bg (draw-plain-bg)]
+                                #:rows       [rows 3]
+                                #:columns    [cols 3]
+                                #:start-tile [t 0]
+                                #:components [c #f]
+                                . custom-components)
 
   (->i ()
-       (#:bg-img [bg-img image?]
+       (#:img [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -718,7 +740,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom background, which will be used
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:bg] parameter.}
   
  (if (> (image-width bg) 24)
     (bg->backdrop-entity (scale 0.25 bg)
@@ -759,7 +783,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+    @{Returns a custom avatar, which will be placed in to the world
+         automatically if it is passed into @racket[battle-arena-game]
+         via the @racket[#:avatar] parameter.}
   
 
   
@@ -849,8 +875,7 @@
        [res () game?])
 
   @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+         Can be run with no parameters to get a basic, default game.}
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
@@ -916,28 +941,91 @@
         e))
   
 
-  (define (enemy-counter-entity)
-    (define bg (~> (rectangle 1 1 'solid (make-color 0 0 0 100))
-                   (new-sprite _ #:animate #f)
-                   (set-x-scale 140 _)
-                   (set-y-scale 20 _)
-                   ))
-
+  (define (start-dead-component? c)
+    (and (on-start? c)
+         (eq? (on-start-func c) die)))
+  
+  ;Add more checks to this.
     (define (enemy-died? g e)
-      (get-entity "Enemy Death Broadcast" g))
+      (define death-broadcast (get-entity "Enemy Death Broadcast" g))
+      #|(define (has-name? name)
+        (lambda (e)
+          (eq? (get-name e) name)))
+      (define all-death-broadcasts (filter (has-name? "Enemy Death Broadcast") (game-entities g)))
+      (if death-broadcast
+          (displayln (~a "ENEMY DEATHS DETECTED: " (length all-death-broadcasts)
+                         "\nFOUND DEATH COMPONENT: " (get-component death-broadcast start-dead-component?)))
+          #f)|#
+      (and death-broadcast
+           (get-component death-broadcast start-dead-component?))) ; This is still read twice in the same tick
 
          
-    (define total-enemies (get-total-by-amount-in-world e-list))
+  (define total-enemies (get-total-by-amount-in-world e-list))
+
+  (define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
+  (define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+   
+
+  (define (enemy-counter-entity)
+    (define outer-border-img (square 1 'solid 'black))
+    (define inner-border-img (square 1 'solid 'white))
+    (define box-img (square 1 'solid 'dimgray))
+    (define counter-sprite
+      (list (new-sprite (~a "Enemies Left: " total-enemies)
+                        #:color 'yellow)
+            (new-sprite  box-img
+                        #:animate #f
+                        #:x-scale 180
+                        #:y-scale 24)
+            (new-sprite inner-border-img
+                        #:animate #f
+                        #:x-scale 184
+                        #:y-scale 28)
+            (new-sprite outer-border-img
+                        #:animate #f
+                        #:x-scale 186
+                        #:y-scale 30)
+                   ))
     
-    (sprite->entity bg
+    
+    (register-fonts! bold-font)
+
+    (define (change-text-sprite s)
+      (lambda (g e)
+        (define current-sprite (get-component e string-animated-sprite?))
+        (update-entity e (is-component? current-sprite)
+                       s)))
+
+    (define (do-font-fx)
+      (lambda (g e)
+        (define current-sprite (get-component e string-animated-sprite?))
+        (define current-text-frame (render-text-frame current-sprite))
+        (define regular-text-frame (~> current-text-frame
+                                       (set-text-frame-font score-font _)
+                                       (set-text-frame-color 'yellow _)))
+        (define bold-text-frame (~> current-text-frame
+                                    (set-text-frame-font bold-font _)
+                                    (set-text-frame-color 'orangered _)))
+        (~> e
+            (update-entity _ (is-component? current-sprite)
+                             (new-sprite (list bold-text-frame
+                                               regular-text-frame)
+                                         10
+                                         #:scale 1.1
+                                         ))
+            (add-components _ (after-time 20 (change-text-sprite (new-sprite regular-text-frame)))))))
+
+    
+    (sprite->entity counter-sprite
                     #:name       "score"
-                    #:position   (posn 340 20)
+                    #:position   (posn 330 24)
                     #:components (static)
-                                 (new-sprite (~a "Enemies Left: " total-enemies) #:y-offset -7 #:scale 0.8 #:color 'yellow)
                                  (counter total-enemies)
                                  (layer "ui")
-                                 (on-rule enemy-died? (do-many (change-counter-by -0.5)
-                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)))
+                                 (on-rule enemy-died? (do-many (change-counter-by -0.5) ; still getting doubled counted
+                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)
+                                                               (do-font-fx)
+                                                               ))
                                  ))
 
    (define bg-with-instructions
@@ -1146,8 +1234,8 @@
 
 (module+ test
   (battle-arena-game
-   #:bg              (custom-bg #:bg-img SNOW-BG)
-   #:avatar          (custom-avatar)
+   #:bg              (custom-bg #:bg-img LAVA-BG)
+   #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (custom-enemy #:amount-in-world 10))
    #:weapon-list     (list (custom-weapon #:name "Light Repeater"
                                           #:sprite (make-icon "LR" "purple")
@@ -1511,4 +1599,7 @@
 #;(module test racket
   (displayln "TEST!!!")
   )
+
+
+
 

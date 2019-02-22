@@ -11,26 +11,20 @@
 (language-mappings battle-arena       battle-arena-starwars
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
-                   [custom-background custom-planet]
-                   [sword             lightsaber]
+                   [custom-bg         custom-planet]
                    [#:avatar          #:hero]
                    [#:enemy-list      #:villain-list]
                    [#:bg              #:planet]
                    [battle-arena-game starwars-game])
 
-(provide lightsaber
-         blaster-dart
-         lightsaber-droid
+(provide lightsaber-droid
          blaster-droid
          double-lightsaber
-
-         crop-sprite
-        
          )
 
 ;; ----- HERO
 
-(define/contract/doc (custom-hero #:sprite           (sprite (circle 10 'solid 'red))
+(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
@@ -52,7 +46,10 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   
-  @{This returns an avatar.}
+  @{Returns a custom hero, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:hero] parameter.}
+  
   (custom-avatar #:sprite           sprite
                  #:damage-processor dp
                  #:position         p
@@ -69,11 +66,11 @@
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
-                                     #:weapon (weapon (custom-blaster #:color "red"))
+                                     #:weapon (weapon (blaster #:color "red"))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
-                                          . custom-components
-                                   )
+                                     . custom-components
+                                     )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
            #:sprite [sprite sprite?]
@@ -86,8 +83,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[starwars-game].}
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:villain-list] parameter.}
 
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite sprite
@@ -100,21 +98,26 @@
 
 ;; ----- LIGHTSABER
 
-(define/contract/doc (custom-lightsaber #:name              [n "Lightsaber"]
-                                        #:icon              [s (make-icon "LS" "green")]
-                                        #:color             [c "green"]
-                                        #:dart              [b (lightsaber #:color c)]
-                                        #:fire-mode         [fm 'normal]
-                                        #:fire-rate         [fr 3]
-                                        #:fire-key          [key 'f]
-                                        #:mouse-fire-button [button 'left]
-                                        #:point-to-mouse?   [ptm? #t]
-                                        #:rapid-fire?       [rf? #t]
-                                        #:rarity            [rarity 'common])
-(->i ()
+(define/contract/doc (lightsaber #:name              [n "Lightsaber"]
+                                 #:icon              [s (make-icon "LS" "green")]
+                                 #:color             [c "green"]
+                                 #:damage            [dmg 25]
+                                 #:durability        [dur 20]
+                                 #:dart              [b (lightsaber-dart #:color      c
+                                                                         #:damage     dmg)]
+                                 #:fire-mode         [fm 'normal]
+                                 #:fire-rate         [fr 3]
+                                 #:fire-key          [key 'f]
+                                 #:mouse-fire-button [button 'left]
+                                 #:point-to-mouse?   [ptm? #t]
+                                 #:rapid-fire?       [rf? #t]
+                                 #:rarity            [rarity 'common])
+  (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
         #:color       [color string?]
+        #:damage      [dmg number?]
+        #:durability  [dur number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -124,8 +127,11 @@
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
        [result entity?])
+
+  @{Returns a custom lightsaber, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:weapon-list] parameter.}
   
-  @{This returns a custom weapon.}
   (custom-weapon #:name              n
                  #:sprite            s
                  #:dart              b
@@ -139,21 +145,33 @@
 
 ;; ----- BLASTER
 
-(define/contract/doc (custom-blaster #:name              [n "Blaster"]
-                                     #:icon              [s (make-icon "B" "red")]
-                                     #:color             [c "green"]
-                                     #:dart              [b (blaster-dart #:color c)]
-                                     #:fire-mode         [fm 'normal]
-                                     #:fire-rate         [fr 3]
-                                     #:fire-key          [key 'f]
-                                     #:mouse-fire-button [button 'left]
-                                     #:point-to-mouse?   [ptm? #t]
-                                     #:rapid-fire?       [rf? #t]
-                                     #:rarity            [rarity 'common])
-(->i ()
+(define/contract/doc (blaster #:name              [n "Blaster"]
+                              #:icon              [s (make-icon "B" "red")]
+                              #:color             [c "green"]
+                              #:damage            [dmg 10]
+                              #:durability        [dur 20]
+                              #:speed             [spd  5]
+                              #:range             [rng 50]
+                              #:dart              [b (blaster-dart #:color      c
+                                                                   #:damage     dmg
+                                                                   #:durability dur
+                                                                   #:speed      spd
+                                                                   #:range      rng)]
+                              #:fire-mode         [fm 'normal]
+                              #:fire-rate         [fr 3]
+                              #:fire-key          [key 'f]
+                              #:mouse-fire-button [button 'left]
+                              #:point-to-mouse?   [ptm? #t]
+                              #:rapid-fire?       [rf? #t]
+                              #:rarity            [rarity 'common])
+  (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
         #:color       [color string?]
+        #:damage      [dmg number?]
+        #:durability  [dur number?]
+        #:speed       [spd number?]
+        #:range       [rng number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -164,7 +182,10 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
   
-  @{This returns a custom weapon.}
+  @{Returns a custom blaster, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:weapon-list] parameter.}
+  
   (custom-weapon #:name              n
                  #:sprite            s
                  #:dart              b
@@ -194,19 +215,21 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom planet, which will be used
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:planet] parameter.}
   
   (if (> (image-width bg) 24)
-    (bg->backdrop-entity (scale 0.25 bg)
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 4)
-    (bg->backdrop-entity bg
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 60)))
+      (bg->backdrop-entity (scale 0.25 bg)
+                           #:rows       rows
+                           #:columns    cols
+                           #:start-tile t
+                           #:scale 4)
+      (bg->backdrop-entity bg
+                           #:rows       rows
+                           #:columns    cols
+                           #:start-tile t
+                           #:scale 60)))
 
 ;; ----- WEAPONS & DARTS
 
@@ -238,7 +261,7 @@
          #:speed      spd
          #:range      rng))
 
-(define (lightsaber
+(define (lightsaber-dart
          #:color      [c "green"]
          #:sprite     [s (swinging-lightsaber-sprite c)]
          #:damage     [dmg 25]
@@ -275,13 +298,13 @@
                           #:range      [rng 20]
                           #:fire-rate  [fire-rate 0.5])
   
-  (builder-dart #:entity (droid #:weapon (custom-lightsaber #:fire-rate fire-rate
-                                                            #:dart (lightsaber #:color      c
-                                                                               #:sprite     s
-                                                                               #:damage     dmg
-                                                                               #:durability dur
-                                                                               #:speed      spd
-                                                                               #:range      rng)))))
+  (builder-dart #:entity (droid #:weapon (lightsaber #:fire-rate fire-rate
+                                                     #:dart (lightsaber-dart #:color      c
+                                                                             #:sprite     s
+                                                                             #:damage     dmg
+                                                                             #:durability dur
+                                                                             #:speed      spd
+                                                                             #:range      rng)))))
 
 (define (blaster-droid #:color      [c "green"]
                        #:sprite     [s (blaster-dart-sprite c)]
@@ -292,7 +315,7 @@
                        #:fire-rate  [fire-rate 2]
                        #:fire-mode  [fire-mode 'normal])
   
-  (builder-dart #:entity (droid #:weapon (custom-blaster #:fire-rate fire-rate
+  (builder-dart #:entity (droid #:weapon (blaster #:fire-rate fire-rate
                                                          #:fire-mode fire-mode
                                                          #:dart (blaster-dart #:color      c
                                                                               #:sprite     s
@@ -356,7 +379,7 @@
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar (custom-hero)]
+                      #:hero             [avatar (custom-hero #:sprite (circle 10 'solid 'red))]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
                       #:villain-list     [e-list '()]
@@ -376,9 +399,8 @@
        #:rest           [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the battle-arena language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+  @{The top-level function for the battle-arena-starwars language.
+         Can be run with no parameters to get a basic, default game.}
 
   (battle-arena-game #:headless headless
                      #:bg planet-ent

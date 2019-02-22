@@ -1,5 +1,5 @@
-2390
-((3) 0 () 1 ((q lib "battle-arena-avengers/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q thor)) q (5954 . 2)) ((c def c (c (? . 0) q ronan)) q (5905 . 2)) ((c def c (c (? . 0) q ironman-sprite)) q (4706 . 2)) ((c def c (c (? . 0) q custom-power)) q (2030 . 23)) ((c def c (c (? . 0) q loki)) q (5725 . 2)) ((c def c (c (? . 0) q hulk)) q (5649 . 2)) ((c def c (c (? . 0) q ironman)) q (5671 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q wintersoldier-sprite)) q (5307 . 2)) ((c def c (c (? . 0) q rocketracoon-sprite)) q (5135 . 2)) ((c def c (c (? . 0) q nebula)) q (5799 . 2)) ((c def c (c (? . 0) q rocketracoon)) q (5875 . 2)) ((c def c (c (? . 0) q tonystark-sprite)) q (4662 . 2)) ((c def c (c (? . 0) q ronan-sprite)) q (5478 . 2)) ((c def c (c (? . 0) q mandarin-sprite)) q (5221 . 2)) ((c def c (c (? . 0) q nickfury)) q (5823 . 2)) ((c def c (c (? . 0) q drax)) q (5578 . 2)) ((c def c (c (? . 0) q hawkeye)) q (5624 . 2)) ((c def c (c (? . 0) q redskull)) q (5849 . 2)) ((c def c (c (? . 0) q ironpatriot)) q (5696 . 2)) ((c def c (c (? . 0) q nebula-sprite)) q (5394 . 2)) ((c def c (c (? . 0) q blackwidow)) q (5518 . 2)) ((c def c (c (? . 0) q starlord)) q (5928 . 2)) ((c def c (c (? . 0) q blackwidow-sprite)) q (4843 . 2)) ((c def c (c (? . 0) q loki-sprite)) q (5355 . 2)) ((c def c (c (? . 0) q ironpatriot-sprite)) q (4748 . 2)) ((c def c (c (? . 0) q nickfury-sprite)) q (5008 . 2)) ((c def c (c (? . 0) q hulk-sprite)) q (4930 . 2)) ((c def c (c (? . 0) q thor-sprite)) q (4969 . 2)) ((c def c (c (? . 0) q mandarin)) q (5773 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q malekith)) q (5747 . 2)) ((c def c (c (? . 0) q hawkeye-sprite)) q (4888 . 2)) ((c def c (c (? . 0) q gamora)) q (5600 . 2)) ((c def c (c (? . 0) q starlord-sprite)) q (5051 . 2)) ((c def c (c (? . 0) q tonystark)) q (5976 . 2)) ((c def c (c (? . 0) q wintersoldier)) q (6003 . 2)) ((c def c (c (? . 0) q avengers-game)) q (3709 . 18)) ((c def c (c (? . 0) q custom-planet)) q (3065 . 14)) ((c def c (c (? . 0) q gamora-sprite)) q (5094 . 2)) ((c def c (c (? . 0) q drax-sprite)) q (5182 . 2)) ((c def c (c (? . 0) q redskull-sprite)) q (5264 . 2)) ((c def c (c (? . 0) q captainamerica)) q (5546 . 2)) ((c def c (c (? . 0) q captainamerica-sprite)) q (4794 . 2)) ((c def c (c (? . 0) q malekith-sprite)) q (5435 . 2))))
+4383
+((3) 0 () 1 ((q lib "battle-arena-avengers/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q PINK-BG)) q (6286 . 2)) ((c def c (c (? . 0) q mandarin)) q (7109 . 2)) ((c def c (c (? . 0) q hawkeye)) q (6960 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (5998 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (5576 . 2)) ((c def c (c (? . 0) q random-character-sprite)) q (5518 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (6343 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (6767 . 2)) ((c def c (c (? . 0) q rocketracoon)) q (7211 . 2)) ((c def c (c (? . 0) q FOREST-BG)) q (6182 . 2)) ((c def c (c (? . 0) q ronan-sprite)) q (5478 . 2)) ((c def c (c (? . 0) q mandarin-sprite)) q (5221 . 2)) ((c def c (c (? . 0) q redskull)) q (7185 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (6504 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (5957 . 2)) ((c def c (c (? . 0) q drax)) q (6886 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (6538 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (6627 . 2)) ((c def c (c (? . 0) q nebula-sprite)) q (5394 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (6730 . 2)) ((c def c (c (? . 0) q lightelf-sheet)) q (6436 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (6796 . 2)) ((c def c (c (? . 0) q blackwidow-sprite)) q (4843 . 2)) ((c def c (c (? . 0) q loki-sprite)) q (5355 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (6596 . 2)) ((c def c (c (? . 0) q energyball)) q (6908 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (6660 . 2)) ((c def c (c (? . 0) q thor-sprite)) q (4969 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (5658 . 2)) ((c def c (c (? . 0) q malekith)) q (7083 . 2)) ((c def c (c (? . 0) q wintersoldier)) q (7339 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (6694 . 2)) ((c def c (c (? . 0) q thor)) q (7290 . 2)) ((c def c (c (? . 0) q ronan)) q (7241 . 2)) ((c def c (c (? . 0) q gamora)) q (6936 . 2)) ((c def c (c (? . 0) q captainamerica-sprite)) q (4794 . 2)) ((c def c (c (? . 0) q avengers-game)) q (3709 . 18)) ((c def c (c (? . 0) q nickfury)) q (7159 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (6261 . 2)) ((c def c (c (? . 0) q drax-sprite)) q (5182 . 2)) ((c def c (c (? . 0) q redskull-sprite)) q (5264 . 2)) ((c def c (c (? . 0) q captainamerica)) q (6854 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (5616 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (6408 . 2)) ((c def c (c (? . 0) q ironman)) q (7007 . 2)) ((c def c (c (? . 0) q caitsith-sheet)) q (6311 . 2)) ((c def c (c (? . 0) q ironman-sprite)) q (4706 . 2)) ((c def c (c (? . 0) q custom-power)) q (2029 . 23)) ((c def c (c (? . 0) q loki)) q (7061 . 2)) ((c def c (c (? . 0) q hulk)) q (6985 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (6134 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (5912 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q monk-sprite)) q (5699 . 2)) ((c def c (c (? . 0) q rocketracoon-sprite)) q (5135 . 2)) ((c def c (c (? . 0) q nebula)) q (7135 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (6209 . 2)) ((c def c (c (? . 0) q tonystark-sprite)) q (4662 . 2)) ((c def c (c (? . 0) q wintersoldier-sprite)) q (5307 . 2)) ((c def c (c (? . 0) q moogle-sheet)) q (6566 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (5785 . 2)) ((c def c (c (? . 0) q starlord)) q (7264 . 2)) ((c def c (c (? . 0) q ironpatriot)) q (7032 . 2)) ((c def c (c (? . 0) q pirategirl-sprite)) q (6042 . 2)) ((c def c (c (? . 0) q blackwidow)) q (6826 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (5828 . 2)) ((c def c (c (? . 0) q ironpatriot-sprite)) q (4748 . 2)) ((c def c (c (? . 0) q nickfury-sprite)) q (5008 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (5873 . 2)) ((c def c (c (? . 0) q hulk-sprite)) q (4930 . 2)) ((c def c (c (? . 0) q starlord-sprite)) q (5051 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (6374 . 2)) ((c def c (c (? . 0) q hawkeye-sprite)) q (4888 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (6468 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q tonystark)) q (7312 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (5738 . 2)) ((c def c (c (? . 0) q custom-planet)) q (3065 . 14)) ((c def c (c (? . 0) q gamora-sprite)) q (5094 . 2)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (6087 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (6234 . 2)) ((c def c (c (? . 0) q malekith-sprite)) q (5435 . 2))))
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -26,7 +26,7 @@ procedure
                  #:ai ai-level                         
                  #:health health                       
                  #:shield shield                       
-                 #:weapon weapon                       
+                 #:power power                         
                  #:death-particles death-particles     
                  #:components first-component]         
                  more-components ...)              -> entity?
@@ -35,7 +35,7 @@ procedure
   ai-level : ai-level? = 'easy
   health : positive? = 100
   shield : positive? = 100
-  weapon : entity? = (custom-power #:color "red")
+  power : entity? = (custom-power #:color "red")
   death-particles : entity? = (custom-particles)
   first-component : component-or-system? = #f
   more-components : (listof component-or-system?)
@@ -54,7 +54,7 @@ procedure
   name : string? = "Energy Blast"
   sprite : sprite? = (make-icon "EB" "green")
   color : string? = "blue"
-  dart : entity? = (energy-dart #:color c)
+  dart : entity? = (energy-blast #:color c)
   fire-mode : fire-mode? = 'normal
   fire-rate : number? = 3
   fire-key : symbol? = 'f
@@ -134,12 +134,86 @@ value
 malekith-sprite : animated-sprite?
 value
 ronan-sprite : animated-sprite?
+procedure
+(random-character-sprite) -> animated-sprite?
+value
+witch-sprite : animated-sprite?
+value
+darkelf-sprite : animated-sprite?
+value
+wizard-sprite : animated-sprite?
+value
+monk-sprite : animated-sprite?
+value
+madscientist-sprite : animated-sprite?
+value
+lightelf-sprite : animated-sprite?
+value
+darkknight-sprite : animated-sprite?
+value
+kavi-sprite : animated-sprite?
+value
+moderngirl-sprite : animated-sprite?
+value
+moogle-sprite : animated-sprite?
+value
+pirateboy-sprite : animated-sprite?
+value
+pirategirl-sprite : animated-sprite?
+value
+steampunkboy-sprite : animated-sprite?
+value
+steampunkgirl-sprite : animated-sprite?
+value
+FOREST-BG : image?
+value
+SNOW-BG : image?
+value
+DESERT-BG : image?
+value
+LAVA-BG : image?
+value
+PINK-BG : image?
+value
+caitsith-sheet : image?
+value
+darkelf-sheet : image?
+value
+darkknight-sheet : image?
+value
+kavi-sheet : image?
+value
+lightelf-sheet : image?
+value
+madscientist-sheet : image?
+value
+moderngirl-sheet : image?
+value
+monk-sheet : image?
+value
+moogle-sheet : image?
+value
+mystery-sheet : image?
+value
+pirateboy-sheet : image?
+value
+pirategirl-sheet : image?
+value
+steampunkboy-sheet : image?
+value
+steampunkgirl-sheet : image?
+value
+witch-sheet : image?
+value
+wizard-sheet : image?
 value
 blackwidow : image?
 value
 captainamerica : image?
 value
 drax : image?
+value
+energyball : image?
 value
 gamora : image?
 value

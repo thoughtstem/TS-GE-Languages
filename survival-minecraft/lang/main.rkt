@@ -1,16 +1,9 @@
  #lang at-exp racket
 
-(provide chicken-sprite
-         creeper-sprite
-         skeleton-sprite
-         pig-sprite
-         ghast-sprite)
-
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         ;2htdp/image
          "../assets.rkt"
          survival)
 
@@ -63,10 +56,7 @@
 ;======== custom-skin to replace custom-avatar ========
 
 (define/contract/doc
-  (custom-skin #:sprite           [sprite (sheet->sprite steve-animated
-                                                         #:rows    1
-                                                         #:columns 2
-                                                         #:delay   3 )]
+  (custom-skin #:sprite           [sprite steve-sprite]
                #:damage-processor [dp (filter-damage-by-tag #:filter-out  '(friendly-team passive)
                                                             #:show-damage? #t
                                                             )]
@@ -309,41 +299,9 @@
    #:crafter-list    c-list
    #:other-entities  (cons ent custom-entities)))
 
-;================== ASSETS ======================
-
-(define creeper-sprite
-  (row->sprite (scale .75 creeper-sheet)
-               #:columns 4
-               #:delay 4))
-
-(define chicken-sprite
-  (row->sprite chicken-sheet
-               #:columns 4
-               #:delay 4))
-
-(define pig-sprite
-  (row->sprite pig-sheet
-               #:columns 4
-               #:delay 4))
-
-(define (ore-entity)
-  (sprite->entity (sheet->sprite ironore-sprite #:columns 1)
-                  #:position   (posn 0 0)
-                  #:name       "Iron Ore"
-                  #:components (active-on-bg 0)
-                               (physical-collider)))
-
-(define skeleton-sprite
-  (row->sprite (scale .75 skeleton-sheet)
-               #:columns 4
-               #:delay 3))
-
-(define ghast-sprite
-  (row->sprite ghast-sheet
-               #:columns 4
-               #:delay 6))
 
 ;============== CUSTOM WEAPONS ================
+;move these out of main and into assets or the like??
 
 (define (arrow #:sprite     [s   (beside
                                   (rectangle 25 3 'solid (make-color 70 40 0))

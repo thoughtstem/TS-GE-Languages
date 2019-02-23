@@ -21,6 +21,7 @@
 ;  the docs. 
 (provide plain-bg-entity
          (rename-out (spear-sprite SPEAR-IMG))
+         ice-sprite
          spear
          sword
          fire-magic
@@ -1356,15 +1357,15 @@
 (define (sword #:name              [n "Sword"]
                #:icon              [i [make-icon "SW"]]
                #:sprite            [s swinging-sword-sprite]
-               #:damage            [dmg 50]
+               #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
-               #:range             [rng 10]
+               #:duration          [rng 10]
                #:dart              [d (sword-dart #:sprite s
                                                   #:damage dmg
                                                   #:durability dur
                                                   #:speed spd
-                                                  #:range rng)]
+                                                  #:duration rng)]
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
@@ -1386,7 +1387,7 @@
                     #:damage     [dmg 50]
                     #:durability [dur 20]
                     #:speed      [spd 0]
-                    #:range      [rng 10])
+                    #:duration   [rng 10])
   (custom-dart #:position (posn 10 0)
                #:sprite     s
                #:damage     dmg
@@ -1579,12 +1580,12 @@
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
-                      #:range             [rng 36]
+                      #:duration          [rng 36]
                       #:dart              [d (ring-of-fire-dart #:sprite s
                                                                 #:damage dmg
                                                                 #:durability dur
                                                                 #:speed spd
-                                                                #:range rng)]
+                                                                #:duration rng)]
                       #:fire-mode         [fm 'normal]
                       #:fire-rate         [fr 10]
                       #:fire-key          [key 'f]
@@ -1608,12 +1609,12 @@
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
-                     #:range             [rng 36]
+                     #:duration          [rng 36]
                      #:dart              [d (ring-of-fire-dart #:sprite s
                                                                #:damage dmg
                                                                #:durability dur
                                                                #:speed spd
-                                                               #:range rng)]
+                                                               #:duration rng)]
                      #:fire-mode         [fm 'normal]
                      #:fire-rate         [fr 10]
                      #:fire-key          [key 'f]
@@ -1635,7 +1636,7 @@
                            #:damage     [dmg 5]
                            #:durability [dur 20]
                            #:speed      [spd 10]
-                           #:range      [rng 36])
+                           #:duration   [rng 36])
   (custom-dart #:position   (posn 25 0)
                #:sprite     s
                #:damage     dmg

@@ -5,7 +5,8 @@
 
 (require ts-kata-util
          "../assets.rkt"
-         battle-arena)
+         battle-arena
+         game-engine-demos-common)
 
 
 (language-mappings battle-arena       battle-arena-avengers
@@ -107,7 +108,9 @@
                                    #:sprite            [sprite  #f];HACK - REMOVE LINE AFTER BATTLE-ARENA CHANGES
                                    #:icon              [icon (make-icon "EB" "green")]
                                    #:color             [c "blue"]
-                                   #:dart              [b (energy-blast #:color c)]
+                                   #:damage            [dmg 10]
+                                   #:dart              [b (energy-blast #:color c
+                                                                        #:damage dmg)]
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
@@ -120,6 +123,7 @@
         #:sprite      [sprite (or/c sprite? false?)]
         #:icon        [icon sprite?]
         #:color       [color image-color?]
+        #:damage      [dmg number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -218,13 +222,13 @@
    (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))
 
-(define (flame-sprite c)
+(define (my-flame-sprite c)
   (overlay (circle 5 "solid" c)
            (circle 6 "solid" "orange")
            (circle 7 "solid" "red")))
 
 (define (magic-orb #:color      [c "yellow"]
-                   #:sprite     [s   (flame-sprite c)]
+                   #:sprite     [s   (my-flame-sprite c)]
                    #:damage     [dmg 5]
                    #:durability [dur 20]
                    #:speed      [spd 10]

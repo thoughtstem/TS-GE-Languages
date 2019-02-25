@@ -39,27 +39,27 @@
 
 ; ---------------
 
-(define-example-code battle-arena-avengers alt/enemy-weapon-1
+#;(define-example-code battle-arena-avengers alt/enemy-weapon-1
   (avengers-game
    #:villain-list (list (custom-villain
                          #:power (custom-power
                                    #:color 'yellow))))
   )
 
-(define-example-code battle-arena-avengers alt/enemy-weapon-2
+#;(define-example-code battle-arena-avengers alt/enemy-weapon-2
   (avengers-game
    #:villain-list (list (custom-villain
                          #:sprite mandarin-sprite
                          #:power (custom-power
-                                   #:dart (ring-of-fire)
+                                   #:dart (ring-of-fire-dart)
                                    #:color 'purple))))
   )
 
-(define-example-code battle-arena-avengers alt/enemy-weapon-3
+#;(define-example-code battle-arena-avengers alt/enemy-weapon-3
   (define (my-power)
-    (custom-power #:dart (ring-of-fire #:damage 50
-                                       #:speed  10
-                                       #:range  20)
+    (custom-power #:dart (ring-of-fire-dart #:damage 50
+                                            #:speed  10
+                                            #:range  20)
                   #:color 'purple))
   (avengers-game
    #:villain-list (list (custom-villain

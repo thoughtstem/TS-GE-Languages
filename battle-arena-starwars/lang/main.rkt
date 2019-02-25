@@ -5,7 +5,8 @@
 
 (require ts-kata-util
          "../assets.rkt"
-         battle-arena)
+         battle-arena
+         game-engine-demos-common)
 
 
 (language-mappings battle-arena       battle-arena-starwars
@@ -255,7 +256,9 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword #:sprite     s
+  (sword #:name       "Double Lightsaber"
+         #:icon       (make-icon "DL")
+         #:sprite     s
          #:damage     dmg
          #:durability dur
          #:speed      spd
@@ -269,11 +272,11 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword #:sprite     s
-         #:damage     dmg
-         #:durability dur
-         #:speed      spd
-         #:range      rng))
+  (sword-dart #:sprite     s
+              #:damage     dmg
+              #:durability dur
+              #:speed      spd
+              #:range      rng))
 
 (define (blaster-dart
          #:color      [c "green"]

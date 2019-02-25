@@ -56,14 +56,10 @@
   )
 
 (define-example-code battle-arena-starwars alt/enemy-weapon-3 
-  (define (my-weapon)
-    (lightsaber 
-     #:dart (double-lightsaber)))
- 
   (starwars-game 
    #:villain-list (list (custom-villain
                        #:sprite darthmaul-sprite
-                       #:weapon (my-weapon))))
+                       #:weapon (double-lightsaber))))
   )
 
 ; ---------------

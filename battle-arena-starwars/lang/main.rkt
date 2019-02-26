@@ -256,13 +256,13 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword #:name       "Double Lightsaber"
-         #:icon       (make-icon "DL")
-         #:sprite     s
-         #:damage     dmg
-         #:durability dur
-         #:speed      spd
-         #:range      rng))
+  (sword #:name          "Double Lightsaber"
+         #:icon          (make-icon "DL")
+         #:sprite        s
+         #:damage        dmg
+         #:durability    dur
+         #:speed         spd
+         #:duration      rng))
 
 (define (lightsaber-dart
          #:color      [c "green"]
@@ -272,11 +272,11 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword-dart #:sprite     s
-              #:damage     dmg
-              #:durability dur
-              #:speed      spd
-              #:range      rng))
+  (sword-dart #:sprite        s
+              #:damage        dmg
+              #:durability    dur
+              #:speed         spd
+              #:duration      rng))
 
 (define (blaster-dart
          #:color      [c "green"]

@@ -1,1 +1,0 @@
-("7.0" ("fb29016b5300a6bc71e240426c85672ce401f681" . "5eb19230be964a107a2f146bdbad09ddba248d95") (collects #"errortrace" #"errortrace-key.rkt") (collects #"pict" #"main.rkt") (collects #"pict" #"shadow.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"racket" #"runtime-path.rkt"))

@@ -47,41 +47,19 @@
 
 (define-example-code battle-arena avatar-3
   (define (my-avatar)
-    (custom-avatar #:sprite (random-character-sprite)
-                   #:speed 20
-                   #:key-mode 'arrow-keys
-                   #:item-slots 5))
+    (custom-avatar #:sprite pirategirl-sprite
+                   #:speed 20))
   
   (battle-arena-game
    #:avatar (my-avatar))
   )
 
-
-
-#;(define-example-code battle-arena avatar-3b
-    (define (my-avatar)
-      (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
-                                             #:columns 3)))
-  
-    (battle-arena-game
-     #:avatar (my-avatar))
-    )
-
-#;(define-example-code battle-arena avatar-3c
-    (define (my-avatar)
-      (custom-avatar #:sprite     STUDENT-IMAGE-HERE
-                     #:key-mode   'wasd
-                     #:mouse-aim? #t))
-  
-    (battle-arena-game
-     #:avatar (my-avatar))
-    )
-
-#;(define-example-code battle-arena avatar-4  
+(define-example-code battle-arena avatar-4
   (define (my-avatar)
-    (custom-avatar #:sprite (sheet->sprite STUDENT-IMAGE-HERE
-                                           #:columns 4)))
-   
+    (custom-avatar #:sprite steampunkgirl-sprite
+                   #:speed 20
+                   #:item-slots 5))
+  
   (battle-arena-game
    #:avatar (my-avatar))
   )
@@ -173,49 +151,41 @@
   )
 
 ;-----------------
-; These katas still need to be updated from sword-dart to sword (weapon)
-(define-example-code battle-arena sword-1  
+
+;Tip: defaults: damage = 25, durability = 20, range = 10
+(define-example-code battle-arena sword-1
   (battle-arena-game
    #:weapon-list (list (sword)))
   )
 
 (define-example-code battle-arena sword-2
-  (define (my-weapon)
-    (sword #:rarity  'rare))
-  
   (battle-arena-game
-   #:weapon-list (list (my-weapon)))
+   #:weapon-list (list (sword #:name "Heavy Sword"
+                              #:damage 50)))
   )
 
+; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code battle-arena sword-3
   (define (my-sword)
-    (sword-dart #:damage     50
-                #:durability 20))
-  
-  (define (my-weapon-2)
-    (custom-weapon #:name   "Sword"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-sword)))
+    (sword #:name   "Epic Heavy Sword"
+           #:damage 50
+           #:rarity 'epic))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-2)))
-  )
+   #:weapon-list (list (my-sword))))
 
+; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code battle-arena sword-4
   (define (my-sword)
-    (sword-dart #:damage     50
-                #:durability 20
-                #:sprite     STUDENT-IMAGE-HERE
-                #:speed      0
-                #:range      10))
-  
-  (define (my-weapon-2)
-    (custom-weapon #:name   "Sword"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-sword)))
+    (sword #:name   "Legendary Sword"
+           #:icon   (make-icon "LS" 'gold)
+           #:sprite (set-sprite-color swinging-sword-sprite #:color 'gold)
+           #:damage 100
+           #:duration  100
+           #:rarity 'legendary))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-2)))
+   #:weapon-list (list (my-spear)))
   )
 
 ;-----------------
@@ -458,41 +428,41 @@
 
 (define-example-code battle-arena magic-balance-1
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Light Magic"
-                                      #:sprite (make-icon "LM")
-                                      #:dart (ring-of-fire-dart #:damage 20
-                                                           #:range   20)
-                                      #:rarity 'common))))
+   #:weapon-list (list (ring-of-fire #:name "Light Magic"
+                                     #:icon (make-icon "LM")
+                                     #:damage 20
+                                     #:rarity 'common))))
 
 
+;Tip: also try ring-of-ice
 (define-example-code battle-arena magic-balance-2
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Magic"
-                                      #:sprite (make-icon "HM")
-                                      #:dart (ring-of-fire-dart #:sprite (scale 2 flame-sprite)
-                                                           #:damage 200
-                                                           #:range 36)
-                                      #:rarity 'epic))))
+   #:weapon-list (list (ring-of-fire #:name "Heavy Magic"
+                                     #:icon   (make-icon "HM")
+                                     #:sprite (scale 2 flame-sprite)
+                                     #:damage 200
+                                     #:rarity 'epic))))
 
 (define-example-code battle-arena magic-balance-3
-  (define (heavy-dart)
-    (ring-of-fire-dart #:sprite (scale 2 flame-sprite)
+  (define (heavy-magic)
+    (ring-of-fire #:name   "Heavy Magic"
+                  #:icon   (make-icon "HM")
+                  #:sprite (scale 2 flame-sprite)
                   #:damage 200
-                  #:range  36))
+                  #:rarity 'epic))
 
-  (define (light-dart)
-    (ring-of-fire-dart #:damage 20
-                  #:range  20))
+  (define (light-magic)
+    (ring-of-fire #:name     "Light Magic"
+                  #:sprite   (make-icon "LM")
+                  #:damage   20
+                  #:duration 20
+                  #:rarity   'common
+                  ))
   
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Magic"
-                                      #:sprite (make-icon "HM")
-                                      #:dart (heavy-dart)
-                                      #:rarity 'epic)
-                       (custom-weapon #:name "Light Magic"
-                                      #:sprite (make-icon "LM")
-                                      #:dart (light-dart)
-                                      #:rarity 'common))))
+   #:weapon-list (list (heavy-magic)
+                       (light-magic)))
+  )
 
 
 (define-example-code battle-arena melee-balance-1
@@ -533,99 +503,42 @@
 (define-example-code battle-arena paint-thrower-1
   
   (battle-arena-game
-   #:weapon-list (list (custom-weapon #:name   "Paint Thrower"
-                                      #:sprite PAINT-THROWER-ICON
-                                      #:dart   (paint-dart))))
+   #:weapon-list (list (paint-thrower)))
   )
-
-
-
-
-#;(define-example-code battle-arena paint-thrower-2-bonus
-  (define (my-weapon-3)
-    (custom-weapon #:name              "Paint Thrower"
-                   #:sprite            PAINT-THROWER-ICON
-                   #:dart              (paint-dart)
-                   #:rarity            'epic
-                   #:fire-rate         30
-                   #:mouse-fire-button 'left))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-3)))
-  )
-
-
-
 
 (define-example-code battle-arena paint-thrower-2
-  (define (my-weapon-3)
-    (custom-weapon #:name   "Paint Thrower"
-                   #:sprite PAINT-THROWER-ICON
-                   #:dart   (paint-dart)
-                   #:rarity 'epic))
+  (define (my-weapon)
+    (paint-thrower #:name   "Heavy Paint Thrower"
+                   #:damage 20))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-3)))
+   #:weapon-list (list (my-weapon)))
   )
-
-
-
-
-#;(define-example-code battle-arena paint-thrower-3-bonus
-  (define (my-paint)
-    (paint-dart #:damage     10
-           #:durability 20
-           #:sprite     paint-sprite
-           #:speed      3
-           #:range      15))
-  
-  (define (my-weapon-3)
-    (custom-weapon #:name   "Paint Thrower"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-paint)
-                   #:rarity 'epic))
-  
-  (battle-arena-game
-   #:weapon-list (list (my-weapon-3)))
-  )
-
-
-
 
 (define-example-code battle-arena paint-thrower-3
-  (define (my-paint)
-    (paint-dart #:damage     10
-                #:durability 20))
-  
-  (define (my-weapon-3)
-    (custom-weapon #:name   "Paint Thrower"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-paint)
+  (define (my-weapon)
+    (paint-thrower #:name   "Epic Paint Thrower"
+                   #:icon (make-icon "PT" 'blue)
+                   #:damage 20
+                   #:speed  10
                    #:rarity 'epic))
   
   (battle-arena-game
-   #:weapon-list (list (my-weapon-3)))
+   #:weapon-list (list (my-weapon)))
   )
 
-
-
-
 (define-example-code battle-arena paint-thrower-4
-  (define (my-paint)
-    (paint-dart #:damage     10
-           #:durability 20
-           #:sprite     paint-sprite
-           #:speed      3
-           #:range      15))
-  
-  (define (my-weapon-3)
-    (custom-weapon #:name   "Paint Thrower"
-                   #:sprite STUDENT-IMAGE-HERE
-                   #:dart   (my-paint)
-                   #:rarity 'epic))
-  
+  (define (my-weapon)
+    (paint-thrower #:name   "Legendary Paint Thrower"
+                   #:icon   (make-icon "PT" 'blue)
+                   #:sprite (set-sprite-color 'green paint-sprite)
+                   #:damage  20
+                   #:speed   10
+                   #:range   50
+                   #:rarity  'legendary))
+
   (battle-arena-game
-   #:weapon-list (list (my-weapon-3)))
+   #:weapon-list (list (my-weapon)))
   )
 
 
@@ -685,11 +598,6 @@
                                                           #:range  50)
                                       #:rarity 'common))))
 
-
-
-
-
-
 (define-example-code battle-arena repeater-balance-2
   (battle-arena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
@@ -699,9 +607,6 @@
                                                           #:speed  10
                                                           #:range  50)
                                       #:rarity 'uncommon))))
-
-
-
 
 (define-example-code battle-arena repeater-balance-3
   (define (heavy-dart)
@@ -848,11 +753,9 @@
 
 (define-example-code battle-arena single-shot-1
   (battle-arena-game
-   #:weapon-list    (list (custom-weapon #:name      "Single Shot"
-                                         #:sprite    (make-icon "SS")
-                                         #:fire-mode 'normal))))
-
-
+   #:weapon-list (list (custom-weapon #:name        "Single Shot"
+                                      #:sprite      (make-icon "SS")
+                                      #:rapid-fire? #f))))
 
 (define-example-code battle-arena single-shot-2
 

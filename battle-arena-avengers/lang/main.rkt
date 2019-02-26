@@ -193,7 +193,7 @@
 ;; ----- WEAPONS & DARTS
 
 (define (star-bit-sprite [c 'white])
-  (sheet->sprite (tint-img c (scale 0.5 energyball))
+  (sheet->sprite (tint-img c (scale 0.5 energyball-sheet))
                  #:rows 1
                  #:columns 8
                  #:row-number 1
@@ -323,7 +323,7 @@
 
   (define droid-base (rectangle 20 1 'solid 'transparent))
   
-  (define droid-top (crop-sprite ironpatriot 4 4 2 2))
+  (define droid-top (crop-sprite ironpatriot-sheet 4 4 2 2))
 
   (define droid-top-entity
     (sprite->entity droid-top

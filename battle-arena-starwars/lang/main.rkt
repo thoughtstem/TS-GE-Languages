@@ -344,7 +344,7 @@
 
   (define droid-base (rectangle 20 1 'solid 'transparent))
   
-  (define droid-top (crop-sprite c2po 4 4 2 2))
+  (define droid-top (crop-sprite c2po-sheet 4 4 2 2))
 
   (define droid-top-entity
     (sprite->entity droid-top

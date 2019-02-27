@@ -28,6 +28,7 @@
          ice-magic
          ring-of-fire
          ring-of-ice
+         ring-of-blades
          paint-thrower
          sword-magic
          
@@ -61,6 +62,8 @@
 
          rocket
          rocket-sprite
+
+         spike-mine-sprite
 
          fire-mode?    
          rarity-level?
@@ -1312,7 +1315,7 @@
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]
-               #:icon              [i [make-icon "SP"]]
+               #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]
                #:damage            [dmg 25]
                #:durability        [dur 20]
@@ -1346,16 +1349,16 @@
                     #:speed      [spd 5]
                     #:range      [rng 20])
   (custom-dart #:position (posn 20 0)
-                 #:sprite s
-                 #:damage dmg
-                 #:durability dur
-                 #:speed spd
-                 #:range rng
-                 #:components (after-time (/ rng 2) (do-many (bounce)
-                                                             (horizontal-flip-sprite)))))
+               #:sprite s
+               #:damage dmg
+               #:durability dur
+               #:speed spd
+               #:range rng
+               #:components (after-time (/ rng 2) (do-many (bounce)
+                                                           (horizontal-flip-sprite)))))
 
 (define (sword #:name              [n "Sword"]
-               #:icon              [i [make-icon "SW"]]
+               #:icon              [i [make-icon "SW" 'silver]]
                #:sprite            [s swinging-sword-sprite]
                #:damage            [dmg 25]
                #:durability        [dur 20]
@@ -1440,7 +1443,7 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (fire-magic #:name              [n "Fire Magic"]
-                    #:icon              [i [make-icon "FM"]]
+                    #:icon              [i [make-icon "FM" 'red]]
                     #:sprite            [s flame-sprite]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
@@ -1483,7 +1486,7 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
-                   #:icon              [i [make-icon "IM"]]
+                   #:icon              [i [make-icon "IM" 'lightcyan]]
                    #:sprite            [s ice-sprite]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
@@ -1531,7 +1534,7 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
-                     #:icon              [i [make-icon "SM"]]
+                     #:icon              [i [make-icon "SM" 'silver]]
                      #:sprite            [s flying-sword-sprite]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
@@ -1574,8 +1577,53 @@
                #:components (on-start (do-many (set-size 0.5)))
                (do-every 10 (change-direction-by-random -25 25))))
 
+(define (ring-of-blades #:name              [n "Ring of Blades"]
+                        #:icon              [i (make-icon "RoB" 'silver)]
+                        #:sprite            [s flying-sword-sprite]
+                        #:damage            [dmg 10]
+                        #:durability        [dur 20]
+                        #:speed             [spd 10]
+                        #:duration          [rng 36]
+                        #:dart              [d (ring-of-blades-dart #:sprite s
+                                                                    #:damage dmg
+                                                                    #:durability dur
+                                                                    #:speed spd
+                                                                    #:duration rng)]
+                        #:fire-mode         [fm 'normal]
+                        #:fire-rate         [fr 6]
+                        #:fire-key          [key 'f]
+                        #:mouse-fire-button [button 'left]
+                        #:point-to-mouse?   [ptm? #t]
+                        #:rapid-fire?       [rf? #t]
+                        #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (ring-of-blades-dart #:sprite     [s   flying-sword-sprite]
+                             #:damage     [dmg 10]
+                             #:durability [dur 20]
+                             #:speed      [spd 10]
+                             #:duration   [rng 36])
+  (custom-dart #:position   (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (do-many ;(scale-sprite 1.05)
+                                    (change-direction-by 10)))))
+
+
 (define (ring-of-fire #:name              [n "Ring of Fire"]
-                      #:icon              [i (make-icon "RoF")]
+                      #:icon              [i (make-icon "RoF" 'red)]
                       #:sprite            [s flame-sprite]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
@@ -1604,7 +1652,7 @@
                  #:rarity rarity))
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
-                     #:icon              [i (make-icon "RoI")]
+                     #:icon              [i (make-icon "RoI" 'lightcyan)]
                      #:sprite            [s ice-sprite]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]

@@ -1,26 +1,98 @@
 #lang racket
 
 (module hero-stuff racket
-  (provide (all-from-out battle-arena-avengers/assets)
-           start)
   
-  (require battle-arena-avengers
-           battle-arena-avengers/assets)
+  (require (prefix-in a: battle-arena-avengers)
+           battle-arena-avengers/assets
+           (for-syntax racket))
 
-  (define (start . is)
-    (define sprites 
-      (map (lambda(i) (sheet->sprite i #:rows 4 #:columns 4 #:row-number 3 #:delay 5)) is)) 
+  (define-syntax (provide-string stx)
+    (define id (second (syntax->datum stx)))
+    (datum->syntax stx
+      `(begin
+         (provide ,id)
+         (define ,id ,(~a id)))))
 
-    (define villains
-      (map (λ(s) (custom-villain #:sprite s))
-           (rest sprites)))
-    
-    (thread (thunk
-             (avengers-game #:hero (custom-hero #:sprite (first sprites))
-                            #:villain-list villains)))
+  (define-syntax-rule (provide-strings s ...)
+    (begin (provide-string s) ...))
 
-    "Please wait... (Take about 10 deep breaths...)" ))
 
+  (define-syntax (provide-arena-sprite stx)
+    (define id (second (syntax->datum stx)))
+    (datum->syntax stx
+      `(begin
+         (provide ,id)
+         (define ,id ,(string->symbol (~a "a:" id "-sprite"))))))
+
+  (define-syntax-rule (provide-arena-sprites s ...)
+    (begin (provide-arena-sprite s) ...))
+
+
+  (provide-strings red orange yellow green blue purple)
+
+  (provide-arena-sprites blackwidow gamora captainamerica drax hawkeye hulk ironman loki)
+
+  (provide top-level
+           hammer
+           magic-orb
+           star-bit
+           energy-blast
+           start)
+
+  (define (hammer (color #f)) 
+    (a:flying-hammer))
+
+  (define (magic-orb (color "yellow"))
+    (a:magic-orb #:color color))
+
+  (define (star-bit (color "green"))
+    (a:star-bit #:color color))
+
+  (define (energy-blast (color "green"))
+    (a:energy-blast #:color color))
+
+  (define (make-hero sprite (dart #f))
+    (define real-dart (call-if-proc dart))
+    (if real-dart
+         (a:custom-hero #:sprite sprite
+                        #:components
+                        (a:custom-weapon-system #:dart real-dart
+                                                #:mouse-fire-button 'left
+                                                ))
+         (a:custom-hero #:sprite sprite)) )
+
+  (define (make-villain sprite (dart #f) )
+    (define real-dart (call-if-proc dart))
+    (if real-dart
+      (a:custom-villain #:sprite sprite
+                        #:power (a:custom-power #:dart real-dart))
+      (a:custom-villain #:sprite sprite)))  
+
+  (define (call-if-proc p)
+    (if (procedure? p)
+      (p)
+      p))
+
+  (define-syntax (app stx)
+    (syntax-case stx ()
+      [(_ f (args ...)) #'(f args ...)] 
+
+      [(_ f arg) #'(f arg)] ) )
+
+  (define-syntax-rule (start hero villains ...)
+    (let ()
+      (define vs
+        (list 
+          (app make-villain villains ) ...))
+
+      (a:avengers-game #:hero (app make-hero hero) 
+                       #:villain-list vs)))
+  
+  (define-syntax-rule (top-level lines ...)
+    (let ()
+      (thread
+        (thunk lines ...)) 
+      "Please wait...")))
 
   
 (require 'hero-stuff)

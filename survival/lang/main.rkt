@@ -28,6 +28,7 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
+         (only-in racket/draw make-font)
          "../assets.rkt")
 
 (require (except-in game-engine
@@ -300,7 +301,7 @@
   (define i
     (sprite->entity (~> bg
                         (set-x-scale 340 _)             
-                        (set-y-scale (* 25 i-length) _) 
+                        (set-y-scale (* 26 i-length) _) 
                         (set-y-offset 0 _))             
                     #:position   (posn 0 0)
                     #:name       "instructions"
@@ -314,7 +315,7 @@
 
   (define last-y-pos (* 20 i-length))
 
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (/ last-y-pos 2) 20))
+  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
                   ))
      
 ; ==== NEW HELPER SYSTEMS ====
@@ -410,6 +411,36 @@
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
       #f))
 
+(define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
+(define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+
+(register-fonts! bold-font)
+
+(define (change-text-sprite s)
+  (lambda (g e)
+    (define current-sprite (get-component e string-animated-sprite?))
+    (update-entity e (is-component? current-sprite)
+                   s)))
+
+(define (do-font-fx)
+  (lambda (g e)
+    (define current-sprite (get-component e string-animated-sprite?))
+    (define current-text-frame (render-text-frame current-sprite))
+    (define regular-text-frame (~> current-text-frame
+                                   (set-text-frame-font score-font _)
+                                   (set-text-frame-color 'yellow _)))
+    (define bold-text-frame (~> current-text-frame
+                                (set-text-frame-font bold-font _)
+                                (set-text-frame-color 'white _)))
+    (~> e
+        (update-entity _ (is-component? current-sprite)
+                       (new-sprite (list bold-text-frame
+                                         regular-text-frame)
+                                   10
+                                   #:scale 1.1
+                                   ))
+        (add-components _ (after-time 20 (change-text-sprite (new-sprite regular-text-frame)))))))
+
 (define (coin->component c #:use-key [use-key 'space])
   (define coin-name (get-name c))
   (define coin-value (get-storage-data "value" c))
@@ -424,6 +455,7 @@
                                                                                                   (not/c ui?))))
                     (do-many (change-counter-by coin-value)
                              (draw-counter-rpg #:prefix "Gold: ")
+                             (do-font-fx)
                              (spawn coin-toast-entity))))
       #f))
 
@@ -483,7 +515,7 @@
                                                           (add-component _
                                                                          (on-start
                                                                           (go-to-pos-inside 'top-left
-                                                                                            #:posn-offset (posn 10 20))))))))
+                                                                                            #:posn-offset (posn 10 10))))))))
 
   (define sheild-bar (stat-progress-bar 'blue
                                         #:width 100
@@ -860,18 +892,30 @@
         ent))
 
   (define (score-entity)
-    (define bg (~> (rectangle 1 1 'solid (make-color 0 0 0 100))
-                   (new-sprite _ #:animate #f)
-                   (set-x-scale 75 _)
-                   (set-y-scale 14 _)
+    (define outer-border-img (square 1 'solid 'black))
+    (define inner-border-img (square 1 'solid 'white))
+    (define box-img (square 1 'solid 'dimgray))
+    (define counter-sprite
+      (list (new-sprite "Gold: 0"
+                        #:color 'yellow)
+            (new-sprite  box-img
+                        #:animate #f
+                        #:x-scale (* .8 180)
+                        #:y-scale (* .8 24))
+            (new-sprite inner-border-img
+                        #:animate #f
+                        #:x-scale (* .8 184)
+                        #:y-scale (* .8 28))
+            (new-sprite outer-border-img
+                        #:animate #f
+                        #:x-scale (* .8 186)
+                        #:y-scale (* .8 30))
                    ))
     
-    (sprite->entity bg
+    (sprite->entity counter-sprite
                     #:name       "score"
-                    #:position   (posn 380 20)
+                    #:position   (posn 330 20)
                     #:components (static)
-                                 (new-sprite "Gold: 0" #:y-offset 0 ;-7
-                                             #:scale 0.7 #:color 'yellow)
                                  (counter 0)
                                  (layer "ui")
                                  (map coin->component (remove-duplicates updated-coin-list name-eq?))))
@@ -982,6 +1026,7 @@
                   #:components (active-on-bg t)
                                (counter 0)
                                (crafting-menu-set! #:recipe-list r-list)
+                               (apply precompiler (map (λ (r) (recipe-product r)) r-list))
                                (cons c custom-components)))
 
 
@@ -1057,6 +1102,7 @@
                                 #:rows       [rows 3]
                                 #:columns    [cols 3]
                                 #:start-tile [t 0]
+                                #:hd?        [hd? #f]
                                 #:components [c #f]
                                 . custom-components)
 
@@ -1065,18 +1111,26 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component (or/c component-or-system? #f (listof #f))])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background}
-  
 
-  (add-components (bg->backdrop-entity (scale 0.25 bg)
-                       #:rows       rows
-                       #:columns    cols
-                       #:start-tile t
-                       #:scale 4)
+  (define bg-base-entity
+    (if hd?
+        (bg->backdrop-entity bg
+                             #:rows       rows
+                             #:columns    cols
+                             #:start-tile t)
+        (bg->backdrop-entity (scale 0.25 bg)
+                             #:rows       rows
+                             #:columns    cols
+                             #:start-tile t
+                             #:scale 4)))
+  
+  (add-components bg-base-entity
                   (cons c custom-components)))
 
 (define (safe-update-entity e component-pred f)

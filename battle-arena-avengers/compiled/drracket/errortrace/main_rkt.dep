@@ -1,1 +1,0 @@
-("7.0" ("b6c563e24b8cc83385a9cd5eabd31ea66ac1344d" . "70243722a0f7917ee5489e2ace3c1b8282f37e63") (collects #"at-exp" #"lang" #"reader.rkt") (collects #"battle-arena-avengers" #"lang.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"module-reader.rkt"))

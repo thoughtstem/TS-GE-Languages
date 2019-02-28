@@ -416,6 +416,13 @@
   (define health (get-stat "health" player))
   (<= health 0))
 
+(define (tops? e)
+  (and ((has-component? layer?) e)
+       (eq? (get-layer e) "tops")))
+
+(define (bg? e)
+  (eq? (get-name e) "bg"))
+
 (define (backpack-has-armor? g e)
   (define items (get-items (get-entity "player" g)))
   (define entity-list (map item-entity items))
@@ -437,7 +444,10 @@
     (~> all-es
         (remove player _ entity-eq?)
         (remove e      _ entity-eq?)
-        (filter not-ui? _)))
+        (filter (and/c (has-component? on-key?)
+                       not-ui?
+                       (not/c tops?)
+                       (not/c bg?)) _ )))
 
   (define (closer-to-player? e1 e2)
     (< (distance-between (get-posn e1) (get-posn player))
@@ -921,7 +931,10 @@
     (define on-use-func (get-storage-data "on-use" e))
     (if on-use-func
         (on-key use-key #:rule (and/r (player-is-near? item-name)
-                                      (nearest-entity-to-player-is? item-name))
+                                      (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
+                                                                                              (not/c tops?)
+                                                                                              (not/c ui?)
+                                                                                              (not/c bg?))))
                 (do-many on-use-func
                          (spawn (player-toast-entity item-name))))
         #f)

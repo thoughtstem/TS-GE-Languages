@@ -256,7 +256,7 @@
 (define/contract/doc
   (minecraft-game #:headless        [headless #f]
                   #:biome           [biome-ent (plain-forest-bg #:image (random-forest))]
-                  #:skin            [skin #f]
+                  #:skin            [skin (custom-skin #:sprite (circle 10 'solid 'red))]
                   #:starvation-rate [sr 50]
                   #:sky             [sky (custom-sky)]
                   #:entity-list     [entity-list  '() ]
@@ -264,6 +264,7 @@
                   #:ore-list        [ore-list     '() ]
                   #:food-list       [f-list       '() ]
                   #:crafter-list    [c-list       '() ]
+                  #:score-prefix    [prefix "Ore"]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()
@@ -277,6 +278,7 @@
         #:ore-list        [ore-list       (listof (or/c entity? procedure?))]
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
+        #:score-prefix    [prefix         string?]
         #:other-entities  [other-entities (or/c #f entity?)])
        #:rest  [rest (listof entity?)]
        [res () game?])
@@ -295,6 +297,7 @@
    #:coin-list       ore-list
    #:food-list       f-list
    #:crafter-list    c-list
+   #:score-prefix    prefix
    #:other-entities  (cons ent custom-entities)))
 
 

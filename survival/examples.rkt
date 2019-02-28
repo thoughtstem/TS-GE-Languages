@@ -334,7 +334,7 @@
 
   (define (my-npc)
     (custom-npc
-     #:sprite (witch-sprite)
+     #:sprite witch-sprite
      #:name   "Witch"))
 
   (survival-game
@@ -345,7 +345,7 @@
 (define-example-code survival npc-3
   (define (my-npc)
     (custom-npc
-     #:sprite (witch-sprite)
+     #:sprite witch-sprite
      #:name   "Witch"
      #:tile   3
      #:mode   'follow))
@@ -376,7 +376,7 @@
 
   (define (another-npc)
     (custom-npc
-     #:sprite (witch-sprite)
+     #:sprite witch-sprite
      #:mode   'pace
      #:dialog (list "Now where did I put it..."
                     "Have you seen an eye of newt?"
@@ -421,10 +421,7 @@
   #:enemy-list   (list (custom-enemy))
   #:crafter-list (list (custom-crafter))))
 
-(define-example-code survival racket-1
 
-  (require 2htdp/image)
-  (circle 80 'solid 'red))
 
 
 
@@ -432,39 +429,41 @@
   (define (my-avatar)
     (custom-avatar #:sprite wizard-sprite))
 
-  (define (red-coin)
-    (custom-coin #:sprite (circle 5 'solid 'red)
-                 #:name "red coin"
+  (define (silver-coin)
+    (custom-coin #:sprite silver-coin-sprite
+                 #:name "silver coin"
                  #:amount-in-world 6
                  #:value 20))
    
    
-  (define (blue-coin)
-    (custom-coin #:sprite (circle 5 'solid 'blue)
-                 #:name "blue coin"
+  (define (gold-coin)
+    (custom-coin #:sprite gold-coin-sprite
+                 #:name "gold coin"
                  #:amount-in-world 4
                  #:value 40))
-   
-   
-  (define (green-coin)
-    (custom-coin #:sprite (circle 5 'solid 'green)
-                 #:name "green coin"
-                 #:amount-in-world 2
-                 #:respawn? #f
-                 #:value 60))
 
-  (define (pineapple)
-    (custom-food #:sprite          (star 5 'solid 'yellow)
-                 #:name            "pineapple"
+  (define (toasted-marshmallow)
+    (custom-food #:sprite          toasted-marshmallow-sprite
+                 #:name            "toasted marshmallow"
                  #:heals-by        5
-                 #:amount-in-world 10))
+                 #:amount-in-world 5))
    
-  (define (mango)
-    (custom-food #:sprite          (star 5 'solid 'orange)
-                 #:name            "mango"
+  (define (cherry)
+    (custom-food #:sprite          cherry-sprite
+                 #:name            "cherry"
                  #:heals-by        50
-                 #:amount-in-world 1
                  #:respawn?        #f))
+
+  (define (carrot)
+    (custom-food #:sprite          carrot-sprite
+                 #:name            "carrot"
+                 #:amount-in-world 5))
+
+  (define (bowl)
+    (custom-food #:sprite          bowl-sprite
+                 #:name            "bowl"
+                 #:heals-by        0
+                 #:amount-in-world 2))
 
   (define (my-enemy-1)
     (custom-enemy #:ai              'easy
@@ -475,60 +474,69 @@
     (custom-enemy #:ai              'medium
                   #:sprite          bat-sprite
                   #:amount-in-world 2
-                  #:weapon          (custom-weapon #:name "Acidtron"
-                                                   #:dart (custom-dart #:damage 50
-                                                                       #:speed  20))))
+                  #:night-only?     #t))
 
-  (define (kiwi)
-    (custom-food #:sprite (star 5 'solid 'brown)
-                 #:name "kiwi"
+  (define (smores)
+    (custom-food #:sprite smores-sprite
+                 #:name "smores"
+                 #:heals-by 40))
+   
+  (define (steak)
+    (custom-food #:sprite  steak-sprite
+                 #:name    "steak"
                  #:heals-by 50))
-   
-   
-  (define (frozen-pineapple)
-    (custom-food #:sprite (star 10 'solid 'yellow)
-                 #:name "frozen pineapple"
-                 #:heals-by 15))
-   
-   
-  (define kiwi-recipe
-    (recipe #:product     (kiwi)
-            #:build-time  5
-            #:ingredients (list "pineapple" "mango")))
-   
-   
-  (define mango-recipe
-    (recipe #:product     (mango)
-            #:build-time  10
-            #:ingredients (list "pineapple")))
-   
-   
-  (define frozen-pineapple-recipe
-    (recipe #:product     (frozen-pineapple)
-            #:build-time  15
-            #:ingredients (list "pineapple")))
-   
-   
-  (define (oven-crafter)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes kiwi-recipe
-                                               mango-recipe)
-                    #:tile 1))
-   
-  (define (freezer-crafter)
-    (custom-crafter #:menu (crafting-menu-set! #:recipes frozen-pineapple-recipe)
-                    #:tile 2))
 
+  (define (carrot-stew)
+    (custom-food #:sprite   carrot-stew-sprite
+                 #:name     "carrot-stew"
+                 #:heals-by 60))
+   
+   
+  (define smores-recipe
+    (recipe #:product     (smores)
+            #:build-time  10
+            #:ingredients (list "toasted marshmallow")))
+   
+  (define steak-recipe
+    (recipe #:product     (steak)
+            #:build-time  5
+            #:ingredients (list "cherry" "toasted marshmallow")))
+
+  (define carrot-stew-recipe
+    (recipe #:product     (carrot-stew)
+            #:build-time  15
+            #:ingredients (list "carrot" "bowl")))
+  
+   
+  (define (campfire)
+    (custom-crafter #:sprite      campfire-sprite
+                    #:position    (posn 200 200)
+                    #:tile        2
+                    #:recipe-list (list smores-recipe
+                                        steak-recipe)))
+  (define (cauldron)
+    (custom-crafter #:sprite      cauldron-sprite
+                    #:position    (posn 200 200)
+                    #:tile        3
+                    #:recipe-list (list carrot-stew-recipe)))
+
+  
   (survival-game
    #:avatar       (my-avatar)
-   #:coin-list    (list (red-coin)
-                        (blue-coin)
-                        (green-coin))
-   #:food-list    (list (pineapple)
-                        (mango)
-                        (kiwi)
-                        (frozen-pineapple))
+   #:coin-list    (list (silver-coin)
+                        (gold-coin))
+   #:food-list    (list (toasted-marshmallow)
+                        (cherry)
+                        (carrot)
+                        (bowl))
    #:enemy-list   (list (my-enemy-1)
                         (my-enemy-2))
-   #:crafter-list (list (oven-crafter)
-                        (freezer-crafter))))
+   #:crafter-list (list (cauldron)
+                        (campfire))))
+
+
+
+
+;Tests all examples as games for 10 ticks
+(test-all-examples-as-games 'survival)
 

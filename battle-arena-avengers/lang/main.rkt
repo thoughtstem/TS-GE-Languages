@@ -5,7 +5,8 @@
 
 (require ts-kata-util
          "../assets.rkt"
-         battle-arena)
+         battle-arena
+         game-engine-demos-common)
 
 
 (language-mappings battle-arena       battle-arena-avengers
@@ -104,9 +105,12 @@
 ;; ----- POWER
 
 (define/contract/doc (custom-power #:name              [n "Energy Blast"]
-                                   #:icon              [s (make-icon "EB" "green")]
+                                   #:sprite            [sprite  #f];HACK - REMOVE LINE AFTER BATTLE-ARENA CHANGES
+                                   #:icon              [icon (make-icon "EB" "green")]
                                    #:color             [c "blue"]
-                                   #:dart              [b (energy-blast #:color c)]
+                                   #:damage            [dmg 10]
+                                   #:dart              [b (energy-blast #:color c
+                                                                        #:damage dmg)]
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
@@ -116,8 +120,10 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:sprite      [sprite (or/c sprite? false?)]
+        #:icon        [icon sprite?]
+        #:color       [color image-color?]
+        #:damage      [dmg number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -131,9 +137,15 @@
   @{Returns a custom power, which will be placed in to the world
          automatically if it is passed into @racket[avengers-game]
          via the @racket[#:power-list] parameter.}
+
+
+  
+  
   
   (custom-weapon #:name              n
-                 #:sprite            s
+                 #:sprite            (if (equal? sprite #f) ;GET RID OF THIS LATER
+                                         icon
+                                         sprite)
                  #:dart              b
                  #:fire-mode         fm
                  #:fire-rate         fr
@@ -181,7 +193,7 @@
 ;; ----- WEAPONS & DARTS
 
 (define (star-bit-sprite [c 'white])
-  (sheet->sprite (tint-img c (scale 0.5 energyball))
+  (sheet->sprite (tint-img c (scale 0.5 energyball-sheet))
                  #:rows 1
                  #:columns 8
                  #:row-number 1
@@ -205,18 +217,18 @@
                  #:columns 3
                  #:row-number 1))
 
-(define flying-hammer-sprite
+(define (flying-hammer-sprite c)
   (beside
-   (rectangle 8 4 "solid" "black")
+   (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))
 
-(define (flame-sprite c)
+(define (my-flame-sprite c)
   (overlay (circle 5 "solid" c)
            (circle 6 "solid" "orange")
            (circle 7 "solid" "red")))
 
 (define (magic-orb #:color      [c "yellow"]
-                   #:sprite     [s   (flame-sprite c)]
+                   #:sprite     [s   (my-flame-sprite c)]
                    #:damage     [dmg 5]
                    #:durability [dur 20]
                    #:speed      [spd 10]
@@ -231,8 +243,9 @@
                (every-tick (do-many (scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
-(define (flying-hammer #:position   [p   (posn 20 0)]
-                       #:sprite     [s   flying-hammer-sprite]
+(define (flying-hammer #:color      [c   'black]
+                       #:position   [p   (posn 20 0)]
+                       #:sprite     [s   (flying-hammer-sprite c)]
                        #:damage     [dmg 10]
                        #:durability [dur 20]
                        #:speed      [spd 5]
@@ -275,7 +288,7 @@
                #:components (on-start (set-size 0.5))
                (every-tick (scale-sprite 1.1))))
 
-(define (energy-droid #:color       [c "green"]
+(define (energy-droid #:color      [c "green"]
                       #:sprite     [s (energy-blast-sprite c)]
                       #:damage     [dmg 10]
                       #:durability [dur 10]
@@ -310,7 +323,7 @@
 
   (define droid-base (rectangle 20 1 'solid 'transparent))
   
-  (define droid-top (crop-sprite ironpatriot 4 4 2 2))
+  (define droid-top (crop-sprite ironpatriot-sheet 4 4 2 2))
 
   (define droid-top-entity
     (sprite->entity droid-top

@@ -1,5 +1,5 @@
-4392
-((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q lando-sprite)) q (6540 . 2)) ((c def c (c (? . 0) q blaster)) q (3213 . 32)) ((c def c (c (? . 0) q FOREST-BG)) q (7540 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (7862 . 2)) ((c def c (c (? . 0) q darthmaul-2)) q (8306 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q monk-sprite)) q (7057 . 2)) ((c def c (c (? . 0) q caitsith-sheet)) q (7669 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (8125 . 2)) ((c def c (c (? . 0) q lando)) q (8472 . 2)) ((c def c (c (? . 0) q twilek-2)) q (8732 . 2)) ((c def c (c (? . 0) q bobafett-2)) q (8184 . 2)) ((c def c (c (? . 0) q hansolo-sprite)) q (6365 . 2)) ((c def c (c (? . 0) q hansolo)) q (8447 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (7896 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (7701 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q PINK-BG)) q (7644 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4561 . 14)) ((c def c (c (? . 0) q random-character-sprite)) q (6876 . 2)) ((c def c (c (? . 0) q darthmaul-sprite)) q (6742 . 2)) ((c def c (c (? . 0) q c2po-sprite)) q (6658 . 2)) ((c def c (c (? . 0) q starwars-game)) q (5205 . 18)) ((c def c (c (? . 0) q stormtrooper)) q (8702 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (8154 . 2)) ((c def c (c (? . 0) q yoda-sprite)) q (6243 . 2)) ((c def c (c (? . 0) q chewie)) q (8282 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (8088 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (7592 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (7356 . 2)) ((c def c (c (? . 0) q c3po-sprite)) q (6619 . 2)) ((c def c (c (? . 0) q c3po)) q (8260 . 2)) ((c def c (c (? . 0) q r2d2-sprite)) q (6580 . 2)) ((c def c (c (? . 0) q darthmaul)) q (8335 . 2)) ((c def c (c (? . 0) q pirategirl-sprite)) q (7400 . 2)) ((c def c (c (? . 0) q rebelpilot)) q (8674 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (7270 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (7732 . 2)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (7445 . 2)) ((c def c (c (? . 0) q twilek-sprite)) q (6282 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (6934 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (7096 . 2)) ((c def c (c (? . 0) q yoda)) q (8782 . 2)) ((c def c (c (? . 0) q r2d2-2)) q (8628 . 2)) ((c def c (c (? . 0) q moogle-sheet)) q (7924 . 2)) ((c def c (c (? . 0) q obiwan)) q (8517 . 2)) ((c def c (c (? . 0) q padawan-sprite)) q (6323 . 2)) ((c def c (c (? . 0) q princessleia-2)) q (8566 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (7619 . 2)) ((c def c (c (? . 0) q princessleia-sprite)) q (6448 . 2)) ((c def c (c (? . 0) q princessleia)) q (8598 . 2)) ((c def c (c (? . 0) q twilek)) q (8758 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (7186 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (7143 . 2)) ((c def c (c (? . 0) q stormtrooper-sprite)) q (6829 . 2)) ((c def c (c (? . 0) q obiwan-sprite)) q (6202 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (7315 . 2)) ((c def c (c (? . 0) q chewie-sprite)) q (6407 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (7766 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (7954 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (8052 . 2)) ((c def c (c (? . 0) q luke-sprite)) q (6163 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (7231 . 2)) ((c def c (c (? . 0) q darthvader)) q (8392 . 2)) ((c def c (c (? . 0) q bobafett-sprite)) q (6786 . 2)) ((c def c (c (? . 0) q luke)) q (8495 . 2)) ((c def c (c (? . 0) q darthvader-sprite)) q (6697 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (7567 . 2)) ((c def c (c (? . 0) q bobafett)) q (8212 . 2)) ((c def c (c (? . 0) q c2po)) q (8238 . 2)) ((c def c (c (? . 0) q rebelpilot-sprite)) q (6495 . 2)) ((c def c (c (? . 0) q hansolo-2)) q (8420 . 2)) ((c def c (c (? . 0) q r2d2)) q (8652 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (6974 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (7985 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (7492 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (7016 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (7826 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (8018 . 2)) ((c def c (c (? . 0) q lightsaber)) q (2024 . 27)) ((c def c (c (? . 0) q lightelf-sheet)) q (7794 . 2)) ((c def c (c (? . 0) q padawan)) q (8541 . 2)) ((c def c (c (? . 0) q darthvader-2)) q (8362 . 2))))
+4144
+((3) 0 () 1 ((q lib "battle-arena-starwars/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q lando-sprite)) q (6550 . 2)) ((c def c (c (? . 0) q blaster)) q (3218 . 32)) ((c def c (c (? . 0) q FOREST-BG)) q (7550 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (7872 . 2)) ((c def c (c (? . 0) q custom-villain)) q (1039 . 19)) ((c def c (c (? . 0) q monk-sprite)) q (7067 . 2)) ((c def c (c (? . 0) q caitsith-sheet)) q (7679 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (8135 . 2)) ((c def c (c (? . 0) q chewie-sheet)) q (8282 . 2)) ((c def c (c (? . 0) q darthvader-sheet)) q (8345 . 2)) ((c def c (c (? . 0) q padawan-sheet)) q (8497 . 2)) ((c def c (c (? . 0) q hansolo-sprite)) q (6375 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (7906 . 2)) ((c def c (c (? . 0) q princessleia-sheet)) q (8528 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (7711 . 2)) ((c def c (c (? . 0) q custom-hero)) q (0 . 20)) ((c def c (c (? . 0) q PINK-BG)) q (7654 . 2)) ((c def c (c (? . 0) q custom-planet)) q (4571 . 14)) ((c def c (c (? . 0) q random-character-sprite)) q (6886 . 2)) ((c def c (c (? . 0) q darthmaul-sprite)) q (6752 . 2)) ((c def c (c (? . 0) q c2po-sprite)) q (6668 . 2)) ((c def c (c (? . 0) q starwars-game)) q (5215 . 18)) ((c def c (c (? . 0) q wizard-sheet)) q (8164 . 2)) ((c def c (c (? . 0) q yoda-sprite)) q (6253 . 2)) ((c def c (c (? . 0) q stormtrooper-sheet)) q (8626 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (8098 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (7602 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (7366 . 2)) ((c def c (c (? . 0) q c3po-sprite)) q (6629 . 2)) ((c def c (c (? . 0) q rebelpilot-sheet)) q (8592 . 2)) ((c def c (c (? . 0) q r2d2-sprite)) q (6590 . 2)) ((c def c (c (? . 0) q pirategirl-sprite)) q (7410 . 2)) ((c def c (c (? . 0) q yoda-sheet)) q (8692 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (7280 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (7742 . 2)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (7455 . 2)) ((c def c (c (? . 0) q twilek-sprite)) q (6292 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (6944 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (7106 . 2)) ((c def c (c (? . 0) q moogle-sheet)) q (7934 . 2)) ((c def c (c (? . 0) q bobafett-sheet)) q (8194 . 2)) ((c def c (c (? . 0) q padawan-sprite)) q (6333 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (7629 . 2)) ((c def c (c (? . 0) q princessleia-sprite)) q (6458 . 2)) ((c def c (c (? . 0) q hansolo-sheet)) q (8379 . 2)) ((c def c (c (? . 0) q luke-sheet)) q (8439 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (7196 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (7153 . 2)) ((c def c (c (? . 0) q stormtrooper-sprite)) q (6839 . 2)) ((c def c (c (? . 0) q lando-sheet)) q (8410 . 2)) ((c def c (c (? . 0) q obiwan-sprite)) q (6212 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (7325 . 2)) ((c def c (c (? . 0) q chewie-sprite)) q (6417 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (7776 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (7964 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (8062 . 2)) ((c def c (c (? . 0) q twilek-sheet)) q (8662 . 2)) ((c def c (c (? . 0) q darthmaul-sheet)) q (8312 . 2)) ((c def c (c (? . 0) q luke-sprite)) q (6173 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (7241 . 2)) ((c def c (c (? . 0) q obiwan-sheet)) q (8467 . 2)) ((c def c (c (? . 0) q r2d2-sheet)) q (8564 . 2)) ((c def c (c (? . 0) q bobafett-sprite)) q (6796 . 2)) ((c def c (c (? . 0) q darthvader-sprite)) q (6707 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (7577 . 2)) ((c def c (c (? . 0) q rebelpilot-sprite)) q (6505 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (6984 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (7995 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (7502 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (7026 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (7836 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (8028 . 2)) ((c def c (c (? . 0) q lightsaber)) q (2024 . 27)) ((c def c (c (? . 0) q lightelf-sheet)) q (7804 . 2)) ((c def c (c (? . 0) q c3po-sheet)) q (8254 . 2)) ((c def c (c (? . 0) q c2po-sheet)) q (8226 . 2))))
 procedure
 (custom-hero [#:sprite sprite                         
               #:damage-processor damage-processor     
@@ -55,7 +55,7 @@ procedure
              #:rarity rarity])          -> entity?
   name : string? = "Lightsaber"
   sprite : sprite? = (make-icon "LS" "green")
-  color : string? = "green"
+  color : image-color? = "green"
   dmg : number? = 25
   dur : number? = 20
   dart : entity? = (lightsaber-dart #:color c #:damage dmg)
@@ -84,7 +84,7 @@ procedure
           #:rarity rarity])          -> entity?
   name : string? = "Blaster"
   sprite : sprite? = (make-icon "B" "red")
-  color : string? = "green"
+  color : image-color? = "green"
   dmg : number? = 10
   dur : number? = 20
   spd : number? = 5
@@ -237,50 +237,36 @@ witch-sheet : image?
 value
 wizard-sheet : image?
 value
-bobafett-2 : image?
+bobafett-sheet : image?
 value
-bobafett : image?
+c2po-sheet : image?
 value
-c2po : image?
+c3po-sheet : image?
 value
-c3po : image?
+chewie-sheet : image?
 value
-chewie : image?
+darthmaul-sheet : image?
 value
-darthmaul-2 : image?
+darthvader-sheet : image?
 value
-darthmaul : image?
+hansolo-sheet : image?
 value
-darthvader-2 : image?
+lando-sheet : image?
 value
-darthvader : image?
+luke-sheet : image?
 value
-hansolo-2 : image?
+obiwan-sheet : image?
 value
-hansolo : image?
+padawan-sheet : image?
 value
-lando : image?
+princessleia-sheet : image?
 value
-luke : image?
+r2d2-sheet : image?
 value
-obiwan : image?
+rebelpilot-sheet : image?
 value
-padawan : image?
+stormtrooper-sheet : image?
 value
-princessleia-2 : image?
+twilek-sheet : image?
 value
-princessleia : image?
-value
-r2d2-2 : image?
-value
-r2d2 : image?
-value
-rebelpilot : image?
-value
-stormtrooper : image?
-value
-twilek-2 : image?
-value
-twilek : image?
-value
-yoda : image?
+yoda-sheet : image?

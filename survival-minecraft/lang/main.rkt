@@ -17,7 +17,7 @@
                    [#:avatar         #:skin]
                    [#:bg             #:biome]
                    [#:enemy-list     #:mob-list]
-                   [#:npc-list       #:enitity-list]
+                   [#:npc-list       #:entity-list]
                    [#:coin-list      #:ore-list]
                    )
 
@@ -259,11 +259,11 @@
                   #:skin            [skin #f]
                   #:starvation-rate [sr 50]
                   #:sky             [sky (custom-sky)]
-                  #:entity-list     [entity-list  '()]
-                  #:mob-list        [mob-list '()] 
-                  #:ore-list        [ore-list  '() ]
-                  #:food-list       [f-list    '() ]
-                  #:crafter-list    [c-list    '() ]
+                  #:entity-list     [entity-list  '() ]
+                  #:mob-list        [mob-list     '() ] 
+                  #:ore-list        [ore-list     '() ]
+                  #:food-list       [f-list       '() ]
+                  #:crafter-list    [c-list       '() ]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()

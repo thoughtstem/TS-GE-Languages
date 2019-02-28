@@ -802,7 +802,7 @@
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
-        #:food-list        [food-list   (listof (or/c entity? procedure?))]
+        #:food-list        [food-list    (listof (or/c entity? procedure?))]
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:other-entities   [other-entities (or/c #f entity? (listof #f))])
        #:rest [rest (listof entity?)]

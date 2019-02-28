@@ -5,7 +5,8 @@
 
 (define deps '(
   "https://github.com/thoughtstem/TS-Kata-Collections.git?path=ts-kata-util"
-  ;If this language depends on another language, add that dep here
+  "battle-arena-avengers"
+  "ratchet"
   ))
 
 (define compile-omit-paths '(

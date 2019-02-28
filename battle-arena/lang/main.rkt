@@ -381,7 +381,7 @@
   (define i
     (sprite->entity (~> bg
                         (set-x-scale 340 _)             ;260
-                        (set-y-scale (* 25 i-length) _) ;150
+                        (set-y-scale (* 26 i-length) _) ;150
                         (set-y-offset 0 _))             ;60
                     #:position   (posn 0 0) ;(posn (/ (WIDTH) 2) 50)
                     #:name       "instructions"
@@ -395,7 +395,7 @@
 
   (define last-y-pos (* 20 i-length))
 
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (/ last-y-pos 2) 20))
+  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
                   ))
 
 ; === WON AND LOST RULES ===
@@ -415,6 +415,13 @@
   (define player (get-entity "player" g))
   (define health (get-stat "health" player))
   (<= health 0))
+
+(define (tops? e)
+  (and ((has-component? layer?) e)
+       (eq? (get-layer e) "tops")))
+
+(define (bg? e)
+  (eq? (get-name e) "bg"))
 
 (define (backpack-has-armor? g e)
   (define items (get-items (get-entity "player" g)))
@@ -437,7 +444,10 @@
     (~> all-es
         (remove player _ entity-eq?)
         (remove e      _ entity-eq?)
-        (filter not-ui? _)))
+        (filter (and/c (has-component? on-key?)
+                       not-ui?
+                       (not/c tops?)
+                       (not/c bg?)) _ )))
 
   (define (closer-to-player? e1 e2)
     (< (distance-between (get-posn e1) (get-posn player))
@@ -759,22 +769,26 @@
          automatically if it is passed into @racket[battle-arena-game]
          via the @racket[#:bg] parameter.}
   
- (if (> (image-width bg) 24)
-    (if hd?
+  (define bg-base-entity
+    (if (> (image-width bg) 24)
+        (if hd?
+            (bg->backdrop-entity bg
+                                 #:rows       rows
+                                 #:columns    cols
+                                 #:start-tile t)
+            (bg->backdrop-entity (scale 0.25 bg)
+                                 #:rows       rows
+                                 #:columns    cols
+                                 #:start-tile t
+                                 #:scale 4))
         (bg->backdrop-entity bg
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t)
-        (bg->backdrop-entity (scale 0.25 bg)
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 4))
-    (bg->backdrop-entity bg
-                         #:rows       rows
-                         #:columns    cols
-                         #:start-tile t
-                         #:scale 60)))
+                             #:rows       rows
+                             #:columns    cols
+                             #:start-tile t
+                             #:scale 60)))
+  (add-components bg-base-entity
+                  (cons c custom-components))
+   )
 
 
 
@@ -917,7 +931,10 @@
     (define on-use-func (get-storage-data "on-use" e))
     (if on-use-func
         (on-key use-key #:rule (and/r (player-is-near? item-name)
-                                      (nearest-entity-to-player-is? item-name))
+                                      (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
+                                                                                              (not/c tops?)
+                                                                                              (not/c ui?)
+                                                                                              (not/c bg?))))
                 (do-many on-use-func
                          (spawn (player-toast-entity item-name))))
         #f)
@@ -1252,7 +1269,7 @@
        
 
 
-#;(module+ test
+(module+ test
   (battle-arena-game
    #:bg              (custom-bg #:img FOREST-BG
                                 #:hd? #t)

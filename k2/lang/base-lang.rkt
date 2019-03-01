@@ -5,7 +5,6 @@
   (provide circle
            square
            jack-o-lantern
-           random-dude
          
            bigger
            smaller

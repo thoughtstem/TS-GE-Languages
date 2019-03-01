@@ -27,14 +27,14 @@
     (submod "./hero-lang.rkt" hero-stuff)
     [start          q play-icon]
 
-    [blackwidow     a (crop a:blackwidow)]   
-    [gamora         s (crop a:gamora)]
-    [captainamerica d (crop a:captainamerica)]
-    [drax           f (crop a:drax)]
-    [hawkeye        g (crop a:hawkeye)]
-    [hulk           h (crop a:hulk)]
-    [ironman        j (crop a:ironman)]
-    [loki           k (crop a:loki)]
+    [blackwidow     a (crop a:blackwidow-sheet)]   
+    [gamora         s (crop a:gamora-sheet)]
+    [captainamerica d (crop a:captainamerica-sheet)]
+    [drax           f (crop a:drax-sheet)]
+    [hawkeye        g (crop a:hawkeye-sheet)]
+    [hulk           h (crop a:hulk-sheet)]
+    [ironman        j (crop a:ironman-sheet)]
+    [loki           k (crop a:loki-sheet)]
 
     [hammer         z (crop a:flying-hammer-sprite)]
     [magic-orb      x (crop (a:flame-sprite "yellow"))]

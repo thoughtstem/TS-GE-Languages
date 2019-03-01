@@ -10,8 +10,7 @@
 
 @section{Functions}
 
-@;throws error -- contract requires number, getting #f
-@;(include-extracted "../lang/main.rkt")
+@(include-extracted "../lang/main.rkt")
 
 @(include-section "assets-library.rkt")
 

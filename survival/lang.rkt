@@ -1,6 +1,7 @@
 #lang racket
 (provide
  (all-from-out "./lang/main.rkt")
+ (all-from-out "./assets.rkt")
  ;(all-from-out "./browsable-assets.rkt")
  (all-from-out game-engine)
  (all-from-out game-engine-demos-common)
@@ -10,6 +11,7 @@
 
 (require "./lang/main.rkt"
          ;"./browsable-assets.rkt"
+         "./assets.rkt"
          )
 (require (except-in game-engine
                     change-health-by))

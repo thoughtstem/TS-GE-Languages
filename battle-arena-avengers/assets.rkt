@@ -40,140 +40,140 @@
 ; ==== CUSTOM ASSETS ====
 
 (define blackwidow-sprite
-  (sheet->sprite blackwidow
+  (sheet->sprite blackwidow-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define gamora-sprite
-  (sheet->sprite gamora
+  (sheet->sprite gamora-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define ironman-sprite
-  (sheet->sprite ironman
+  (sheet->sprite ironman-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define mandarin-sprite
-  (sheet->sprite mandarin
+  (sheet->sprite mandarin-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define redskull-sprite
-  (sheet->sprite redskull
+  (sheet->sprite redskull-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define starlord-sprite
-  (sheet->sprite starlord
+  (sheet->sprite starlord-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define wintersoldier-sprite
-  (sheet->sprite wintersoldier
+  (sheet->sprite wintersoldier-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define captainamerica-sprite
-  (sheet->sprite captainamerica
+  (sheet->sprite captainamerica-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define hawkeye-sprite
-  (sheet->sprite hawkeye
+  (sheet->sprite hawkeye-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define loki-sprite
-  (sheet->sprite loki
+  (sheet->sprite loki-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define nebula-sprite
-  (sheet->sprite nebula
+  (sheet->sprite nebula-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define rocketracoon-sprite
-  (sheet->sprite rocketracoon
+  (sheet->sprite rocketracoon-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define thor-sprite
-  (sheet->sprite thor
+  (sheet->sprite thor-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define drax-sprite
-  (sheet->sprite drax
+  (sheet->sprite drax-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define hulk-sprite
-  (sheet->sprite hulk
+  (sheet->sprite hulk-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define malekith-sprite
-  (sheet->sprite malekith
+  (sheet->sprite malekith-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define nickfury-sprite
-  (sheet->sprite nickfury
+  (sheet->sprite nickfury-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define ronan-sprite
-  (sheet->sprite ronan
+  (sheet->sprite ronan-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define tonystark-sprite
-  (sheet->sprite tonystark
+  (sheet->sprite tonystark-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3
                  #:delay 5))
 
 (define ironpatriot-sprite
-  (sheet->sprite ironpatriot
+  (sheet->sprite ironpatriot-sheet
                  #:rows 4
                  #:columns 4
                  #:row-number 3

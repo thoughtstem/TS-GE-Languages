@@ -445,11 +445,11 @@
                                    ))
         (add-components _ (after-time 20 (change-text-sprite (new-sprite regular-text-frame)))))))
 
-(define (coin->component c #:use-key [use-key 'space])
+(define (coin->component c prefix #:use-key [use-key 'space])
   (define coin-name (get-name c))
   (define coin-value (get-storage-data "value" c))
   (define coin-toast-entity
-    (player-toast-entity (~a "+" coin-value " GOLD")))
+    (player-toast-entity (~a "+" coin-value " " (string-upcase prefix))))
 
   
   (if coin-value
@@ -459,7 +459,7 @@
                                                                                                   (not/c ui?)
                                                                                                   (not/c bg?))))
                     (do-many (change-counter-by coin-value)
-                             (draw-counter-rpg #:prefix "Gold: ")
+                             (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
                              (do-font-fx)
                              (spawn coin-toast-entity))))
       #f))
@@ -791,6 +791,7 @@
                  #:coin-list       [coin-list '()]
                  #:food-list       [f-list    '()]
                  #:crafter-list    [c-list    '()]
+                 #:score-prefix    [prefix "Gold"]
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -804,6 +805,7 @@
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
         #:food-list        [food-list    (listof (or/c entity? procedure?))]
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
+        #:score-prefix     [prefix string?]
         #:other-entities   [other-entities (or/c #f entity? (listof #f))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -896,12 +898,12 @@
                             (on-rule should-be-dead? die))
         ent))
 
-  (define (score-entity)
+  (define (score-entity prefix)
     (define outer-border-img (square 1 'solid 'black))
     (define inner-border-img (square 1 'solid 'white))
     (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite "Gold: 0"
+      (list (new-sprite (~a (string-titlecase prefix) " : 0")
                         #:color 'yellow)
             (new-sprite  box-img
                         #:animate #f
@@ -923,7 +925,7 @@
                     #:components (static)
                                  (counter 0)
                                  (layer "ui")
-                                 (map coin->component (remove-duplicates updated-coin-list name-eq?))))
+                                 (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile (clone-by-amount-in-world e-list))))
@@ -952,7 +954,7 @@
                        (instructions-entity #:move-keys move-keys
                                             #:mouse-aim? mouse-aim?)
                        (if p (game-over-screen won? lost?) #f)
-                       (if p (score-entity) #f)
+                       (if p (score-entity prefix) #f)
 
                        (tm-entity)
                        (night-sky-with-lighting #:color         (sky-color sky)

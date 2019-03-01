@@ -45,7 +45,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom biome, which will be used
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:biome] parameter.}
   
   (custom-bg #:image      img
              #:rows       rows
@@ -79,7 +81,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+  @{Returns a custom skin (player), which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:skin] parameter.}
   
   (custom-avatar
    #:sprite           sprite 
@@ -121,10 +125,10 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
+   @{Returns a custom entity, which will be placed in to the world
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:mob-list] parameter.}
   
-  @{Creates a custom entity that can be used in the entity list
-         of @racket[minecraft-game].}
-
   (define dialog
     (if (not d)
         (dialog->sprites (first (shuffle (list (list "bwaawk bwawk bwawk bwaawk")
@@ -184,9 +188,10 @@
            #:components      [first-component any/c])
        #:rest [more-components (listof any/c)]
        [returns entity?])
-
-  @{Creates a custom mob that can be used in the mob list
-         of @racket[minecraft-game].}
+  
+  @{Returns a custom mob, which will be placed in to the world
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:mob-list] parameter.}
 
   (define weapon
     (if (not w)
@@ -284,8 +289,8 @@
        [res () game?])
 
   @{The top-level function for the minecraft-game language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+         Can be run with no parameters to get a basic, default game.}
+  
   (survival-game
    #:headless        headless
    #:bg              biome-ent

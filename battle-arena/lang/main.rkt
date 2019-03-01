@@ -71,6 +71,8 @@
 
          draw-plain-bg
          plain-bg
+
+         (rename-out (battle-arena-game battlearena-game))
          )
 
 (define (force-field [width 80]
@@ -1271,7 +1273,7 @@
        
 
 
-(module+ test
+#;(module+ test
   (battle-arena-game
    #:bg              (custom-bg #:img FOREST-BG
                                 #:hd? #t)

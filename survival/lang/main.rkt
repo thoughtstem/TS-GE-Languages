@@ -82,7 +82,7 @@
            #:max-darkness     [max-darkness number?])
        [returns sky?])
 
-  @{Creates a custom sky that can be used in the sky parameter
+  @{Creates a custom sky that can be used in the @racket[#:sky] parameter
          of @racket[survival-game].}
   
   (define ds (if day-start
@@ -487,7 +487,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+  @{Returns a custom avatar, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:avatar] parameter.}
   
   (define dead-frame (if (image? sprite)
                          (rotate -90 sprite)
@@ -565,7 +567,7 @@
         #:rarity      [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom weapon}
+  @{Returns a custom weapon.} ;change docs when avatar can have weapon
 
 
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
@@ -687,8 +689,9 @@
        #:rest [more-components (listof any/c)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[survival-game].}
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:enemy-list] parameter.}
   
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
@@ -810,9 +813,8 @@
        #:rest [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the surival-game language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+  @{The top-level function for the survival-game language.
+         Can be run with no parameters to get a basic, default game.}
 
   ; === AUTO INSTRUCTIONS ===
   (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
@@ -1025,7 +1027,9 @@
        #:rest       [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom crafter}
+  @{Returns a custom crafter, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:crafter-list] parameter.}
   
   (crafting-chest p
                   #:sprite sprite
@@ -1067,8 +1071,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom npc that can be used in the npc list
-         of @racket[survival-game].}
+ @{Returns a custom npc, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:npc-list] parameter.}
   
   (define dialog
     (if (not d)
@@ -1123,7 +1128,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom background, which will be used
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:bg] parameter.}
 
   (define bg-base-entity
     (if hd?
@@ -1170,8 +1177,8 @@
        [returns entity?])
 
   @{Returns a custom food, which will be placed into the world
-              automatically if it is passed into @racket[battle-arena-game]
-              via the @racket[#:coin-food] parameter.}
+              automatically if it is passed into @racket[survival-game]
+              via the @racket[#:food-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
@@ -1224,7 +1231,7 @@
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world
-              automatically if it is passed into @racket[battle-arena-game]
+              automatically if it is passed into @racket[survival-game]
               via the @racket[#:coin-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]

@@ -26,6 +26,17 @@
          redgirl-sprite
          greenboy-sprite
          greengirl-sprite
+
+         dawnstone
+         duskstone
+         everstone
+         firestone
+         leafstone
+         moonstone
+         shinystone
+         sunstone
+         thunderstone
+         waterstone
          
          )
 
@@ -51,18 +62,18 @@
                #:delay 5))
 
 (define jessie-sprite
-  (sheet->sprite jessie-sheet
-               #:rows 4
-               #:columns 4
-               #:row-number 3
-               #:delay 5))
+  (set-sprite-scale 1.25 (sheet->sprite jessie-sheet
+                                        #:rows 4
+                                        #:columns 4
+                                        #:row-number 3
+                                        #:delay 5)))
 
 (define james-sprite
-  (sheet->sprite james-sheet
-               #:rows 4
-               #:columns 4
-               #:row-number 3
-               #:delay 5))
+  (set-sprite-scale 1.25 (sheet->sprite james-sheet
+                                        #:rows 4
+                                        #:columns 4
+                                        #:row-number 3
+                                        #:delay 5)))
 
 (define redboy-sprite
   (sheet->sprite redboy-sheet
@@ -155,3 +166,84 @@
                #:columns 8
                #:row-number 1
                #:delay 5))
+
+; ---- Stone Entities
+(define (dawnstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite dawnstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Dawn Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (duskstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite duskstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Dusk Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (everstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite everstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Ever Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (firestone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite firestone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Fire Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (leafstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite leafstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Leaf Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (moonstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite moonstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Moon Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (shinystone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite shinystone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Shiny Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (sunstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite sunstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Sun Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (thunderstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite thunderstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Thunder Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))
+
+(define (waterstone)
+  (sprite->entity (set-sprite-scale .5 (sheet->sprite waterstone-sprite
+                                                      #:columns 1))
+                  #:position   (posn 0 0)
+                  #:name       "Water Stone"
+                  #:components (active-on-bg (random 0 9))
+                               (physical-collider)))

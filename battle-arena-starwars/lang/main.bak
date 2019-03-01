@@ -5,7 +5,8 @@
 
 (require ts-kata-util
          "../assets.rkt"
-         battle-arena)
+         battle-arena
+         game-engine-demos-common)
 
 
 (language-mappings battle-arena       battle-arena-starwars
@@ -115,7 +116,7 @@
   (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:dart        [dart entity?]
@@ -167,7 +168,7 @@
   (->i ()
        (#:name        [name string?]
         #:icon        [sprite sprite?]
-        #:color       [color string?]
+        #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:speed       [spd number?]
@@ -255,11 +256,13 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword #:sprite     s
-         #:damage     dmg
-         #:durability dur
-         #:speed      spd
-         #:range      rng))
+  (sword #:name          "Double Lightsaber"
+         #:icon          (make-icon "DL")
+         #:sprite        s
+         #:damage        dmg
+         #:durability    dur
+         #:speed         spd
+         #:duration      rng))
 
 (define (lightsaber-dart
          #:color      [c "green"]
@@ -269,11 +272,11 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
-  (sword #:sprite     s
-         #:damage     dmg
-         #:durability dur
-         #:speed      spd
-         #:range      rng))
+  (sword-dart #:sprite        s
+              #:damage        dmg
+              #:durability    dur
+              #:speed         spd
+              #:duration      rng))
 
 (define (blaster-dart
          #:color      [c "green"]
@@ -341,7 +344,7 @@
 
   (define droid-base (rectangle 20 1 'solid 'transparent))
   
-  (define droid-top (crop-sprite c2po 4 4 2 2))
+  (define droid-top (crop-sprite c2po-sheet 4 4 2 2))
 
   (define droid-top-entity
     (sprite->entity droid-top

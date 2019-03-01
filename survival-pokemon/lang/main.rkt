@@ -14,7 +14,7 @@
                    ;[custom-enemy     custom-grunt]
                    ;[custom-coin      custom-]
                    [survival-game    pokemon-game]
-                   [#:bg             #:world]
+                   [#:bg             #:town-bg]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:trainer-list]
                    [#:enemy-list     #:grunt-list]
@@ -29,7 +29,7 @@
 
 (define/contract/doc
   (pokemon-game #:headless        [headless #f]
-                #:world           [world-ent (plain-forest-bg #:image (random-forest))]
+                #:town-bg         [town-ent (plain-forest-bg #:image (random-forest))]
                 #:pokemon         [pokemon #f]
                 #:starvation-rate [sr 50]
                 #:sky             [sky (custom-sky)]
@@ -42,7 +42,7 @@
                 . custom-entities)
   (->i ()
        (#:headless        [headless boolean?]
-        #:world           [world-ent entity?]
+        #:town-bg         [town-ent entity?]
         #:pokemon         [pokemon (or/c entity? #f)]
         #:starvation-rate [starvation-rate number?]
         #:sky             [sky sky?]
@@ -60,7 +60,7 @@
          with nothing in it!}
   (survival-game
    #:headless        headless
-   #:bg              world-ent
+   #:bg              town-ent
    #:avatar          pokemon
    #:starvation-rate sr
    #:sky             sky

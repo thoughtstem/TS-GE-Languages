@@ -21,12 +21,15 @@
                    [#:weapon          #:power]
                    [battle-arena-game avengers-game])
 
-(provide  energy-blast
-          star-bit
-          energy-droid
-          flying-hammer
-          magic-orb
-          )
+(provide energy-blast
+         star-bit
+         energy-droid
+         flying-hammer
+         flying-hammer-sprite
+         star-bit-sprite
+         energy-blast-sprite
+         magic-orb
+         flame-sprite)
 
 ;; ----- HERO
 
@@ -47,8 +50,7 @@
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
         #:item-slots [item-slots number?]
-        #:components [first-component component-or-system?]
-        )
+        #:components [first-component component-or-system?])
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   

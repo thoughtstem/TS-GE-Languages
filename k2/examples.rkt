@@ -3,19 +3,11 @@
 (require ts-kata-util
          k2/lang/ocean/fish
          k2/lang/classroom/basic
-         k2/lang/hero/basic)
+         #;k2/lang/hero/basic)
 
 (define-example-code k2/lang/hero/basic
   hero-0
   blackwidow)
-
-(define-example-code k2/lang/hero/basic
-  hero-1
-  ironman)
-
-(define-example-code k2/lang/hero/basic
-  hero-2
-  gamora)
 
 (define-example-code k2/lang/hero/basic
   hero-3
@@ -49,6 +41,200 @@
   hero-10
   (start gamora gamora gamora gamora gamora))
 
+
+(define-example-code k2/lang/hero/powers
+  hero-11
+  (start ironman (gamora hammer)))
+
+
+(define-example-code k2/lang/hero/powers
+  hero-12
+  (start ironman (gamora hammer) gamora gamora))
+
+(define-example-code k2/lang/hero/powers
+  hero-13
+  (start ironman
+         (gamora hammer)
+         (gamora hammer)
+         (gamora hammer)))
+
+
+(define-example-code k2/lang/hero/powers
+  hero-14
+  (start ironman
+         (drax hammer)
+         (hawkeye hammer)
+         (gamora hammer)))
+
+(define-example-code k2/lang/hero/powers
+  hero-15
+  (start (ironman hammer)
+         ironman
+         ironman
+         ironman
+         ironman))
+
+(define-example-code k2/lang/hero/powers
+  hero-16
+  (start (ironman hammer)
+         (ironman hammer)
+         (ironman hammer)
+         (ironman hammer)
+         (ironman hammer)))
+
+(define-example-code k2/lang/hero/powers
+  hero-17
+  (start (ironman hammer)
+         (ironman magic-orb)
+         (ironman magic-orb)
+         (ironman magic-orb)
+         (ironman magic-orb)))
+
+(define-example-code k2/lang/hero/powers
+  hero-18
+  (start (ironman hammer)
+         (drax magic-orb)
+         (drax magic-orb)
+         (blackwidow hammer)
+         (blackwidow hammer)))
+
+(define-example-code k2/lang/hero/powers
+  hero-19
+  (start (ironman hammer)
+         (drax magic-orb)
+         (drax magic-orb)
+         (blackwidow hammer)
+         (blackwidow hammer)
+         gamora
+         gamora))
+
+(define-example-code k2/lang/hero/powers
+  hero-20
+  (start (ironman (magic-orb red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-21
+  (start (ironman (star-bit red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-22
+  (start (ironman (energy-blast red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-23
+  (start (ironman (magic-orb red))
+         (ironman (magic-orb orange))
+         (ironman (magic-orb yellow))
+         (ironman (magic-orb green))))
+
+(define-example-code k2/lang/hero/powers
+  hero-24
+  (start (ironman (magic-orb red))
+         (ironman (magic-orb orange))
+         (ironman (magic-orb yellow))
+         (ironman (magic-orb green))
+         (ironman (magic-orb blue))
+         (ironman (magic-orb purple))))
+
+(define-example-code k2/lang/hero/powers
+  hero-25
+  (start (ironman (magic-orb red))
+         (drax (magic-orb orange))
+         (drax (magic-orb yellow))
+         (drax (magic-orb green))
+         (drax (magic-orb blue))
+         (drax (magic-orb purple))))
+
+(define-example-code k2/lang/hero/powers
+  hero-26
+  (start (ironman (magic-orb red))
+         (drax hammer)
+         (drax (star-bit yellow))
+         (drax (star-bit yellow))
+         (drax (energy-blast blue))
+         (drax (energy-blast blue))
+         ironman
+         ironman))
+
+(define-example-code k2/lang/hero/powers
+  hero-27
+  (start ironman gamora)
+  (start ironman drax))
+
+(define-example-code k2/lang/hero/powers
+  hero-28
+  (start ironman gamora)
+  (start ironman drax)
+  (start ironman hawkeye))
+
+(define-example-code k2/lang/hero/powers
+  hero-29
+  (start ironman gamora)
+  (start ironman gamora gamora)
+  (start ironman gamora gamora gamora))
+
+(define-example-code k2/lang/hero/powers
+  hero-30
+  (start ironman (gamora (magic-orb green)))
+  (start ironman (gamora (magic-orb yellow)))
+  (start ironman (gamora (magic-orb red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-31
+  (start ironman
+         (gamora (magic-orb green)))
+  (start ironman
+         (gamora (magic-orb yellow))
+         (gamora (magic-orb yellow)))
+  (start ironman
+         (gamora (magic-orb red))
+         (gamora (magic-orb red))
+         (gamora (magic-orb red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-32
+  (start ironman
+         (gamora (magic-orb green)))
+  (start ironman
+         (drax (magic-orb yellow))
+         (drax (magic-orb yellow)))
+  (start ironman
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-33
+  (start ironman
+         ironman
+         (gamora (magic-orb green)))
+  (start ironman
+         ironman
+         ironman
+         (drax (magic-orb yellow))
+         (drax (magic-orb yellow)))
+  (start ironman
+         ironman
+         ironman
+         ironman
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))))
+
+(define-example-code k2/lang/hero/powers
+  hero-34
+  (start (ironman (energy-blast green))
+         (gamora (magic-orb green)))
+  (start (ironman (energy-blast yellow))
+         (drax (magic-orb yellow))
+         (drax (magic-orb yellow)))
+  (start (ironman (energy-blast red))
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))
+         (hawkeye (magic-orb red))))
+
+
+
 (define-example-code k2/lang/ocean/fish
   fish-1
   (red fish))
@@ -72,10 +258,202 @@
 (define-example-code k2/lang/ocean/fish
   fish-5
   (beside
-   (above
-	   (red fish)
-	   (blue fish))
-   (green fish)))
+    (above
+      (red fish)
+      (blue fish))
+    (green fish)))
+
+
+(define-example-code k2/lang/classroom/basic
+                     demo-0
+                     (say 'A))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-2
+                     (sign 'A))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-3
+                     (say 'B))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-4
+                     (sign 'B))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-5
+                     (say 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-6
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-7
+                     (say 'A)
+                     (say 'B)
+                     (say 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-8
+                     (sign 'A)
+                     (sign 'B)
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-10
+                     (say 'A)
+                     (sign 'B)
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-11
+
+                     (whenever (hear 'A)
+                               (say 'A)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-12
+
+                     (whenever (hear 'A)
+                               (sign 'A)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-13
+
+                     (whenever (hear 'B)
+                               (sign 'B)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-14
+
+                     (whenever (hear 'C)
+                               (sign 'C)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-15
+
+                     (whenever (hear 'A)
+                               (sign 'A))
+                     (whenever (hear 'B)
+                               (sign 'B))
+                     (whenever (hear 'C)
+                               (sign 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-16
+
+                     (whenever (see 'A)
+                               (say 'A))
+                     (whenever (see 'B)
+                               (say 'B))
+                     (whenever (see 'C)
+                               (say 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-17
+
+                     (whenever (see 'A)
+                               (sign 'A))
+                     (whenever (see 'B)
+                               (sign 'B))
+                     (whenever (see 'C)
+                               (sign 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-18
+
+                     (assign 'Left-Side
+                            (whenever (see 'A)
+                                      (say 'A)))
+
+                     (assign 'Right-Side
+                            (whenever (hear 'A)
+                                      (say 'A))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-19
+
+                     (assign 'Right-Side
+                            (whenever (see 'A)
+                                      (say 'A)))
+
+                     (assign 'Left-Side
+                            (whenever (hear 'A)
+                                      (say 'A))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-20
+
+                     (assign 'Left-Side
+                            (whenever (see 'A)
+                                      (say 'A))
+                            (whenever (see 'B)
+                                      (say 'B))
+                            (whenever (see 'C)
+                                      (say 'C)))
+
+                     (assign 'Right-Side
+                            (whenever (hear 'A)
+                                      (say  'A))
+                            (whenever (hear 'B)
+                                      (say  'B))
+                            (whenever (hear 'C)
+                                      (say  'C))))
+
+
+
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-1
+
+                     (assign 'Everyone
+                            (whenever (want)
+                                      (sign 'A)))
+
+                     (assign 'Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-2
+
+                     (assign 'Everyone
+                            (whenever (want)
+                                      (sign 'A))
+                            (whenever (want)
+                                      (sign 'B))
+                            (whenever (want)
+                                      (sign 'C)))
+
+                     (assign 'Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))
+                            (whenever (see 'B)
+                                      (turn 'Right))
+                            (whenever (see 'C)
+                                      (turn 'Left))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-3
+
+                     (assign 'Everyone
+                            (whenever (want)
+                                      (sign 'A))
+                            (whenever (want)
+                                      (sign 'B))
+                            (whenever (want)
+                                      (sign 'C)))
+
+                     (assign 'Red-Bot 'Blue-Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))
+                            (whenever (see 'B)
+                                      (turn 'Right))
+                            (whenever (see 'C)
+                                      (turn 'Left))) )
+
+
+
 
 (define-example-code k2/lang/classroom/basic
   intro-0a

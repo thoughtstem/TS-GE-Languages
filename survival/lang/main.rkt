@@ -792,6 +792,7 @@
                  #:food-list       [f-list    '()]
                  #:crafter-list    [c-list    '()]
                  #:score-prefix    [prefix "Gold"]
+                 #:enable-world-objects? [world-objects? #f]
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -806,7 +807,8 @@
         #:food-list        [food-list    (listof (or/c entity? procedure?))]
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
-        #:other-entities   [other-entities (or/c #f entity? (listof #f))])
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
 
@@ -964,22 +966,20 @@
                        ;(if p (health-entity) #f)
 
                        player-with-recipes
-                           
-                       ;(pine-tree (posn 400 140) #:tile 2)
-                       ;(pine-tree (posn 93 136) #:tile 4)
-                       ;(round-tree (posn 322 59) #:tile 4)
 
                        npc-list
-              
+                       
                        c-list
-              
-                       ;(clone-by-amount-in-world updated-coin-list)
-                       ;(clone-by-amount-in-world updated-food-list)
+                       
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
                        (map maybe-add-night-only updated-enemy-list)
-
+                       
                        (cons ent custom-entities)
+
+                       (if world-objects?
+                           (make-world-objects round-tree pine-tree)
+                           #f)
               
                        bg-with-instructions))))
   

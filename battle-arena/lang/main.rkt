@@ -894,6 +894,7 @@
    #:enemy-list     [e-list '()]
    #:weapon-list    [weapon-list '()]
    #:item-list      [item-list '()]
+   #:enable-world-objects? [world-objects? #f]
    #:other-entities [ent #f]
    . custom-entities)
 
@@ -904,7 +905,8 @@
         #:enemy-list [enemy-list   (listof (or/c false? entity? procedure?))]
         #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
-        #:other-entities [other-entities (or/c #f entity? (listof false?))])
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
 
@@ -1079,20 +1081,19 @@
 
                        player-with-weapons
               
-              
-                       ;(pine-tree (posn 400 140) #:tile 2 (damager 5 (list 'passive)))
-                       ;(pine-tree (posn 93 136)  #:tile 4 (damager 5 (list 'passive)))
-                       ;(round-tree (posn 322 59) #:tile 4 (damager 5 (list 'passive)))
-
-                       ;(map (λ (w) (entity-cloner w 3)) weapon-list)
                        (clone-by-rarity weapon-list)
 
                        (clone-by-rarity item-list)
 
                        (clone-by-amount-in-world e-list)
-                        
+
+                       
 
                        (cons ent custom-entities)
+
+                       (if world-objects?
+                           (make-world-objects round-tree pine-tree)
+                           #f)
 
                        ;For precompilation...
                        default-combat-particles

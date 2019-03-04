@@ -25,7 +25,7 @@
           star-bit
           energy-droid
           flying-hammer
-          magic-orbs
+          magic-orb
           )
 
 ;; ----- HERO

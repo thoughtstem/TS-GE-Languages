@@ -5,9 +5,5 @@
   survival/lang)
 
 ;if you (require survival)
-(provide (all-from-out "./lang.rkt"
-                       ;"./browsable-assets.rkt"
-                       ))
-(require "./lang.rkt"
-         ;"./browsable-assets.rkt"
-         )
+(provide (all-from-out "./lang.rkt"))
+(require "./lang.rkt")

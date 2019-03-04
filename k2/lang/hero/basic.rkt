@@ -1,3 +1,4 @@
+
 #lang racket
 
 ;This allows the lang to be used as a module:
@@ -28,14 +29,14 @@
 
   (define-visual-language fish-lang
     (submod "./hero-lang.rkt" hero-stuff)
-    [blackwidow     b (crop a:blackwidow)]   
-    [gamora         g (crop a:gamora)]
-    [captainamerica c (crop a:captainamerica)]
-    [drax           d (crop a:drax)]
-    [hawkeye        h (crop a:hawkeye)]
-    [hulk           u (crop a:hulk)]
-    [ironman        i (crop a:ironman)]
-    [loki           l (crop a:loki)]
+    [blackwidow     b (crop a:blackwidow-sheet)]   
+    [gamora         g (crop a:gamora-sheet)]
+    [captainamerica c (crop a:captainamerica-sheet)]
+    [drax           d (crop a:drax-sheet)]
+    [hawkeye        h (crop a:hawkeye-sheet)]
+    [hulk           u (crop a:hulk-sheet)]
+    [ironman        i (crop a:ironman-sheet)]
+    [loki           l (crop a:loki-sheet)]
 
     [start         s play-icon]))
 

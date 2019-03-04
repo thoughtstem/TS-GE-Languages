@@ -24,7 +24,18 @@
           nickfury-sprite
           ronan-sprite
           tonystark-sprite
-          ironpatriot-sprite)
+          ironpatriot-sprite
+
+          green-effect-sprite)
+
+; ==== POWERS ====
+
+(define green-effect-sprite
+  (sheet->sprite (rotate 90 green-effect)
+                 #:rows 1
+                 #:columns 10
+                 #:row-number 1
+                 #:delay 1))
 
 ; ==== CUSTOM ASSETS ====
 

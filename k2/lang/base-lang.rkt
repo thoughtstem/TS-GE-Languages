@@ -5,7 +5,6 @@
   (provide circle
            square
            jack-o-lantern
-           random-dude
          
            bigger
            smaller
@@ -20,11 +19,8 @@
            blue
            (all-from-out racket))
 
-  (require (prefix-in p: pict)
-           (prefix-in t: ts-racket))
+  (require (prefix-in p: pict))
 
-  (define (random-dude)
-    (t:random-dude))
 
   (define jack-o-lantern
     (p:jack-o-lantern 20))

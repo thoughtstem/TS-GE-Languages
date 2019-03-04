@@ -276,15 +276,16 @@
 (define/contract/doc
   (pokemon-game #:headless        [headless #f]
                 #:town-bg         [town-ent (plain-forest-bg #:image (random-forest))]
-                #:pokemon         [pokemon #f]
+                #:pokemon         [pokemon (custom-pokemon #:sprite (circle 10 'solid 'red))]
                 #:starvation-rate [sr 50]
                 #:sky             [sky (custom-sky)]
-                #:friend-list    [friend-list  '()]
+                #:friend-list     [friend-list  '()]
                 #:trainer-list    [trainer-list '()] 
                 #:stone-list      [stone-list  '() ]
                 #:food-list       [f-list    '() ]
                 #:crafter-list    [c-list    '() ]
                 #:score-prefix    [prefix    "Stones"]
+                #:weapon-list     [weapon-list '()]
                 #:other-entities  [ent #f]
                 . custom-entities)
   (->i ()
@@ -293,12 +294,13 @@
         #:pokemon         [pokemon (or/c entity? #f)]
         #:starvation-rate [starvation-rate number?]
         #:sky             [sky sky?]
-        #:friend-list    [friend-list    (listof (or/c entity? procedure?))]
+        #:friend-list     [friend-list    (listof (or/c entity? procedure?))]
         #:trainer-list    [trainer-list       (listof (or/c entity? procedure?))]
         #:stone-list      [stone-list       (listof (or/c entity? procedure?))]
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix string?]
+        #:weapon-list     [weapon-list (listof (or/c entity? procedure?))]
         #:other-entities  [other-entities (or/c #f entity?)])
        #:rest  [rest (listof entity?)]
        [res () game?])
@@ -319,4 +321,5 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
+   #:weapon-list     weapon-list
    #:other-entities  (cons ent custom-entities)))

@@ -270,6 +270,7 @@
                   #:food-list       [f-list       '() ]
                   #:crafter-list    [c-list       '() ]
                   #:score-prefix    [prefix "Ore"]
+                  #:weapon-list     [weapon-list '()]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()
@@ -284,6 +285,7 @@
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix         string?]
+        #:weapon-list     [weapon-list (listof (or/c entity? procedure?))]
         #:other-entities  [other-entities (or/c #f entity?)])
        #:rest  [rest (listof entity?)]
        [res () game?])
@@ -303,6 +305,7 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
+   #:weapon-list     weapon-list
    #:other-entities  (cons ent custom-entities)))
 
 

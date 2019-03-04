@@ -23,6 +23,10 @@
                    [#:weapon-list    #:power-list]
                    )
 
+(provide pokeball
+         )
+
+
 (define bg-list
   (list FOREST-BG SNOW-BG DESERT-BG LAVA-BG))
 

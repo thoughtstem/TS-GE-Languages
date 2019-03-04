@@ -16,7 +16,8 @@
          plain-forest-bg
          draw-plain-forest-bg
          ai-level?
-
+         fire-mode?
+         rarity-level?
          safe-update-entity
          random-food
          random-coin
@@ -566,23 +567,23 @@
    base-avatar)
   )
 
-(define/contract/doc (custom-weapon        #:name              [n "Repeater"]
-                                           #:sprite            [s chest-sprite]
-                                           #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
-                                           #:speed             [spd 10]
-                                           #:damage            [dmg 10]
-                                           #:range             [rng 1000]
-                                           #:dart              [b (custom-dart #:sprite ds
-                                                                               #:speed spd
-                                                                               #:damage dmg
-                                                                               #:range rng)]
-                                           #:fire-mode         [fm 'normal]
-                                           #:fire-rate         [fr 3]
-                                           #:fire-key          [key 'f]
-                                           #:mouse-fire-button [button 'left]
-                                           #:point-to-mouse?   [ptm? #t]
-                                           #:rapid-fire?       [rf? #t]
-                                           #:rarity            [rarity 'common])
+(define/contract/doc (custom-weapon #:name              [n "Repeater"]
+                                    #:sprite            [s chest-sprite]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
+                                    #:fire-mode         [fm 'normal]
+                                    #:fire-rate         [fr 3]
+                                    #:fire-key          [key 'f]
+                                    #:mouse-fire-button [button 'left]
+                                    #:point-to-mouse?   [ptm? #t]
+                                    #:rapid-fire?       [rf? #t]
+                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
         #:sprite            [sprite sprite?]

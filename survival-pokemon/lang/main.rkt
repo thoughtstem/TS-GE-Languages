@@ -13,12 +13,14 @@
                    [custom-npc       custom-friend]
                    [custom-enemy     custom-trainer]
                    [custom-coin      custom-stone]
+                   [custom-weapon    custom-power]
                    [survival-game    pokemon-game]
                    [#:bg             #:town-bg]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:friend-list]
                    [#:enemy-list     #:trainer-list]
                    [#:coin-list      #:stone-list]
+                   [#:weapon-list    #:power-list]
                    )
 
 (define bg-list
@@ -267,6 +269,60 @@
                #:respawn?        respawn?
                #:components      (cons c custom-entities)))
 
+;--------- Custom Power
+(define/contract/doc (custom-power #:name              [n "Thunderbolt"]
+                                   #:sprite            [s chest-sprite]
+                                   #:dart-sprite       [ds (rectangle 10 2 "solid" "yellow")]
+                                   #:speed             [spd 10]
+                                   #:damage            [dmg 10]
+                                   #:range             [rng 1000]
+                                   #:dart              [b (custom-dart #:sprite ds
+                                                                       #:speed spd
+                                                                       #:damage dmg
+                                                                       #:range rng)]
+                                   #:fire-mode         [fm 'normal]
+                                   #:fire-rate         [fr 3]
+                                   #:fire-key          [key 'f]
+                                   #:mouse-fire-button [button 'left]
+                                   #:point-to-mouse?   [ptm? #t]
+                                   #:rapid-fire?       [rf? #t]
+                                   #:rarity            [rarity 'common])
+  (->i ()
+       (#:name              [name string?]
+        #:sprite            [sprite sprite?]
+        #:dart-sprite       [dart-sprite sprite?]
+        #:speed             [speed  number?]
+        #:damage            [damage number?]
+        #:range             [range  number?]
+        #:dart              [dart entity?]
+        #:fire-mode         [fire-mode fire-mode?]
+        #:fire-rate         [fire-rate number?]
+        #:fire-key          [fire-key symbol?]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
+        #:point-to-mouse?   [ptm? boolean?]
+        #:rapid-fire?       [rf? boolean?]
+        #:rarity            [rarity rarity-level?])
+       [result entity?])
+
+  @{Returns a custom power, which will be placed in to the world
+         automatically if it is passed into @racket[pokemon-game]
+         via the @racket[#:power-list] parameter.}
+
+  (custom-weapon #:name              n
+                 #:sprite            s
+                 #:dart-sprite       ds
+                 #:speed             spd
+                 #:damage            dmg 
+                 #:range             rng
+                 #:dart              b
+                 #:fire-mode         fm
+                 #:fire-rate         fr
+                 #:fire-key          key
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
+
 ; ---------   Minecraft Main Game
 
 (define (random-forest)
@@ -285,7 +341,7 @@
                 #:food-list       [f-list    '() ]
                 #:crafter-list    [c-list    '() ]
                 #:score-prefix    [prefix    "Stones"]
-                #:weapon-list     [weapon-list '()]
+                #:power-list      [power-list '()]
                 #:other-entities  [ent #f]
                 . custom-entities)
   (->i ()
@@ -300,7 +356,7 @@
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix string?]
-        #:weapon-list     [weapon-list (listof (or/c entity? procedure?))]
+        #:power-list      [power-list (listof (or/c entity? procedure?))]
         #:other-entities  [other-entities (or/c #f entity?)])
        #:rest  [rest (listof entity?)]
        [res () game?])
@@ -321,5 +377,5 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
-   #:weapon-list     weapon-list
+   #:weapon-list     power-list
    #:other-entities  (cons ent custom-entities)))

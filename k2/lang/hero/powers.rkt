@@ -36,8 +36,8 @@
     [ironman        j (crop a:ironman-sheet)]
     [loki           k (crop a:loki-sheet)]
 
-    [hammer         z (crop a:flying-hammer-sprite)]
-    [magic-orb      x (crop (a:flame-sprite "yellow"))]
+    [hammer         z (crop (a:flying-hammer-sprite "black"))]
+    [magic-orb      x (crop a:flame-sprite)]
     [star-bit       c (crop (a:star-bit-sprite "green"))]
     [energy-blast   v (crop (a:energy-blast-sprite "green"))]
 
@@ -48,5 +48,6 @@
     [blue           y (p:colorize (p:filled-ellipse 40 40) "blue")]
     [purple         t (p:colorize (p:filled-ellipse 40 40) "purple")]
     ))
+
 
 

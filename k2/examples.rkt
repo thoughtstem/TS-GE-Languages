@@ -3,7 +3,146 @@
 (require ts-kata-util
          k2/lang/ocean/fish
          k2/lang/classroom/basic
-         #;k2/lang/hero/basic)
+         #;k2/lang/hero/basic
+         )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-0
+                     (say 'A))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-2
+                     (sign 'A))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-3
+                     (say 'B))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-4
+                     (sign 'B))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-5
+                     (say 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-6
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-7
+                     (say 'A)
+                     (say 'B)
+                     (say 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-8
+                     (sign 'A)
+                     (sign 'B)
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-10
+                     (say 'A)
+                     (sign 'B)
+                     (sign 'C))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-11
+
+                     (whenever (hear 'A)
+                               (say 'A)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-12
+
+                     (whenever (hear 'A)
+                               (sign 'A)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-13
+
+                     (whenever (hear 'B)
+                               (sign 'B)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-14
+
+                     (whenever (hear 'C)
+                               (sign 'C)) )
+
+(define-example-code k2/lang/classroom/basic
+                     demo-15
+
+                     (whenever (hear 'A)
+                               (sign 'A))
+                     (whenever (hear 'B)
+                               (sign 'B))
+                     (whenever (hear 'C)
+                               (sign 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-16
+
+                     (whenever (see 'A)
+                               (say 'A))
+                     (whenever (see 'B)
+                               (say 'B))
+                     (whenever (see 'C)
+                               (say 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-17
+
+                     (whenever (see 'A)
+                               (sign 'A))
+                     (whenever (see 'B)
+                               (sign 'B))
+                     (whenever (see 'C)
+                               (sign 'C)))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-18
+
+                     (assign 'Left-Side
+                            (whenever (see 'A)
+                                      (say 'A)))
+
+                     (assign 'Right-Side
+                            (whenever (hear 'A)
+                                      (say 'A))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-19
+
+                     (assign 'Right-Side
+                            (whenever (see 'A)
+                                      (say 'A)))
+
+                     (assign 'Left-Side
+                            (whenever (hear 'A)
+                                      (say 'A))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-20
+
+                     (assign 'Left-Side
+                            (whenever (see 'A)
+                                      (say 'A))
+                            (whenever (see 'B)
+                                      (say 'B))
+                            (whenever (see 'C)
+                                      (say 'C)))
+
+                     (assign 'Right-Side
+                            (whenever (hear 'A)
+                                      (say  'A))
+                            (whenever (hear 'B)
+                                      (say  'B))
+                            (whenever (hear 'C)
+                                      (say  'C))))
+
 
 (define-example-code k2/lang/hero/basic
   hero-0
@@ -31,9 +170,7 @@
 
 (define-example-code k2/lang/hero/basic
   hero-8
-  (start ironman ironman))
-
-(define-example-code k2/lang/hero/basic
+  (start ironman ironman)) (define-example-code k2/lang/hero/basic
   hero-9
   (start ironman ironman ironman ironman))
 
@@ -264,149 +401,12 @@
     (green fish)))
 
 
-(define-example-code k2/lang/classroom/basic
-                     demo-0
-                     (say 'A))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-2
-                     (sign 'A))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-3
-                     (say 'B))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-4
-                     (sign 'B))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-5
-                     (say 'C))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-6
-                     (sign 'C))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-7
-                     (say 'A)
-                     (say 'B)
-                     (say 'C))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-8
-                     (sign 'A)
-                     (sign 'B)
-                     (sign 'C))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-10
-                     (say 'A)
-                     (sign 'B)
-                     (sign 'C))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-11
-
-                     (whenever (hear 'A)
-                               (say 'A)) )
-
-(define-example-code k2/lang/classroom/basic
-                     demo-12
-
-                     (whenever (hear 'A)
-                               (sign 'A)) )
-
-(define-example-code k2/lang/classroom/basic
-                     demo-13
-
-                     (whenever (hear 'B)
-                               (sign 'B)) )
-
-(define-example-code k2/lang/classroom/basic
-                     demo-14
-
-                     (whenever (hear 'C)
-                               (sign 'C)) )
-
-(define-example-code k2/lang/classroom/basic
-                     demo-15
-
-                     (whenever (hear 'A)
-                               (sign 'A))
-                     (whenever (hear 'B)
-                               (sign 'B))
-                     (whenever (hear 'C)
-                               (sign 'C)))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-16
-
-                     (whenever (see 'A)
-                               (say 'A))
-                     (whenever (see 'B)
-                               (say 'B))
-                     (whenever (see 'C)
-                               (say 'C)))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-17
-
-                     (whenever (see 'A)
-                               (sign 'A))
-                     (whenever (see 'B)
-                               (sign 'B))
-                     (whenever (see 'C)
-                               (sign 'C)))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-18
-
-                     (assign 'Left-Side
-                            (whenever (see 'A)
-                                      (say 'A)))
-
-                     (assign 'Right-Side
-                            (whenever (hear 'A)
-                                      (say 'A))))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-19
-
-                     (assign 'Right-Side
-                            (whenever (see 'A)
-                                      (say 'A)))
-
-                     (assign 'Left-Side
-                            (whenever (hear 'A)
-                                      (say 'A))))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-20
-
-                     (assign 'Left-Side
-                            (whenever (see 'A)
-                                      (say 'A))
-                            (whenever (see 'B)
-                                      (say 'B))
-                            (whenever (see 'C)
-                                      (say 'C)))
-
-                     (assign 'Right-Side
-                            (whenever (hear 'A)
-                                      (say  'A))
-                            (whenever (hear 'B)
-                                      (say  'B))
-                            (whenever (hear 'C)
-                                      (say  'C))))
-
 
 
 (define-example-code k2/lang/classroom/basic
                      demo-bots-1
 
-                     (assign 'Everyone
+                     (assign 'Controller
                             (whenever (want)
                                       (sign 'A)))
 
@@ -417,7 +417,7 @@
 (define-example-code k2/lang/classroom/basic
                      demo-bots-2
 
-                     (assign 'Everyone
+                     (assign 'Controller
                             (whenever (want)
                                       (sign 'A))
                             (whenever (want)
@@ -436,7 +436,7 @@
 (define-example-code k2/lang/classroom/basic
                      demo-bots-3
 
-                     (assign 'Everyone
+                     (assign 'Controller
                             (whenever (want)
                                       (sign 'A))
                             (whenever (want)
@@ -712,16 +712,5 @@
 
 
 
-
-#;(module+ test
-  (require ratchet)
-  ;TODO: Make some generalization of test-all-examples-as-games
-  ;  so we can automatically test all...
-
-  (run-example two-fish)
-  (run-example red-fish)
-
-  
-  )
 
 

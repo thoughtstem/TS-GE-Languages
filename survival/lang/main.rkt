@@ -16,7 +16,8 @@
          plain-forest-bg
          draw-plain-forest-bg
          ai-level?
-
+         fire-mode?
+         rarity-level?
          safe-update-entity
          random-food
          random-coin
@@ -82,7 +83,7 @@
            #:max-darkness     [max-darkness number?])
        [returns sky?])
 
-  @{Creates a custom sky that can be used in the sky parameter
+  @{Creates a custom sky that can be used in the @racket[#:sky] parameter
          of @racket[survival-game].}
   
   (define ds (if day-start
@@ -280,7 +281,8 @@
                             #:speed 4))
 
 (define (instructions-entity #:move-keys  [move-keys "ARROW KEYS"]
-                             #:mouse-aim? [mouse-aim? #f])
+                             #:mouse-aim? [mouse-aim? #f]
+                             #:shoot-key  [shoot-key "F"])
 
   (define (instruction->sprite text offset)
     (new-sprite text #:y-offset offset #:color 'yellow))
@@ -338,6 +340,27 @@
                   (get-storage-data "amount-in-world" to-clone)
                   1))
     (entity-cloner  e n))
+
+  (flatten (map f es)))
+
+(define/contract (clone-by-rarity es)
+  (-> (listof (or/c procedure? entity?)) (listof entity?))
+
+  (define (f e)
+    (define to-clone (if (procedure? e)
+                         (e)
+                         e) )
+    
+    (define rarity (if (get-storage "Rarity" to-clone)
+                       (get-storage-data "Rarity" to-clone)
+                       'common))
+    
+    (define n (cond [(eq? rarity 'common)    5]
+                    [(eq? rarity 'uncommon)  4]
+                    [(eq? rarity 'rare)      3]
+                    [(eq? rarity 'epic)      2]
+                    [(eq? rarity 'legendary) 1]))
+    (entity-cloner e n))
 
   (flatten (map f es)))
 
@@ -465,29 +488,30 @@
       #f))
 
 (define/contract/doc
-  (custom-avatar #:sprite     [sprite (random-character-sprite)]
+  (custom-avatar #:sprite           [sprite (random-character-sprite)]
                  #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
-                                                              #:show-damage? #t
-                                                              )]
-                 #:position   [p   (posn 100 100)]
-                 #:speed      [spd 10]
-                 #:key-mode   [key-mode 'arrow-keys]
-                 #:mouse-aim? [mouse-aim? #f]
-                 #:components [c #f]
-                               . custom-components)
+                                                              #:show-damage? #t)]
+                 #:position         [p   (posn 100 100)]
+                 #:speed            [spd 10]
+                 #:key-mode         [key-mode 'arrow-keys]
+                 #:mouse-aim?       [mouse-aim? #f]
+                 #:components       [c #f]
+                                    . custom-components)
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite           [sprite sprite?]
         #:damage-processor [damage-processor damage-processor?]
-        #:position [position posn?]
-        #:speed [speed number?]
-        #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
-        #:mouse-aim? [mouse-aim boolean?]
-        #:components [first-component (or/c component-or-system? false? (listof false?))]
+        #:position         [position posn?]
+        #:speed            [speed number?]
+        #:key-mode         [key-mode (or/c 'wasd 'arrow-keys)]
+        #:mouse-aim?       [mouse-aim boolean?]
+        #:components       [first-component (or/c component-or-system? false? (listof false?))]
         )
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+  @{Returns a custom avatar, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:avatar] parameter.}
   
   (define dead-frame (if (image? sprite)
                          (rotate -90 sprite)
@@ -507,6 +531,7 @@
                                (player-edge-system)
                                (observe-change lost? (kill-player-v2))
                                (counter 0)
+                               (weapon-selector #:slots 10)
                                (on-key 'enter #:rule player-dialog-open? (get-dialog-selection))
                                (on-rule (not/r all-dialog-closed?) (stop-movement))
                                (cons c custom-components)))
@@ -542,30 +567,43 @@
    base-avatar)
   )
 
-(define/contract/doc (custom-weapon        #:name        [n "Repeater"]
-                                           #:sprite      [s chest-sprite]
-                                           #:dart        [b (custom-dart)]
-                                           #:fire-mode   [fm 'normal]
-                                           #:fire-rate   [fr 3]
-                                           #:fire-key    [key 'f]
-                                           #:mouse-fire-button [button 'left]
-                                           #:point-to-mouse?   [ptm? #t]
-                                           #:rapid-fire?       [rf? #t]
-                                           #:rarity      [rarity 'common])
+(define/contract/doc (custom-weapon #:name              [n "Repeater"]
+                                    #:sprite            [s chest-sprite]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
+                                    #:fire-mode         [fm 'normal]
+                                    #:fire-rate         [fr 3]
+                                    #:fire-key          [key 'f]
+                                    #:mouse-fire-button [button 'left]
+                                    #:point-to-mouse?   [ptm? #t]
+                                    #:rapid-fire?       [rf? #t]
+                                    #:rarity            [rarity 'common])
   (->i ()
-       (#:name        [name string?]
-        #:sprite      [sprite sprite?]
-        #:dart      [dart entity?]
-        #:fire-mode   [fire-mode fire-mode?]
-        #:fire-rate   [fire-rate number?]
-        #:fire-key    [fire-key symbol?]
+       (#:name              [name string?]
+        #:sprite            [sprite sprite?]
+        #:dart-sprite       [dart-sprite sprite?]
+        #:speed             [speed  number?]
+        #:damage            [damage number?]
+        #:range             [range  number?]
+        #:dart              [dart entity?]
+        #:fire-mode         [fire-mode fire-mode?]
+        #:fire-rate         [fire-rate number?]
+        #:fire-key          [fire-key symbol?]
         #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
-        #:rarity      [rarity rarity-level?])
+        #:rarity            [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom weapon}
+  @{Returns a custom weapon, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:weapon-list] parameter.}
 
 
   (define updated-name (cond [(eq? rarity 'rare)      (~a "Rare " n)]
@@ -687,8 +725,9 @@
        #:rest [more-components (listof any/c)]
        [returns entity?])
 
-  @{Creates a custom enemy that can be used in the enemy list
-         of @racket[survival-game].}
+  @{Returns a custom enemy, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:enemy-list] parameter.}
   
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
@@ -793,6 +832,7 @@
                  #:crafter-list    [c-list    '()]
                  #:score-prefix    [prefix "Gold"]
                  #:enable-world-objects? [world-objects? #f]
+                 #:weapon-list     [weapon-list '()]
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -808,15 +848,20 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
+        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
 
-  @{The top-level function for the surival-game language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+  @{The top-level function for the survival-game language.
+         Can be run with no parameters to get a basic, default game.}
 
   ; === AUTO INSTRUCTIONS ===
+
+  (define (weapon-entity->player-system e)
+    (get-storage-data "Weapon" e))
+
+  ;------------------
   (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
                         "WASD KEYS"
                         "ARROW KEYS"))
@@ -828,12 +873,6 @@
 
   (define mouse-aim? (and p
                           (get-component p mouse-aim-component?)))
-
-  (define bg-with-instructions
-    (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn (instructions-entity #:move-keys move-keys
-                                                               #:mouse-aim? mouse-aim?)
-                                          #:relative? #f))))
 
   (define updated-food-list  (clone-by-amount-in-world f-list))
   (define updated-coin-list  (clone-by-amount-in-world coin-list))
@@ -849,9 +888,10 @@
 
   (define known-products-list (map recipe-product known-recipes-list))
   
-  (define player-with-recipes
+  (define player-with-recipes-and-weapons
     (if p
-        (add-components p (map recipe->system known-recipes-list)
+        (add-components p (map weapon-entity->player-system weapon-list) ;added weapon stuff
+                          (map recipe->system known-recipes-list)
                           ;(apply precompiler (remove-duplicates updated-food-list render-eq?))                                ;f-list
                           (map food->component (append (remove-duplicates updated-food-list
                                                                           name-eq?)
@@ -861,6 +901,19 @@
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
         #f))
 
+  ;--------
+  (define shoot-key (if (and player-with-recipes-and-weapons (get-component player-with-recipes-and-weapons on-mouse?))
+                        "LEFT-CLICK"
+                        "F"))
+  ;--------
+
+  (define bg-with-instructions
+    (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
+                                   (spawn (instructions-entity #:move-keys move-keys
+                                                               #:mouse-aim? mouse-aim?
+                                                               #:shoot-key shoot-key)
+                                          #:relative? #f))))
+  
   (define (add-random-start-pos e)
     (define world-amt (get-storage-data "amount-in-world" e))
     (if (> world-amt 0) 
@@ -954,7 +1007,8 @@
                      (flatten
                       (list
                        (instructions-entity #:move-keys move-keys
-                                            #:mouse-aim? mouse-aim?)
+                                            #:mouse-aim? mouse-aim?
+                                            #:shoot-key shoot-key)
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity prefix) #f)
 
@@ -965,8 +1019,10 @@
 
                        ;(if p (health-entity) #f)
 
-                       player-with-recipes
+                       player-with-recipes-and-weapons
 
+                       (clone-by-rarity weapon-list)
+                       
                        npc-list
                        
                        c-list
@@ -1025,7 +1081,9 @@
        #:rest       [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom crafter}
+  @{Returns a custom crafter, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:crafter-list] parameter.}
   
   (crafting-chest p
                   #:sprite sprite
@@ -1067,8 +1125,9 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
-  @{Creates a custom npc that can be used in the npc list
-         of @racket[survival-game].}
+ @{Returns a custom npc, which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:npc-list] parameter.}
   
   (define dialog
     (if (not d)
@@ -1123,7 +1182,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom background, which will be used
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:bg] parameter.}
 
   (define bg-base-entity
     (if hd?
@@ -1170,8 +1231,8 @@
        [returns entity?])
 
   @{Returns a custom food, which will be placed into the world
-              automatically if it is passed into @racket[battle-arena-game]
-              via the @racket[#:coin-food] parameter.}
+              automatically if it is passed into @racket[survival-game]
+              via the @racket[#:food-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
@@ -1224,7 +1285,7 @@
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world
-              automatically if it is passed into @racket[battle-arena-game]
+              automatically if it is passed into @racket[survival-game]
               via the @racket[#:coin-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]

@@ -13,12 +13,14 @@
                    [custom-npc       custom-entity]
                    [custom-enemy     custom-mob]
                    [custom-coin      custom-ore]
+                   [custom-weapon    custom-tool]
                    [survival-game    minecraft-game]
                    [#:avatar         #:skin]
                    [#:bg             #:biome]
                    [#:enemy-list     #:mob-list]
                    [#:npc-list       #:entity-list]
                    [#:coin-list      #:ore-list]
+                   [#:weapon-list    #:tool-list]
                    )
 
 
@@ -45,7 +47,9 @@
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
-  @{Returns a custom background}
+  @{Returns a custom biome, which will be used
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:biome] parameter.}
   
   (custom-bg #:image      img
              #:rows       rows
@@ -79,7 +83,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
 
-  @{Returns a custom avatar...}
+  @{Returns a custom skin (player), which will be placed in to the world
+         automatically if it is passed into @racket[survival-game]
+         via the @racket[#:skin] parameter.}
   
   (custom-avatar
    #:sprite           sprite 
@@ -121,10 +127,10 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
+   @{Returns a custom entity, which will be placed in to the world
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:mob-list] parameter.}
   
-  @{Creates a custom entity that can be used in the entity list
-         of @racket[minecraft-game].}
-
   (define dialog
     (if (not d)
         (dialog->sprites (first (shuffle (list (list "bwaawk bwawk bwawk bwaawk")
@@ -184,9 +190,10 @@
            #:components      [first-component any/c])
        #:rest [more-components (listof any/c)]
        [returns entity?])
-
-  @{Creates a custom mob that can be used in the mob list
-         of @racket[minecraft-game].}
+  
+  @{Returns a custom mob, which will be placed in to the world
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:mob-list] parameter.}
 
   (define weapon
     (if (not w)
@@ -248,6 +255,67 @@
                #:components (cons c custom-entities)))
 
 
+;--------- Custom Tool
+(define/contract/doc (custom-tool #:name              [n "Iron Sword"]
+                                  #:sprite            [s chest-sprite]
+                                  #:dart-sprite       [ds swinging-sword-sprite]
+                                  #:speed             [spd 0]
+                                  #:damage            [dmg 50]
+                                  #:range             [rng 10]
+                                  #:dart              [b (custom-dart #:sprite ds
+                                                                      #:speed spd
+                                                                      #:damage dmg
+                                                                      #:range rng)]
+                                  #:fire-mode         [fm 'normal]
+                                  #:fire-rate         [fr 3]
+                                  #:fire-key          [key 'f]
+                                  #:mouse-fire-button [button 'left]
+                                  #:point-to-mouse?   [ptm? #t]
+                                  #:rapid-fire?       [rf? #t]
+                                  #:rarity            [rarity 'common])
+  (->i ()
+       (#:name              [name string?]
+        #:sprite            [sprite sprite?]
+        #:dart-sprite       [dart-sprite sprite?]
+        #:speed             [speed  number?]
+        #:damage            [damage number?]
+        #:range             [range  number?]
+        #:dart              [b entity?]
+        #:fire-mode         [fire-mode fire-mode?]
+        #:fire-rate         [fire-rate number?]
+        #:fire-key          [fire-key symbol?]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
+        #:point-to-mouse?   [ptm? boolean?]
+        #:rapid-fire?       [rf? boolean?]
+        #:rarity            [rarity rarity-level?])
+       [result entity?])
+
+  @{Returns a custom tool, which will be placed in to the world
+         automatically if it is passed into @racket[minecraft-game]
+         via the @racket[#:tool-list] parameter.}
+
+  (define dart
+    (if (equal? n "Iron Sword")
+        (sword)
+        b))
+  
+  (custom-weapon #:name              n
+                 #:sprite            s
+                 #:dart-sprite       ds
+                 #:speed             spd
+                 #:damage            dmg 
+                 #:range             rng
+                 #:dart              dart
+                 #:fire-mode         fm
+                 #:fire-rate         fr
+                 #:fire-key          key
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
+
+
+
 ;random color background for default
 (define (random-forest)
   (change-img-hue (random 360) (draw-plain-forest-bg)))
@@ -265,6 +333,7 @@
                   #:food-list       [f-list       '() ]
                   #:crafter-list    [c-list       '() ]
                   #:score-prefix    [prefix "Ore"]
+                  #:tool-list       [tool-list '()]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()
@@ -279,13 +348,14 @@
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix         string?]
+        #:tool-list       [tool-list (listof (or/c entity? procedure?))]
         #:other-entities  [other-entities (or/c #f entity?)])
        #:rest  [rest (listof entity?)]
        [res () game?])
 
   @{The top-level function for the minecraft-game language.
-         Can be run with no parameters to get a basic, default game
-         with nothing in it!}
+         Can be run with no parameters to get a basic, default game.}
+  
   (survival-game
    #:headless        headless
    #:bg              biome-ent
@@ -298,11 +368,12 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
+   #:weapon-list     tool-list
    #:other-entities  (cons ent custom-entities)))
 
 
 ;============== CUSTOM WEAPONS ================
-;move these out of main and into assets or the like??
+;move these out of main and into assets or the like??        
 
 (define (arrow #:sprite     [s   (beside
                                   (rectangle 25 3 'solid (make-color 70 40 0))

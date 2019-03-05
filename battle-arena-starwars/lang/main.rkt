@@ -388,6 +388,7 @@
                       #:villain-list     [e-list '()]
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
+                      #:score-prefix     [prefix "Villains"]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -398,19 +399,21 @@
         #:villain-list   [enemy-list   (listof (or/c #f entity? procedure?))]
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
+        #:score-prefix   [prefix string?]
         #:other-entities [other-entities (or/c #f entity?)])
-       #:rest           [rest (listof entity?)]
+       #:rest            [rest (listof entity?)]
        [res () game?])
 
   @{The top-level function for the battle-arena-starwars language.
          Can be run with no parameters to get a basic, default game.}
 
-  (battle-arena-game #:headless headless
-                     #:bg planet-ent
-                     #:avatar avatar
-                     #:weapon-list weapon-list
-                     #:enemy-list e-list
-                     #:item-list item-list
+  (battle-arena-game #:headless        headless
+                     #:bg              planet-ent
+                     #:avatar          avatar
+                     #:weapon-list     weapon-list
+                     #:enemy-list      e-list
+                     #:item-list       item-list
+                     #:score-prefix    prefix
                      #:other-entities  (cons ent custom-entities)))
 
 

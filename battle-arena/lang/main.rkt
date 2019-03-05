@@ -71,6 +71,8 @@
 
          draw-plain-bg
          plain-bg
+
+         (rename-out (battle-arena-game battlearena-game))
          )
 
 (define (force-field [width 80]
@@ -894,6 +896,7 @@
    #:enemy-list     [e-list '()]
    #:weapon-list    [weapon-list '()]
    #:item-list      [item-list '()]
+   #:score-prefix   [prefix "Enemies"]
    #:enable-world-objects? [world-objects? #f]
    #:other-entities [ent #f]
    . custom-entities)
@@ -905,6 +908,7 @@
         #:enemy-list [enemy-list   (listof (or/c false? entity? procedure?))]
         #:weapon-list [weapon-list (listof (or/c entity? procedure?))]
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
+        #:score-prefix [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
         #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest [rest (listof entity?)]
@@ -1005,12 +1009,12 @@
   (define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
    
 
-  (define (enemy-counter-entity)
+  (define (enemy-counter-entity prefix)
     (define outer-border-img (square 1 'solid 'black))
     (define inner-border-img (square 1 'solid 'white))
     (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite (~a "Enemies Left: " total-enemies)
+      (list (new-sprite (~a prefix " Left: " total-enemies)
                         #:color 'yellow)
             (new-sprite  box-img
                         #:animate #f
@@ -1062,7 +1066,7 @@
                                  (counter total-enemies)
                                  (layer "ui")
                                  (on-rule enemy-died? (do-many (change-counter-by -0.5) ; still getting doubled counted
-                                                               (draw-counter-rpg #:prefix "Enemies Left: " #:exact-floor? #t)
+                                                               (draw-counter-rpg #:prefix (~a prefix " Left: ") #:exact-floor? #t)
                                                                (do-font-fx)
                                                                ))
                                  ))
@@ -1076,7 +1080,7 @@
                       (list
                        (instructions-entity #:move-keys move-keys #:shoot-key shoot-key #:mouse-aim? mouse-aim?)
                        (if p (game-over-screen won? lost?) #f)
-                       (if p (enemy-counter-entity) #f)
+                       (if p (enemy-counter-entity prefix) #f)
 
 
                        player-with-weapons
@@ -1270,7 +1274,7 @@
        
 
 
-(module+ test
+#;(module+ test
   (battle-arena-game
    #:bg              (custom-bg #:img FOREST-BG
                                 #:hd? #t)

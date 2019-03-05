@@ -8,14 +8,41 @@
 
 @section{Pokemon}
 
-@defthing[armoredmewtwo-sprite animated-sprite?]
-@(sprite->sheet armoredmewtwo-sprite)
+@defthing[bulbasaur-sprite animated-sprite?]
+@(sprite->sheet bulbasaur-sprite)
+
+@defthing[ivysaur-sprite animated-sprite?]
+@(sprite->sheet ivysaur-sprite)
+
+@defthing[venasaur-sprite animated-sprite?]
+@(sprite->sheet venasaur-sprite)
+
+@defthing[squirtle-sprite animated-sprite?]
+@(sprite->sheet squirtle-sprite)
+
+@defthing[wartortle-sprite animated-sprite?]
+@(sprite->sheet wartortle-sprite)
+
+@defthing[blastoise-sprite animated-sprite?]
+@(sprite->sheet blastoise-sprite)
+
+@defthing[charmander-sprite animated-sprite?]
+@(sprite->sheet charmander-sprite)
+
+@defthing[charmelon-sprite animated-sprite?]
+@(sprite->sheet charmelon-sprite)
+
+@defthing[charizard-sprite animated-sprite?]
+@(sprite->sheet charizard-sprite)
 
 @defthing[pikachu-sprite animated-sprite?]
 @(sprite->sheet pikachu-sprite)
 
 @defthing[pikachurun-sprite animated-sprite?]
 @(sprite->sheet pikachurun-sprite)
+
+@defthing[armoredmewtwo-sprite animated-sprite?]
+@(sprite->sheet armoredmewtwo-sprite)
 
 
 

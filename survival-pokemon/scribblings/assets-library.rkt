@@ -72,7 +72,7 @@
 @defthing[james-sprite animated-sprite?]
 @(sprite->sheet james-sprite)
 
-@(include-section battle-arena/scribblings/assets-library)
+@(include-section survival/scribblings/assets-library)
 
 @section{Sprite Sheets}
 

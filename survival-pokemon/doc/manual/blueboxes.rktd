@@ -1,5 +1,5 @@
-5070
-((3) 0 () 1 ((q lib "survival-pokemon/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q charizard-sheet)) q (10141 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (9473 . 2)) ((c def c (c (? . 0) q greengirl-sheet)) q (10410 . 2)) ((c def c (c (? . 0) q moderngirl-sprite)) q (9124 . 2)) ((c def c (c (? . 0) q charmeleon-sheet)) q (10208 . 2)) ((c def c (c (? . 0) q custom-power)) q (4878 . 30)) ((c def c (c (? . 0) q moogle-sheet)) q (9778 . 2)) ((c def c (c (? . 0) q squirtle-sprite)) q (8040 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (9979 . 2)) ((c def c (c (? . 0) q firestone-sprite)) q (10344 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (9680 . 2)) ((c def c (c (? . 0) q blastoise-sprite)) q (8127 . 2)) ((c def c (c (? . 0) q greenboy-sprite)) q (8522 . 2)) ((c def c (c (? . 0) q pikachurun-sheet)) q (10632 . 2)) ((c def c (c (? . 0) q moonstone-sprite)) q (10567 . 2)) ((c def c (c (? . 0) q armoredmewtwo-sprite)) q (8391 . 2)) ((c def c (c (? . 0) q redgirl-sprite)) q (8480 . 2)) ((c def c (c (? . 0) q ivysaur-sheet)) q (10443 . 2)) ((c def c (c (? . 0) q FOREST-BG)) q (9394 . 2)) ((c def c (c (? . 0) q greengirl-sprite)) q (8565 . 2)) ((c def c (c (? . 0) q leafstone-sprite)) q (10533 . 2)) ((c def c (c (? . 0) q steampunkgirl-sheet)) q (9942 . 2)) ((c def c (c (? . 0) q waterstone-sprite)) q (10994 . 2)) ((c def c (c (? . 0) q pikachu-sheet)) q (10601 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (8870 . 2)) ((c def c (c (? . 0) q james-sprite)) q (8690 . 2) (8609 . 2)) ((c def c (c (? . 0) q armoredmewtwo-sheet)) q (10038 . 2)) ((c def c (c (? . 0) q kavi-sheet)) q (9620 . 2)) ((c def c (c (? . 0) q everstone-sprite)) q (10310 . 2)) ((c def c (c (? . 0) q ivysaur-sprite)) q (7955 . 2)) ((c def c (c (? . 0) q venasaur-sprite)) q (7997 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (8950 . 2)) ((c def c (c (? . 0) q redboy-sheet)) q (10731 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (9808 . 2)) ((c def c (c (? . 0) q moderngirl-sheet)) q (9716 . 2)) ((c def c (c (? . 0) q venusaur-sheet)) q (10929 . 2)) ((c def c (c (? . 0) q charmelon-sprite)) q (8216 . 2)) ((c def c (c (? . 0) q PINK-BG)) q (9498 . 2)) ((c def c (c (? . 0) q jessie-sprite)) q (8649 . 2)) ((c def c (c (? . 0) q wartortle-sprite)) q (8083 . 2)) ((c def c (c (? . 0) q charmander-sprite)) q (8171 . 2)) ((c def c (c (? . 0) q custom-stone)) q (3893 . 21)) ((c def c (c (? . 0) q monk-sprite)) q (8911 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (9446 . 2)) ((c def c (c (? . 0) q moogle-sprite)) q (9169 . 2)) ((c def c (c (? . 0) q lightelf-sheet)) q (9648 . 2)) ((c def c (c (? . 0) q jessie-sheet)) q (10503 . 2)) ((c def c (c (? . 0) q darkknight-sheet)) q (9586 . 2)) ((c def c (c (? . 0) q shinystone-sprite)) q (10792 . 2)) ((c def c (c (? . 0) q pirateboy-sheet)) q (9839 . 2)) ((c def c (c (? . 0) q redboy-sprite)) q (8439 . 2)) ((c def c (c (? . 0) q pikachurun-sprite)) q (8346 . 2)) ((c def c (c (? . 0) q wartortle-sheet)) q (10961 . 2)) ((c def c (c (? . 0) q steampunkboy-sheet)) q (9906 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (10008 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (8997 . 2)) ((c def c (c (? . 0) q charizard-sprite)) q (8260 . 2)) ((c def c (c (? . 0) q pirategirl-sheet)) q (9872 . 2)) ((c def c (c (? . 0) q pikachu-sprite)) q (8304 . 2)) ((c def c (c (? . 0) q duskstone-sprite)) q (10276 . 2)) ((c def c (c (? . 0) q steampunkgirl-sprite)) q (9346 . 2)) ((c def c (c (? . 0) q custom-trainer)) q (2912 . 20)) ((c def c (c (? . 0) q redgirl-sheet)) q (10761 . 2)) ((c def c (c (? . 0) q james-sheet)) q (10474 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (9555 . 2)) ((c def c (c (? . 0) q pirategirl-sprite)) q (9254 . 2)) ((c def c (c (? . 0) q greenboy-sheet)) q (10378 . 2)) ((c def c (c (? . 0) q dawnstone-sprite)) q (10242 . 2)) ((c def c (c (? . 0) q custom-friend)) q (1587 . 28)) ((c def c (c (? . 0) q caitsith-sheet)) q (9523 . 2)) ((c def c (c (? . 0) q bulbasaur-sheet)) q (10108 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (8788 . 2)) ((c def c (c (? . 0) q pokemon-game)) q (6249 . 30)) ((c def c (c (? . 0) q squirtle-sheet)) q (10827 . 2)) ((c def c (c (? . 0) q kavi-sprite)) q (9085 . 2)) ((c def c (c (? . 0) q thunderstone-sprite)) q (10892 . 2)) ((c def c (c (? . 0) q blastoise-sheet)) q (10075 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (8828 . 2)) ((c def c (c (? . 0) q random-character-sprite)) q (8730 . 2)) ((c def c (c (? . 0) q pokeball-sheet)) q (10666 . 2)) ((c def c (c (? . 0) q bulbasaur-sprite)) q (7911 . 2)) ((c def c (c (? . 0) q pirateboy-sprite)) q (9210 . 2)) ((c def c (c (? . 0) q sunstone-sprite)) q (10859 . 2)) ((c def c (c (? . 0) q charmander-sheet)) q (10174 . 2)) ((c def c (c (? . 0) q custom-town)) q (0 . 13)) ((c def c (c (? . 0) q steampunkboy-sprite)) q (9299 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (9421 . 2)) ((c def c (c (? . 0) q custom-pokemon)) q (597 . 18)) ((c def c (c (? . 0) q pokeball2-sheet)) q (10698 . 2)) ((c def c (c (? . 0) q darkknight-sprite)) q (9040 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (9750 . 2))))
+5554
+((3) 0 () 1 ((q lib "survival-pokemon/main.rkt")) () (h ! (equal) ((c def c (c (? . 0) q bowl-sprite)) q (10065 . 2)) ((c def c (c (? . 0) q charmeleon-sheet)) q (10650 . 2)) ((c def c (c (? . 0) q snake-sprite)) q (9245 . 2)) ((c def c (c (? . 0) q pokeball-sheet)) q (11108 . 2)) ((c def c (c (? . 0) q witch-sheet)) q (10421 . 2)) ((c def c (c (? . 0) q charmander-sheet)) q (10616 . 2)) ((c def c (c (? . 0) q greenboy-sprite)) q (8522 . 2)) ((c def c (c (? . 0) q madscientist-sprite)) q (8991 . 2)) ((c def c (c (? . 0) q fish-sprite)) q (9548 . 2)) ((c def c (c (? . 0) q FOREST-BG)) q (10104 . 2)) ((c def c (c (? . 0) q greengirl-sprite)) q (8565 . 2)) ((c def c (c (? . 0) q everstone-sprite)) q (10752 . 2)) ((c def c (c (? . 0) q wood-table-sprite)) q (9980 . 2)) ((c def c (c (? . 0) q redboy-sprite)) q (8439 . 2)) ((c def c (c (? . 0) q carrot-sprite)) q (9366 . 2)) ((c def c (c (? . 0) q custom-power)) q (4878 . 30)) ((c def c (c (? . 0) q armoredmewtwo-sprite)) q (8391 . 2)) ((c def c (c (? . 0) q custom-stone)) q (3893 . 21)) ((c def c (c (? . 0) q waterstone-sprite)) q (11436 . 2)) ((c def c (c (? . 0) q DESERT-BG)) q (10156 . 2)) ((c def c (c (? . 0) q smores-sprite)) q (9507 . 2)) ((c def c (c (? . 0) q shinystone-sprite)) q (11234 . 2)) ((c def c (c (? . 0) q armoredmewtwo-sheet)) q (10480 . 2)) ((c def c (c (? . 0) q duskstone-sprite)) q (10718 . 2)) ((c def c (c (? . 0) q witch-sprite)) q (8788 . 2)) ((c def c (c (? . 0) q lightelf-sprite)) q (9038 . 2)) ((c def c (c (? . 0) q charizard-sprite)) q (8260 . 2)) ((c def c (c (? . 0) q wartortle-sprite)) q (8083 . 2)) ((c def c (c (? . 0) q slime-sprite)) q (9285 . 2)) ((c def c (c (? . 0) q cooked-fish-sprite)) q (9587 . 2)) ((c def c (c (? . 0) q custom-pokemon)) q (597 . 18)) ((c def c (c (? . 0) q dawnstone-sprite)) q (10684 . 2)) ((c def c (c (? . 0) q greenboy-sheet)) q (10820 . 2)) ((c def c (c (? . 0) q firestone-sprite)) q (10786 . 2)) ((c def c (c (? . 0) q wartortle-sheet)) q (11403 . 2)) ((c def c (c (? . 0) q squirtle-sheet)) q (11269 . 2)) ((c def c (c (? . 0) q pirate-sheet)) q (10391 . 2)) ((c def c (c (? . 0) q darkelf-sprite)) q (8828 . 2)) ((c def c (c (? . 0) q random-character-sprite)) q (8730 . 2)) ((c def c (c (? . 0) q jessie-sheet)) q (10945 . 2)) ((c def c (c (? . 0) q redgirl-sheet)) q (11203 . 2)) ((c def c (c (? . 0) q james-sheet)) q (10916 . 2)) ((c def c (c (? . 0) q charizard-sheet)) q (10583 . 2)) ((c def c (c (? . 0) q LAVA-BG)) q (10183 . 2)) ((c def c (c (? . 0) q greengirl-sheet)) q (10852 . 2)) ((c def c (c (? . 0) q carrot-stew-sprite)) q (9407 . 2)) ((c def c (c (? . 0) q redboy-sheet)) q (11173 . 2)) ((c def c (c (? . 0) q apples-sprite)) q (9325 . 2)) ((c def c (c (? . 0) q venusaur-sheet)) q (11371 . 2)) ((c def c (c (? . 0) q squirtle-sprite)) q (8040 . 2)) ((c def c (c (? . 0) q silver-coin-sprite)) q (9804 . 2)) ((c def c (c (? . 0) q madscientist-sheet)) q (10296 . 2)) ((c def c (c (? . 0) q blastoise-sprite)) q (8127 . 2)) ((c def c (c (? . 0) q black-cat-sprite)) q (9157 . 2)) ((c def c (c (? . 0) q charmelon-sprite)) q (8216 . 2)) ((c def c (c (? . 0) q redgirl-sprite)) q (8480 . 2)) ((c def c (c (? . 0) q monk-sheet)) q (10332 . 2)) ((c def c (c (? . 0) q leafstone-sprite)) q (10975 . 2)) ((c def c (c (? . 0) q steak-sprite)) q (9718 . 2)) ((c def c (c (? . 0) q gold-coin-sprite)) q (9850 . 2)) ((c def c (c (? . 0) q thunderstone-sprite)) q (11334 . 2)) ((c def c (c (? . 0) q cauldron-sprite)) q (9894 . 2)) ((c def c (c (? . 0) q bat-sprite)) q (9081 . 2)) ((c def c (c (? . 0) q james-sprite)) q (8690 . 2) (8609 . 2)) ((c def c (c (? . 0) q ivysaur-sprite)) q (7955 . 2)) ((c def c (c (? . 0) q venasaur-sprite)) q (7997 . 2)) ((c def c (c (? . 0) q pikachurun-sheet)) q (11074 . 2)) ((c def c (c (? . 0) q moonstone-sprite)) q (11009 . 2)) ((c def c (c (? . 0) q SNOW-BG)) q (10131 . 2)) ((c def c (c (? . 0) q PINK-BG)) q (10208 . 2)) ((c def c (c (? . 0) q charmander-sprite)) q (8171 . 2)) ((c def c (c (? . 0) q chest-sprite)) q (10025 . 2)) ((c def c (c (? . 0) q monk-sprite)) q (8952 . 2)) ((c def c (c (? . 0) q pikachu-sheet)) q (11043 . 2)) ((c def c (c (? . 0) q wizard-sprite)) q (8870 . 2)) ((c def c (c (? . 0) q bulbasaur-sheet)) q (10550 . 2)) ((c def c (c (? . 0) q pikachurun-sprite)) q (8346 . 2)) ((c def c (c (? . 0) q cat-sprite)) q (9119 . 2)) ((c def c (c (? . 0) q wizard-sheet)) q (10450 . 2)) ((c def c (c (? . 0) q mystery-sheet)) q (10360 . 2)) ((c def c (c (? . 0) q pikachu-sprite)) q (8304 . 2)) ((c def c (c (? . 0) q ivysaur-sheet)) q (10885 . 2)) ((c def c (c (? . 0) q custom-trainer)) q (2912 . 20)) ((c def c (c (? . 0) q pirate-sprite)) q (8911 . 2)) ((c def c (c (? . 0) q darkelf-sheet)) q (10233 . 2)) ((c def c (c (? . 0) q cherry-sprite)) q (9677 . 2)) ((c def c (c (? . 0) q campfire-sprite)) q (9937 . 2)) ((c def c (c (? . 0) q copper-coin-sprite)) q (9758 . 2)) ((c def c (c (? . 0) q custom-friend)) q (1587 . 28)) ((c def c (c (? . 0) q toasted-marshmallow-sprite)) q (9453 . 2)) ((c def c (c (? . 0) q pokemon-game)) q (6249 . 30)) ((c def c (c (? . 0) q blastoise-sheet)) q (10517 . 2)) ((c def c (c (? . 0) q bulbasaur-sprite)) q (7911 . 2)) ((c def c (c (? . 0) q jessie-sprite)) q (8649 . 2)) ((c def c (c (? . 0) q sunstone-sprite)) q (11301 . 2)) ((c def c (c (? . 0) q custom-town)) q (0 . 13)) ((c def c (c (? . 0) q white-cat-sprite)) q (9201 . 2)) ((c def c (c (? . 0) q lightelf-sheet)) q (10264 . 2)) ((c def c (c (? . 0) q fish-stew-sprite)) q (9633 . 2)) ((c def c (c (? . 0) q pokeball2-sheet)) q (11140 . 2))))
 procedure
 (custom-town [#:image img                       
               #:rows rows                       
@@ -207,27 +207,61 @@ darkelf-sprite : animated-sprite?
 value
 wizard-sprite : animated-sprite?
 value
+pirate-sprite : animated-sprite?
+value
 monk-sprite : animated-sprite?
 value
 madscientist-sprite : animated-sprite?
 value
 lightelf-sprite : animated-sprite?
 value
-darkknight-sprite : animated-sprite?
+bat-sprite : animated-sprite?
 value
-kavi-sprite : animated-sprite?
+cat-sprite : animated-sprite?
 value
-moderngirl-sprite : animated-sprite?
+black-cat-sprite : animated-sprite?
 value
-moogle-sprite : animated-sprite?
+white-cat-sprite : animated-sprite?
 value
-pirateboy-sprite : animated-sprite?
+snake-sprite : animated-sprite?
 value
-pirategirl-sprite : animated-sprite?
+slime-sprite : animated-sprite?
 value
-steampunkboy-sprite : animated-sprite?
+apples-sprite : animated-sprite?
 value
-steampunkgirl-sprite : animated-sprite?
+carrot-sprite : animated-sprite?
+value
+carrot-stew-sprite : animated-sprite?
+value
+toasted-marshmallow-sprite : animated-sprite?
+value
+smores-sprite : animated-sprite?
+value
+fish-sprite : animated-sprite?
+value
+cooked-fish-sprite : animated-sprite?
+value
+fish-stew-sprite : animated-sprite?
+value
+cherry-sprite : animated-sprite?
+value
+steak-sprite : animated-sprite?
+value
+copper-coin-sprite : animated-sprite?
+value
+silver-coin-sprite : animated-sprite?
+value
+gold-coin-sprite : animated-sprite?
+value
+cauldron-sprite : animated-sprite?
+value
+campfire-sprite : animated-sprite?
+value
+wood-table-sprite : animated-sprite?
+value
+chest-sprite : animated-sprite?
+value
+bowl-sprite : animated-sprite?
 value
 FOREST-BG : image?
 value
@@ -239,33 +273,17 @@ LAVA-BG : image?
 value
 PINK-BG : image?
 value
-caitsith-sheet : image?
-value
 darkelf-sheet : image?
-value
-darkknight-sheet : image?
-value
-kavi-sheet : image?
 value
 lightelf-sheet : image?
 value
 madscientist-sheet : image?
 value
-moderngirl-sheet : image?
-value
 monk-sheet : image?
-value
-moogle-sheet : image?
 value
 mystery-sheet : image?
 value
-pirateboy-sheet : image?
-value
-pirategirl-sheet : image?
-value
-steampunkboy-sheet : image?
-value
-steampunkgirl-sheet : image?
+pirate-sheet : image?
 value
 witch-sheet : image?
 value

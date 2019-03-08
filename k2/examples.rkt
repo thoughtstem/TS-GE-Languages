@@ -144,6 +144,58 @@
                                       (say  'C))))
 
 
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-1
+
+                     (assign 'Controller
+                            (whenever (want)
+                                      (sign 'A)))
+
+                     (assign 'Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-2
+
+                     (assign 'Controller
+                            (whenever (want)
+                                      (sign 'A))
+                            (whenever (want)
+                                      (sign 'B))
+                            (whenever (want)
+                                      (sign 'C)))
+
+                     (assign 'Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))
+                            (whenever (see 'B)
+                                      (turn 'Right))
+                            (whenever (see 'C)
+                                      (turn 'Left))))
+
+(define-example-code k2/lang/classroom/basic
+                     demo-bots-3
+
+                     (assign 'Controller
+                            (whenever (want)
+                                      (sign 'A))
+                            (whenever (want)
+                                      (sign 'B))
+                            (whenever (want)
+                                      (sign 'C)))
+
+                     (assign 'Red-Bot 'Blue-Bot
+                            (whenever (see 'A)
+                                      (step 'Forward))
+                            (whenever (see 'B)
+                                      (turn 'Right))
+                            (whenever (see 'C)
+                                      (turn 'Left))) )
+
+
+
+
 (define-example-code k2/lang/hero/basic
   hero-0
   blackwidow)
@@ -401,56 +453,6 @@
     (green fish)))
 
 
-
-
-(define-example-code k2/lang/classroom/basic
-                     demo-bots-1
-
-                     (assign 'Controller
-                            (whenever (want)
-                                      (sign 'A)))
-
-                     (assign 'Bot
-                            (whenever (see 'A)
-                                      (step 'Forward))))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-bots-2
-
-                     (assign 'Controller
-                            (whenever (want)
-                                      (sign 'A))
-                            (whenever (want)
-                                      (sign 'B))
-                            (whenever (want)
-                                      (sign 'C)))
-
-                     (assign 'Bot
-                            (whenever (see 'A)
-                                      (step 'Forward))
-                            (whenever (see 'B)
-                                      (turn 'Right))
-                            (whenever (see 'C)
-                                      (turn 'Left))))
-
-(define-example-code k2/lang/classroom/basic
-                     demo-bots-3
-
-                     (assign 'Controller
-                            (whenever (want)
-                                      (sign 'A))
-                            (whenever (want)
-                                      (sign 'B))
-                            (whenever (want)
-                                      (sign 'C)))
-
-                     (assign 'Red-Bot 'Blue-Bot
-                            (whenever (see 'A)
-                                      (step 'Forward))
-                            (whenever (see 'B)
-                                      (turn 'Right))
-                            (whenever (see 'C)
-                                      (turn 'Left))) )
 
 
 

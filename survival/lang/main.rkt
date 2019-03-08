@@ -983,7 +983,7 @@
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))))
  
   (define (spawn-many-on-current-tile e-list)
-    (apply do-many (map spawn-on-current-tile (clone-by-amount-in-world e-list))))
+    (apply do-many (map spawn-on-current-tile e-list)))
 
   (define (night-only? e)
     (define ent (if (procedure? e)

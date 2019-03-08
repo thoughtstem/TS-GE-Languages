@@ -203,8 +203,18 @@
   (define (my-bg)
     (custom-bg #:img LAVA-BG
                #:rows 2
+               #:columns 2))
+ 
+  (battle-arena-game #:bg (my-bg))
+  )
+
+(define-example-code battle-arena background-4
+  (define (my-bg)
+    (custom-bg #:img LAVA-BG
+               #:rows 2
                #:columns 2
-               #:start-tile 4))
+               #:start-tile 3
+               #:hd? #t))
  
   (battle-arena-game #:bg (my-bg))
   )
@@ -1055,8 +1065,43 @@
                         #:dart (builder-dart #:entity
                                              (wall))))))
 
+; ==== LEVEL DESIGN KATAS ====
+(define-example-code battle-arena level-design-1
 
+  (battle-arena-game
+   #:bg             (custom-bg #:img FOREST-BG)
+   #:enable-world-objects? #t)
+  
+  )
 
+(define-example-code battle-arena level-design-2
+
+  (battle-arena-game
+   #:bg             (custom-bg #:img FOREST-BG)
+   #:other-entities (make-world-objects round-tree
+                                        pine-tree
+                                        #:hd? #t))
+  )
+
+(define-example-code battle-arena level-design-3
+
+  (battle-arena-game
+   #:bg             (custom-bg #:img PINK-BG)
+   #:other-entities (make-world-objects candy-cane-tree
+                                        snow-pine-tree
+                                        #:hd? #t
+                                        #:random-color? #t))
+  
+  )
+
+(define-example-code battle-arena level-design-4
+  
+  (battle-arena-game
+   #:other-entities (pine-tree   (posn 100 200) #:tile 0)
+                    (wood-house  (posn 100 200) #:tile 1 #:size 0.5)
+                    (brick-house (posn 100 200) #:tile 2 #:hue (random 360)))
+  
+  )
 
 
 (test-all-examples-as-games 'battle-arena)

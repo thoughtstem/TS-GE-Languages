@@ -167,7 +167,7 @@
 ; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code battle-arena sword-3
   (define (my-sword)
-    (sword #:name   "Epic Heavy Sword"
+    (sword #:name   "Heavy Sword"
            #:damage 50
            #:rarity 'epic))
   
@@ -177,7 +177,7 @@
 ; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code battle-arena sword-4
   (define (my-sword)
-    (sword #:name   "Legendary Sword"
+    (sword #:name   "Sword"
            #:icon   (make-icon "LS" 'gold)
            #:sprite (set-sprite-color 'gold swinging-sword-sprite)
            #:damage 100
@@ -527,7 +527,7 @@
 
 (define-example-code battle-arena paint-thrower-3
   (define (my-weapon)
-    (paint-thrower #:name   "Epic Paint Thrower"
+    (paint-thrower #:name   "Paint Thrower"
                    #:icon (make-icon "PT" 'blue)
                    #:damage 20
                    #:speed  10
@@ -540,7 +540,7 @@
 
 (define-example-code battle-arena paint-thrower-4
   (define (my-weapon)
-    (paint-thrower #:name   "Legendary Paint Thrower"
+    (paint-thrower #:name   "Paint Thrower"
                    #:icon   (make-icon "PT" 'blue)
                    #:sprite (set-sprite-color 'green paint-sprite)
                    #:damage  20
@@ -561,7 +561,7 @@
 (define-example-code battle-arena fire-magic-2
   (define (my-weapon)
     (fire-magic #:name   "Heavy Fire Magic"
-                   #:damage 20))
+                #:damage 20))
   
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -569,11 +569,11 @@
 
 (define-example-code battle-arena fire-magic-3
   (define (my-weapon)
-    (fire-magic #:name   "Epic Fire Magic"
-                   #:icon (make-icon "FM" 'red)
-                   #:damage 20
-                   #:speed  10
-                   #:rarity 'epic))
+    (fire-magic #:name   "Fire Magic"
+                #:icon (make-icon "FM" 'red)
+                #:damage 20
+                #:speed  10
+                #:rarity 'epic))
   
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -581,13 +581,13 @@
 
 (define-example-code battle-arena fire-magic-4
   (define (my-weapon)
-    (fire-magic #:name   "Legendary Fire Magic"
-                   #:icon   (make-icon "FM" 'red)
-                   #:sprite (set-sprite-color 'green flame-sprite)
-                   #:damage  20
-                   #:speed   10
-                   #:range   50
-                   #:rarity  'legendary))
+    (fire-magic #:name   "Fire Magic"
+                #:icon   (make-icon "FM" 'red)
+                #:sprite (set-sprite-color 'green flame-sprite)
+                #:damage  20
+                #:speed   10
+                #:range   50
+                #:rarity  'legendary))
 
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -602,7 +602,7 @@
 (define-example-code battle-arena ice-magic-2
   (define (my-weapon)
     (ice-magic #:name   "Heavy Ice Magic"
-                   #:damage 20))
+               #:damage 20))
   
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -610,11 +610,11 @@
 
 (define-example-code battle-arena ice-magic-3
   (define (my-weapon)
-    (ice-magic #:name   "Epic Ice Magic"
-                   #:icon (make-icon "FM" 'red)
-                   #:damage 20
-                   #:speed  10
-                   #:rarity 'epic))
+    (ice-magic #:name   "Ice Magic"
+               #:icon (make-icon "FM" 'red)
+               #:damage 20
+               #:speed  10
+               #:rarity 'epic))
   
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -622,13 +622,13 @@
 
 (define-example-code battle-arena ice-magic-4
   (define (my-weapon)
-    (ice-magic #:name   "Legendary Ice Magic"
-                   #:icon   (make-icon "FM" 'red)
-                   #:sprite (set-sprite-color 'green ice-sprite)
-                   #:damage  20
-                   #:speed   10
-                   #:range   50
-                   #:rarity  'legendary))
+    (ice-magic #:name   "Ice Magic"
+               #:icon   (make-icon "FM" 'red)
+               #:sprite (set-sprite-color 'green ice-sprite)
+               #:damage  20
+               #:speed   10
+               #:range   50
+               #:rarity  'legendary))
 
   (battle-arena-game
    #:weapon-list (list (my-weapon)))
@@ -897,7 +897,7 @@
 ; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code battle-arena spear-3
   (define (my-spear)
-    (spear #:name   "Epic Heavy Spear"
+    (spear #:name   "Heavy Spear"
            #:damage 50
            #:rarity 'epic))
   
@@ -907,7 +907,7 @@
 ; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code battle-arena spear-4
   (define (my-spear)
-    (spear #:name   "Legendary Spear"
+    (spear #:name   "Spear"
            #:icon   (make-icon "LS" 'blue)
            #:sprite (set-sprite-color 'blue spear-sprite)
            #:damage 100

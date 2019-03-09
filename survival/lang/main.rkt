@@ -3,7 +3,6 @@
 (provide crafting-menu-set!
          entity-cloner
          player-toast-entity
-         acid
          plain-bg
          plain-color-bg
          plain-forest-bg
@@ -11,7 +10,7 @@
          carrot-stew
          carrot-stew-recipe
          fish
-         acid-spitter
+         
          sky?
          plain-forest-bg
          draw-plain-forest-bg
@@ -22,7 +21,23 @@
          random-food
          random-coin
          dialog-str?
-         sword)
+                 
+         acid-spitter
+         spear
+         sword
+         fire-magic
+         ice-magic
+         sword-magic
+         ring-of-fire
+         ring-of-ice
+         ring-of-blades
+         
+         acid-dart
+         spear-dart
+         sword-dart
+         flying-dagger-dart
+         ring-of-fire-dart
+         )
 
 (require scribble/srcdoc)
 
@@ -580,8 +595,8 @@
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
-                                    #:mouse-fire-button [button 'left]
-                                    #:point-to-mouse?   [ptm? #t]
+                                    #:mouse-fire-button [button #f]
+                                    #:point-to-mouse?   [ptm? #f]
                                     #:rapid-fire?       [rf? #t]
                                     #:rarity            [rarity 'common])
   (->i ()
@@ -706,7 +721,7 @@
                                    #:health (health 99)
                                    ;#:shield (shield 100)
                                    #:weapon (weapon (custom-weapon #:name "Spitter"
-                                                                   #:dart (acid)))
+                                                                   #:dart (acid-dart)))
                                    #:death-particles (particles (custom-particles))
                                    #:night-only? (night-only? #f)
                                    #:components (c #f)
@@ -832,7 +847,7 @@
                  #:crafter-list    [c-list    '()]
                  #:score-prefix    [prefix "Gold"]
                  #:enable-world-objects? [world-objects? #f]
-                 #:weapon-list     [weapon-list '()]
+                 ;#:weapon-list     [weapon-list '()] ; survival doesn't need weapons in the wild
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -848,7 +863,7 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        ;#:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -887,10 +902,12 @@
   ;(define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
 
   (define known-products-list (map recipe-product known-recipes-list))
+
+  (define known-weapons-list (filter (curry get-storage "Weapon") known-products-list))
   
   (define player-with-recipes-and-weapons
     (if p
-        (add-components p (map weapon-entity->player-system weapon-list) ;added weapon stuff
+        (add-components p (map weapon-entity->player-system known-weapons-list) ;added weapon stuff
                           (map recipe->system known-recipes-list)
                           ;(apply precompiler (remove-duplicates updated-food-list render-eq?))                                ;f-list
                           (map food->component (append (remove-duplicates updated-food-list
@@ -1024,7 +1041,7 @@
 
                        player-with-recipes-and-weapons
 
-                       (clone-by-rarity weapon-list)
+                       ;(clone-by-rarity weapon-list) ; surival doesn't need weapons in the wild
                        
                        npc-list
                        
@@ -1313,28 +1330,100 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-; ==== PREBUILT DARTS ====
-(define (sword #:sprite     [s swinging-sword-sprite]
-               #:damage     [dmg 50]
-               #:durability [dur 20]
-               #:speed      [spd 0]
-               #:range      [rng 10])
-  (custom-dart #:position (posn 10 0)
-                 #:sprite     s
-                 #:damage     dmg
-                 #:durability dur
-                 #:speed      spd
-                 #:range      rng
-                 #:components (every-tick (change-direction-by 15))))
+; ==== PREBUILT WEAPONS & DARTS ====
+(define (spear #:name              [n "Spear"]
+               #:icon              [i [make-icon "SP" 'brown]]
+               #:sprite            [s spear-sprite]
+               #:damage            [dmg 25]
+               #:durability        [dur 20]
+               #:speed             [spd 5]
+               #:range             [rng 20]
+               #:dart              [d (spear-dart #:sprite s
+                                                  #:damage dmg
+                                                  #:durability dur
+                                                  #:speed spd
+                                                  #:range rng)]
+               #:fire-mode         [fm 'normal]
+               #:fire-rate         [fr 3]
+               #:fire-key          [key 'f]
+               #:mouse-fire-button [button #f]
+               #:point-to-mouse?   [ptm? #f]
+               #:rapid-fire?       [rf? #f]
+               #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (acid  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
-                                                 -3 3
-                                                 (overlay (circle 10 'outline 'green)
-                                                          (circle 10 'solid (make-color 180 200 0 128))))]
-               #:damage     [dmg 10]
-               #:durability [dur 5]
-               #:speed      [spd 3]
-               #:range      [rng 100])
+(define (spear-dart #:sprite     [s spear-sprite]
+                    #:damage     [dmg 25]
+                    #:durability [dur 20]
+                    #:speed      [spd 5]
+                    #:range      [rng 20])
+  (custom-dart #:position (posn 20 0)
+               #:sprite s
+               #:damage dmg
+               #:durability dur
+               #:speed spd
+               #:range rng
+               #:components (after-time (/ rng 2) (do-many (bounce)
+                                                           (horizontal-flip-sprite)))))
+
+(define (sword #:name              [n "Sword"]
+               #:icon              [i [make-icon "SW" 'silver]]
+               #:sprite            [s swinging-sword-sprite]
+               #:damage            [dmg 25]
+               #:durability        [dur 20]
+               #:speed             [spd 0]
+               #:duration          [rng 10]
+               #:dart              [d (sword-dart #:sprite s
+                                                  #:damage dmg
+                                                  #:durability dur
+                                                  #:speed spd
+                                                  #:duration rng)]
+               #:fire-mode         [fm 'normal]
+               #:fire-rate         [fr 3]
+               #:fire-key          [key 'f]
+               #:mouse-fire-button [button #f]
+               #:point-to-mouse?   [ptm? #f]
+               #:rapid-fire?       [rf? #f]
+               #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (sword-dart #:sprite     [s swinging-sword-sprite]
+                    #:damage     [dmg 50]
+                    #:durability [dur 20]
+                    #:speed      [spd 0]
+                    #:duration   [rng 10])
+  (custom-dart #:position (posn 10 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (every-tick (change-direction-by 15))))
+
+(define (acid-dart  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
+                                                      -3 3
+                                                      (overlay (circle 10 'outline 'green)
+                                                               (circle 10 'solid (make-color 180 200 0 128))))]
+                    #:damage     [dmg 10]
+                    #:durability [dur 5]
+                    #:speed      [spd 3]
+                    #:range      [rng 100])
   (custom-dart #:position (posn 25 0)
                #:sprite     s
                #:damage     dmg
@@ -1376,6 +1465,259 @@
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?
                  #:rarity            rarity))
+
+(define (fire-magic #:name              [n "Fire Magic"]
+                    #:icon              [i [make-icon "FM" 'red]]
+                    #:sprite            [s flame-sprite]
+                    #:damage            [dmg 5]
+                    #:durability        [dur 5]
+                    #:speed             [spd 3]
+                    #:range             [rng 20]
+                    #:dart              [d (fire-dart #:sprite s
+                                                       #:damage dmg
+                                                       #:durability dur
+                                                       #:speed spd
+                                                       #:range rng)]
+                    #:fire-mode         [fm 'random]
+                    #:fire-rate         [fr 10]
+                    #:fire-key          [key 'f]
+                    #:mouse-fire-button [button #f]
+                    #:point-to-mouse?   [ptm? #f]
+                    #:rapid-fire?       [rf? #t]
+                    #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (fire-dart #:sprite     [s   flame-sprite]
+                   #:damage     [dmg 5]
+                   #:durability [dur 5]
+                   #:speed      [spd 3]
+                   #:range      [rng 20])
+  (custom-dart #:position (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (scale-sprite 1.1))))
+
+(define (ice-magic #:name              [n "Ice Magic"]
+                   #:icon              [i [make-icon "IM" 'lightcyan]]
+                   #:sprite            [s ice-sprite]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 5]
+                   #:speed             [spd 3]
+                   #:range             [rng 20]
+                   #:dart              [d (ice-dart #:sprite s
+                                                    #:damage dmg
+                                                    #:durability dur
+                                                    #:speed spd
+                                                    #:range rng)]
+                   #:fire-mode         [fm 'random]
+                   #:fire-rate         [fr 10]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define ice-sprite
+  (overlay (circle 5 "solid" "white")
+           (circle 6 "solid" "cyan")
+           (circle 7 "solid" "blue")))
+
+(define (ice-dart #:sprite     [s   ice-sprite]
+                  #:damage     [dmg 5]
+                  #:durability [dur 5]
+                  #:speed      [spd 3]
+                  #:range      [rng 20])
+  (custom-dart #:position (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (scale-sprite 1.1))))
+
+(define (sword-magic #:name              [n "Sword Magic"]
+                     #:icon              [i [make-icon "SM" 'silver]]
+                     #:sprite            [s flying-sword-sprite]
+                     #:damage            [dmg 10]
+                     #:durability        [dur 20]
+                     #:speed             [spd 4]
+                     #:range             [rng 40]
+                     #:dart              [d (flying-dagger-dart #:sprite s
+                                                                #:damage dmg
+                                                                #:durability dur
+                                                                #:speed spd
+                                                                #:range rng)]
+                     #:fire-mode         [fm 'spread]
+                     #:fire-rate         [fr 1]
+                     #:fire-key          [key 'f]
+                     #:mouse-fire-button [button #f]
+                     #:point-to-mouse?   [ptm? #f]
+                     #:rapid-fire?       [rf? #t]
+                     #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (flying-dagger-dart #:position   [p   (posn 20 0)]
+                            #:sprite     [s   flying-sword-sprite]
+                            #:damage     [dmg 10]
+                            #:durability [dur 20]
+                            #:speed      [spd 4]
+                            #:range      [rng 40])
+  (custom-dart #:position p
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (do-many (set-size 0.5)))
+               (do-every 10 (change-direction-by-random -25 25))))
+
+(define (ring-of-blades #:name              [n "Ring of Blades"]
+                        #:icon              [i (make-icon "RoB" 'silver)]
+                        #:sprite            [s flying-sword-sprite]
+                        #:damage            [dmg 10]
+                        #:durability        [dur 20]
+                        #:speed             [spd 10]
+                        #:duration          [rng 36]
+                        #:dart              [d (ring-of-blades-dart #:sprite s
+                                                                    #:damage dmg
+                                                                    #:durability dur
+                                                                    #:speed spd
+                                                                    #:duration rng)]
+                        #:fire-mode         [fm 'normal]
+                        #:fire-rate         [fr 6]
+                        #:fire-key          [key 'f]
+                        #:mouse-fire-button [button #f]
+                        #:point-to-mouse?   [ptm? #f]
+                        #:rapid-fire?       [rf? #t]
+                        #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (ring-of-blades-dart #:sprite     [s   flying-sword-sprite]
+                             #:damage     [dmg 10]
+                             #:durability [dur 20]
+                             #:speed      [spd 10]
+                             #:duration   [rng 36])
+  (custom-dart #:position   (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (do-many ;(scale-sprite 1.05)
+                                    (change-direction-by 10)))))
+
+
+(define (ring-of-fire #:name              [n "Ring of Fire"]
+                      #:icon              [i (make-icon "RoF" 'red)]
+                      #:sprite            [s flame-sprite]
+                      #:damage            [dmg 5]
+                      #:durability        [dur 20]
+                      #:speed             [spd 10]
+                      #:duration          [rng 36]
+                      #:dart              [d (ring-of-fire-dart #:sprite s
+                                                                #:damage dmg
+                                                                #:durability dur
+                                                                #:speed spd
+                                                                #:duration rng)]
+                      #:fire-mode         [fm 'normal]
+                      #:fire-rate         [fr 10]
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button #f]
+                      #:point-to-mouse?   [ptm? #f]
+                      #:rapid-fire?       [rf? #t]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (ring-of-ice #:name              [n "Ring of Ice"]
+                     #:icon              [i (make-icon "RoI" 'lightcyan)]
+                     #:sprite            [s ice-sprite]
+                     #:damage            [dmg 5]
+                     #:durability        [dur 20]
+                     #:speed             [spd 10]
+                     #:duration          [rng 36]
+                     #:dart              [d (ring-of-fire-dart #:sprite s
+                                                               #:damage dmg
+                                                               #:durability dur
+                                                               #:speed spd
+                                                               #:duration rng)]
+                     #:fire-mode         [fm 'normal]
+                     #:fire-rate         [fr 10]
+                     #:fire-key          [key 'f]
+                     #:mouse-fire-button [button #f]
+                     #:point-to-mouse?   [ptm? #f]
+                     #:rapid-fire?       [rf? #t]
+                     #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (ring-of-fire-dart #:sprite     [s   flame-sprite]
+                           #:damage     [dmg 5]
+                           #:durability [dur 20]
+                           #:speed      [spd 10]
+                           #:duration   [rng 36])
+  (custom-dart #:position   (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (do-many (scale-sprite 1.05)
+                                    (change-direction-by 10)))))
 
 ; ==== PREBUILT FOOD AND RECIPES ===
 (define (carrot #:sprite           [s carrot-sprite]

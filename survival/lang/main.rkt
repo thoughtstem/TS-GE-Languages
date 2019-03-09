@@ -991,12 +991,15 @@
                     e))
     (get-storage-data "night-only?" ent))
 
+  (define enemies-with-night-code
+    (map maybe-add-night-only updated-enemy-list))
+
   (define (tm-entity)
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
                            (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN"))
-                                    (spawn-many-on-current-tile (filter night-only? updated-enemy-list))
+                                    (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
                            (spawn (toast-entity "DAYTIME HAS BEGUN")))
@@ -1029,7 +1032,7 @@
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
-                       (map maybe-add-night-only updated-enemy-list)
+                       enemies-with-night-code
                        
                        (cons ent custom-entities)
 

@@ -847,7 +847,7 @@
                  #:crafter-list    [c-list    '()]
                  #:score-prefix    [prefix "Gold"]
                  #:enable-world-objects? [world-objects? #f]
-                 ;#:weapon-list     [weapon-list '()] ; survival doesn't need weapons in the wild
+                 #:weapon-list     [weapon-list '()] ; survival doesn't need weapons in the wild
                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -863,7 +863,7 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        ;#:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
+        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -1041,7 +1041,7 @@
 
                        player-with-recipes-and-weapons
 
-                       ;(clone-by-rarity weapon-list) ; surival doesn't need weapons in the wild
+                       (clone-by-rarity weapon-list) ; surival doesn't need weapons in the wild
                        
                        npc-list
                        

@@ -16,7 +16,7 @@
                    [#:avatar          #:hero]
                    [#:enemy-list      #:villain-list]
                    [#:bg              #:planet]
-                   [battle-arena-game starwars-game])
+                   [battlearena-game starwars-game])
 
 (provide lightsaber-droid
          blaster-droid
@@ -204,6 +204,7 @@
                                     #:rows       [rows 3]
                                     #:columns    [cols 3]
                                     #:start-tile [t 0]
+                                    #:hd?        [hd? #f]
                                     #:components [c #f]
                                     . custom-components)
 
@@ -212,6 +213,7 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
@@ -220,17 +222,26 @@
          automatically if it is passed into @racket[starwars-game]
          via the @racket[#:planet] parameter.}
   
-  (if (> (image-width bg) 24)
-      (bg->backdrop-entity (scale 0.25 bg)
-                           #:rows       rows
-                           #:columns    cols
-                           #:start-tile t
-                           #:scale 4)
-      (bg->backdrop-entity bg
-                           #:rows       rows
-                           #:columns    cols
-                           #:start-tile t
-                           #:scale 60)))
+  (define bg-base-entity
+    (if (> (image-width bg) 24)
+        (if hd?
+            (bg->backdrop-entity bg
+                                 #:rows       rows
+                                 #:columns    cols
+                                 #:start-tile t)
+            (bg->backdrop-entity (scale 0.25 bg)
+                                 #:rows       rows
+                                 #:columns    cols
+                                 #:start-tile t
+                                 #:scale 4))
+        (bg->backdrop-entity bg
+                             #:rows       rows
+                             #:columns    cols
+                             #:start-tile t
+                             #:scale 60)))
+  (add-components bg-base-entity
+                  (cons c custom-components))
+  )
 
 ;; ----- WEAPONS & DARTS
 
@@ -389,6 +400,7 @@
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Villains"]
+                      #:enable-world-objects? [world-objects? #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -400,7 +412,8 @@
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
-        #:other-entities [other-entities (or/c #f entity?)])
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest            [rest (listof entity?)]
        [res () game?])
 
@@ -414,6 +427,7 @@
                      #:enemy-list      e-list
                      #:item-list       item-list
                      #:score-prefix    prefix
-                     #:other-entities  (cons ent custom-entities)))
+                     #:enable-world-objects? world-objects?
+                     #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
 
 

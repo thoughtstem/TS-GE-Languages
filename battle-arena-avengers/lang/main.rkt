@@ -19,7 +19,7 @@
                    [#:bg              #:planet]
                    [#:weapon-list     #:power-list]
                    [#:weapon          #:power]
-                   [battle-arena-game avengers-game])
+                   [battlearena-game  avengers-game])
 
 (provide energy-blast
          star-bit
@@ -370,6 +370,7 @@
                       #:power-list       [power-list '()]
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Villains"]
+                      #:enable-world-objects? [world-objects? #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -381,7 +382,8 @@
         #:power-list     [power-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
-        #:other-entities [other-entities (or/c #f entity?)])
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest           [rest (listof entity?)]
        [res () game?])
 
@@ -395,6 +397,7 @@
                      #:enemy-list     e-list
                      #:item-list      item-list
                      #:score-prefix   prefix
-                     #:other-entities (cons ent custom-entities)))
+                     #:enable-world-objects? world-objects?
+                     #:other-entities (filter identity (flatten (cons ent custom-entities)))))
 
 

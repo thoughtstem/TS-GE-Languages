@@ -12,7 +12,7 @@
 (language-mappings battle-arena       battle-arena-fortnite
                    [custom-avatar     custom-hero]
                    [#:avatar          #:hero]
-                   [battle-arena-game fortnite-game])
+                   [battlearena-game fortnite-game])
 
 ;; ----- HERO
 
@@ -61,6 +61,7 @@
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Enemies"]
+                      #:enable-world-objects? [world-objects? #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -72,7 +73,8 @@
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
-        #:other-entities [other-entities (or/c #f entity?)])
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest            [rest (listof entity?)]
        [res () game?])
 
@@ -86,4 +88,5 @@
                      #:enemy-list     e-list
                      #:item-list      item-list
                      #:score-prefix   prefix
-                     #:other-entities (cons ent custom-entities)))
+                     #:enable-world-objects? world-objects?
+                     #:other-entities (filter identity (flatten (cons ent custom-entities)))))

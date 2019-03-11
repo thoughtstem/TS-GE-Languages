@@ -20,6 +20,7 @@
          safe-update-entity
          random-food
          random-coin
+         has-gold?
          dialog-str?
                  
          acid-spitter
@@ -912,7 +913,7 @@
                           ;(apply precompiler (remove-duplicates updated-food-list render-eq?))                                ;f-list
                           (map food->component (append (remove-duplicates updated-food-list
                                                                           name-eq?)
-                                                       known-products-list))                   ;f-list
+                                                       (filter-not (curry get-storage "Weapon") known-products-list)))                  ;f-list
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))

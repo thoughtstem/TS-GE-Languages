@@ -2,8 +2,8 @@
 
 (module hero-stuff racket
   
-  (require (prefix-in a: battle-arena-avengers)
-           battle-arena-avengers/assets
+  (require (prefix-in a: battlearena-avengers)
+           battlearena-avengers/assets
            (for-syntax racket))
 
   (define-syntax (provide-string stx)

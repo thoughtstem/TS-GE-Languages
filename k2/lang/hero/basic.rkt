@@ -19,7 +19,7 @@
   (require ratchet
            (submod "./hero-lang.rkt" hero-stuff)
            "../icons.rkt"
-           (prefix-in a: battle-arena-avengers/assets)
+           (prefix-in a: battlearena-avengers/assets)
            (prefix-in h: 2htdp/image)
            (prefix-in p: pict)
            (prefix-in p: pict/flash))

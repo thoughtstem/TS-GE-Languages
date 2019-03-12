@@ -201,7 +201,7 @@
                (custom-weapon #:name "Fireball" #:dart (fireball))]
               [(equal? (render s) (render skeleton-sprite))
                (custom-weapon #:name "Arrow" #:dart (arrow))]
-              [else (custom-weapon #:name "Spitter" #:dart (acid))])
+              [else (custom-weapon #:name "Spitter" #:dart (acid-dart))])
         w))
   
   (custom-enemy #:amount-in-world amount-in-world
@@ -296,7 +296,7 @@
 
   (define dart
     (if (equal? n "Iron Sword")
-        (sword)
+        (sword-dart)
         b))
   
   (custom-weapon #:name              n

@@ -4,3 +4,4 @@
 *.scrbl~
 *.rkt~
 *.DS_Store
+doc

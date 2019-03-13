@@ -407,7 +407,19 @@
     (define gold (get-counter (get-entity "score" g)))
     (>= gold amount)))
 
-
+(define (recipe->coin-system r #:prefix [prefix "Gold"])
+  (define product-name (get-name (recipe-product r)))
+  (define product-cost (recipe-cost r))
+  (define coin-toast-entity
+    (player-toast-entity (~a "-" product-cost " " (string-upcase prefix))))
+  (define (remove-gold g e1 e2)
+    (if ((crafting? product-name) g e2)
+        ((do-many (change-counter-by (- product-cost))
+                  (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                  (do-font-fx)
+                  (spawn coin-toast-entity)) g e2)
+        e2))
+  (observe-change (crafting? product-name) remove-gold))
 
 ; === WON AND LOST RULES ===
 (define (won? g e)
@@ -991,6 +1003,9 @@
                         #:x-scale (* .8 186)
                         #:y-scale (* .8 30))
                    ))
+
+    (define (recipe-has-cost? r)
+      (> (recipe-cost r) 0))
     
     (sprite->entity counter-sprite
                     #:name       "score"
@@ -998,7 +1013,8 @@
                     #:components (static)
                                  (counter 0)
                                  (layer "ui")
-                                 (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))))
+                                 (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
+                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile e-list)))

@@ -179,7 +179,7 @@
     (recipe #:product (fire-magic  #:name "Fire Magic"
                                    #:speed 5)
             #:build-time 60
-            #:rule       (has-gold? 100)))
+            #:cost       100))
   
   (survival-game
    #:avatar       (custom-avatar)

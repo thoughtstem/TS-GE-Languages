@@ -133,15 +133,15 @@
                       (set-y-scale 360 _))
                   #:position (posn 0 0)
                   #:name "night sky"
-                  #:components (layer "tops")
-                  (hidden)
-                  (apply precompiler
-                         (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
-                              (range 0 (+ max-alpha update-multiplier 1) update-multiplier)))
-                  (on-start (do-many (go-to-pos 'center)
-                                     show))
-                  (do-every update-interval update-night-sky)
-                  ))
+                  #:components (layer "sky")
+                               (hidden)
+                               (apply precompiler
+                                      (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
+                                           (range 0 (+ max-alpha update-multiplier 1) update-multiplier)))
+                               (on-start (do-many (go-to-pos 'center)
+                                                  show))
+                               (do-every update-interval update-night-sky)
+                               ))
 
 (define (draw-sky-with-light color)
   (place-images (list (circle 24 'outline (pen color 36 'solid 'round 'bevel))
@@ -193,7 +193,7 @@
   (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
                   #:position (posn 0 0)
                   #:name "night sky"
-                  #:components (layer "tops")
+                  #:components (layer "sky")
                   (hidden)
                   (lock-to "player")
                   (apply precompiler
@@ -442,14 +442,6 @@
   (define health (get-stat "health" player))
   (<= health 0))
 
-;(define (lost? g e)
-;  (and e
-;       (health-is-zero? g e)))
-
-(define (tops? e)
-  (and ((has-component? layer?) e)
-       (eq? (get-layer e) "tops")))
-
 (define (bg? e)
   (eq? (get-name e) "bg"))
     
@@ -459,8 +451,6 @@
   (if heal-amount
       (on-key use-key #:rule (and/r (player-is-near? item-name)
                                     (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
-                                                                                            (not/c tops?)
-                                                                                            (not/c ui?)
                                                                                             (not/c bg?))))
           (do-many (change-health-by heal-amount #:max max-health)
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
@@ -506,8 +496,6 @@
   (if coin-value
       (list (on-key use-key #:rule (and/r (player-is-near? coin-name)
                                           (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
-                                                                                                  (not/c tops?)
-                                                                                                  (not/c ui?)
                                                                                                   (not/c bg?))))
                     (do-many (change-counter-by coin-value)
                              (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))

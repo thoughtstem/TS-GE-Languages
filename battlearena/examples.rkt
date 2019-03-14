@@ -1069,7 +1069,7 @@
 (define-example-code battlearena level-design-1
 
   (battlearena-game
-   #:bg             (custom-bg #:img FOREST-BG)
+   #:bg (custom-bg #:img FOREST-BG)
    #:enable-world-objects? #t)
   
   )

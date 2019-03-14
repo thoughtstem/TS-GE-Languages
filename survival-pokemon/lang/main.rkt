@@ -35,6 +35,7 @@
                                   #:rows       [rows 3]
                                   #:columns    [cols 3]
                                   #:start-tile [t 0]
+                                  #:hd?        [hd? #f]
                                   #:components [c #f]
                                   . custom-components)
 
@@ -43,6 +44,7 @@
         #:rows       [rows number?]
         #:columns    [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
@@ -54,7 +56,8 @@
   (custom-bg #:image      img
              #:rows       rows
              #:columns    cols
-             #:start-tile t 
+             #:start-tile t
+             #:hd?        hd?
              #:components (cons c custom-components)))
 
 ; ---------   Custom Pokemon
@@ -346,6 +349,7 @@
                 #:crafter-list    [c-list    '() ]
                 #:score-prefix    [prefix    "Stones"]
                 #:power-list      [power-list '()]
+                #:enable-world-objects? [world-objects? #f]
                 #:other-entities  [ent #f]
                 . custom-entities)
   (->i ()
@@ -355,13 +359,14 @@
         #:starvation-rate [starvation-rate number?]
         #:sky             [sky sky?]
         #:friend-list     [friend-list    (listof (or/c entity? procedure?))]
-        #:trainer-list    [trainer-list       (listof (or/c entity? procedure?))]
-        #:stone-list      [stone-list       (listof (or/c entity? procedure?))]
+        #:trainer-list    [trainer-list   (listof (or/c entity? procedure?))]
+        #:stone-list      [stone-list     (listof (or/c entity? procedure?))]
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
-        #:score-prefix    [prefix string?]
-        #:power-list      [power-list (listof (or/c entity? procedure?))]
-        #:other-entities  [other-entities (or/c #f entity?)])
+        #:score-prefix    [prefix         string?]
+        #:power-list      [power-list     (listof (or/c entity? procedure?))]
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities  [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest  [rest (listof entity?)]
        [res () game?])
 
@@ -382,4 +387,5 @@
    #:crafter-list    c-list
    #:score-prefix    prefix
    #:weapon-list     power-list
-   #:other-entities  (cons ent custom-entities)))
+   #:enable-world-objects? world-objects?
+   #:other-entities  (filter identity (flatten (cons ent custom-entities)))))

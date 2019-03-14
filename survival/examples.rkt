@@ -148,6 +148,48 @@
    #:crafter-list (list (my-cauldron)))
   )
 
+; sword, damage, has-gold? options (spear) fire-magic, etc
+(define-example-code survival weapon-crafter-1
+  (define my-sword-recipe
+    (recipe #:product (sword)
+            #:build-time 20))
+  
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:crafter-list (list (custom-crafter
+                         #:sprite      wood-table-sprite
+                         #:recipe-list (list my-sword-recipe))))
+  )
+
+(define-example-code survival weapon-crafter-2
+  (define my-sword-recipe
+    (recipe #:product (sword #:name "Heavy Sword"
+                             #:damage 100)
+            #:build-time 40))
+  
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:crafter-list (list (custom-crafter
+                         #:sprite      wood-table-sprite
+                         #:recipe-list (list my-sword-recipe))))
+  )
+
+(define-example-code survival weapon-crafter-3
+  (define my-fire-magic-recipe
+    (recipe #:product (fire-magic  #:name "Fire Magic"
+                                   #:speed 5)
+            #:build-time 60
+            #:cost       100))
+  
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:coin-list    (list (custom-coin #:value 20
+                                     #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter
+                         #:sprite wood-table-sprite
+                         #:recipe-list (list my-fire-magic-recipe))))
+  )
+
 ; -----------------
 
 (define-example-code survival sky-1 
@@ -375,16 +417,67 @@
   (define (my-bg)
     (custom-bg
      #:image LAVA-BG
-     #:start-tile 4))
+     #:rows 2
+     #:columns 2))
 
   (survival-game
    #:avatar (custom-avatar)
    #:bg (my-bg))
   )
+
+(define-example-code survival bg-4
+  (define (my-bg)
+    (custom-bg #:image LAVA-BG
+               #:rows 2
+               #:columns 2
+               #:start-tile 3
+               #:hd? #t))
+ 
+  (survival-game #:bg (my-bg))
+  )
   
 
 ; -----------------
 
+; ==== LEVEL DESIGN KATAS ====
+(define-example-code survival level-design-1
+
+  (survival-game
+   #:bg (custom-bg #:image FOREST-BG)
+   #:enable-world-objects? #t)
+  
+  )
+
+(define-example-code survival level-design-2
+
+  (survival-game
+   #:bg             (custom-bg #:image FOREST-BG)
+   #:other-entities (make-world-objects round-tree
+                                        pine-tree
+                                        #:hd? #t))
+  )
+
+(define-example-code survival level-design-3
+
+  (survival-game
+   #:bg             (custom-bg #:image PINK-BG)
+   #:other-entities (make-world-objects candy-cane-tree
+                                        snow-pine-tree
+                                        #:hd? #t
+                                        #:random-color? #t))
+  
+  )
+
+(define-example-code survival level-design-4
+  
+  (survival-game
+   #:other-entities (pine-tree   (posn 100 200) #:tile 0)
+                    (wood-house  (posn 100 200) #:tile 1 #:size 0.5)
+                    (brick-house (posn 100 200) #:tile 2 #:hue (random 360)))
+  
+  )
+
+; ==============================
 
 (define-example-code survival game-jam-1 
   (survival-game

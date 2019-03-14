@@ -309,9 +309,11 @@
                                             #f)
                                         "SPACE to interact/use"
                                         "ENTER to close dialogs"
+                                        "F to fire/use weapon"
                                         "I to open these instructions"
                                         "Z to pick up items"
-                                        "X to drop items")))
+                                        "X to drop items"
+                                        "B to open and close backpack")))
   (define i-length (length i-list))
   
   (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
@@ -529,9 +531,10 @@
          automatically if it is passed into @racket[survival-game]
          via the @racket[#:avatar] parameter.}
   
-  (define dead-frame (if (image? sprite)
-                         (rotate -90 sprite)
-                         (rotate -90 (render sprite))))
+  (define dead-frame (cond [(image? sprite)           (rotate -90 sprite)]
+                           [(animated-sprite? sprite) (rotate -90 (render sprite))]
+                           [((listof sprite?) sprite) (rotate -90 (render (last sprite)))]))
+  
   (define base-avatar
     (sprite->entity sprite
                   #:name       "player"
@@ -602,8 +605,8 @@
                                     #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite sprite?]
-        #:dart-sprite       [dart-sprite sprite?]
+        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]
@@ -730,7 +733,7 @@
                                    )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai ai-level?]
            #:health [health positive?]
            ;#:shield [shield positive?]
@@ -1100,7 +1103,7 @@
        (#:position   [position posn?]
         #:tile       [tile number?]
         #:name       [name string?]
-        #:sprite     [sprite sprite?]
+        #:sprite     [sprite (or/c sprite? (listof sprite?))]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1135,7 +1138,7 @@
                                  #:components [c (on-start (respawn 'anywhere))]
                                  . custom-components )
 
-  (->i () (#:sprite     [sprite sprite?]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -1242,7 +1245,7 @@
                                   #:components       [c #f]
                                   . custom-entities)
   (->i () (#:entity     [entity entity?]
-           #:sprite     [sprite sprite?]
+           #:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -1296,7 +1299,7 @@
 
   ;change contracts to accept #f
    (->i () (#:entity   [entity entity?]
-            #:sprite   [sprite (or/c sprite? #f)]
+            #:sprite   [sprite (or/c sprite? (listof sprite?) #f)]
             #:position [position (or/c posn? #f)]
             #:name     [name (or/c string? #f)]
             #:tile     [tile (or/c number? #f)]

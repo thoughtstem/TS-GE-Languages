@@ -13,18 +13,21 @@
                    [custom-npc       custom-friend]
                    [custom-enemy     custom-trainer]
                    [custom-coin      custom-stone]
-                   [custom-weapon    custom-power]
+                   [custom-weapon    custom-attack]
                    [survival-game    pokemon-game]
                    [#:bg             #:town-bg]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:friend-list]
                    [#:enemy-list     #:trainer-list]
                    [#:coin-list      #:stone-list]
-                   [#:weapon-list    #:power-list]
+                   [#:weapon-list    #:attack-list]
                    )
 
 (provide pokeball
-         )
+         (rename-out [fire-magic   fire-blast])
+         (rename-out [ice-magic    aqua-jet])
+         (rename-out [ring-of-fire fire-spin])
+         (rename-out [ring-of-ice  waterfall]))
 
 
 (define bg-list
@@ -276,24 +279,24 @@
                #:respawn?        respawn?
                #:components      (cons c custom-entities)))
 
-;--------- Custom Power
-(define/contract/doc (custom-power #:name              [n "Thunderbolt"]
-                                   #:sprite            [s chest-sprite]
-                                   #:dart-sprite       [ds (rectangle 10 2 "solid" "yellow")]
-                                   #:speed             [spd 10]
-                                   #:damage            [dmg 10]
-                                   #:range             [rng 1000]
-                                   #:dart              [b (custom-dart #:sprite ds
-                                                                       #:speed spd
-                                                                       #:damage dmg
-                                                                       #:range rng)]
-                                   #:fire-mode         [fm 'normal]
-                                   #:fire-rate         [fr 3]
-                                   #:fire-key          [key 'f]
-                                   #:mouse-fire-button [button 'left]
-                                   #:point-to-mouse?   [ptm? #t]
-                                   #:rapid-fire?       [rf? #t]
-                                   #:rarity            [rarity 'common])
+;--------- Custom Attack
+(define/contract/doc (custom-attack #:name              [n "Thunderbolt"]
+                                    #:sprite            [s chest-sprite]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "yellow")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
+                                    #:fire-mode         [fm 'spread]
+                                    #:fire-rate         [fr 3]
+                                    #:fire-key          [key 'f]
+                                    #:mouse-fire-button [button 'left]
+                                    #:point-to-mouse?   [ptm? #t]
+                                    #:rapid-fire?       [rf? #t]
+                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
         #:sprite            [sprite sprite?]
@@ -311,9 +314,9 @@
         #:rarity            [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom power, which will be placed in to the world
+  @{Returns a custom attack, which will be placed in to the world
          automatically if it is passed into @racket[pokemon-game]
-         via the @racket[#:power-list] parameter.}
+         via the @racket[#:attack-list] parameter.}
 
   (custom-weapon #:name              n
                  #:sprite            s
@@ -330,7 +333,9 @@
                  #:rapid-fire?       rf?
                  #:rarity            rarity))
 
-; ---------   Minecraft Main Game
+
+
+; ---------   Pokemon Main Game
 
 (define (random-forest)
   (change-img-hue (random 360) (draw-plain-forest-bg)))
@@ -348,7 +353,7 @@
                 #:food-list       [f-list    '() ]
                 #:crafter-list    [c-list    '() ]
                 #:score-prefix    [prefix    "Stones"]
-                #:power-list      [power-list '()]
+                #:attack-list     [attack-list '()]
                 #:enable-world-objects? [world-objects? #f]
                 #:other-entities  [ent #f]
                 . custom-entities)
@@ -364,7 +369,7 @@
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix         string?]
-        #:power-list      [power-list     (listof (or/c entity? procedure?))]
+        #:attack-list     [attack-list    (listof (or/c entity? procedure?))]
         #:enable-world-objects? [world-objects? boolean?]
         #:other-entities  [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest  [rest (listof entity?)]
@@ -386,6 +391,6 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
-   #:weapon-list     power-list
+   #:weapon-list     attack-list
    #:enable-world-objects? world-objects?
    #:other-entities  (filter identity (flatten (cons ent custom-entities)))))

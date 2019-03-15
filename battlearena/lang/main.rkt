@@ -241,7 +241,7 @@
                                    )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
@@ -375,7 +375,8 @@
                                         "ENTER to close dialogs"
                                         "I to open these instructions"
                                         "Z to pick up items"
-                                        "X to drop items")))
+                                        "X to drop items"
+                                        "B to open and close backpack")))
   (define i-length (length i-list))
   
   (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
@@ -475,7 +476,7 @@
                                           #:rarity      [rarity 'common])
   (->i ()
        ( #:name          [name string?]
-         #:sprite        [sprite sprite?]
+         #:sprite        [sprite (or/c sprite? (listof sprite?))]
          #:protects-from [protects-from string?]
          #:change-damage [change-damage procedure?]
          #:rarity        [rarity rarity-level?])
@@ -532,8 +533,8 @@
                                     #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:sprite      [sprite sprite?]
-        #:dart-sprite [dart-sprite sprite?]
+        #:sprite      [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed       [speed  number?]
         #:damage      [damage number?]
         #:range       [range  number?]
@@ -594,7 +595,7 @@
                                   . custom-entities)
 
   (->i () (#:name [name string?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:on-use [on-use any/c]
            #:rarity [rarity rarity-level?]
            #:respawn? [respawn boolean?]
@@ -807,7 +808,7 @@
                       . custom-components)
 
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -825,9 +826,9 @@
   
 
   
-  (define dead-frame (if (image? sprite)
-                         (rotate -90 sprite)
-                         (rotate -90 (render sprite))))
+  (define dead-frame (cond [(image? sprite)           (rotate -90 sprite)]
+                           [(animated-sprite? sprite) (rotate -90 (render sprite))]
+                           [((listof sprite?) sprite) (rotate -90 (render (last sprite)))]))
 
   (define base-avatar
     (sprite->entity sprite

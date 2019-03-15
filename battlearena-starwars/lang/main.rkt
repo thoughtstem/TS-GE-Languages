@@ -21,6 +21,7 @@
 (provide lightsaber-droid
          blaster-droid
          double-lightsaber
+         lightsaber-sprite
          )
 
 ;; ----- HERO
@@ -35,7 +36,7 @@
                                   #:components       [c #f]
                                   . custom-components)
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -74,7 +75,7 @@
                                      )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai-level ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
@@ -115,7 +116,7 @@
                                  #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
+        #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
@@ -167,7 +168,7 @@
                               #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
+        #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
@@ -244,6 +245,10 @@
   )
 
 ;; ----- WEAPONS & DARTS
+
+(define (lightsaber-sprite c)
+  (beside (rectangle 8 4 "solid" "black")
+          (rectangle 28 4 "solid" c)))
 
 (define (swinging-lightsaber-sprite c)
   (rotate 90 (beside (rectangle 40 40 "solid" "transparent")

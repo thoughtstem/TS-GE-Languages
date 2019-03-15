@@ -43,7 +43,7 @@
                                   #:components       [c #f]
                                   . custom-components)
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -81,7 +81,7 @@
                                      )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai-level ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
@@ -122,8 +122,8 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:sprite      [sprite (or/c sprite? false?)]
-        #:icon        [icon sprite?]
+        #:sprite      [sprite (or/c sprite? (listof sprite?) false?)]
+        #:icon        [icon (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:damage      [dmg number?]
         #:dart        [dart entity?]

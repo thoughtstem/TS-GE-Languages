@@ -75,7 +75,7 @@
                . custom-components)
   
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -115,7 +115,7 @@
                                     #:scale      [scale 1]
                                     #:components [c (on-start (respawn 'anywhere))] . custom-components )
 
-  (->i () (#:sprite     [sprite sprite?]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -184,7 +184,7 @@
                                                    . custom-components)
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite          [sprite sprite?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
            #:ai              [ai ai-level?]
            #:health          [health positive?] 
            #:weapon          [weapon entity?]
@@ -232,7 +232,7 @@
                                                     . custom-entities)
 
    (->i () (#:entity     [entity entity?]
-            #:sprite     [sprite sprite?]
+            #:sprite     [sprite (or/c sprite? (listof sprite?))]
             #:position   [position posn?]
             #:name       [name string?]
             #:tile       [tile number?]
@@ -278,8 +278,8 @@
                                   #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite sprite?]
-        #:dart-sprite       [dart-sprite sprite?]
+        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]

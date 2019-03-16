@@ -10,11 +10,11 @@
 
 
 (language-mappings battlearena       battlearena-starwars
-                   [custom-avatar     custom-hero]
-                   [custom-enemy      custom-villain]
+                   [custom-avatar     custom-rebel]
+                   [custom-enemy      custom-imperial]
                    [custom-bg         custom-planet]
-                   [#:avatar          #:hero]
-                   [#:enemy-list      #:villain-list]
+                   [#:avatar          #:rebel]
+                   [#:enemy-list      #:imperial-list]
                    [#:bg              #:planet]
                    [battlearena-game starwars-game])
 
@@ -24,9 +24,9 @@
          lightsaber-sprite
          )
 
-;; ----- HERO
+;; ----- REBEL
 
-(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-rebel #:sprite           (sprite (random-character-sprite))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
@@ -48,9 +48,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   
-  @{Returns a custom hero, which will be placed in to the world
+  @{Returns a custom rebel, which will be placed in to the world
          automatically if it is passed into @racket[starwars-game]
-         via the @racket[#:hero] parameter.}
+         via the @racket[#:rebel] parameter.}
   
   (custom-avatar #:sprite           sprite
                  #:damage-processor dp
@@ -61,9 +61,9 @@
                  #:item-slots       w-slots
                  #:components       (cons c custom-components)))
 
-;; ----- VILLAIN
+;; ----- IMPERIAL
 
-(define/contract/doc (custom-villain #:amount-in-world (amount-in-world 1)
+(define/contract/doc (custom-imperial #:amount-in-world (amount-in-world 1)
                                      #:sprite (sprite stormtrooper-sprite)
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
@@ -87,7 +87,7 @@
 
   @{Returns a custom enemy, which will be placed in to the world
          automatically if it is passed into @racket[starwars-game]
-         via the @racket[#:villain-list] parameter.}
+         via the @racket[#:imperial-list] parameter.}
 
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite sprite
@@ -398,13 +398,13 @@
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar (custom-hero #:sprite (circle 10 'solid 'red))]
+                      #:rebel             [avatar (custom-rebel #:sprite (circle 10 'solid 'red))]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
-                      #:villain-list     [e-list '()]
+                      #:imperial-list     [e-list '()]
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
-                      #:score-prefix     [prefix "Villains"]
+                      #:score-prefix     [prefix "Imperials"]
                       #:enable-world-objects? [world-objects? #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
@@ -412,8 +412,8 @@
   (->i ()
        (#:headless       [headless boolean?]
         #:planet         [planet entity?]
-        #:hero           [avatar (or/c entity? false?)]
-        #:villain-list   [enemy-list   (listof (or/c #f entity? procedure?))]
+        #:rebel           [avatar (or/c entity? false?)]
+        #:imperial-list   [enemy-list   (listof (or/c #f entity? procedure?))]
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]

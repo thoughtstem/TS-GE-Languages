@@ -36,8 +36,13 @@
          acid-dart
          spear-dart
          sword-dart
+         fire-dart
+         ice-dart
          flying-dagger-dart
          ring-of-fire-dart
+
+         acid-sprite
+         ice-sprite
          )
 
 (require scribble/srcdoc)
@@ -1424,10 +1429,13 @@
                #:range      rng
                #:components (every-tick (change-direction-by 15))))
 
-(define (acid-dart  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
-                                                      -3 3
-                                                      (overlay (circle 10 'outline 'green)
-                                                               (circle 10 'solid (make-color 180 200 0 128))))]
+(define acid-sprite
+  (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
+                  -3 3
+                  (overlay (circle 10 'outline 'green)
+                           (circle 10 'solid (make-color 180 200 0 128)))))
+
+(define (acid-dart  #:sprite     [s   acid-sprite]
                     #:damage     [dmg 10]
                     #:durability [dur 5]
                     #:speed      [spd 3]
@@ -1440,15 +1448,18 @@
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
 
-(define (acid-spitter  #:sprite     [s   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'green))
-                                                 -3 3
-                                                 (overlay (circle 10 'outline 'green)
-                                                          (circle 10 'solid (make-color 180 200 0 128))))]
-                       #:damage      [dmg 10]
-                       #:durability  [dur 5]
-                       #:speed       [spd 3]
-                       #:range       [rng 100]
-                       #:name              [n "Acid Spitter"]
+(define (acid-spitter  #:name              [n "Acid Spitter"]
+                       #:icon              [icon (make-icon "AS")]
+                       #:sprite            [s   acid-sprite]
+                       #:damage            [dmg 10]
+                       #:durability        [dur 5]
+                       #:speed             [spd 3]
+                       #:range             [rng 100]
+                       #:dart              [d (acid-dart #:sprite s
+                                                         #:damage dmg
+                                                         #:durability dur
+                                                         #:speed spd
+                                                         #:range rng)]
                        #:fire-mode         [fm 'normal]
                        #:fire-rate         [fr 3]
                        #:fire-key          [key 'f]
@@ -1456,16 +1467,9 @@
                        #:point-to-mouse?   [ptm? #f]
                        #:rapid-fire?       [rf? #t]
                        #:rarity            [rarity 'common])
-  (define acid-dart
-    (custom-dart #:position (posn 25 0)
-                 #:sprite     s
-                 #:damage     dmg
-                 #:durability dur
-                 #:speed      spd
-                 #:range      rng
-                 #:components (on-start (random-size 0.5 1))))
-  (custom-weapon #:sprite (make-icon "AS")
-                 #:dart   acid-dart
+  (custom-weapon #:name n
+                 #:sprite icon
+                 #:dart   d
                  #:fire-mode fm
                  #:fire-rate fr
                  #:fire-key key

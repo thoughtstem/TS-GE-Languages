@@ -24,10 +24,11 @@
                    )
 
 (provide pokeball
-         (rename-out [fire-magic   fire-blast])
-         (rename-out [ice-magic    aqua-jet])
-         (rename-out [ring-of-fire fire-spin])
-         (rename-out [ring-of-ice  waterfall]))
+         fire-blast
+         aqua-jet
+         fire-spin
+         waterfall
+         bubble)
 
 
 (define bg-list
@@ -394,3 +395,215 @@
    #:weapon-list     attack-list
    #:enable-world-objects? world-objects?
    #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
+
+; ===== PREBUILT ATTACKS =====
+
+(define fire-blast-icon (list (new-sprite flame-sprite
+                                          #:scale 0.75
+                                          #:x-offset 5
+                                          #:y-offset -5)
+                              (new-sprite flame-sprite
+                                          #:scale 0.75)
+                              (new-sprite flame-sprite
+                                          #:scale 0.75
+                                          #:x-offset -5
+                                          #:y-offset 5)
+                              (make-icon "" )))
+
+(define (fire-blast #:name              [n "Fire Blast"]
+                    #:icon              [i fire-blast-icon]
+                    #:sprite            [s flame-sprite]
+                    #:damage            [dmg 5]
+                    #:durability        [dur 5]
+                    #:speed             [spd 3]
+                    #:range             [rng 20]
+                    #:dart              [d (fire-dart #:sprite s
+                                                      #:damage dmg
+                                                      #:durability dur
+                                                      #:speed spd
+                                                      #:range rng)]
+                    #:fire-mode         [fm 'random]
+                    #:fire-rate         [fr 10]
+                    #:fire-key          [key 'f]
+                    #:mouse-fire-button [button #f]
+                    #:point-to-mouse?   [ptm? #f]
+                    #:rapid-fire?       [rf? #t]
+                    #:rarity            [rarity 'common])
+  (fire-magic #:name n
+              #:icon i
+              #:dart d
+              #:fire-mode fm
+              #:fire-rate fr
+              #:mouse-fire-button button
+              #:point-to-mouse? ptm?
+              #:rapid-fire? rf?
+              #:rarity rarity))
+
+(define aqua-jet-icon (list (new-sprite ice-sprite
+                                        #:scale 0.75
+                                        #:x-offset 5
+                                        #:y-offset -5)
+                            (new-sprite ice-sprite
+                                        #:scale 0.75)
+                            (new-sprite ice-sprite
+                                        #:scale 0.75
+                                        #:x-offset -5
+                                        #:y-offset 5)
+                            (make-icon "" )))
+
+(define (aqua-jet #:name              [n "Aqua Jet"]
+                  #:icon              [i aqua-jet-icon]
+                  #:sprite            [s ice-sprite]
+                  #:damage            [dmg 5]
+                  #:durability        [dur 5]
+                  #:speed             [spd 3]
+                  #:range             [rng 20]
+                  #:dart              [d (ice-dart #:sprite s
+                                                   #:damage dmg
+                                                   #:durability dur
+                                                   #:speed spd
+                                                   #:range rng)]
+                  #:fire-mode         [fm 'random]
+                  #:fire-rate         [fr 10]
+                  #:fire-key          [key 'f]
+                  #:mouse-fire-button [button #f]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (ice-magic #:name n
+             #:icon i
+             #:dart d
+             #:fire-mode fm
+             #:fire-rate fr
+             #:mouse-fire-button button
+             #:point-to-mouse? ptm?
+             #:rapid-fire? rf?
+             #:rarity rarity))
+
+(define fire-spin-icon (list (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset -5
+                                         #:y-offset 0)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 5
+                                         #:y-offset 0)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset -5)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset 5)
+                             (make-icon "" )))
+
+(define (fire-spin #:name              [n "Fire Spin"]
+                   #:icon              [i fire-spin-icon]
+                   #:sprite            [s flame-sprite]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 20]
+                   #:speed             [spd 10]
+                   #:duration          [rng 36]
+                   #:dart              [d (ring-of-fire-dart #:sprite s
+                                                             #:damage dmg
+                                                             #:durability dur
+                                                             #:speed spd
+                                                             #:duration rng)]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 10]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
+  (ring-of-fire #:name n
+                #:icon i
+                #:dart d
+                #:fire-mode fm
+                #:fire-rate fr
+                #:mouse-fire-button button
+                #:point-to-mouse? ptm?
+                #:rapid-fire? rf?
+                #:rarity rarity))
+
+(define waterfall-icon (list (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset -5
+                                         #:y-offset 0)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 5
+                                         #:y-offset 0)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset -5)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset 5)
+                             (make-icon "" )))
+
+(define (waterfall #:name              [n "Waterfall"]
+                   #:icon              [i waterfall-icon]
+                   #:sprite            [s ice-sprite]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 20]
+                   #:speed             [spd 10]
+                   #:duration          [rng 36]
+                   #:dart              [d (ring-of-fire-dart #:sprite s
+                                                             #:damage dmg
+                                                             #:durability dur
+                                                             #:speed spd
+                                                             #:duration rng)]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 10]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
+  (ring-of-ice #:name n
+               #:icon i
+               #:dart d
+               #:fire-mode fm
+               #:fire-rate fr
+               #:mouse-fire-button button
+               #:point-to-mouse? ptm?
+               #:rapid-fire? rf?
+               #:rarity rarity))
+
+(define (bubble-icon)
+  (list (set-sprite-color 'blue acid-sprite)
+        (make-icon "" 'lightgoldenrodyellow)))
+
+(define (bubble  #:name              [n "Bubble"]
+                 #:icon              [i (bubble-icon)]
+                 #:sprite            [s   (set-sprite-color 'blue acid-sprite)]
+                 #:damage            [dmg 10]
+                 #:durability        [dur 5]
+                 #:speed             [spd 3]
+                 #:range             [rng 100]
+                 #:dart              [d (acid-dart #:sprite s
+                                                   #:damage dmg
+                                                   #:durability dur
+                                                   #:speed spd
+                                                   #:range rng)]
+                 #:fire-mode         [fm 'random]
+                 #:fire-rate         [fr 3]
+                 #:fire-key          [key 'f]
+                 #:mouse-fire-button [button #f]
+                 #:point-to-mouse?   [ptm? #f]
+                 #:rapid-fire?       [rf? #t]
+                 #:rarity            [rarity 'common])
+  (acid-spitter #:name n
+                #:icon i
+                #:dart   d
+                #:fire-mode fm
+                #:fire-rate fr
+                #:fire-key key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            rarity))

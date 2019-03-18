@@ -26,7 +26,7 @@
                                   #:components       [c #f]
                                   . custom-components)
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]

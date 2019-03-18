@@ -225,14 +225,6 @@
 
 ; -----------------
 
-(define-example-code survival starvation-rate
-  (survival-game
-   #:avatar          (custom-avatar)
-   #:starvation-rate 100)
-  )
-
-; -----------------
-
 (define-example-code survival enemy-1
   (survival-game
    #:avatar     (custom-avatar)
@@ -302,6 +294,7 @@
    #:food-list  (list (my-food)))
   )
 
+
 (define-example-code survival food-3
   (define (my-food)
     (custom-food #:sprite          apples-sprite
@@ -334,6 +327,18 @@
    #:food-list  (list (my-food)
                       (special-food))))
 
+(define-example-code survival food-5
+  (define (my-food)
+    (custom-food #:sprite          cherry-sprite
+                 #:name            "Cherry"
+                 #:amount-in-world 20
+                 #:heals-by        50))
+  
+  (survival-game
+   #:avatar          (custom-avatar)
+   #:food-list       (list (my-food))
+   #:starvation-rate 100)
+  )
 ; -----------------
 
 (define-example-code survival npc-1

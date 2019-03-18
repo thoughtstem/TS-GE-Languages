@@ -183,4 +183,19 @@
 
   ;=================================
 
+
+(define-example-code survival-pokemon alt/weapon-crafter-1
+  (define my-attack-recipe
+    (recipe #:product (fire-blast)
+            #:build-time 20))
+  
+  (pokemon-game
+   #:pokemon      (custom-pokemon)
+   #:crafter-list (list (custom-crafter
+                         #:sprite      chest-sprite
+                         #:recipe-list (list my-attack-recipe))))
+  )
+
+
+
 (test-all-examples-as-games 'survival-pokemon)

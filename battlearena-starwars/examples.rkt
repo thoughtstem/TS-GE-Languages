@@ -16,10 +16,17 @@
 
 (define-example-code battlearena-starwars alt/avatar-3
   (define (my-rebel)
+    (custom-rebel #:sprite obiwan-sprite
+                  #:speed  15))
+  (starwars-game
+   #:rebel (my-rebel))
+  )
+
+(define-example-code battlearena-starwars alt/avatar-4
+  (define (my-rebel)
     (custom-rebel #:sprite     yoda-sprite
-                 #:speed      15
-                 #:key-mode   'arrow-keys
-                 #:item-slots 5))
+                  #:speed      20
+                  #:item-slots 5))
   (starwars-game
    #:rebel (my-rebel))
   )
@@ -28,14 +35,30 @@
 
 (define-example-code battlearena-starwars alt/enemy-3
   (define (my-enemy)
-    (custom-imperial #:sprite          darthvader-sprite
-                    #:ai              'medium
-                    #:health          200
-                    #:shield          100
-                    #:amount-in-world 5))
+    (custom-imperial #:sprite          darthmaul-sprite
+                     #:ai              'medium
+                     #:health          200
+                     #:shield          100
+                     #:amount-in-world 5))
   
   (starwars-game 
    #:imperial-list (list (my-enemy)))
+  )
+
+(define-example-code battlearena-starwars alt/enemy-4
+  (define (easy-enemy)
+    (custom-imperial #:ai 'easy
+                     #:sprite stormtrooper-sprite
+                     #:health 50
+                     #:amount-in-world 5))
+ 
+  (define (hard-enemy)
+    (custom-imperial #:ai 'hard
+                     #:sprite bobafett-sprite
+                     #:health 200))
+ 
+  (starwars-game
+   #:imperial-list (list (easy-enemy) (hard-enemy)))
   )
 
 ; ---------------
@@ -80,7 +103,7 @@
                   #:rarity        'rare))
   
   (starwars-game
-   #:item-list (list (l-armor)))  
+   #:item-list (list (l-armor)))
   )
 
 (define-example-code battlearena-starwars alt/sword-armor-3

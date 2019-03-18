@@ -10,17 +10,17 @@
 
 (define-example-code battlearena-fortnite alt/avatar-2
  (fortnite-game
-   #:hero (custom-hero #:sprite constructor-sprite))
+   #:avatar (custom-avatar #:sprite constructor-sprite))
   )
 
 (define-example-code battlearena-fortnite alt/avatar-3
-  (define (my-hero)
-    (custom-hero #:sprite     ninja-sprite
-                 #:speed      20
-                 #:key-mode   'arrow-keys
-                 #:item-slots 5))
+  (define (my-avatar)
+    (custom-avatar #:sprite     ninja-sprite
+                   #:speed      20
+                   #:key-mode   'arrow-keys
+                   #:item-slots 5))
   (fortnite-game
-   #:hero (my-hero))
+   #:avatar (my-avatar))
   )
 
 

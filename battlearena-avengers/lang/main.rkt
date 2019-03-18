@@ -24,8 +24,8 @@
 (provide energy-blast
          star-bit
          energy-droid
-         hammer
-         hammer-sprite
+         flying-hammer
+         flying-hammer-sprite
          star-bit-sprite
          energy-blast-sprite
          magic-orb
@@ -215,7 +215,7 @@
                  #:columns 3
                  #:row-number 1))
 
-(define (hammer-sprite c)
+(define (flying-hammer-sprite c)
   (beside
    (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))
@@ -261,8 +261,8 @@
                 #:rarity            'common
                 ))
 
-(define (hammer #:color             [c   'black]
-                #:sprite            [s   (hammer-sprite c)]
+(define (flying-hammer #:color             [c   'black]
+                #:sprite            [s   (flying-hammer-sprite c)]
                 #:damage            [dmg 10]
                 #:durability        [dur 20]
                 #:speed             [spd 5]

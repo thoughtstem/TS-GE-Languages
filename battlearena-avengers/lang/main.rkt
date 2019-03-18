@@ -9,7 +9,7 @@
          game-engine-demos-common)
 
 
-(language-mappings battlearena       battlearena-avengers
+(language-mappings battlearena        battlearena-avengers
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
                    [custom-weapon     custom-power]
@@ -24,8 +24,8 @@
 (provide energy-blast
          star-bit
          energy-droid
-         flying-hammer
-         flying-hammer-sprite
+         hammer
+         hammer-sprite
          star-bit-sprite
          energy-blast-sprite
          magic-orb
@@ -74,7 +74,7 @@
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
-                                     #:power (power (custom-power #:color "red"))
+                                     #:power (power (custom-power #:color 'red))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
                                      . custom-components
@@ -111,8 +111,8 @@
                                    #:icon              [icon (make-icon "EB" "green")]
                                    #:color             [c "blue"]
                                    #:damage            [dmg 10]
-                                   #:dart              [b (energy-blast #:color c
-                                                                        #:damage dmg)]
+                                   #:dart              [b (energy #:color c
+                                                                  #:damage dmg)]
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
@@ -139,10 +139,6 @@
   @{Returns a custom power, which will be placed in to the world
          automatically if it is passed into @racket[avengers-game]
          via the @racket[#:power-list] parameter.}
-
-
-  
-  
   
   (custom-weapon #:name              n
                  #:sprite            (if (equal? sprite #f) ;GET RID OF THIS LATER
@@ -219,7 +215,7 @@
                  #:columns 3
                  #:row-number 1))
 
-(define (flying-hammer-sprite c)
+(define (hammer-sprite c)
   (beside
    (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))
@@ -229,52 +225,145 @@
            (circle 6 "solid" "orange")
            (circle 7 "solid" "red")))
 
-(define (magic-orb #:color      [c "yellow"]
-                   #:sprite     [s   (my-flame-sprite c)]
-                   #:damage     [dmg 5]
-                   #:durability [dur 20]
-                   #:speed      [spd 10]
-                   #:range      [rng 36])
-  (custom-dart #:position   (posn 25 0)
-               #:sprite     s
-               #:damage     dmg
-               #:durability dur
-               #:speed      spd
-               #:range      rng
-               #:components (on-start (set-size 0.5))
-               (every-tick (do-many (scale-sprite 1.05)
-                                    (change-direction-by 10)))))
+(define (magic-orb #:color             [c "yellow"]
+                   #:sprite            [s   (my-flame-sprite c)]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 20]
+                   #:speed             [spd 10]
+                   #:range             [rng 36]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 3]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button 'left]
+                   #:point-to-mouse?   [ptm? #t]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common]
+                   #:icon              [icon (make-icon "MO" "orange")]
+                   #:dart              [dart (custom-dart #:position   (posn 25 0)
+                                                          #:sprite     s
+                                                          #:damage     dmg
+                                                          #:durability dur
+                                                          #:speed      spd
+                                                          #:range      rng
+                                                          #:components (on-start (set-size 0.5))
+                                                                       (every-tick (do-many (scale-sprite 1.05)
+                                                                                            (change-direction-by 10))))])
 
-(define (flying-hammer #:color      [c   'black]
-                       #:position   [p   (posn 20 0)]
-                       #:sprite     [s   (flying-hammer-sprite c)]
-                       #:damage     [dmg 10]
-                       #:durability [dur 20]
-                       #:speed      [spd 5]
-                       #:range      [rng 40])
-  (custom-dart #:position p
-               #:sprite     s
-               #:damage     dmg
-               #:durability dur
-               #:speed      spd
-               #:range      rng
-               #:components (do-every 10 (random-direction 0 360))))
+  (custom-power #:name              "Magic Orb"
+                #:icon              icon
+                #:dart              dart
+                #:fire-mode         fm
+                #:fire-rate         fr
+                #:fire-key          key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            'common
+                ))
+
+(define (hammer #:color             [c   'black]
+                #:sprite            [s   (hammer-sprite c)]
+                #:damage            [dmg 10]
+                #:durability        [dur 20]
+                #:speed             [spd 5]
+                #:range             [rng 40]
+                #:fire-mode         [fm 'normal]
+                #:fire-rate         [fr 3]
+                #:fire-key          [key 'f]
+                #:mouse-fire-button [button 'left]
+                #:point-to-mouse?   [ptm? #t]
+                #:rapid-fire?       [rf? #t]
+                #:rarity            [rarity 'common]
+                #:icon              [icon (make-icon "H" "gray")]
+                #:dart              [dart (custom-dart #:position   (posn 20 0)
+                                                       #:sprite     s
+                                                       #:damage     dmg
+                                                       #:durability dur
+                                                       #:speed      spd
+                                                       #:range      rng
+                                                       #:components (do-every 10 (random-direction 0 360)))])
+
+  (custom-power #:name              "Hammer"
+                #:icon              icon
+                #:dart              dart
+                #:fire-mode         fm
+                #:fire-rate         fr
+                #:fire-key          key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            'common
+                ))
 
 (define (star-bit
-         #:color      [c "green"]
-         #:sprite     [s (star-bit-sprite c)]
-         #:damage     [dmg 25]
-         #:durability [dur 10]
-         #:speed      [spd  5]
-         #:range      [rng 50])
+         #:color             [c "green"]
+         #:sprite            [s (star-bit-sprite c)]
+         #:damage            [dmg 5]
+         #:durability        [dur 10]
+         #:speed             [spd 15]
+         #:range             [rng 50]
+         #:fire-mode         [fm 'normal]
+         #:fire-rate         [fr 3]
+         #:fire-key          [key 'f]
+         #:mouse-fire-button [button 'left]
+         #:point-to-mouse?   [ptm? #t]
+         #:rapid-fire?       [rf? #t]
+         #:rarity            [rarity 'common]
+         #:icon              [icon (make-icon "SB" "blue")]
+         #:dart              [dart (custom-dart #:sprite     s
+                                                #:damage     dmg
+                                                #:durability dur
+                                                #:speed      spd
+                                                #:range      rng)])
 
-  (custom-dart #:sprite     s
-               #:damage     dmg
-               #:durability dur
-               #:speed      spd
-               #:range      rng))
+  (custom-power #:name              "Star Bit"
+                #:icon              icon
+                #:dart              dart
+                #:fire-mode         fm
+                #:fire-rate         fr
+                #:fire-key          key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            'common
+                ))
 
 (define (energy-blast
+         #:color             [c "green"]
+         #:sprite            [s (energy-blast-sprite c)]
+         #:damage            [dmg 10]
+         #:durability        [dur 10]
+         #:speed             [spd 5]
+         #:range             [rng 30]
+         #:fire-mode         [fm 'normal]
+         #:fire-rate         [fr 3]
+         #:fire-key          [key 'f]
+         #:mouse-fire-button [button 'left]
+         #:point-to-mouse?   [ptm? #t]
+         #:rapid-fire?       [rf? #t]
+         #:rarity            [rarity 'common]
+         #:icon              [icon (make-icon "EB" "green")]
+         #:dart              [dart (custom-dart #:sprite     s
+                                                #:damage     dmg
+                                                #:durability dur
+                                                #:speed      spd
+                                                #:range      rng
+                                                #:components (on-start (set-size 0.5))
+                                                             (every-tick (scale-sprite 1.1)))])
+
+  (custom-power #:name              "Energy Blast"
+                #:icon              icon
+                #:dart              dart
+                #:fire-mode         fm
+                #:fire-rate         fr
+                #:fire-key          key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            'common
+                ))
+
+(define (energy
          #:color      [c "green"]
          #:sprite     [s (energy-blast-sprite c)]
          #:damage     [dmg 10]
@@ -301,12 +390,12 @@
   
   (builder-dart #:entity (droid #:weapon (custom-power #:fire-rate fire-rate
                                                        #:fire-mode fire-mode
-                                                       #:dart (energy-blast #:color      c
-                                                                            #:sprite     s
-                                                                            #:damage     dmg
-                                                                            #:durability dur
-                                                                            #:speed      spd
-                                                                            #:range      rng)))))
+                                                       #:dart (energy #:color      c
+                                                                      #:sprite     s
+                                                                      #:damage     dmg
+                                                                      #:durability dur
+                                                                      #:speed      spd
+                                                                      #:range      rng)))))
 
 ;; ----- DROIDS
 

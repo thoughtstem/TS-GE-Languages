@@ -78,57 +78,38 @@
 
 (define-example-code battlearena-avengers power-1
   (avengers-game
-   #:power-list (list (custom-power)))
+   #:power-list (list (energy-blast)))
   )
 
 (define-example-code battlearena-avengers power-2
   (avengers-game
-   #:power-list (list (custom-power #:name "Energy Blast"
-                                    #:icon (make-icon "EB" 'orange)
-                                    #:dart (energy-blast #:color 'orange))))
+   #:power-list (list (energy-blast #:color 'orange
+                                    #:damage 20)))
   )
 
 (define-example-code battlearena-avengers power-3
   (define (my-power)
-    (custom-power #:name "Energy Blast"
-                  #:icon (make-icon "EB" 'orange)
-                  #:dart (energy-blast #:color 'orange)
-                  #:rarity 'legendary))
+    (star-bit #:color 'orange
+              #:damage 10
+              #:speed 15
+              #:rarity 'legendary))
   
   (avengers-game
    #:power-list (list (my-power)))
   )
 
 (define-example-code battlearena-avengers power-4
-  (define (my-energy)
-    (energy-blast #:color      'orange
-                  #:damage     20
-                  #:durability 25
-                  #:speed      10
-                  #:range      70))
-                  
-  (define (my-power)
-    (custom-power #:name "Energy Blast"
-                  #:icon (make-icon "EB" 'orange)
-                  #:dart (my-energy)
-                  #:rarity 'legendary))
-  
-  (avengers-game
-   #:power-list (list (my-power)))
-  )
-
-(define-example-code battlearena-avengers power-5
   (define (my-power-1)
-    (custom-power #:name "Energy Blast"
-                  #:icon (make-icon "EB" 'orange)
-                  #:dart (energy-blast)
-                  #:rarity 'legendary))
+    (magic-orb #:damage      10
+               #:speed       15
+               #:fire-mode   'spread
+               #:rapid-fire? #f))
                   
   (define (my-power-2)
-    (custom-power #:name "Hammer"
-                  #:icon (make-icon "H" 'gray)
-                  #:dart (flying-hammer)
-                  #:rarity 'rare))
+    (hammer #:color     'red
+            #:damage    15
+            #:speed     10
+            #:rarity    'rare))
   
   (avengers-game
    #:power-list (list (my-power-1)

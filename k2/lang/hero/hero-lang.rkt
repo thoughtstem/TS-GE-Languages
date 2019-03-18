@@ -40,7 +40,7 @@
            start)
 
   (define (hammer (color #f)) 
-    (a:flying-hammer))
+    (a:hammer))
 
   (define (magic-orb (color "yellow"))
     (a:magic-orb #:color color))

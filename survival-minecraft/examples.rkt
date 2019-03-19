@@ -17,13 +17,20 @@
 
 (define-example-code survival-minecraft alt/avatar-3
   (define (my-hero)
+    (custom-skin #:sprite alex-sprite))
+  
+  (minecraft-game
+   #:skin (reduce-quality-by 4 (my-hero))))
+
+(define-example-code survival-minecraft alt/avatar-4
+  (define (my-hero)
     (custom-skin #:sprite alex-sprite
                  #:speed 20))
   
   (minecraft-game
    #:skin (my-hero)))
 
-(define-example-code survival-minecraft alt/avatar-4
+(define-example-code survival-minecraft avatar-5
   (define (my-hero)
     (custom-skin #:sprite alex-sprite
                  #:speed 20

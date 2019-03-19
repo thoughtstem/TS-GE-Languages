@@ -46,7 +46,7 @@
    #:mob-list (list (my-mob)))
   )
 
-(define-example-code survival-minecraft elt/enemy-4
+(define-example-code survival-minecraft alt/enemy-4
 
   (define (easy-mob)
     (custom-mob #:ai 'easy

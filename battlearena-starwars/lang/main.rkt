@@ -64,7 +64,10 @@
 ;; ----- IMPERIAL
 
 (define/contract/doc (custom-imperial #:amount-in-world (amount-in-world 1)
-                                     #:sprite (sprite stormtrooper-sprite)
+                                     #:sprite (sprite (first (shuffle (list stormtrooper-sprite
+                                                                            darthmaul-sprite
+                                                                            bobafett-sprite
+                                                                            darthvader-sprite))))
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)

@@ -36,7 +36,7 @@
     [ironman        j (crop a:ironman-sheet)]
     [loki           k (crop a:loki-sheet)]
 
-    [hammer         z (crop (a:flying-hammer-sprite "black"))]
+    [hammer         z (crop (a:hammer-sprite "black"))]
     [magic-orb      x (crop a:flame-sprite)]
     [star-bit       c (crop (a:star-bit-sprite "green"))]
     [energy-blast   v (crop (a:energy-blast-sprite "green"))]

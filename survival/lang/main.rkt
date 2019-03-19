@@ -12,6 +12,7 @@
          fish
          
          sky?
+         draw-sky-with-light
          plain-forest-bg
          draw-plain-forest-bg
          ai-level?
@@ -141,7 +142,7 @@
                   #:components (layer "sky")
                                (hidden)
                                (apply precompiler
-                                      (map (λ (a)(square 1 'solid (make-color r-val g-val b-val a)))
+                                      (map (λ (a) (freeze (square 1 'solid (make-color r-val g-val b-val a))))
                                            (range 0 (+ max-alpha update-multiplier 1) update-multiplier)))
                                (on-start (do-many (go-to-pos 'center)
                                                   show))
@@ -202,7 +203,7 @@
                   (hidden)
                   (lock-to "player")
                   (apply precompiler
-                         (map (λ (a)(draw-sky-with-light (make-color r-val g-val b-val a)))
+                         (map (λ (a)(freeze (draw-sky-with-light (make-color r-val g-val b-val a))))
                               (range 0 (+ max-alpha 2 1) update-multiplier)))
                   (on-start (do-many (go-to-pos 'center)
                                      show))

@@ -13,18 +13,22 @@
                    [custom-npc       custom-friend]
                    [custom-enemy     custom-trainer]
                    [custom-coin      custom-stone]
-                   [custom-weapon    custom-power]
+                   [custom-weapon    custom-attack]
                    [survival-game    pokemon-game]
                    [#:bg             #:town-bg]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:friend-list]
                    [#:enemy-list     #:trainer-list]
                    [#:coin-list      #:stone-list]
-                   [#:weapon-list    #:power-list]
+                   [#:weapon-list    #:attack-list]
                    )
 
 (provide pokeball
-         )
+         fire-blast
+         aqua-jet
+         fire-spin
+         waterfall
+         bubble)
 
 
 (define bg-list
@@ -35,6 +39,7 @@
                                   #:rows       [rows 3]
                                   #:columns    [cols 3]
                                   #:start-tile [t 0]
+                                  #:hd?        [hd? #f]
                                   #:components [c #f]
                                   . custom-components)
 
@@ -43,6 +48,7 @@
         #:rows       [rows number?]
         #:columns    [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
@@ -54,7 +60,8 @@
   (custom-bg #:image      img
              #:rows       rows
              #:columns    cols
-             #:start-tile t 
+             #:start-tile t
+             #:hd?        hd?
              #:components (cons c custom-components)))
 
 ; ---------   Custom Pokemon
@@ -70,7 +77,7 @@
                                      . custom-components)
   
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -108,7 +115,7 @@
                                     #:scale      [scale 1]
                                     #:components [c (on-start (respawn 'anywhere))] . custom-components )
 
-  (->i () (#:sprite     [sprite sprite?]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -212,7 +219,7 @@
                                      . custom-components)
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite          [sprite sprite?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
            #:ai              [ai ai-level?]
            #:health          [health positive?] 
            #:weapon          [w entity?]
@@ -248,7 +255,7 @@
                                    . custom-entities)
 
    (->i () (#:type       [type entity?]
-            #:sprite     [sprite sprite?]
+            #:sprite     [sprite (or/c sprite? (listof sprite?))]
             #:position   [position posn?]
             #:name       [name string?]
             #:tile       [tile number?]
@@ -273,28 +280,28 @@
                #:respawn?        respawn?
                #:components      (cons c custom-entities)))
 
-;--------- Custom Power
-(define/contract/doc (custom-power #:name              [n "Thunderbolt"]
-                                   #:sprite            [s chest-sprite]
-                                   #:dart-sprite       [ds (rectangle 10 2 "solid" "yellow")]
-                                   #:speed             [spd 10]
-                                   #:damage            [dmg 10]
-                                   #:range             [rng 1000]
-                                   #:dart              [b (custom-dart #:sprite ds
-                                                                       #:speed spd
-                                                                       #:damage dmg
-                                                                       #:range rng)]
-                                   #:fire-mode         [fm 'normal]
-                                   #:fire-rate         [fr 3]
-                                   #:fire-key          [key 'f]
-                                   #:mouse-fire-button [button 'left]
-                                   #:point-to-mouse?   [ptm? #t]
-                                   #:rapid-fire?       [rf? #t]
-                                   #:rarity            [rarity 'common])
+;--------- Custom Attack
+(define/contract/doc (custom-attack #:name              [n "Thunderbolt"]
+                                    #:sprite            [s chest-sprite]
+                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "yellow")]
+                                    #:speed             [spd 10]
+                                    #:damage            [dmg 10]
+                                    #:range             [rng 1000]
+                                    #:dart              [b (custom-dart #:sprite ds
+                                                                        #:speed spd
+                                                                        #:damage dmg
+                                                                        #:range rng)]
+                                    #:fire-mode         [fm 'spread]
+                                    #:fire-rate         [fr 3]
+                                    #:fire-key          [key 'f]
+                                    #:mouse-fire-button [button 'left]
+                                    #:point-to-mouse?   [ptm? #t]
+                                    #:rapid-fire?       [rf? #t]
+                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite sprite?]
-        #:dart-sprite       [dart-sprite sprite?]
+        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]
@@ -308,9 +315,9 @@
         #:rarity            [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom power, which will be placed in to the world
+  @{Returns a custom attack, which will be placed in to the world
          automatically if it is passed into @racket[pokemon-game]
-         via the @racket[#:power-list] parameter.}
+         via the @racket[#:attack-list] parameter.}
 
   (custom-weapon #:name              n
                  #:sprite            s
@@ -327,7 +334,9 @@
                  #:rapid-fire?       rf?
                  #:rarity            rarity))
 
-; ---------   Minecraft Main Game
+
+
+; ---------   Pokemon Main Game
 
 (define (random-forest)
   (change-img-hue (random 360) (draw-plain-forest-bg)))
@@ -345,7 +354,8 @@
                 #:food-list       [f-list    '() ]
                 #:crafter-list    [c-list    '() ]
                 #:score-prefix    [prefix    "Stones"]
-                #:power-list      [power-list '()]
+                #:attack-list     [attack-list '()]
+                #:enable-world-objects? [world-objects? #f]
                 #:other-entities  [ent #f]
                 . custom-entities)
   (->i ()
@@ -355,13 +365,14 @@
         #:starvation-rate [starvation-rate number?]
         #:sky             [sky sky?]
         #:friend-list     [friend-list    (listof (or/c entity? procedure?))]
-        #:trainer-list    [trainer-list       (listof (or/c entity? procedure?))]
-        #:stone-list      [stone-list       (listof (or/c entity? procedure?))]
+        #:trainer-list    [trainer-list   (listof (or/c entity? procedure?))]
+        #:stone-list      [stone-list     (listof (or/c entity? procedure?))]
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
-        #:score-prefix    [prefix string?]
-        #:power-list      [power-list (listof (or/c entity? procedure?))]
-        #:other-entities  [other-entities (or/c #f entity?)])
+        #:score-prefix    [prefix         string?]
+        #:attack-list     [attack-list    (listof (or/c entity? procedure?))]
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities  [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest  [rest (listof entity?)]
        [res () game?])
 
@@ -381,5 +392,218 @@
    #:food-list       f-list
    #:crafter-list    c-list
    #:score-prefix    prefix
-   #:weapon-list     power-list
-   #:other-entities  (cons ent custom-entities)))
+   #:weapon-list     attack-list
+   #:enable-world-objects? world-objects?
+   #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
+
+; ===== PREBUILT ATTACKS =====
+
+(define fire-blast-icon (list (new-sprite flame-sprite
+                                          #:scale 0.75
+                                          #:x-offset 5
+                                          #:y-offset -5)
+                              (new-sprite flame-sprite
+                                          #:scale 0.75)
+                              (new-sprite flame-sprite
+                                          #:scale 0.75
+                                          #:x-offset -5
+                                          #:y-offset 5)
+                              (make-icon "" )))
+
+(define (fire-blast #:name              [n "Fire Blast"]
+                    #:icon              [i fire-blast-icon]
+                    #:sprite            [s flame-sprite]
+                    #:damage            [dmg 5]
+                    #:durability        [dur 5]
+                    #:speed             [spd 3]
+                    #:range             [rng 20]
+                    #:dart              [d (fire-dart #:sprite s
+                                                      #:damage dmg
+                                                      #:durability dur
+                                                      #:speed spd
+                                                      #:range rng)]
+                    #:fire-mode         [fm 'random]
+                    #:fire-rate         [fr 10]
+                    #:fire-key          [key 'f]
+                    #:mouse-fire-button [button #f]
+                    #:point-to-mouse?   [ptm? #f]
+                    #:rapid-fire?       [rf? #t]
+                    #:rarity            [rarity 'common])
+  (fire-magic #:name n
+              #:icon i
+              #:dart d
+              #:fire-mode fm
+              #:fire-rate fr
+              #:mouse-fire-button button
+              #:point-to-mouse? ptm?
+              #:rapid-fire? rf?
+              #:rarity rarity))
+
+(define aqua-jet-icon (list (new-sprite ice-sprite
+                                        #:scale 0.75
+                                        #:x-offset 5
+                                        #:y-offset -5)
+                            (new-sprite ice-sprite
+                                        #:scale 0.75)
+                            (new-sprite ice-sprite
+                                        #:scale 0.75
+                                        #:x-offset -5
+                                        #:y-offset 5)
+                            (make-icon "" )))
+
+(define (aqua-jet #:name              [n "Aqua Jet"]
+                  #:icon              [i aqua-jet-icon]
+                  #:sprite            [s ice-sprite]
+                  #:damage            [dmg 5]
+                  #:durability        [dur 5]
+                  #:speed             [spd 3]
+                  #:range             [rng 20]
+                  #:dart              [d (ice-dart #:sprite s
+                                                   #:damage dmg
+                                                   #:durability dur
+                                                   #:speed spd
+                                                   #:range rng)]
+                  #:fire-mode         [fm 'random]
+                  #:fire-rate         [fr 10]
+                  #:fire-key          [key 'f]
+                  #:mouse-fire-button [button #f]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (ice-magic #:name n
+             #:icon i
+             #:dart d
+             #:fire-mode fm
+             #:fire-rate fr
+             #:mouse-fire-button button
+             #:point-to-mouse? ptm?
+             #:rapid-fire? rf?
+             #:rarity rarity))
+
+(define fire-spin-icon (list (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset -5
+                                         #:y-offset 0)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 5
+                                         #:y-offset 0)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset -5)
+                             (new-sprite flame-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset 5)
+                             (make-icon "" )))
+
+(define (fire-spin #:name              [n "Fire Spin"]
+                   #:icon              [i fire-spin-icon]
+                   #:sprite            [s flame-sprite]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 20]
+                   #:speed             [spd 10]
+                   #:duration          [rng 36]
+                   #:dart              [d (ring-of-fire-dart #:sprite s
+                                                             #:damage dmg
+                                                             #:durability dur
+                                                             #:speed spd
+                                                             #:duration rng)]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 10]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
+  (ring-of-fire #:name n
+                #:icon i
+                #:dart d
+                #:fire-mode fm
+                #:fire-rate fr
+                #:mouse-fire-button button
+                #:point-to-mouse? ptm?
+                #:rapid-fire? rf?
+                #:rarity rarity))
+
+(define waterfall-icon (list (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset -5
+                                         #:y-offset 0)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 5
+                                         #:y-offset 0)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset -5)
+                             (new-sprite ice-sprite
+                                         #:scale 0.75
+                                         #:x-offset 0
+                                         #:y-offset 5)
+                             (make-icon "" )))
+
+(define (waterfall #:name              [n "Waterfall"]
+                   #:icon              [i waterfall-icon]
+                   #:sprite            [s ice-sprite]
+                   #:damage            [dmg 5]
+                   #:durability        [dur 20]
+                   #:speed             [spd 10]
+                   #:duration          [rng 36]
+                   #:dart              [d (ring-of-fire-dart #:sprite s
+                                                             #:damage dmg
+                                                             #:durability dur
+                                                             #:speed spd
+                                                             #:duration rng)]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 10]
+                   #:fire-key          [key 'f]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
+  (ring-of-ice #:name n
+               #:icon i
+               #:dart d
+               #:fire-mode fm
+               #:fire-rate fr
+               #:mouse-fire-button button
+               #:point-to-mouse? ptm?
+               #:rapid-fire? rf?
+               #:rarity rarity))
+
+(define (bubble-icon)
+  (list (set-sprite-color 'blue acid-sprite)
+        (make-icon "" 'lightgoldenrodyellow)))
+
+(define (bubble  #:name              [n "Bubble"]
+                 #:icon              [i (bubble-icon)]
+                 #:sprite            [s   (set-sprite-color 'blue acid-sprite)]
+                 #:damage            [dmg 10]
+                 #:durability        [dur 5]
+                 #:speed             [spd 3]
+                 #:range             [rng 100]
+                 #:dart              [d (acid-dart #:sprite s
+                                                   #:damage dmg
+                                                   #:durability dur
+                                                   #:speed spd
+                                                   #:range rng)]
+                 #:fire-mode         [fm 'random]
+                 #:fire-rate         [fr 3]
+                 #:fire-key          [key 'f]
+                 #:mouse-fire-button [button #f]
+                 #:point-to-mouse?   [ptm? #f]
+                 #:rapid-fire?       [rf? #t]
+                 #:rarity            [rarity 'common])
+  (acid-spitter #:name n
+                #:icon i
+                #:dart   d
+                #:fire-mode fm
+                #:fire-rate fr
+                #:fire-key key
+                #:mouse-fire-button button
+                #:point-to-mouse?   ptm?
+                #:rapid-fire?       rf?
+                #:rarity            rarity))

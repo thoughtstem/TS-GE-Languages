@@ -35,6 +35,7 @@
                                    #:rows       [rows 3]
                                    #:columns    [cols 3]
                                    #:start-tile [t 0]
+                                   #:hd?        [hd? #f]
                                    #:components [c #f]
                                    . custom-components)
 
@@ -43,6 +44,7 @@
         #:rows       [rows number?]
         #:columns    [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
@@ -54,7 +56,8 @@
   (custom-bg #:image      img
              #:rows       rows
              #:columns    cols
-             #:start-tile t 
+             #:start-tile t
+             #:hd?        hd?
              #:components (cons c custom-components)))
 
 ;======== custom-skin to replace custom-avatar ========
@@ -72,7 +75,7 @@
                . custom-components)
   
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -112,7 +115,7 @@
                                     #:scale      [scale 1]
                                     #:components [c (on-start (respawn 'anywhere))] . custom-components )
 
-  (->i () (#:sprite     [sprite sprite?]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -181,7 +184,7 @@
                                                    . custom-components)
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite          [sprite sprite?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
            #:ai              [ai ai-level?]
            #:health          [health positive?] 
            #:weapon          [weapon entity?]
@@ -229,7 +232,7 @@
                                                     . custom-entities)
 
    (->i () (#:entity     [entity entity?]
-            #:sprite     [sprite sprite?]
+            #:sprite     [sprite (or/c sprite? (listof sprite?))]
             #:position   [position posn?]
             #:name       [name string?]
             #:tile       [tile number?]
@@ -275,8 +278,8 @@
                                   #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite sprite?]
-        #:dart-sprite       [dart-sprite sprite?]
+        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]
@@ -334,6 +337,7 @@
                   #:crafter-list    [c-list       '() ]
                   #:score-prefix    [prefix "Ore"]
                   #:tool-list       [tool-list '()]
+                  #:enable-world-objects? [world-objects? #f]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()
@@ -348,8 +352,9 @@
         #:food-list       [food-list      (listof (or/c entity? procedure?))]
         #:crafter-list    [crafter-list   (listof (or/c entity? procedure?))]
         #:score-prefix    [prefix         string?]
-        #:tool-list       [tool-list (listof (or/c entity? procedure?))]
-        #:other-entities  [other-entities (or/c #f entity?)])
+        #:tool-list       [tool-list      (listof (or/c entity? procedure?))]
+        #:enable-world-objects? [world-objects? boolean?]
+        #:other-entities  [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest  [rest (listof entity?)]
        [res () game?])
 
@@ -369,7 +374,8 @@
    #:crafter-list    c-list
    #:score-prefix    prefix
    #:weapon-list     tool-list
-   #:other-entities  (cons ent custom-entities)))
+   #:enable-world-objects? world-objects?
+   #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
 
 
 ;============== CUSTOM WEAPONS ================

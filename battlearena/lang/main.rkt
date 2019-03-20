@@ -241,7 +241,7 @@
                                    )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
@@ -375,7 +375,8 @@
                                         "ENTER to close dialogs"
                                         "I to open these instructions"
                                         "Z to pick up items"
-                                        "X to drop items")))
+                                        "X to drop items"
+                                        "B to open and close backpack")))
   (define i-length (length i-list))
   
   (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
@@ -406,11 +407,11 @@
 
 (define (kill-player-v2)
   (lambda (g e1 e2)
-    (define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
     (if (lost? g e2)
         ((do-many remove-on-key
                   (stop-animation)
-                  (change-sprite (new-sprite dead-player-image))) g e2)
+                  (rotate-sprite 90)
+                  ) g e2)
         e2)))
 
 (define (lost? g e)
@@ -475,7 +476,7 @@
                                           #:rarity      [rarity 'common])
   (->i ()
        ( #:name          [name string?]
-         #:sprite        [sprite sprite?]
+         #:sprite        [sprite (or/c sprite? (listof sprite?))]
          #:protects-from [protects-from string?]
          #:change-damage [change-damage procedure?]
          #:rarity        [rarity rarity-level?])
@@ -532,8 +533,8 @@
                                     #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:sprite      [sprite sprite?]
-        #:dart-sprite [dart-sprite sprite?]
+        #:sprite      [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed       [speed  number?]
         #:damage      [damage number?]
         #:range       [range  number?]
@@ -594,7 +595,7 @@
                                   . custom-entities)
 
   (->i () (#:name [name string?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:on-use [on-use any/c]
            #:rarity [rarity rarity-level?]
            #:respawn? [respawn boolean?]
@@ -807,7 +808,7 @@
                       . custom-components)
 
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -822,12 +823,6 @@
     @{Returns a custom avatar, which will be placed in to the world
          automatically if it is passed into @racket[battlearena-game]
          via the @racket[#:avatar] parameter.}
-  
-
-  
-  (define dead-frame (if (image? sprite)
-                         (rotate -90 sprite)
-                         (rotate -90 (render sprite))))
 
   (define base-avatar
     (sprite->entity sprite
@@ -835,8 +830,6 @@
                   #:position   p
                   #:components (physical-collider)
                                (sound-stream)
-                               ;Handle deaths....
-                               (precompiler dead-frame)
                                (damager 10 (list 'passive 'friendly-team))
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))

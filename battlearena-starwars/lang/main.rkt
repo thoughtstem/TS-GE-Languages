@@ -10,22 +10,23 @@
 
 
 (language-mappings battlearena       battlearena-starwars
-                   [custom-avatar     custom-hero]
-                   [custom-enemy      custom-villain]
+                   [custom-avatar     custom-rebel]
+                   [custom-enemy      custom-imperial]
                    [custom-bg         custom-planet]
-                   [#:avatar          #:hero]
-                   [#:enemy-list      #:villain-list]
+                   [#:avatar          #:rebel]
+                   [#:enemy-list      #:imperial-list]
                    [#:bg              #:planet]
                    [battlearena-game starwars-game])
 
 (provide lightsaber-droid
          blaster-droid
          double-lightsaber
+         lightsaber-sprite
          )
 
-;; ----- HERO
+;; ----- REBEL
 
-(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-rebel #:sprite           (sprite (random-character-sprite))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
@@ -35,7 +36,7 @@
                                   #:components       [c #f]
                                   . custom-components)
   (->i ()
-       (#:sprite [sprite sprite?]
+       (#:sprite [sprite (or/c sprite? (listof sprite?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -47,9 +48,9 @@
        #:rest (rest (listof component-or-system?))
        [returns entity?])
   
-  @{Returns a custom hero, which will be placed in to the world
+  @{Returns a custom rebel, which will be placed in to the world
          automatically if it is passed into @racket[starwars-game]
-         via the @racket[#:hero] parameter.}
+         via the @racket[#:rebel] parameter.}
   
   (custom-avatar #:sprite           sprite
                  #:damage-processor dp
@@ -60,10 +61,13 @@
                  #:item-slots       w-slots
                  #:components       (cons c custom-components)))
 
-;; ----- VILLAIN
+;; ----- IMPERIAL
 
-(define/contract/doc (custom-villain #:amount-in-world (amount-in-world 1)
-                                     #:sprite (sprite stormtrooper-sprite)
+(define/contract/doc (custom-imperial #:amount-in-world (amount-in-world 1)
+                                     #:sprite (sprite (first (shuffle (list stormtrooper-sprite
+                                                                            darthmaul-sprite
+                                                                            bobafett-sprite
+                                                                            darthvader-sprite))))
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
@@ -74,7 +78,7 @@
                                      )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite sprite?]
+           #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai-level ai-level?]
            #:health [health positive?]
            #:shield [shield positive?]
@@ -86,7 +90,7 @@
 
   @{Returns a custom enemy, which will be placed in to the world
          automatically if it is passed into @racket[starwars-game]
-         via the @racket[#:villain-list] parameter.}
+         via the @racket[#:imperial-list] parameter.}
 
   (custom-enemy #:amount-in-world amount-in-world
                 #:sprite sprite
@@ -115,7 +119,7 @@
                                  #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
+        #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
@@ -167,7 +171,7 @@
                               #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite sprite?]
+        #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
@@ -244,6 +248,10 @@
   )
 
 ;; ----- WEAPONS & DARTS
+
+(define (lightsaber-sprite c)
+  (beside (rectangle 8 4 "solid" "black")
+          (rectangle 28 4 "solid" c)))
 
 (define (swinging-lightsaber-sprite c)
   (rotate 90 (beside (rectangle 40 40 "solid" "transparent")
@@ -393,13 +401,13 @@
 ;------------------- MAIN GAME
 
 (define/contract/doc (starwars-game
-                      #:hero             [avatar (custom-hero #:sprite (circle 10 'solid 'red))]
+                      #:rebel             [avatar (custom-rebel #:sprite (circle 10 'solid 'red))]
                       #:headless         [headless #f]
                       #:planet           [planet-ent (plain-bg)]
-                      #:villain-list     [e-list '()]
+                      #:imperial-list     [e-list '()]
                       #:weapon-list      [weapon-list '()]
                       #:item-list        [item-list '()]
-                      #:score-prefix     [prefix "Villains"]
+                      #:score-prefix     [prefix "Imperials"]
                       #:enable-world-objects? [world-objects? #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
@@ -407,8 +415,8 @@
   (->i ()
        (#:headless       [headless boolean?]
         #:planet         [planet entity?]
-        #:hero           [avatar (or/c entity? false?)]
-        #:villain-list   [enemy-list   (listof (or/c #f entity? procedure?))]
+        #:rebel           [avatar (or/c entity? false?)]
+        #:imperial-list   [enemy-list   (listof (or/c #f entity? procedure?))]
         #:weapon-list    [weapon-list (listof (or/c entity? procedure?))]
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]

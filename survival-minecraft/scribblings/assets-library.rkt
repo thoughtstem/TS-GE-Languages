@@ -6,7 +6,7 @@
 
 @require[scribble/extract]
 
-@title{Minecraft Game Assets}
+@title{Assets Library}
 
 @section{Skins, Mobs and Entities}
 

@@ -15,6 +15,9 @@
 @defthing[witch-sprite animated-sprite?]
 @(sprite->sheet witch-sprite)
 
+@defthing[caitsith-sprite animated-sprite?]
+@(sprite->sheet caitsith-sprite)
+
 @defthing[darkelf-sprite animated-sprite?]
 @(sprite->sheet darkelf-sprite)
 
@@ -29,6 +32,9 @@
 
 @defthing[lightelf-sprite animated-sprite?]
 @(sprite->sheet lightelf-sprite)
+
+@defthing[caitsith-sprite animated-sprite?]
+@(sprite->sheet caitsith-sprite)
 
 @defthing[darkknight-sprite animated-sprite?]
 @(sprite->sheet darkknight-sprite)

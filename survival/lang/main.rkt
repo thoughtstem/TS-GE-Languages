@@ -537,10 +537,6 @@
          automatically if it is passed into @racket[survival-game]
          via the @racket[#:avatar] parameter.}
   
-  (define dead-frame (cond [(image? sprite)           (rotate -90 sprite)]
-                           [(animated-sprite? sprite) (rotate -90 (render sprite))]
-                           [((listof sprite?) sprite) (rotate -90 (render (last sprite)))]))
-  
   (define base-avatar
     (sprite->entity sprite
                   #:name       "player"

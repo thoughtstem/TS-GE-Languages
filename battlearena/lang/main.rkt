@@ -407,11 +407,11 @@
 
 (define (kill-player-v2)
   (lambda (g e1 e2)
-    (define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
     (if (lost? g e2)
         ((do-many remove-on-key
                   (stop-animation)
-                  (change-sprite (new-sprite dead-player-image))) g e2)
+                  (rotate-sprite 90)
+                  ) g e2)
         e2)))
 
 (define (lost? g e)
@@ -823,12 +823,6 @@
     @{Returns a custom avatar, which will be placed in to the world
          automatically if it is passed into @racket[battlearena-game]
          via the @racket[#:avatar] parameter.}
-  
-
-  
-  (define dead-frame (cond [(image? sprite)           (rotate -90 sprite)]
-                           [(animated-sprite? sprite) (rotate -90 (render sprite))]
-                           [((listof sprite?) sprite) (rotate -90 (render (last sprite)))]))
 
   (define base-avatar
     (sprite->entity sprite
@@ -836,8 +830,6 @@
                   #:position   p
                   #:components (physical-collider)
                                (sound-stream)
-                               ;Handle deaths....
-                               (precompiler dead-frame)
                                (damager 10 (list 'passive 'friendly-team))
                                (key-movement spd #:mode key-mode #:rule (and/r all-dialog-closed?
                                                                                (not/r lost?)))

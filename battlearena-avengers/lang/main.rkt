@@ -13,7 +13,7 @@
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
                    [custom-weapon     custom-power]
-                   [custom-background custom-planet]
+                   [custom-bg         custom-planet]
                    [#:avatar          #:hero]
                    [#:enemy-list      #:villain-list]
                    [#:bg              #:planet]
@@ -21,14 +21,19 @@
                    [#:weapon          #:power]
                    [battlearena-game  avengers-game])
 
-(provide energy-blast
+(provide energy
+         energy-blast
+         energy-blast-dart
          star-bit
+         star-bit-dart
          energy-droid
          hammer
+         hammer-dart
          hammer-sprite
          star-bit-sprite
          energy-blast-sprite
          magic-orb
+         magic-orb-dart
          flame-sprite)
 
 ;; ----- HERO
@@ -159,6 +164,7 @@
                                     #:rows       [rows 3]
                                     #:columns    [cols 3]
                                     #:start-tile [t 0]
+                                    #:hd?        [hd? #f]  
                                     #:components [c #f]
                                     . custom-components)
 
@@ -167,6 +173,7 @@
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
+        #:hd?        [high-def? boolean?]
         #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
@@ -225,6 +232,23 @@
            (circle 6 "solid" "orange")
            (circle 7 "solid" "red")))
 
+(define (magic-orb-dart #:color             [c "yellow"]
+                        #:sprite            [s   (my-flame-sprite c)]
+                        #:damage            [dmg 5]
+                        #:durability        [dur 20]
+                        #:speed             [spd 10]
+                        #:range             [rng 36])
+  
+  (custom-dart #:position   (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (do-many (scale-sprite 1.05)
+                                    (change-direction-by 10)))))
+
 (define (magic-orb #:color             [c "yellow"]
                    #:sprite            [s   (my-flame-sprite c)]
                    #:damage            [dmg 5]
@@ -239,15 +263,11 @@
                    #:rapid-fire?       [rf? #t]
                    #:rarity            [rarity 'common]
                    #:icon              [icon (make-icon "MO" "orange")]
-                   #:dart              [dart (custom-dart #:position   (posn 25 0)
-                                                          #:sprite     s
-                                                          #:damage     dmg
-                                                          #:durability dur
-                                                          #:speed      spd
-                                                          #:range      rng
-                                                          #:components (on-start (set-size 0.5))
-                                                                       (every-tick (do-many (scale-sprite 1.05)
-                                                                                            (change-direction-by 10))))])
+                   #:dart              [dart (magic-orb-dart #:sprite     s
+                                                             #:damage     dmg
+                                                             #:durability dur
+                                                             #:speed      spd
+                                                             #:range      rng)])
 
   (custom-power #:name              "Magic Orb"
                 #:icon              icon
@@ -260,6 +280,20 @@
                 #:rapid-fire?       rf?
                 #:rarity            'common
                 ))
+
+(define (hammer-dart #:color             [c   'black]
+                     #:sprite            [s   (hammer-sprite c)]
+                     #:damage            [dmg 10]
+                     #:durability        [dur 20]
+                     #:speed             [spd 5]
+                     #:range             [rng 40])
+  (custom-dart #:position   (posn 20 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (do-every 10 (random-direction 0 360))))
 
 (define (hammer #:color             [c   'black]
                 #:sprite            [s   (hammer-sprite c)]
@@ -275,13 +309,11 @@
                 #:rapid-fire?       [rf? #t]
                 #:rarity            [rarity 'common]
                 #:icon              [icon (make-icon "H" "gray")]
-                #:dart              [dart (custom-dart #:position   (posn 20 0)
-                                                       #:sprite     s
+                #:dart              [dart (hammer-dart #:sprite     s
                                                        #:damage     dmg
                                                        #:durability dur
                                                        #:speed      spd
-                                                       #:range      rng
-                                                       #:components (do-every 10 (random-direction 0 360)))])
+                                                       #:range      rng)])
 
   (custom-power #:name              "Hammer"
                 #:icon              icon
@@ -294,6 +326,18 @@
                 #:rapid-fire?       rf?
                 #:rarity            'common
                 ))
+
+(define (star-bit-dart #:color             [c "green"]
+                       #:sprite            [s (star-bit-sprite c)]
+                       #:damage            [dmg 5]
+                       #:durability        [dur 10]
+                       #:speed             [spd 15]
+                       #:range             [rng 50])
+  (custom-dart #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng))
 
 (define (star-bit
          #:color             [c "green"]
@@ -310,11 +354,11 @@
          #:rapid-fire?       [rf? #t]
          #:rarity            [rarity 'common]
          #:icon              [icon (make-icon "SB" "blue")]
-         #:dart              [dart (custom-dart #:sprite     s
-                                                #:damage     dmg
-                                                #:durability dur
-                                                #:speed      spd
-                                                #:range      rng)])
+         #:dart              [dart (star-bit-dart #:sprite     s
+                                                  #:damage     dmg
+                                                  #:durability dur
+                                                  #:speed      spd
+                                                  #:range      rng)])
 
   (custom-power #:name              "Star Bit"
                 #:icon              icon
@@ -327,6 +371,20 @@
                 #:rapid-fire?       rf?
                 #:rarity            'common
                 ))
+
+(define (energy-blast-dart  #:color             [c "green"]
+                            #:sprite            [s (energy-blast-sprite c)]
+                            #:damage            [dmg 10]
+                            #:durability        [dur 10]
+                            #:speed             [spd 5]
+                            #:range             [rng 30])
+  (custom-dart #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng
+               #:components (on-start (set-size 0.5))
+               (every-tick (scale-sprite 1.1))))
 
 (define (energy-blast
          #:color             [c "green"]
@@ -343,13 +401,11 @@
          #:rapid-fire?       [rf? #t]
          #:rarity            [rarity 'common]
          #:icon              [icon (make-icon "EB" "green")]
-         #:dart              [dart (custom-dart #:sprite     s
-                                                #:damage     dmg
-                                                #:durability dur
-                                                #:speed      spd
-                                                #:range      rng
-                                                #:components (on-start (set-size 0.5))
-                                                             (every-tick (scale-sprite 1.1)))])
+         #:dart              [dart (energy-blast-dart #:sprite     s
+                                                      #:damage     dmg
+                                                      #:durability dur
+                                                      #:speed      spd
+                                                      #:range      rng)])
 
   (custom-power #:name              "Energy Blast"
                 #:icon              icon

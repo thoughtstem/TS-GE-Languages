@@ -548,7 +548,10 @@
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
                                (stop-on-edge)
-                               (backpack-system #:components (observe-change backpack-changed? update-backpack))
+                               (backpack-system #:pickup-sound   PICKUP-SOUND
+                                                #:drop-sound     SHORT-BLIP-SOUND
+                                                #:backpack-sound BLIP-SOUND
+                                                #:components (observe-change backpack-changed? update-backpack))
                                (player-edge-system)
                                (observe-change lost? (kill-player-v2))
                                (counter 0)

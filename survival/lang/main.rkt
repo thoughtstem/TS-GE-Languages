@@ -58,7 +58,7 @@
                     change-health-by)
          game-engine-demos-common
          (only-in lang/posn make-posn)
-         #;(only-in rsound rsound?)
+         (only-in rsound rsound?)
          )
 
 (define-syntax-rule (define/log l head body ...)
@@ -623,7 +623,7 @@
         #:fire-mode         [fire-mode fire-mode?]
         #:fire-rate         [fire-rate number?]
         #:fire-key          [fire-key symbol?]
-        #:fire-sound        [fire-sound (or/c #;rsound? '() #f)]
+        #:fire-sound        [fire-sound (or/c rsound? '() #f)]
         #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -1122,8 +1122,8 @@
         #:name       [name string?]
         #:sprite     [sprite (or/c sprite? (listof sprite?))]
         #:open-key     [open-key (or/c string? symbol?)]
-        #:open-sound   [open-sound (or/c #;rsound? '() #f)]
-        #:select-sound [select-sound (or/c #;rsound? '() #f)]
+        #:open-sound   [open-sound (or/c rsound? '() #f)]
+        #:select-sound [select-sound (or/c rsound? '() #f)]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]

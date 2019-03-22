@@ -576,7 +576,7 @@
 
 (define (bubble-icon)
   (list (set-sprite-color 'blue acid-sprite)
-        (make-icon "" 'lightgoldenrodyellow)))
+        (make-icon "" #;'lightgoldenrodyellow)))
 
 (define (bubble  #:name              [n "Bubble"]
                  #:icon              [i (bubble-icon)]

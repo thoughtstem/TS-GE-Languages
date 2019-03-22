@@ -58,7 +58,8 @@
                     change-health-by)
          game-engine-demos-common
          (only-in lang/posn make-posn)
-         (only-in rsound rsound?))
+         #;(only-in rsound rsound?)
+         )
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -515,7 +516,8 @@
 (define/contract/doc
   (custom-avatar #:sprite           [sprite (random-character-sprite)]
                  #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
-                                                              #:show-damage? #t)]
+                                                              #:show-damage? #t
+                                                              #:hit-sound HIT-SOUND)]
                  #:position         [p   (posn 100 100)]
                  #:speed            [spd 10]
                  #:key-mode         [key-mode 'arrow-keys]
@@ -556,7 +558,7 @@
                                (player-edge-system)
                                (observe-change lost? (kill-player-v2))
                                (counter 0)
-                               (weapon-selector #:slots 10)
+                               (weapon-selector #:slots 10 #:select-sound BLIP-SOUND)
                                (on-key 'enter #:rule player-dialog-open? (get-dialog-selection))
                                (on-rule (not/r all-dialog-closed?) (stop-movement))
                                (cons c custom-components)))
@@ -605,6 +607,7 @@
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
+                                    #:fire-sound        [fire-sound LASER-SOUND]
                                     #:mouse-fire-button [button #f]
                                     #:point-to-mouse?   [ptm? #f]
                                     #:rapid-fire?       [rf? #t]
@@ -620,6 +623,7 @@
         #:fire-mode         [fire-mode fire-mode?]
         #:fire-rate         [fire-rate number?]
         #:fire-key          [fire-key symbol?]
+        #:fire-sound        [fire-sound (or/c #;rsound? '() #f)]
         #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -644,6 +648,7 @@
                                                  #:fire-mode fm
                                                  #:fire-rate fr
                                                  #:fire-key  key
+                                                 #:fire-sound fire-sound
                                                  #:mouse-fire-button button
                                                  #:point-to-mouse? ptm?
                                                  #:rapid-fire? rf?
@@ -762,7 +767,8 @@
     (define c (~> e
                   (combatant
                    #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -30)))) ;(default-health+shields-stats health shield)
-                   #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team))
+                   #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
+                                                            #:hit-sound HIT-SOUND)
                              _)
                   ))
  
@@ -779,6 +785,7 @@
                (define h (get-storage-data "health-stat" e))
                (and h (<= h 0)))
              (do-many
+              (play-sound EXPLOSION-SOUND)
               (spawn-on-current-tile particles)
               (spawn death-broadcast)
               (λ(g e)
@@ -793,6 +800,7 @@
 
                     ;What is making these guys slow???
                     (die-if-health-is-0)
+                    (sound-stream)
                     (damager 10 (list 'passive 'enemy-team 'bullet))
                     (hidden)
                     ;(active-on-bg 0) ;Don't leave this in
@@ -1114,8 +1122,8 @@
         #:name       [name string?]
         #:sprite     [sprite (or/c sprite? (listof sprite?))]
         #:open-key     [open-key (or/c string? symbol?)]
-        #:open-sound   [open-sound rsound?]
-        #:select-sound [select-sound rsound?]
+        #:open-sound   [open-sound (or/c #;rsound? '() #f)]
+        #:select-sound [select-sound (or/c #;rsound? '() #f)]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1369,6 +1377,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
+               #:fire-sound        [fire-sound #f] ; TODO: Create a default melee sound
                #:mouse-fire-button [button #f]
                #:point-to-mouse?   [ptm? #f]
                #:rapid-fire?       [rf? #f]
@@ -1378,6 +1387,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1412,6 +1422,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
+               #:fire-sound        [fire-sound #f]
                #:mouse-fire-button [button #f]
                #:point-to-mouse?   [ptm? #f]
                #:rapid-fire?       [rf? #f]
@@ -1421,6 +1432,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1473,6 +1485,7 @@
                        #:fire-mode         [fm 'normal]
                        #:fire-rate         [fr 3]
                        #:fire-key          [key 'f]
+                       #:fire-sound        [fire-sound #f] ; TODO: Create a bubble sound
                        #:mouse-fire-button [button #f]
                        #:point-to-mouse?   [ptm? #f]
                        #:rapid-fire?       [rf? #t]
@@ -1483,6 +1496,7 @@
                  #:fire-mode fm
                  #:fire-rate fr
                  #:fire-key key
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?
@@ -1503,6 +1517,7 @@
                     #:fire-mode         [fm 'random]
                     #:fire-rate         [fr 10]
                     #:fire-key          [key 'f]
+                    #:fire-sound        [fire-sound #f]
                     #:mouse-fire-button [button #f]
                     #:point-to-mouse?   [ptm? #f]
                     #:rapid-fire?       [rf? #t]
@@ -1512,6 +1527,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound #f
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1546,6 +1562,7 @@
                    #:fire-mode         [fm 'random]
                    #:fire-rate         [fr 10]
                    #:fire-key          [key 'f]
+                   #:fire-sound        [fire-sound #f]
                    #:mouse-fire-button [button #f]
                    #:point-to-mouse?   [ptm? #f]
                    #:rapid-fire?       [rf? #t]
@@ -1555,6 +1572,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1594,6 +1612,7 @@
                      #:fire-mode         [fm 'spread]
                      #:fire-rate         [fr 1]
                      #:fire-key          [key 'f]
+                     #:fire-sound        [fire-sound #f]
                      #:mouse-fire-button [button #f]
                      #:point-to-mouse?   [ptm? #f]
                      #:rapid-fire?       [rf? #t]
@@ -1603,6 +1622,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1638,6 +1658,7 @@
                         #:fire-mode         [fm 'normal]
                         #:fire-rate         [fr 6]
                         #:fire-key          [key 'f]
+                        #:fire-sound        [fire-sound #f]
                         #:mouse-fire-button [button #f]
                         #:point-to-mouse?   [ptm? #f]
                         #:rapid-fire?       [rf? #t]
@@ -1647,6 +1668,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1683,6 +1705,7 @@
                       #:fire-mode         [fm 'normal]
                       #:fire-rate         [fr 10]
                       #:fire-key          [key 'f]
+                      #:fire-sound        [fire-sound #f]
                       #:mouse-fire-button [button #f]
                       #:point-to-mouse?   [ptm? #f]
                       #:rapid-fire?       [rf? #t]
@@ -1692,6 +1715,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1712,6 +1736,7 @@
                      #:fire-mode         [fm 'normal]
                      #:fire-rate         [fr 10]
                      #:fire-key          [key 'f]
+                     #:fire-sound        [fire-sound #f]
                      #:mouse-fire-button [button #f]
                      #:point-to-mouse?   [ptm? #f]
                      #:rapid-fire?       [rf? #t]
@@ -1721,6 +1746,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?

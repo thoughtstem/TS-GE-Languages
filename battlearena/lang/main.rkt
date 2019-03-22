@@ -836,6 +836,9 @@
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
                                (stop-on-edge)
                                (backpack-system #:max-items w-slots
+                                                #:pickup-sound   PICKUP-SOUND
+                                                #:drop-sound     SHORT-BLIP-SOUND
+                                                #:backpack-sound BLIP-SOUND
                                                 #:pickup-rule (or/r (not/r backpack-has-armor?)
                                                              (not/r nearest-item-is-armor?))
                                                 #:components (observe-change backpack-changed? update-backpack))

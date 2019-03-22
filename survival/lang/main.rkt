@@ -57,7 +57,8 @@
 (require (except-in game-engine
                     change-health-by)
          game-engine-demos-common
-         (only-in lang/posn make-posn))
+         (only-in lang/posn make-posn)
+         (only-in rsound rsound?))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -548,7 +549,10 @@
                                                                                (not/r lost?)))
                                (key-animator-system #:mode key-mode #:face-mouse? mouse-aim?)
                                (stop-on-edge)
-                               (backpack-system #:components (observe-change backpack-changed? update-backpack))
+                               (backpack-system #:pickup-sound   PICKUP-SOUND
+                                                #:drop-sound     SHORT-BLIP-SOUND
+                                                #:backpack-sound BLIP-SOUND
+                                                #:components (observe-change backpack-changed? update-backpack))
                                (player-edge-system)
                                (observe-change lost? (kill-player-v2))
                                (counter 0)
@@ -1097,6 +1101,9 @@
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
+                                     #:open-key     [open-key 'space]
+                                     #:open-sound   [open-sound OPEN-DIALOG-SOUND]
+                                     #:select-sound [select-sound BLIP-SOUND]
                                      #:recipe-list [r-list (list (recipe #:product (carrot-stew)
                                                                          #:build-time 30
                                                                          ))]
@@ -1106,6 +1113,9 @@
         #:tile       [tile number?]
         #:name       [name string?]
         #:sprite     [sprite (or/c sprite? (listof sprite?))]
+        #:open-key     [open-key (or/c string? symbol?)]
+        #:open-sound   [open-sound rsound?]
+        #:select-sound [select-sound rsound?]
         #:recipe-list [recipe-list (listof recipe?)]
         #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
@@ -1120,7 +1130,10 @@
                   #:name   name
                   #:components (active-on-bg t)
                                (counter 0)
-                               (crafting-menu-set! #:recipe-list r-list)
+                               (crafting-menu-set! #:open-key     open-key
+                                                   #:open-sound   open-sound
+                                                   #:select-sound select-sound
+                                                   #:recipe-list r-list)
                                (apply precompiler (map (λ (r) (recipe-product r)) r-list))
                                (cons c custom-components)))
 
@@ -1167,16 +1180,16 @@
                                                (list "I'm hungry..."))))
                      #:game-width GAME-WIDTH
                      #:animated #t
-                     #:speed 1)
+                     #:speed 2)
         (if (string? (first d))
             (dialog->sprites d
                              #:game-width GAME-WIDTH
                              #:animated #t
-                             #:speed    1)
+                             #:speed    2)
             (dialog->response-sprites d
                                       #:game-width GAME-WIDTH
                                       #:animated #t
-                                      #:speed 1))))
+                                      #:speed 2))))
   
   (define sprite (if (image? s)
                      (new-sprite s)

@@ -40,16 +40,16 @@
            start)
 
   (define (hammer (color #f)) 
-    (a:hammer))
+    (a:hammer-dart))
 
   (define (magic-orb (color "yellow"))
-    (a:magic-orb #:color color))
+    (a:magic-orb-dart #:color color))
 
   (define (star-bit (color "green"))
-    (a:star-bit #:color color))
+    (a:star-bit-dart #:color color))
 
   (define (energy-blast (color "green"))
-    (a:energy-blast #:color color))
+    (a:energy-blast-dart #:color color))
 
   (define (make-hero sprite (dart #f))
     (define real-dart (call-if-proc dart))
@@ -85,7 +85,9 @@
         (list 
           (app make-villain villains ) ...))
 
-      (a:avengers-game #:hero (app make-hero hero) 
+      (a:avengers-game #:planet (a:custom-planet #:rows 2
+                                               #:columns 2)
+                       #:hero (app make-hero hero)
                        #:villain-list vs)))
   
   (define-syntax-rule (top-level lines ...)

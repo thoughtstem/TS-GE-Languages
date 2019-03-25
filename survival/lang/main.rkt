@@ -58,7 +58,6 @@
                     change-health-by)
          game-engine-demos-common
          (only-in lang/posn make-posn)
-         (only-in rsound rsound?)
          )
 
 (define-syntax-rule (define/log l head body ...)
@@ -1082,7 +1081,7 @@
                        bg-with-instructions))))
   
   (if headless
-      (initialize-game es)
+      (initialize-game (map (curryr remove-component sound-stream?) es))
       (apply start-game es))
   
   )

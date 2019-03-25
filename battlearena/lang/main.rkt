@@ -6,7 +6,8 @@
 
 (require (except-in game-engine
                     change-health-by)
-         game-engine-demos-common)
+         game-engine-demos-common
+         )
 
 
 (require ts-kata-util
@@ -265,7 +266,8 @@
     (define c (~> e
                   (combatant
                    #:stats (default-health+shields-stats health shield)
-                   #:damage-processor (divert-damage #:filter-out '(passive enemy-team))
+                   #:damage-processor (divert-damage #:filter-out '(passive enemy-team)
+                                                     #:hit-sound HIT-SOUND)
                              _)
                   ))
  
@@ -288,6 +290,7 @@
                (define h (get-storage-data "health-stat" e))
                (and h (<= h 0)))
              (do-many
+              (play-sound EXPLOSION-SOUND)
               (spawn-on-current-tile particles)
               (spawn death-broadcast)
               (λ(g e)
@@ -305,6 +308,7 @@
               (die-if-health-is-0)
               (damager 10 (list 'passive 'enemy-team))
               (hidden)
+              (sound-stream)
               ;(active-on-bg 0) ;Don't leave this in
               (on-start (do-many (respawn 'anywhere)
                                  (active-on-random)
@@ -494,8 +498,10 @@
 
   (define damage-processor (conditional-damage-processor #:rule (damager-has-tag? (string->symbol pf))
                                                          #:processor (divert-damage #:first-stat-protection cd
-                                                                                    #:filter-out '(friendly-team passive))
-                                                         #:default-processor (divert-damage #:filter-out '(friendly-team passive))))
+                                                                                    #:filter-out '(friendly-team passive)
+                                                                                    #:hit-sound HIT-SOUND)
+                                                         #:default-processor (divert-damage #:filter-out '(friendly-team passive)
+                                                                                            #:hit-sound HIT-SOUND)))
   (sprite->entity s
                   #:name updated-name
                   #:position    (posn 0 0)
@@ -527,6 +533,7 @@
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
+                                    #:fire-sound        [fire-sound LASER-SOUND]
                                     #:mouse-fire-button [button 'left]
                                     #:point-to-mouse?   [ptm? #t]
                                     #:rapid-fire?       [rf? #t]
@@ -542,6 +549,7 @@
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
+        #:fire-sound  [fire-sound (or/c rsound? #f '())]
         #:mouse-fire-button [button (or/c 'left 'right)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -565,6 +573,7 @@
                                                  #:fire-mode fm
                                                  #:fire-rate fr
                                                  #:fire-key  key
+                                                 #:fire-sound fire-sound
                                                  #:mouse-fire-button button
                                                  #:point-to-mouse? ptm?
                                                  #:rapid-fire? rf?
@@ -798,7 +807,8 @@
 
 (define/contract/doc (custom-avatar
                       #:sprite       [sprite (random-character-sprite)]
-                      #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
+                      #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
+                                                            #:hit-sound HIT-SOUND)]
                       #:position     [p   (posn 100 100)]
                       #:speed        [spd 10]
                       #:key-mode     [key-mode 'wasd]
@@ -845,7 +855,7 @@
                                (observe-change lost? (kill-player-v2))
                                (player-edge-system)
                                (counter 0)
-                               (weapon-selector #:slots w-slots)
+                               (weapon-selector #:slots w-slots #:select-sound BLIP-SOUND)
                                (cons c custom-components)
                                ))
 
@@ -925,7 +935,8 @@
                                                            (update-entity e2 damage-processor? new-dp))
                                                     (begin (displayln "REMOVING ARMOR")
                                                            (update-entity e2 damage-processor?
-                                                                          (divert-damage #:filter-out '(friendly-team passive))))))))
+                                                                          (divert-damage #:filter-out '(friendly-team passive)
+                                                                                         #:hit-sound HIT-SOUND)))))))
 
   (define (item-entity->player-system e #:use-key [use-key 'space])
     (define item-name (get-name e))
@@ -1102,7 +1113,7 @@
 
   
   (if headless
-      (initialize-game es) ;Just return initial game state for whatever processing or unit tests...
+      (initialize-game (map (curryr remove-component sound-stream?) es)) ;Just return initial game state for whatever processing or unit tests...
       (apply start-game es))
   )
 
@@ -1138,7 +1149,7 @@
 
 
 
-(define (mine #:weapon (weapon (custom-weapon))
+(define (mine #:weapon (weapon (custom-weapon #:fire-sound #f))
               #:sprite (s spike-mine-sprite) ;(square 50 'solid 'green)
               #:die-after (die-after 500))
 
@@ -1347,6 +1358,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
+               #:fire-sound        [fire-sound #f]
                #:mouse-fire-button [button 'left]
                #:point-to-mouse?   [ptm? #t]
                #:rapid-fire?       [rf? #f]
@@ -1356,6 +1368,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1390,6 +1403,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
+               #:fire-sound        [fire-sound #f]
                #:mouse-fire-button [button 'left]
                #:point-to-mouse?   [ptm? #t]
                #:rapid-fire?       [rf? #f]
@@ -1399,6 +1413,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1432,6 +1447,7 @@
                        #:fire-mode         [fm 'random]
                        #:fire-rate         [fr 10]
                        #:fire-key          [key 'f]
+                       #:fire-sound        [fire-sound #f]
                        #:mouse-fire-button [button 'left]
                        #:point-to-mouse?   [ptm? #t]
                        #:rapid-fire?       [rf? #t]
@@ -1475,6 +1491,7 @@
                     #:fire-mode         [fm 'random]
                     #:fire-rate         [fr 10]
                     #:fire-key          [key 'f]
+                    #:fire-sound        [fire-sound #f]
                     #:mouse-fire-button [button 'left]
                     #:point-to-mouse?   [ptm? #t]
                     #:rapid-fire?       [rf? #t]
@@ -1484,6 +1501,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1518,6 +1536,7 @@
                    #:fire-mode         [fm 'random]
                    #:fire-rate         [fr 10]
                    #:fire-key          [key 'f]
+                   #:fire-sound        [fire-sound #f]
                    #:mouse-fire-button [button 'left]
                    #:point-to-mouse?   [ptm? #t]
                    #:rapid-fire?       [rf? #t]
@@ -1527,6 +1546,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1566,6 +1586,7 @@
                      #:fire-mode         [fm 'spread]
                      #:fire-rate         [fr 1]
                      #:fire-key          [key 'f]
+                     #:fire-sound        [fire-sound LASER-SOUND]
                      #:mouse-fire-button [button 'left]
                      #:point-to-mouse?   [ptm? #t]
                      #:rapid-fire?       [rf? #t]
@@ -1575,6 +1596,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1610,6 +1632,7 @@
                         #:fire-mode         [fm 'normal]
                         #:fire-rate         [fr 6]
                         #:fire-key          [key 'f]
+                        #:fire-sound        [fire-sound #f]
                         #:mouse-fire-button [button 'left]
                         #:point-to-mouse?   [ptm? #t]
                         #:rapid-fire?       [rf? #t]
@@ -1619,6 +1642,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1655,6 +1679,7 @@
                       #:fire-mode         [fm 'normal]
                       #:fire-rate         [fr 10]
                       #:fire-key          [key 'f]
+                      #:fire-sound        [fire-sound #f]
                       #:mouse-fire-button [button 'left]
                       #:point-to-mouse?   [ptm? #t]
                       #:rapid-fire?       [rf? #t]
@@ -1664,6 +1689,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1684,6 +1710,7 @@
                      #:fire-mode         [fm 'normal]
                      #:fire-rate         [fr 10]
                      #:fire-key          [key 'f]
+                     #:fire-sound        [fire-sound #f]
                      #:mouse-fire-button [button 'left]
                      #:point-to-mouse?   [ptm? #t]
                      #:rapid-fire?       [rf? #t]
@@ -1693,6 +1720,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1718,9 +1746,11 @@
                              #:durability [dur 20]
                              #:speed      [spd 5]
                              #:range      [rng 20]
-                             #:fire-rate  [fire-rate 0.5])
+                             #:fire-rate  [fire-rate 0.5]
+                             #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
+                                               #:fire-sound fire-sound
                                                #:dart (spear-dart
                                                        #:sprite     s
                                                        #:damage     dmg
@@ -1742,11 +1772,13 @@
                             #:durability [dur 10]
                             #:speed      [spd 5]
                             #:range      [rng 20]
-                            #:fire-rate  [fire-rate 20])
+                            #:fire-rate  [fire-rate 20]
+                            #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (mine #:sprite s
                       #:weapon (custom-weapon ;#:fire-mode 'spread
                                               #:fire-rate fire-rate
+                                              #:fire-sound fire-sound
                                               #:point-to-mouse? #f
                                               #:dart (custom-dart #:sprite spike-sprite
                                                                   #:damage dmg
@@ -1792,11 +1824,13 @@
                               #:speed      [spd 5]
                               #:range      [rng 100]
                               #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5])
+                              #:fire-rate  [fire-rate 0.5]
+                              #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
                                                ;#:point-to-mouse? #f
+                                               #:fire-sound        fire-sound
                                                #:dart (rocket
                                                        #:sprite     s
                                                        #:damage     dmg
@@ -1810,10 +1844,12 @@
                                 #:speed      [spd 10]
                                 #:range      [rng 100]
                                 #:fire-mode  [fm 'normal]
-                                #:fire-rate  [fire-rate 3])
+                                #:fire-rate  [fire-rate 3]
+                                #:fire-sound [fire-sound LASER-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
+                                               #:fire-sound fire-sound
                                                ;#:point-to-mouse? #f
                                                #:dart (custom-dart
                                                        #:position  (posn 0 -70)
@@ -1829,11 +1865,13 @@
                               #:speed      [spd 5]
                               #:range      [rng 200]
                               #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5])
+                              #:fire-rate  [fire-rate 0.5]
+                              #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
                                                ;#:point-to-mouse? #f
+                                               #:fire-sound fire-sound
                                                #:dart (custom-dart
                                                        #:position  (posn 0 -70) 
                                                        #:sprite     s

@@ -549,7 +549,7 @@
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
-        #:fire-sound  [fire-sound (or/c rsound? #f '())]
+        #:fire-sound  [fire-sound (or/c rsound? procedure? #f '())]
         #:mouse-fire-button [button (or/c 'left 'right)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -1358,7 +1358,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
-               #:fire-sound        [fire-sound #f]
+               #:fire-sound        [fire-sound random-woosh-sound]
                #:mouse-fire-button [button 'left]
                #:point-to-mouse?   [ptm? #t]
                #:rapid-fire?       [rf? #f]
@@ -1403,7 +1403,7 @@
                #:fire-mode         [fm 'normal]
                #:fire-rate         [fr 3]
                #:fire-key          [key 'f]
-               #:fire-sound        [fire-sound #f]
+               #:fire-sound        [fire-sound random-slash-sound]
                #:mouse-fire-button [button 'left]
                #:point-to-mouse?   [ptm? #t]
                #:rapid-fire?       [rf? #f]
@@ -1491,7 +1491,7 @@
                     #:fire-mode         [fm 'random]
                     #:fire-rate         [fr 10]
                     #:fire-key          [key 'f]
-                    #:fire-sound        [fire-sound #f]
+                    #:fire-sound        [fire-sound FIRE-MAGIC-SOUND]
                     #:mouse-fire-button [button 'left]
                     #:point-to-mouse?   [ptm? #t]
                     #:rapid-fire?       [rf? #t]
@@ -1536,7 +1536,7 @@
                    #:fire-mode         [fm 'random]
                    #:fire-rate         [fr 10]
                    #:fire-key          [key 'f]
-                   #:fire-sound        [fire-sound #f]
+                   #:fire-sound        [fire-sound ICE-MAGIC-SOUND]
                    #:mouse-fire-button [button 'left]
                    #:point-to-mouse?   [ptm? #t]
                    #:rapid-fire?       [rf? #t]
@@ -1586,7 +1586,7 @@
                      #:fire-mode         [fm 'spread]
                      #:fire-rate         [fr 1]
                      #:fire-key          [key 'f]
-                     #:fire-sound        [fire-sound LASER-SOUND]
+                     #:fire-sound        [fire-sound random-woosh-sound]
                      #:mouse-fire-button [button 'left]
                      #:point-to-mouse?   [ptm? #t]
                      #:rapid-fire?       [rf? #t]
@@ -1632,7 +1632,7 @@
                         #:fire-mode         [fm 'normal]
                         #:fire-rate         [fr 6]
                         #:fire-key          [key 'f]
-                        #:fire-sound        [fire-sound #f]
+                        #:fire-sound        [fire-sound random-woosh-sound]
                         #:mouse-fire-button [button 'left]
                         #:point-to-mouse?   [ptm? #t]
                         #:rapid-fire?       [rf? #t]
@@ -1679,7 +1679,7 @@
                       #:fire-mode         [fm 'normal]
                       #:fire-rate         [fr 10]
                       #:fire-key          [key 'f]
-                      #:fire-sound        [fire-sound #f]
+                      #:fire-sound        [fire-sound FIRE-MAGIC-SOUND]
                       #:mouse-fire-button [button 'left]
                       #:point-to-mouse?   [ptm? #t]
                       #:rapid-fire?       [rf? #t]
@@ -1710,7 +1710,7 @@
                      #:fire-mode         [fm 'normal]
                      #:fire-rate         [fr 10]
                      #:fire-key          [key 'f]
-                     #:fire-sound        [fire-sound #f]
+                     #:fire-sound        [fire-sound ICE-MAGIC-SOUND]
                      #:mouse-fire-button [button 'left]
                      #:point-to-mouse?   [ptm? #t]
                      #:rapid-fire?       [rf? #t]
@@ -1747,7 +1747,7 @@
                              #:speed      [spd 5]
                              #:range      [rng 20]
                              #:fire-rate  [fire-rate 0.5]
-                             #:fire-sound [fire-sound #f])
+                             #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-sound fire-sound
@@ -1773,7 +1773,7 @@
                             #:speed      [spd 5]
                             #:range      [rng 20]
                             #:fire-rate  [fire-rate 20]
-                            #:fire-sound [fire-sound #f])
+                            #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (mine #:sprite s
                       #:weapon (custom-weapon ;#:fire-mode 'spread
@@ -1825,7 +1825,7 @@
                               #:range      [rng 100]
                               #:fire-mode  [fm 'normal]
                               #:fire-rate  [fire-rate 0.5]
-                              #:fire-sound [fire-sound #f])
+                              #:fire-sound [fire-sound FIRE-MAGIC-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm

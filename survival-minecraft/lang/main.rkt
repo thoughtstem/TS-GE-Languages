@@ -66,6 +66,7 @@
   (custom-skin #:sprite           [sprite steve-sprite]
                #:damage-processor [dp (filter-damage-by-tag #:filter-out  '(friendly-team passive)
                                                             #:show-damage? #t
+                                                            #:hit-sound HIT-SOUND
                                                             )]
                #:position         [p   (posn 100 100)]
                #:speed            [spd 10]
@@ -201,10 +202,13 @@
   (define weapon
     (if (not w)
         (cond [(equal? (render s) (render ghast-sprite))
-               (custom-weapon #:name "Fireball" #:dart (fireball))]
+               (custom-weapon #:name "Fireball" #:dart (fireball)
+                              #:fire-sound #f)]
               [(equal? (render s) (render skeleton-sprite))
-               (custom-weapon #:name "Arrow" #:dart (arrow))]
-              [else (custom-weapon #:name "Spitter" #:dart (acid-dart))])
+               (custom-weapon #:name "Arrow" #:dart (arrow)
+                              #:fire-sound #f)]
+              [else (custom-weapon #:name "Spitter" #:dart (acid-dart)
+                                   #:fire-sound #f)])
         w))
   
   (custom-enemy #:amount-in-world amount-in-world
@@ -272,6 +276,7 @@
                                   #:fire-mode         [fm 'normal]
                                   #:fire-rate         [fr 3]
                                   #:fire-key          [key 'f]
+                                  #:fire-sound        [fire-sound #f]
                                   #:mouse-fire-button [button 'left]
                                   #:point-to-mouse?   [ptm? #t]
                                   #:rapid-fire?       [rf? #t]
@@ -287,6 +292,7 @@
         #:fire-mode         [fire-mode fire-mode?]
         #:fire-rate         [fire-rate number?]
         #:fire-key          [fire-key symbol?]
+        #:fire-sound        [fire-sound (or/c rsound? #f '())]
         #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -312,6 +318,7 @@
                  #:fire-mode         fm
                  #:fire-rate         fr
                  #:fire-key          key
+                 #:fire-sound        fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?

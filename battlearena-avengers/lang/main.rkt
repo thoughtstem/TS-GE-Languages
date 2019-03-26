@@ -39,7 +39,8 @@
 ;; ----- HERO
 
 (define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
-                                  #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive))]
+                                  #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
+                                                                        #:hit-sound HIT-SOUND)]
                                   #:position         [p   (posn 100 100)]
                                   #:speed            [spd 10]
                                   #:key-mode         [key-mode 'wasd]
@@ -121,6 +122,7 @@
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
+                                   #:fire-sound        [fire-sound LASER-SOUND]
                                    #:mouse-fire-button [button 'left]
                                    #:point-to-mouse?   [ptm? #t]
                                    #:rapid-fire?       [rf? #t]
@@ -135,6 +137,7 @@
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
+        #:fire-sound  [fire-sound (or/c rsound? #f '())]
         #:mouse-fire-button [button (or/c 'left 'right)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
@@ -153,6 +156,7 @@
                  #:fire-mode         fm
                  #:fire-rate         fr
                  #:fire-key          key
+                 #:fire-sound        fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?

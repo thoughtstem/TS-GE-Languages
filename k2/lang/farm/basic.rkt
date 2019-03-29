@@ -21,6 +21,6 @@
     (submod "./farm-lang.rkt" farm-stuff)
     [cat           c (crop s:CAT-SHEET)]
 
-    [start         s play-icon]))
+    [start-a         s play-icon]))
 
 

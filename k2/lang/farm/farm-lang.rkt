@@ -2,16 +2,163 @@
 
 (module farm-stuff racket
 
-(require survival)
+(require survival
+         "farm-assets.rkt")
 
-  (provide start
-           cat)
+  (provide start-a
+           start-b
+           start-c
+           start-d
+           cat
+           dog
+           chicken
+           cow
+           goat
+           llama
+           pig 
+           rabbit
+           sheep
+           turkey
+           horse
+           wolf
 
-  (define cat cat-sprite)
+           apple
+           banana
+           brocolli
+           cherries
+           eggplant
+           greengrapes
+           kiwi
+           mushroom
+           onion
+           pepper
+           pineapple
+           potato
+           purplegrapes
+           strawberry
+           tomato)
+
+  (define cat     blackcat-sprite)
+  (define dog     browndog-sprite)
+  (define chicken chicken-sprite)
+  (define cow     cow-sprite)
+  (define goat    goat-sprite)
+  (define llama   llama-sprite)
+  (define pig     pig-sprite)
+  (define rabbit  rabbit-sprite)
+  (define sheep   sheep-sprite)
+  (define turkey  turkey-sprite)
+  (define horse   whitehorse-sprite)
+  (define wolf    wolf-sprite)
+
+  (define apple        apple-sprite)
+  (define banana       banana-sprite)
+  (define brocolli     brocolli-sprite)
+  (define cherries     cherries-sprite)
+  (define eggplant     eggplant-sprite)
+  (define greengrapes  greengrapes-sprite)
+  (define kiwi         kiwi-sprite)
+  (define mushroom     mushroom-sprite)
+  (define onion        onion-sprite)
+  (define pepper       pepper-sprite)
+  (define pieneapple   pineapple-sprite)
+  (define potato       potato-sprite)
+  (define purplegrapes purplegrapes-sprite)
+  (define strawberry   strawberry-sprite)
+  (define tomato       tomato-sprite)
+
+  (define growl-sprite
+    (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
+                    -3 3
+                    (overlay (circle 10 'outline 'black)
+                             (circle 10 'solid (make-color 128 128 128 128)))))
+
+  (define (growl-dart  #:sprite     [s   growl-sprite]
+                       #:damage     [dmg 10]
+                       #:durability [dur 5]
+                       #:speed      [spd 3]
+                       #:range      [rng 100])
+    (custom-dart #:position (posn 25 0)
+                 #:sprite     s
+                 #:damage     dmg
+                 #:durability dur
+                 #:speed      spd
+                 #:range      rng
+                 #:components (on-start (random-size 0.5 1))))
+
   
-  (define (start avatar-sprite)
-   (survival-game #:avatar (custom-avatar #:sprite avatar-sprite))
-    )
+  (define (make-food sprite)
+    (custom-food #:sprite sprite)) 
+  
+  (define (make-friend sprite)
+    (custom-npc #:sprite sprite))
+
+  (define (make-foe sprite)
+    (custom-enemy #:sprite sprite
+                  #:weapon (custom-weapon #:name "Evilness"
+                                          #:dart (growl-dart))))
+
+  (define-syntax (app stx)
+    (syntax-case stx ()
+      [(_ f (args ...)) #'(f args ...)] 
+
+      [(_ f arg) #'(f arg)] ) )
+
+ ;start-a = avatar + foods
+  (define-syntax-rule (start-a avatar-sprite food-sprite ...)
+    (let ()
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
+                     )
+      ))
+
+  ;start-b = avatar + friends
+  (define-syntax-rule (start-b avatar-sprite friend-sprite ...)
+    (let ()
+      (define friend-list
+        (list (app make-friend friend-sprite ) ...))
+
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:npc-list friend-list
+                     )
+      ))
+  
+  ;start-c = avatar + foods + friends
+  (define-syntax-rule (start-c avatar-sprite (food-sprite ...) (friend-sprite ...))
+    (let ()
+      (define friend-list
+        (list (app make-friend friend-sprite ) ...))
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
+                     #:npc-list friend-list
+                     )
+      ))
+
+  ;start-d = avatar + foods + enemy
+  (define-syntax-rule (start-d avatar-sprite (food-sprite ...) enemy-sprite)
+    (let ()
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
+                     #:enemy-list (list (make-foe enemy-sprite))
+                     )
+      ))
   
   (define-syntax-rule (top-level lines ...)
     (let ()
@@ -19,6 +166,5 @@
         (thunk lines ...)) 
       "Please wait...")))
 
-  
 (require 'farm-stuff)
 (provide (all-from-out racket 'farm-stuff))

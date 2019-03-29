@@ -62,9 +62,9 @@
 
 (define blackhorse-sprite
   (sheet->sprite blackhorse-sheet
-               #:rows 19
+               #:rows 1
                #:columns 4
-               #:row-number 8
+               #:row-number 1
                #:delay 5))
 
 (define browncat-sprite
@@ -83,9 +83,9 @@
 
 (define brownhorse-sprite
   (sheet->sprite brownhorse-sheet
-               #:rows 19
+               #:rows 1
                #:columns 4
-               #:row-number 8
+               #:row-number 1
                #:delay 5))
 
 (define chicken-sprite
@@ -125,16 +125,16 @@
 
 (define goldenhorse-sprite
   (sheet->sprite goldenhorse-sheet
-               #:rows 19
+               #:rows 1
                #:columns 4
-               #:row-number 8
+               #:row-number 1
                #:delay 5))
 
 (define grayhorse-sprite
   (sheet->sprite grayhorse-sheet
-               #:rows 19
+               #:rows 1
                #:columns 4
-               #:row-number 8
+               #:row-number 1
                #:delay 5))
 
 (define llama-sprite
@@ -188,9 +188,9 @@
 
 (define whitehorse-sprite
   (sheet->sprite whitehorse-sheet
-               #:rows 19
+               #:rows 1
                #:columns 4
-               #:row-number 8
+               #:row-number 1
                #:delay 5))
 
 (define wolf-sprite

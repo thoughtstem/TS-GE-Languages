@@ -9,6 +9,7 @@
            start-b
            start-c
            start-d
+           start-e
            cat
            dog
            chicken
@@ -27,14 +28,13 @@
            brocolli
            cherries
            eggplant
-           greengrapes
+           grapes
            kiwi
            mushroom
            onion
            pepper
            pineapple
            potato
-           purplegrapes
            strawberry
            tomato)
 
@@ -48,7 +48,7 @@
   (define rabbit  rabbit-sprite)
   (define sheep   sheep-sprite)
   (define turkey  turkey-sprite)
-  (define horse   whitehorse-sprite)
+  (define horse   goldenhorse-sprite)
   (define wolf    wolf-sprite)
 
   (define apple        apple-sprite)
@@ -56,14 +56,13 @@
   (define brocolli     brocolli-sprite)
   (define cherries     cherries-sprite)
   (define eggplant     eggplant-sprite)
-  (define greengrapes  greengrapes-sprite)
+  (define grapes       greengrapes-sprite)
   (define kiwi         kiwi-sprite)
   (define mushroom     mushroom-sprite)
   (define onion        onion-sprite)
   (define pepper       pepper-sprite)
-  (define pieneapple   pineapple-sprite)
+  (define pineapple    pineapple-sprite)
   (define potato       potato-sprite)
-  (define purplegrapes purplegrapes-sprite)
   (define strawberry   strawberry-sprite)
   (define tomato       tomato-sprite)
 
@@ -91,7 +90,8 @@
     (custom-food #:sprite sprite)) 
   
   (define (make-friend sprite)
-    (custom-npc #:sprite sprite))
+    (custom-npc #:sprite sprite
+                #:tile (random 0 4)))
 
   (define (make-foe sprite)
     (custom-enemy #:sprite sprite
@@ -156,6 +156,23 @@
                                      #:columns 2)
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
+                     #:enemy-list (list (make-foe enemy-sprite))
+                     )
+      ))
+
+  ;start-e = avatar + foods + friends + enemy
+  (define-syntax-rule (start-e avatar-sprite (food-sprite ...) (friend-sprite ...) enemy-sprite)
+    (let ()
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+      (define friend-list
+        (list (app make-friend friend-sprite ) ...))
+      
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
+                     #:npc-list friend-list
                      #:enemy-list (list (make-foe enemy-sprite))
                      )
       ))

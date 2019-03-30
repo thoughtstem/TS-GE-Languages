@@ -54,8 +54,7 @@
          (only-in racket/draw make-font)
          "../assets.rkt")
 
-(require (except-in game-engine
-                    change-health-by)
+(require game-engine
          game-engine-demos-common
          (only-in lang/posn make-posn)
          )
@@ -390,17 +389,13 @@
   (flatten (map f es)))
 
 (define (player-toast-entity message #:color [color "yellow"])
-  (define color-symbol (if (string? color)
-                           (string->symbol color)
-                           color))
-  (sprite->entity (new-sprite message #:x-offset -1 #:y-offset 1 #:color 'black)
+  (sprite->entity (list (new-sprite message #:color color)
+                        (new-sprite message #:x-offset -1 #:y-offset 1 #:color 'black))
                   #:name       "player toast"
                   #:position   (posn 0 0)
                   #:components (hidden)
                                (layer "ui")
-                               (new-sprite message #:color color-symbol)
                                (direction 270)
-                               ;(physical-collider)
                                (speed 3)
                                (on-start (do-many (go-to-entity "player" #:offset (posn 0 -20))
                                                   (random-direction 240 300)
@@ -454,14 +449,14 @@
 (define (bg? e)
   (eq? (get-name e) "bg"))
     
-(define (food->component f #:use-key [use-key 'space] #:max-health [max-health 100])
+(define (food->component f #:use-key [use-key 'space])
   (define item-name (get-name f))
   (define heal-amount (get-storage-data "heals-by" f))
   (if heal-amount
       (on-key use-key #:rule (and/r (player-is-near? item-name)
                                     (nearest-entity-to-player-is? item-name #:filter (and/c (has-component? on-key?)
                                                                                             (not/c bg?))))
-          (do-many (change-health-by heal-amount #:max max-health)
+          (do-many (change-health-by heal-amount)
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
       #f))
 
@@ -521,6 +516,8 @@
                  #:speed            [spd 10]
                  #:key-mode         [key-mode 'arrow-keys]
                  #:mouse-aim?       [mouse-aim? #f]
+                 #:health           [health     100]
+                 #:max-health       [max-health 100]
                  #:components       [c #f]
                                     . custom-components)
   (->i ()
@@ -530,6 +527,8 @@
         #:speed            [speed number?]
         #:key-mode         [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim?       [mouse-aim boolean?]
+        #:health           [health     number?]
+        #:max-health       [max-health number?]
         #:components       [first-component (or/c component-or-system? false? (listof false?))]
         )
        #:rest (rest (listof component-or-system?))
@@ -564,7 +563,7 @@
   (define health-bar (stat-progress-bar 'red
                                         #:width 100
                                         #:height 10
-                                        #:max 100 
+                                        #:max max-health ;100 
                                         #:after (λ(e) (~> e
                                                           (remove-component _ lock-to?)
                                                           (remove-component _ active-on-bg?)
@@ -573,7 +572,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))
 
-  (define sheild-bar (stat-progress-bar 'blue
+  #|(define sheild-bar (stat-progress-bar 'blue
                                         #:width 100
                                         #:height 10
                                         #:max 100
@@ -583,10 +582,10 @@
                                                           (add-component _
                                                                          (on-start
                                                                           (go-to-pos-inside 'top-left
-                                                                                            #:posn-offset (posn 10 10))))))))
+                                                                                            #:posn-offset (posn 10 10))))))))|#
 
   (combatant
-   #:stats (list (make-stat-config 'health 100 health-bar)
+   #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  ;(make-stat-config 'shield 100 sheild-bar)
                  )
    #:damage-processor dp         
@@ -732,7 +731,7 @@
 (define/contract/doc (custom-enemy #:amount-in-world (amount-in-world 1)
                                    #:sprite (s (first (shuffle (list slime-sprite bat-sprite snake-sprite))))
                                    #:ai (ai-level 'medium)
-                                   #:health (health 99)
+                                   #:health (health 100)
                                    ;#:shield (shield 100)
                                    #:weapon (weapon (custom-weapon #:name "Spitter"
                                                                    #:dart (acid-dart)))
@@ -765,7 +764,8 @@
 
     (define c (~> e
                   (combatant
-                   #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -30)))) ;(default-health+shields-stats health shield)
+                   #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -30))
+                                                   #:max-value health)) ;(default-health+shields-stats health shield)
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
                                                             #:hit-sound HIT-SOUND)
                              _)
@@ -921,15 +921,22 @@
   (define known-products-list (map recipe-product known-recipes-list))
 
   (define known-weapons-list (filter (curry get-storage "Weapon") known-products-list))
+
+  (define (known-weapon? e)
+    (member (get-name e) (map get-name known-weapons-list)))
+  
+  (define world-weapon-list (filter (not/c known-weapon?) weapon-list))
   
   (define player-with-recipes-and-weapons
     (if p
         (add-components p (map weapon-entity->player-system known-weapons-list) ;added weapon stuff
+                          (map weapon-entity->player-system world-weapon-list)
                           (map recipe->system known-recipes-list)
                           ;(apply precompiler (remove-duplicates updated-food-list render-eq?))                                ;f-list
-                          (map food->component (append (remove-duplicates updated-food-list
-                                                                          name-eq?)
-                                                       (filter-not (curry get-storage "Weapon") known-products-list)))                  ;f-list
+                          (map food->component
+                               (append (remove-duplicates updated-food-list
+                                                          name-eq?)
+                                       (filter-not (curry get-storage "Weapon") known-products-list)))                  ;f-list
                           (do-every starvation-period
                                     (do-many (change-health-by -1)
                                              (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
@@ -1526,7 +1533,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
-                 #:fire-sound #f
+                 #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
@@ -1865,18 +1872,6 @@
                #:tile t
                #:respawn? respawn?
                #:components (cons c custom-components)))
-
-; ==== HEALTH HANDLERS ====
-(define (set-health-to amt)
-  (lambda (g e)
-    (set-stat "health" e (max 0 (min 100 amt)))))
-
-(define (change-health-by amt #:max [max 100])
-  (lambda (g e)
-    (define current-stat (get-stat "health" e))
-    (if (<= current-stat (- max amt))
-        (change-stat "health" e amt)
-        (set-stat "health" e max))))
 
 (module test racket
   (displayln "TEST!!!")

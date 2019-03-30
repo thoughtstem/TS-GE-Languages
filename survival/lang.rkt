@@ -11,7 +11,6 @@
 (require "./lang/main.rkt"
          "./assets.rkt"
          )
-(require (except-in game-engine
-                    change-health-by))
+(require game-engine)
 (require game-engine-demos-common)
 (require 2htdp/image)

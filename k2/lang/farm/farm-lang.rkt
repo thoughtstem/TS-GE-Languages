@@ -9,7 +9,6 @@
            start-b
            start-c
            start-d
-           start-e
            cat
            dog
            chicken
@@ -93,10 +92,13 @@
     (custom-npc #:sprite sprite
                 #:tile (random 0 4)))
 
-  (define (make-foe sprite)
+  (define (make-enemy sprite)
     (custom-enemy #:sprite sprite
                   #:weapon (custom-weapon #:name "Evilness"
                                           #:dart (growl-dart))))
+
+  (define (make-coin sprite)
+    (custom-coin #:sprite sprite))
 
   (define-syntax (app stx)
     (syntax-case stx ()
@@ -105,7 +107,7 @@
       [(_ f arg) #'(f arg)] ) )
 
  ;start-a = avatar + foods
-  (define-syntax-rule (start-a avatar-sprite food-sprite ...)
+  (define-syntax-rule (start-a avatar-sprite (food-sprite ...))
     (let ()
       (define food-list
         (list (app make-food food-sprite ) ...))
@@ -117,21 +119,8 @@
                      )
       ))
 
-  ;start-b = avatar + friends
-  (define-syntax-rule (start-b avatar-sprite friend-sprite ...)
-    (let ()
-      (define friend-list
-        (list (app make-friend friend-sprite ) ...))
-
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:npc-list friend-list
-                     )
-      ))
-  
-  ;start-c = avatar + foods + friends
-  (define-syntax-rule (start-c avatar-sprite (food-sprite ...) (friend-sprite ...))
+  ;start-b = avatar + foods + friends
+  (define-syntax-rule (start-b avatar-sprite (food-sprite ...) (friend-sprite ...))
     (let ()
       (define friend-list
         (list (app make-friend friend-sprite ) ...))
@@ -146,36 +135,47 @@
                      )
       ))
 
-  ;start-d = avatar + foods + enemy
-  (define-syntax-rule (start-d avatar-sprite (food-sprite ...) enemy-sprite)
-    (let ()
-      (define food-list
-        (list (app make-food food-sprite ) ...))
-
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:enemy-list (list (make-foe enemy-sprite))
-                     )
-      ))
-
-  ;start-e = avatar + foods + friends + enemy
-  (define-syntax-rule (start-e avatar-sprite (food-sprite ...) (friend-sprite ...) enemy-sprite)
+  ;start-c = avatar + foods + friends + enemies
+  (define-syntax-rule (start-c avatar-sprite (food-sprite ...) (friend-sprite ...) (enemy-sprite ...))
     (let ()
       (define food-list
         (list (app make-food food-sprite ) ...))
       (define friend-list
         (list (app make-friend friend-sprite ) ...))
+      (define enemy-list
+        (list (app make-enemy enemy-sprite ) ...))
       
       (survival-game #:bg (custom-bg #:rows 2
                                      #:columns 2)
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
                      #:npc-list friend-list
-                     #:enemy-list (list (make-foe enemy-sprite))
+                     #:enemy-list enemy-list
                      )
       ))
+
+  ;start-d = avatar + foods + friends + enemies + coins
+  (define-syntax-rule (start-d avatar-sprite (food-sprite ...) (friend-sprite ...) (enemy-sprite ...) (coin-sprite ...))
+    (let ()
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+      (define friend-list
+        (list (app make-friend friend-sprite ) ...))
+      (define enemy-list
+        (list (app make-enemy enemy-sprite ) ...))
+      (define coin-list
+        (list (app make-coin coin-sprite ) ...))
+      
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
+                     #:npc-list friend-list
+                     #:enemy-list enemy-list
+                     #:coin-list coin-list
+                     )
+      ))
+  
   
   (define-syntax-rule (top-level lines ...)
     (let ()

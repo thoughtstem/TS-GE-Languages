@@ -23,7 +23,7 @@
         i-or-s))
     (h:crop 0 0 32 32 i))
 
-  (define-visual-language #:wrapper top-level hero-lang
+  (define-visual-language #:wrapper begin hero-lang
     (submod "./hero-lang.rkt" hero-stuff)
     [start          q play-icon]
 

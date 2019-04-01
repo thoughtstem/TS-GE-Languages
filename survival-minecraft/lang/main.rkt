@@ -72,6 +72,8 @@
                #:speed            [spd 10]
                #:key-mode         [key-mode 'arrow-keys]
                #:mouse-aim?       [mouse-aim? #f]
+               #:health           [health 100]
+               #:max-health       [max-health 100]
                #:components       [c #f]
                . custom-components)
   
@@ -82,6 +84,8 @@
         #:speed [speed number?]
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
+        #:health     [health number?]
+        #:max-health [max-health number?]
         #:components [first-component component-or-system?]
         )
        #:rest (rest (listof component-or-system?))
@@ -98,6 +102,8 @@
    #:speed            spd
    #:key-mode         key-mode
    #:mouse-aim?       mouse-aim?
+   #:health           health
+   #:max-health       max-health
    #:components       (cons c custom-components)))
 
 ;======== custom-entity to replace custom-npc ========

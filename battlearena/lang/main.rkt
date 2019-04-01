@@ -4,8 +4,7 @@
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
-(require (except-in game-engine
-                    change-health-by)
+(require game-engine
          game-engine-demos-common
          )
 
@@ -640,28 +639,16 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-; ==== BORDERLANDS STYLE POP UPS =====
-; todo: add to game-engine?
-(define (go-to-entity name #:offset [offset (posn 0 0)])
-  (lambda (g e)
-    (define target? (get-entity name g))
-    (if target?
-        (update-entity e posn? (posn-add (get-component target? posn?) offset))
-        e)))
-
-(define (text/shadow message size color)
-  (overlay/offset (freeze (text/font message size color "Arial" 'default 'normal 'normal #f))
-                  -1 1
-                  (freeze (text/font message size "black" "Arial" 'default 'normal 'normal #f))))
-
 (define (player-toast-entity message #:color [color "yellow"])
-  (sprite->entity (text/shadow message 16 color)
+  (sprite->entity (list (new-sprite message #:color color)
+                        (new-sprite message #:color 'black
+                                    #:x-offset -1
+                                    #:y-offset 1))
                   #:name       "player toast"
                   #:position   (posn 0 0)
                   #:components (hidden)
                                (layer "ui")
                                (direction 270)
-                               ;(physical-collider)
                                (speed 3)
                                (on-start (do-many (go-to-entity "player" #:offset (posn 0 -20))
                                                   (random-direction 240 300)
@@ -814,6 +801,10 @@
                       #:key-mode     [key-mode 'wasd]
                       #:mouse-aim?   [mouse-aim? #t]
                       #:item-slots   [w-slots 2]
+                      #:health       [health 100]
+                      #:max-health   [max-health 100]
+                      #:shield       [shield 100]
+                      #:max-shield   [max-shield 100]
                       #:components   [c #f]
                       . custom-components)
 
@@ -825,6 +816,10 @@
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
         #:item-slots [item-slots number?]
+        #:health     [health number?]
+        #:max-health [max-health number?]
+        #:shield     [shield number?]
+        #:max-shield [max-shield number?]
         #:components [first-component (or/c component-or-system? false? (listof false?))]
         )
        #:rest (rest (listof component-or-system?))
@@ -862,7 +857,7 @@
   (define health-bar (stat-progress-bar 'green
                                         #:width 100
                                         #:height 10
-                                        #:max 100 
+                                        #:max max-health 
                                         #:after (λ(e) (~> e
                                                           (remove-component _ lock-to?)
                                                           (remove-component _ active-on-bg?)
@@ -874,7 +869,7 @@
   (define sheild-bar (stat-progress-bar 'deepskyblue
                                         #:width 100
                                         #:height 10
-                                        #:max 100
+                                        #:max max-shield
                                         #:after (λ(e) (~> e
                                                           (remove-component _ lock-to?)
                                                           (remove-component _ active-on-bg?)
@@ -884,8 +879,8 @@
                                                                                             #:posn-offset (posn 10 10))))))))
 
   (combatant
-   #:stats (list (make-stat-config 'health 100 health-bar)
-                 (make-stat-config 'shield 100 sheild-bar))
+   #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
+                 (make-stat-config 'shield shield sheild-bar #:max-value max-shield))
    #:damage-processor dp         
    base-avatar)
   )
@@ -1888,16 +1883,9 @@
 
 ; POWER UP HANDLERS
 
-(provide set-health-to
-         change-health-by
-         set-shield-to
-         change-shield-by
-         change-damage-by
+(provide change-damage-by
          multiply-damage-by
          set-damage-to)
-
-;change-damage-by
-;multiply-damage-by
 
 ;Holy crap, why is this so hard.  WE need better tools for
 ;  applying a function to all things spawned from some entity
@@ -1986,28 +1974,7 @@
 
 ;change-fire-rate-by
 ;multiply-fire-rate-by
-
-(define (set-health-to amt)
-  (lambda (g e)
-    (set-stat "health" e (max 0 (min 100 amt)))))
-
-(define (change-health-by amt)
-  (lambda (g e)
-    (define current-stat (get-stat "health" e))
-    (if (<= current-stat (- 100 amt))
-        (change-stat "health" e amt)
-        (set-stat "health" e 100))))
-
-(define (set-shield-to amt)
-  (lambda (g e)
-    (set-stat "shield" e (max 0 (min 100 amt)))))
-
-(define (change-shield-by amt)
-  (lambda (g e)
-    (define current-stat (get-stat "shield" e))
-    (if (<= current-stat (- 100 amt))
-        (change-stat "shield" e amt)
-        (set-stat "shield" e 100))))
+;set-fire-rate-to
 
 
 #;(module test racket

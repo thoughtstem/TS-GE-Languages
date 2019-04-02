@@ -34,7 +34,11 @@
            pineapple
            potato
            strawberry
-           tomato)
+           tomato
+
+           copper
+           silver
+           gold)
 
   (define cat     blackcat-sprite)
   (define dog     browndog-sprite)
@@ -101,7 +105,17 @@
                                           #:dart (growl-dart))))
 
   (define (make-coin sprite)
-    (custom-coin #:sprite sprite)) 
+    (cond
+      [(equal? sprite gold) (custom-coin #:sprite sprite
+                                         #:value  3
+                                         #:amount-in-world 1
+                                         #:name "Gold")]
+      [(equal? sprite silver) (custom-coin #:sprite sprite
+                                         #:value  2
+                                         #:amount-in-world 5
+                                         #:name "Silver")]
+      [else  (custom-coin #:sprite sprite
+                          #:value 1)])) 
 
   (define-syntax (app stx)
     (syntax-case stx ()
@@ -119,7 +133,7 @@
                                      #:columns 2)
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
-                     #:score-prefix    "Points"
+                     #:score-prefix    "Score"
                      )
       ))
 
@@ -136,7 +150,7 @@
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
                      #:coin-list coin-list
-                     #:score-prefix    "Points"
+                     #:score-prefix    "Score"
                      )
       ))
 
@@ -156,7 +170,7 @@
                      #:food-list food-list
                      #:enemy-list enemy-list
                      #:coin-list coin-list
-                     #:score-prefix    "Points"
+                     #:score-prefix    "Score"
                      )
       ))
   

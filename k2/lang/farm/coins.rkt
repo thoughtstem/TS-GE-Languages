@@ -25,19 +25,21 @@
   
   (define-visual-language farm-lang
     (submod "./farm-lang.rkt" farm-stuff)
-    [start-b  s play-icon]
-    ;[bronze c (crop s:CAT-SHEET)]
-    [chicken  c (crop (s:render chicken))]
+    [start-b  x play-icon]
+    
     [llama    l (crop (crop-left (s:render llama)))]
-    [horse    h (crop (crop-left (s:render horse)))]
+    [cow      c (crop (crop-left (s:render cow)))]
     [rabbit   r (crop (s:render rabbit))]
+    [sheep    s (crop (crop-left (s:render sheep)))]
     
     [apple    a (crop (s:render apple))]
-    [brocolli b (crop (s:render brocolli))]
-    [grapes   g (crop (s:render grapes))]
-    [onion    o (crop (s:render onion))]
+    [banana   b (crop (s:render banana))]
     [potato   p (crop (s:render potato))]
-    [tomato   t (crop (s:render tomato))]
+    [kiwi     k (crop (s:render kiwi))]
+
+    [copper   1 (crop (s:render copper))]
+    [silver   2 (crop (s:render silver))]
+    [gold     3 (crop (s:render gold))]
 ))
 
 

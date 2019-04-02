@@ -11,6 +11,7 @@
   (require ratchet
            (submod "./farm-lang.rkt" farm-stuff)
            "../icons.rkt"
+           ;"farm-assets.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
@@ -24,19 +25,24 @@
   
   (define-visual-language farm-lang
     (submod "./farm-lang.rkt" farm-stuff)
-    [start-a  x play-icon]
-
-    [chicken  c (crop (s:render chicken))]
+    [start-c  x play-icon]
+    
     [llama    l (crop (crop-left (s:render llama)))]
     [horse    h (crop (crop-left (s:render horse)))]
+    [cow      c (crop (crop-left (s:render cow)))]
     [rabbit   r (crop (s:render rabbit))]
+    [sheep    s (crop (crop-left (s:render sheep)))]
+    [dog      d (crop (crop-left (s:render dog)))]
+    [wolf     w (crop (crop-left (s:render wolf)))]
     
     [apple    a (crop (s:render apple))]
-    [brocolli b (crop (s:render brocolli))]
     [grapes   g (crop (s:render grapes))]
-    [onion    o (crop (s:render onion))]
-    [potato   p (crop (s:render potato))]
-    [tomato   t (crop (s:render tomato))]
+    [kiwi     k (crop (s:render kiwi))]
+    [pepper   p (crop (s:render pepper))]
+
+    [copper   1 (crop (s:render copper))]
+    [silver   2 (crop (s:render silver))]
+    [gold     3 (crop (s:render gold))]
 ))
 
 

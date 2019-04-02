@@ -28,7 +28,13 @@
          aqua-jet
          fire-spin
          waterfall
-         bubble)
+         bubble
+         
+         fire-blast-icon
+         aqua-jet-icon
+         fire-spin-icon
+         waterfall-icon
+         bubble-icon)
 
 
 (define bg-list

@@ -32,8 +32,7 @@
 
   (provide-arena-sprites blackwidow gamora captainamerica drax hawkeye hulk ironman loki)
 
-  (provide top-level
-           hammer
+  (provide hammer
            magic-orb
            star-bit
            energy-blast
@@ -90,11 +89,7 @@
                        #:hero (app make-hero hero)
                        #:villain-list vs)))
   
-  (define-syntax-rule (top-level lines ...)
-    (let ()
-      (thread
-        (thunk lines ...)) 
-      "Please wait...")))
+  )
 
   
 (require 'hero-stuff)

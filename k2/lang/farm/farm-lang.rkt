@@ -8,7 +8,6 @@
   (provide start-a
            start-b
            start-c
-           start-d
            cat
            dog
            chicken
@@ -65,6 +64,10 @@
   (define strawberry   strawberry-sprite)
   (define tomato       tomato-sprite)
 
+  (define copper coppercoin-sprite)
+  (define silver silvercoin-sprite)
+  (define gold   goldcoin-sprite)
+
   (define growl-sprite
     (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
                     -3 3
@@ -98,7 +101,7 @@
                                           #:dart (growl-dart))))
 
   (define (make-coin sprite)
-    (custom-coin #:sprite sprite))
+    (custom-coin #:sprite sprite)) 
 
   (define-syntax (app stx)
     (syntax-case stx ()
@@ -116,63 +119,44 @@
                                      #:columns 2)
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
+                     #:score-prefix    "Points"
                      )
       ))
 
-  ;start-b = avatar + foods + friends
-  (define-syntax-rule (start-b avatar-sprite (food-sprite ...) (friend-sprite ...))
-    (let ()
-      (define friend-list
-        (list (app make-friend friend-sprite ) ...))
-      (define food-list
-        (list (app make-food food-sprite ) ...))
-
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:npc-list friend-list
-                     )
-      ))
-
-  ;start-c = avatar + foods + friends + enemies
-  (define-syntax-rule (start-c avatar-sprite (food-sprite ...) (friend-sprite ...) (enemy-sprite ...))
+  ;start-b = avatar + foods + coins
+  (define-syntax-rule (start-b avatar-sprite (food-sprite ...) (coin-sprite ...))
     (let ()
       (define food-list
         (list (app make-food food-sprite ) ...))
-      (define friend-list
-        (list (app make-friend friend-sprite ) ...))
-      (define enemy-list
-        (list (app make-enemy enemy-sprite ) ...))
-      
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:npc-list friend-list
-                     #:enemy-list enemy-list
-                     )
-      ))
-
-  ;start-d = avatar + foods + friends + enemies + coins
-  (define-syntax-rule (start-d avatar-sprite (food-sprite ...) (friend-sprite ...) (enemy-sprite ...) (coin-sprite ...))
-    (let ()
-      (define food-list
-        (list (app make-food food-sprite ) ...))
-      (define friend-list
-        (list (app make-friend friend-sprite ) ...))
-      (define enemy-list
-        (list (app make-enemy enemy-sprite ) ...))
       (define coin-list
         (list (app make-coin coin-sprite ) ...))
-      
+
       (survival-game #:bg (custom-bg #:rows 2
                                      #:columns 2)
                      #:avatar (custom-avatar #:sprite avatar-sprite)
                      #:food-list food-list
-                     #:npc-list friend-list
+                     #:coin-list coin-list
+                     #:score-prefix    "Points"
+                     )
+      ))
+
+  ;start-c = avatar + foods + coins + enemies
+  (define-syntax-rule (start-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+    (let ()
+      (define food-list
+        (list (app make-food food-sprite ) ...))
+      (define coin-list
+        (list (app make-coin coin-sprite ) ...))
+      (define enemy-list
+        (list (app make-enemy enemy-sprite ) ...))
+
+      (survival-game #:bg (custom-bg #:rows 2
+                                     #:columns 2)
+                     #:avatar (custom-avatar #:sprite avatar-sprite)
+                     #:food-list food-list
                      #:enemy-list enemy-list
                      #:coin-list coin-list
+                     #:score-prefix    "Points"
                      )
       ))
   

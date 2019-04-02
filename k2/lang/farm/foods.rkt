@@ -11,7 +11,6 @@
   (require ratchet
            (submod "./farm-lang.rkt" farm-stuff)
            "../icons.rkt"
-           ;"farm-assets.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
@@ -26,7 +25,7 @@
   (define-visual-language farm-lang
     (submod "./farm-lang.rkt" farm-stuff)
     [start-a  s play-icon]
-    ;[cat c (crop s:CAT-SHEET)]
+
     [chicken  c (crop (s:render chicken))]
     [llama    l (crop (crop-left (s:render llama)))]
     [horse    h (crop (crop-left (s:render horse)))]

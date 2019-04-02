@@ -43,7 +43,11 @@
          potato-sprite
          purplegrapes-sprite
          strawberry-sprite
-         tomato-sprite)
+         tomato-sprite
+
+         coppercoin-sprite
+         silvercoin-sprite
+         goldcoin-sprite)
 
 ; == ANIMALS
 (define blackcat-sprite
@@ -305,3 +309,24 @@
                #:columns 1
                #:row-number 1
                #:delay 5))
+
+(define coppercoin-sprite
+  (sheet->sprite coppercoin-sheet
+               #:rows 1
+               #:columns 8
+               #:row-number 1
+               #:delay 2))
+
+(define silvercoin-sprite
+  (sheet->sprite silvercoin-sheet
+               #:rows 1
+               #:columns 8
+               #:row-number 1
+               #:delay 2))
+
+(define goldcoin-sprite
+  (sheet->sprite goldcoin-sheet
+               #:rows 1
+               #:columns 8
+               #:row-number 1
+               #:delay 2))

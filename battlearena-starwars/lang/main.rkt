@@ -34,6 +34,10 @@
                                   #:key-mode         [key-mode 'wasd]
                                   #:mouse-aim?       [mouse-aim? #t]
                                   #:item-slots       [w-slots 2]
+                                  #:health           [health 100]
+                                  #:max-health       [max-health 100]
+                                  #:shield           [shield 100]
+                                  #:max-shield       [max-shield 100]
                                   #:components       [c #f]
                                   . custom-components)
   (->i ()
@@ -44,6 +48,10 @@
         #:key-mode [key-mode (or/c 'wasd 'arrow-keys)]
         #:mouse-aim? [mouse-aim boolean?]
         #:item-slots [item-slots number?]
+        #:health     [health number?]
+        #:max-health [max-health number?]
+        #:shield     [shield number?]
+        #:max-shield [max-shield number?]
         #:components [first-component component-or-system?]
         )
        #:rest (rest (listof component-or-system?))
@@ -60,6 +68,10 @@
                  #:key-mode         key-mode
                  #:mouse-aim?       mouse-aim?
                  #:item-slots       w-slots
+                 #:health           health
+                 #:max-health       max-health
+                 #:shield           shield
+                 #:max-shield       max-shield
                  #:components       (cons c custom-components)))
 
 ;; ----- IMPERIAL

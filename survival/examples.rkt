@@ -98,7 +98,8 @@
 (define-example-code survival crafter-2
   (survival-game
    #:avatar       (custom-avatar)
-   #:food-list    (list (carrot #:amount-in-world 10))
+   #:food-list    (list (carrot #:name "Carrot"
+                                #:amount-in-world 10))
    #:crafter-list (list (custom-crafter
                          #:recipe-list (list carrot-stew-recipe))))
   )
@@ -144,7 +145,7 @@
   (survival-game
    #:avatar       (custom-avatar)
    #:food-list    (list (carrot #:amount-in-world 10)
-                        (fish   #:amount-in-world 10))
+                        (fish #:amount-in-world 10))
    #:crafter-list (list (my-cauldron)))
   )
 

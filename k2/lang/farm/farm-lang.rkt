@@ -2,12 +2,13 @@
 
 (module farm-stuff racket
 
-(require survival
-         "farm-assets.rkt")
+  (require survival
+           "farm-assets.rkt")
 
   (provide start-a
            start-b
            start-c
+           
            cat
            dog
            chicken
@@ -111,9 +112,9 @@
                                          #:amount-in-world 1
                                          #:name "Gold")]
       [(equal? sprite silver) (custom-coin #:sprite sprite
-                                         #:value  2
-                                         #:amount-in-world 5
-                                         #:name "Silver")]
+                                           #:value  2
+                                           #:amount-in-world 5
+                                           #:name "Silver")]
       [else  (custom-coin #:sprite sprite
                           #:value 1)])) 
 
@@ -123,17 +124,17 @@
 
       [(_ f arg) #'(f arg)] ) )
 
- ;start-a = avatar + foods
+  ;start-a = avatar + foods
   (define-syntax-rule (start-a avatar-sprite (food-sprite ...))
     (let ()
       (define food-list
         (list (app make-food food-sprite ) ...))
 
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:score-prefix    "Score"
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:score-prefix "Score"
                      )
       ))
 
@@ -145,12 +146,12 @@
       (define coin-list
         (list (app make-coin coin-sprite ) ...))
 
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:coin-list coin-list
-                     #:score-prefix    "Score"
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"
                      )
       ))
 
@@ -164,13 +165,13 @@
       (define enemy-list
         (list (app make-enemy enemy-sprite ) ...))
 
-      (survival-game #:bg (custom-bg #:rows 2
-                                     #:columns 2)
-                     #:avatar (custom-avatar #:sprite avatar-sprite)
-                     #:food-list food-list
-                     #:enemy-list enemy-list
-                     #:coin-list coin-list
-                     #:score-prefix    "Score"
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:enemy-list   enemy-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"
                      )
       ))
   
@@ -178,7 +179,7 @@
   (define-syntax-rule (top-level lines ...)
     (let ()
       (thread
-        (thunk lines ...)) 
+       (thunk lines ...)) 
       "Please wait...")))
 
 (require 'farm-stuff)

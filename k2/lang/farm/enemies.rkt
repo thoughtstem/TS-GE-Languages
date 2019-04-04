@@ -1,17 +1,20 @@
 #lang racket
 
-(provide (all-from-out "./farm-lang.rkt"))
-(require "./farm-lang.rkt")
+(provide (all-from-out "../animal/animal-lang.rkt")) 
+
+(require "../animal/animal-lang.rkt"
+         "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/farm/farm-lang)
+  k2/lang/animal/animal-lang)
 
 (module ratchet racket
   
   (require ratchet
-           (submod "./farm-lang.rkt" farm-stuff)
+           (rename-in "../animal/animal-lang.rkt" 
+                      [start-c start])
            "../icons.rkt"
-           ;"farm-assets.rkt"
+           "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
@@ -22,10 +25,9 @@
     (define w (h:image-width i))
     (define h (h:image-height i))
     (h:crop (- w 32) 0 w 32 i))
-  
-  (define-visual-language farm-lang
-    (submod "./farm-lang.rkt" farm-stuff)
-    [start-c  x play-icon]
+
+  (define-visual-language farm-lang "../animal/animal-lang.rkt" 
+    [start  x play-icon]
     
     [llama    l (crop (crop-left (s:render llama)))]
     [horse    h (crop (crop-left (s:render horse)))]
@@ -42,7 +44,6 @@
 
     [copper   1 (crop (s:render copper))]
     [silver   2 (crop (s:render silver))]
-    [gold     3 (crop (s:render gold))]
-))
+    [gold     3 (crop (s:render gold))]))
 
 

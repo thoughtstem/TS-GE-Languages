@@ -4,6 +4,7 @@
   
   (require (prefix-in a: battlearena-avengers)
            battlearena-avengers/assets
+           ratchet/util
            (for-syntax racket))
 
   (define-syntax (provide-string stx)
@@ -84,10 +85,11 @@
         (list 
           (app make-villain villains ) ...))
 
-      (a:avengers-game #:planet (a:custom-planet #:rows 2
-                                               #:columns 2)
-                       #:hero (app make-hero hero)
-                       #:villain-list vs)))
+      (launch-for-ratchet
+        (a:avengers-game #:planet (a:custom-planet #:rows 2
+                                                   #:columns 2)
+                         #:hero (app make-hero hero)
+                         #:villain-list vs))))
   
   )
 

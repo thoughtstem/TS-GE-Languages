@@ -2,7 +2,8 @@
 
 (provide start-a
          start-b
-         start-c)
+         start-c
+         (all-from-out racket))
 
 (require survival
          (prefix-in a: "./animal-asset-friendly-names.rkt"))

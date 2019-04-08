@@ -1,36 +1,43 @@
 #lang racket
 
 (provide (rename-out 
-	   (blackcat-sprite cat)
-	   (fish-sprite fish)
-	   (browndog-sprite dog)
-	   (chicken-sprite chicken)
-	   (cow-sprite cow)
-	   (goat-sprite goat)
-	   (llama-sprite llama)
-	   (pig-sprite pig)
-	   (rabbit-sprite rabbit)
-	   (sheep-sprite sheep)
-	   (turkey-sprite turkey)
-	   (goldenhorse-sprite horse)
-	   (wolf-sprite wolf)
-	   (apple-sprite apple)
-	   (banana-sprite banana)
-	   (brocolli-sprite brocolli)
-	   (cherries-sprite cherries)
-	   (eggplant-sprite eggplant)
-	   (greengrapes-sprite grapes)
-	   (kiwi-sprite kiwi)
-	   (mushroom-sprite mushroom)
-	   (onion-sprite onion)
-	   (pepper-sprite pepper)
-	   (pineapple-sprite pineapple)
-	   (potato-sprite potato)
-	   (strawberry-sprite strawberry)
-	   (tomato-sprite tomato)
-	   (coppercoin-sprite copper)
-	   (silvercoin-sprite silver)
-	   (goldcoin-sprite gold)))
+          (blackcat-sprite cat)
+          (fish-sprite fish)
+          (browndog-sprite dog)
+          (chicken-sprite chicken)
+          (cow-sprite cow)
+          (goat-sprite goat)
+          (llama-sprite llama)
+          (pig-sprite pig)
+          (rabbit-sprite rabbit)
+          (sheep-sprite sheep)
+          (turkey-sprite turkey)
+          (goldenhorse-sprite horse)
+          (wolf-sprite wolf)
+
+          (apple-sprite apple)
+          (banana-sprite banana)
+          (brocolli-sprite brocolli)
+          (cherries-sprite cherries)
+          (eggplant-sprite eggplant)
+          (greengrapes-sprite grapes)
+          (kiwi-sprite kiwi)
+          (mushroom-sprite mushroom)
+          (onion-sprite onion)
+          (pepper-sprite pepper)
+          (pineapple-sprite pineapple)
+          (potato-sprite potato)
+          (strawberry-sprite strawberry)
+          (tomato-sprite tomato)
+
+          (coppercoin-sprite copper)
+          (silvercoin-sprite silver)
+          (goldcoin-sprite gold)
+          )
+
+          question-icon
+          
+         )
 
 
 (module animal-sprites racket
@@ -39,6 +46,7 @@
            survival)
 
   (define-assets-from "../../assets/animal")
+  (define-assets-from "../../assets")
 
   (provide blackcat-sprite
            blackdog-sprite
@@ -83,7 +91,7 @@
            coppercoin-sprite
            silvercoin-sprite
            goldcoin-sprite)
-
+  
   ; == ANIMALS
   (define blackcat-sprite
     (sheet->sprite blackcat-sheet
@@ -355,6 +363,7 @@
                    #:row-number 1
                    #:delay 5))
 
+    ; == COINS
   (define coppercoin-sprite
     (sheet->sprite coppercoin-sheet
                    #:rows 1

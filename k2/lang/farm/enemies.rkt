@@ -44,6 +44,10 @@
 
     [copper   1 (crop (s:render copper))]
     [silver   2 (crop (s:render silver))]
-    [gold     3 (crop (s:render gold))]))
+    [gold     3 (crop (s:render gold))]
+
+    [rand     ? question-icon]
+
+    ))
 
 

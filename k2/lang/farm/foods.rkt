@@ -26,10 +26,15 @@
     (define w (h:image-width i))
     (define h (h:image-height i))
     (h:crop (- w 32) 0 w 32 i))
+
+  (define l (list apple brocolli grapes onion potato tomato))
+  
+  (define rand
+    (list-ref l (random 0 6)))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 
-    [start  x play-icon]
+    [start    x play-icon]
 
     [chicken  c (crop (s:render chicken))]
     [llama    l (crop (crop-left (s:render llama)))]
@@ -41,6 +46,8 @@
     [grapes   g (crop (s:render grapes))]
     [onion    o (crop (s:render onion))]
     [potato   p (crop (s:render potato))]
-    [tomato   t (crop (s:render tomato))]))
+    [tomato   t (crop (s:render tomato))]
 
+    [rand     ? question-icon]
 
+    ))

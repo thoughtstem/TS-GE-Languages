@@ -6,6 +6,7 @@
          (all-from-out racket))
 
 (require survival
+         ratchet/util
          (prefix-in a: "./animal-asset-friendly-names.rkt"))
 
 
@@ -67,13 +68,12 @@
     (define food-list
       (list (app make-food food-sprite ) ...))
 
-    (survival-game #:bg           (custom-bg #:rows 2
-                                             #:columns 2)
-                   #:avatar       (custom-avatar #:sprite avatar-sprite)
-                   #:food-list    food-list
-                   #:score-prefix "Score"
-                   )
-    ))
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:score-prefix "Score"))))
 
 ;start-b = avatar + foods + coins
 (define-syntax-rule (start-b avatar-sprite (food-sprite ...) (coin-sprite ...))
@@ -83,13 +83,14 @@
     (define coin-list
       (list (app make-coin coin-sprite ) ...))
 
-    (survival-game #:bg           (custom-bg #:rows 2
-                                             #:columns 2)
-                   #:avatar       (custom-avatar #:sprite avatar-sprite)
-                   #:food-list    food-list
-                   #:coin-list    coin-list
-                   #:score-prefix "Score"
-                   )
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"))
+    
     ))
 
 ;start-c = avatar + foods + coins + enemies
@@ -102,14 +103,14 @@
     (define enemy-list
       (list (app make-enemy enemy-sprite ) ...))
 
-    (survival-game #:bg           (custom-bg #:rows 2
-                                             #:columns 2)
-                   #:avatar       (custom-avatar #:sprite avatar-sprite)
-                   #:food-list    food-list
-                   #:enemy-list   enemy-list
-                   #:coin-list    coin-list
-                   #:score-prefix "Score"
-                   )
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:rows 2
+                                               #:columns 2)
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:enemy-list   enemy-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"))
     ))
 
 

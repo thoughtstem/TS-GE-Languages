@@ -44,6 +44,9 @@
 
          acid-sprite
          ice-sprite
+
+         cutscene
+         page
          )
 
 (require scribble/srcdoc)
@@ -852,27 +855,134 @@
 
 ; ==== END OF CUSTOM ENEMY FUNCTIONS ====
 
+(define image-or-images?
+  (or/c image? (listof image?)))
+
+(define string-or-text-frame?
+      (or/c image? (listof image?)
+            string?     (listof string?)
+            text-frame? (listof text-frame?)))
+
+; ===== CUT-SCENE =====
+; This is basically a mode-lambda/game-engine friendly version of (above ...)
+; It can take any combination of images, text, sprites, or listof sprites
+
+(define (page #:name         [name "Cut Scene"]
+              #:bg-color     [bg-color (color 50 50 50)]
+              #:border-color [border-color 'white]
+              #:game-width   [game-width 480]
+              #:game-height  [game-height 360]
+              #:line-padding [line-padding 4]
+              . items
+              )
+  ;item can be an image, text, sprite, or list of sprites
+  (define (ensure-list-of-sprites item)
+    (cond [(image-or-images? item)       (list (new-sprite item))]
+          [(string-or-text-frame? item)  (list (new-sprite item #:color 'yellow))]
+          [(animated-sprite? item)       (list item)]
+          [(and (list? item)
+                ((listof sprite?) (flatten item))) (map ensure-sprite (flatten item))]
+          [else (error "That wasn't a valid cut-scene item!")]))
+  
+  (define items-list
+    (map ensure-list-of-sprites items))
+  
+
+  (define (get-sprite-height as)
+    (* (image-height (pick-frame as
+                                 (animated-sprite-current-frame as)))
+       (get-y-scale as)))
+  
+  (define (get-largest-sprite-height list-of-sprites)
+    (+ line-padding (apply max (map get-sprite-height list-of-sprites))))
+  
+  (define total-height (apply + (map get-largest-sprite-height items-list)))
+  (define half-of-total (/ total-height 2))
+  
+  (define offset-items-list
+    (flatten (for/list ([item items-list]
+                        [i (range (length items-list))])
+               (let ([last-height (apply + (map get-largest-sprite-height (take items-list i)))]
+                     [half-height-item (/ (get-largest-sprite-height item) 2)])
+                 (map (λ (s)
+                        (set-y-offset (+ last-height
+                                         half-height-item
+                                         (- half-of-total)
+                                         (get-y-offset s)) s))
+                      item)))))
+
+  (sprite->entity (append offset-items-list
+                          (bordered-box-sprite game-width game-height #:color bg-color #:border-color border-color))
+                  #:name       name
+                  #:position   (posn (/ game-width 2) (/ game-height 2))
+                  #:components (layer "ui")
+                               ;(hidden)
+                               ;(on-start (do-many (go-to-pos 'center)
+                               ;                   show))
+                               (on-key 'space die)
+                               (on-key 'enter die)
+                               (storable)))
+
+; ===== END OF CUT-SCENE =====
+
+
+; ===== MULTI-PAGE CUT-SCENE =====
+
+(define (change-cutscene)
+  (lambda (g e)
+    ;change all sprites and change counter
+    (define cut-scenes (get-storage-data "cut-scenes" e))
+    (define current-scene-index (get-counter e))
+    (define next-scene-index (min (add1 current-scene-index) (sub1 (length cut-scenes)))) ;capping at length - 1 just in case.
+    (if (= current-scene-index (sub1 (length cut-scenes)))
+        (die g e)
+        (~> e
+            (remove-components _ animated-sprite?)
+            (add-components _ (get-components (list-ref cut-scenes next-scene-index) animated-sprite?))
+            (update-entity _ counter? (counter next-scene-index))))))
+
+(define (cutscene . pages)
+  ; for now, pages is a list of page entities
+  ; maybe turn it into a scene/page struct?
+  (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
+  (sprite->entity (reverse (get-components (first pages) animated-sprite?))
+                  #:name "Multi Cut Scene"
+                  #:position (posn 0 0)
+                  #:components (layer "ui")
+                               (hidden)
+                               ;(apply precompiler (flatten (map (curryr get-components image-animated-sprite?) pages)))
+                               (storage "cut-scenes" pages)
+                               (counter 0)
+                               (storable)
+                               (on-start (do-many (go-to-pos 'center)
+                                                  show))
+                               (on-key 'enter (change-cutscene))))
+
+; ===== END OF MULTI-PAGE CUT-SCENE =====
+
 
 (define/contract/doc
   (adventure-game #:headless        [headless #f]
-                 #:bg              [bg-ent (plain-forest-bg)]
-                 #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
-                 #:sky             [sky (custom-sky)]
-                 #:npc-list        [npc-list  '()]
-                 #:enemy-list      [e-list    '()]
-                 #:coin-list       [coin-list '()]
-                 #:food-list       [f-list    '()]
-                 #:crafter-list    [c-list    '()]
-                 #:score-prefix    [prefix "Gold"]
-                 #:enable-world-objects? [world-objects? #f]
-                 #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
-                 #:other-entities  [ent #f]
+                  #:bg              [bg-ent (plain-forest-bg)]
+                  #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
+                  #:sky             [sky (custom-sky)]
+                  #:cutscene-list   [cutscene-list '()]
+                  #:npc-list        [npc-list  '()]
+                  #:enemy-list      [e-list    '()]
+                  #:coin-list       [coin-list '()]
+                  #:food-list       [f-list    '()]
+                  #:crafter-list    [c-list    '()]
+                  #:score-prefix    [prefix "Gold"]
+                  #:enable-world-objects? [world-objects? #f]
+                  #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
        (#:headless         [headless boolean?]
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
         #:sky              [sky sky?]
+        #:cutscene-list    [cutscene-list (listof entity?)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -1042,6 +1152,9 @@
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
                            (spawn (toast-entity "DAYTIME HAS BEGUN")))
+                  (if (empty? cutscene-list)
+                      #f
+                      (after-time 1 (spawn (apply cutscene cutscene-list) #:relative? #f)))
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
   

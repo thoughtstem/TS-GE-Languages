@@ -25,6 +25,11 @@
     (define w (h:image-width i))
     (define h (h:image-height i))
     (h:crop (- w 32) 0 w 32 i))
+
+  (define l (list llama apple banana potato kiwi copper silver gold))
+  
+  (define rand
+    (list-ref l (random 0 6)))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 

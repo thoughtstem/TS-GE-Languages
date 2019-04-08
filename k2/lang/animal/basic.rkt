@@ -8,7 +8,8 @@
 
 (module ratchet racket 
   (require ratchet
-           (submod "./animal-lang.rkt" animal-stuff)
+           "./animal-lang.rkt"
+           "../animal/animal-asset-friendly-names.rkt"
            "../icons.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
@@ -17,9 +18,9 @@
     (h:crop 0 0 32 32 i))
 
   (define-visual-language animal-lang
-    (submod "./animal-lang.rkt" animal-stuff)
+    "./animal-lang.rkt"
     [cat     c (crop s:CAT-SHEET)]
 
-    [start   s play-icon]))
+    [start-a   s play-icon]))
 
 

@@ -1,36 +1,49 @@
 #lang racket
 
 (provide (rename-out 
-	   (blackcat-sprite cat)
-	   (fish-sprite fish)
-	   (browndog-sprite dog)
-	   (chicken-sprite chicken)
-	   (cow-sprite cow)
-	   (goat-sprite goat)
-	   (llama-sprite llama)
-	   (pig-sprite pig)
-	   (rabbit-sprite rabbit)
-	   (sheep-sprite sheep)
-	   (turkey-sprite turkey)
-	   (goldenhorse-sprite horse)
-	   (wolf-sprite wolf)
-	   (apple-sprite apple)
-	   (banana-sprite banana)
-	   (brocolli-sprite brocolli)
-	   (cherries-sprite cherries)
-	   (eggplant-sprite eggplant)
-	   (greengrapes-sprite grapes)
-	   (kiwi-sprite kiwi)
-	   (mushroom-sprite mushroom)
-	   (onion-sprite onion)
-	   (pepper-sprite pepper)
-	   (pineapple-sprite pineapple)
-	   (potato-sprite potato)
-	   (strawberry-sprite strawberry)
-	   (tomato-sprite tomato)
-	   (coppercoin-sprite copper)
-	   (silvercoin-sprite silver)
-	   (goldcoin-sprite gold)))
+          (blackcat-sprite cat)
+          (fish-sprite fish)
+          (browndog-sprite dog)
+          (chicken-sprite chicken)
+          (cow-sprite cow)
+          (goat-sprite goat)
+          (llama-sprite llama)
+          (pig-sprite pig)
+          (rabbit-sprite rabbit)
+          (sheep-sprite sheep)
+          (turkey-sprite turkey)
+          (goldenhorse-sprite horse)
+          (wolf-sprite wolf)
+          (apple-sprite apple)
+          (banana-sprite banana)
+          (brocolli-sprite brocolli)
+          (cherries-sprite cherries)
+          (eggplant-sprite eggplant)
+          (greengrapes-sprite grapes)
+          (kiwi-sprite kiwi)
+          (mushroom-sprite mushroom)
+          (onion-sprite onion)
+          (pepper-sprite pepper)
+          (pineapple-sprite pineapple)
+          (potato-sprite potato)
+          (strawberry-sprite strawberry)
+          (tomato-sprite tomato)
+          (coppercoin-sprite copper)
+          (silvercoin-sprite silver)
+          (goldcoin-sprite gold)
+
+          (zookeeper-sprite zookeeper)
+          (lion-sprite lion)
+          (monkey-sprite monkey)
+          (tiger-sprite tiger)
+          (elephant-sprite elephant)
+          (giraffe-sprite giraffe)
+          (hippo-sprite hippo)
+          (kangaroo-sprite kangaroo)
+          (penguin-sprite penguin)
+          (zebra-sprite zebra)
+          
+          ))
 
 
 (module animal-sprites racket
@@ -39,6 +52,7 @@
            survival)
 
   (define-assets-from "../../assets/animal")
+  (define-assets-from "../../assets/zoo")
 
   (provide blackcat-sprite
            blackdog-sprite
@@ -63,6 +77,18 @@
            whitedog-sprite
            whitehorse-sprite
            wolf-sprite
+           
+           zookeeper-sprite
+           lion-sprite
+           monkey-sprite
+           tiger-sprite
+           elephant-sprite
+           giraffe-sprite
+           hippo-sprite
+           kangaroo-sprite
+           penguin-sprite
+           zebra-sprite
+           
 
            apple-sprite
            banana-sprite
@@ -247,6 +273,59 @@
                    #:columns 5
                    #:row-number 1
                    #:delay 5))
+
+  ; === ZOO ANIMALS ===
+  (define lion-sprite
+    (sheet->sprite lion-sheet
+                   #:rows 4
+                   #:columns 3
+                   #:row-number 2
+                   #:delay 5))
+
+  (define monkey-sprite
+    (sheet->sprite monkey-sheet
+                   #:rows 4
+                   #:columns 3
+                   #:row-number 2
+                   #:delay 5))
+
+  (define tiger-sprite
+    (sheet->sprite tiger-sheet
+                   #:rows 4
+                   #:columns 3
+                   #:row-number 2
+                   #:delay 5))
+
+  (define zookeeper-sprite
+    (sheet->sprite mystery-sheet
+                   #:columns 4
+                   #:delay 5))
+
+  (define (make-wiggle-animation img)
+    (list img
+          (rotate -10 img)
+          img
+          (rotate 10 img)))
+          
+
+  (define elephant-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-elephant)) 5))
+
+  (define giraffe-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-giraffe)) 5))
+
+  (define hippo-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-hippo)) 5))
+
+  (define kangaroo-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-kangaroo)) 5))
+
+  (define penguin-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-penguin)) 5))
+
+  (define zebra-sprite
+    (new-sprite (make-wiggle-animation (scale 0.25 round-zebra)) 5))
+  
 
 
   ; == FOOD

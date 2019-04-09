@@ -14,6 +14,7 @@
           (turkey-sprite turkey)
           (goldenhorse-sprite horse)
           (wolf-sprite wolf)
+
           (apple-sprite apple)
           (banana-sprite banana)
           (brocolli-sprite brocolli)
@@ -28,6 +29,7 @@
           (potato-sprite potato)
           (strawberry-sprite strawberry)
           (tomato-sprite tomato)
+
           (coppercoin-sprite copper)
           (silvercoin-sprite silver)
           (goldcoin-sprite gold)
@@ -42,8 +44,15 @@
           (kangaroo-sprite kangaroo)
           (penguin-sprite penguin)
           (zebra-sprite zebra)
+
+          (coppercoin-sprite copper)
+          (silvercoin-sprite silver)
+          (goldcoin-sprite gold)
+          )
+
+         question-icon
           
-          ))
+         )
 
 
 (module animal-sprites racket
@@ -53,6 +62,7 @@
 
   (define-assets-from "../../assets/animal")
   (define-assets-from "../../assets/zoo")
+  (define-assets-from "../../assets")
 
   (provide blackcat-sprite
            blackdog-sprite
@@ -109,7 +119,7 @@
            coppercoin-sprite
            silvercoin-sprite
            goldcoin-sprite)
-
+  
   ; == ANIMALS
   (define blackcat-sprite
     (sheet->sprite blackcat-sheet
@@ -434,6 +444,7 @@
                    #:row-number 1
                    #:delay 5))
 
+    ; == COINS
   (define coppercoin-sprite
     (sheet->sprite coppercoin-sheet
                    #:rows 1

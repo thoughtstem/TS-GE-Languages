@@ -2,7 +2,8 @@
 
 (provide start-a
          start-b
-         start-c)
+         start-c
+         (all-from-out racket))
 
 (require survival
          ratchet/util

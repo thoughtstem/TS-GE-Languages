@@ -26,6 +26,11 @@
     (define h (h:image-height i))
     (h:crop (- w 32) 0 w 32 i))
 
+    (define l (list llama horse cow rabbit sheep dog wolf))
+  
+  (define rand
+    (list-ref l (random 0 6)))
+
   (define-visual-language farm-lang "../animal/animal-lang.rkt" 
     [start  x play-icon]
     
@@ -44,6 +49,10 @@
 
     [copper   1 (crop (s:render copper))]
     [silver   2 (crop (s:render silver))]
-    [gold     3 (crop (s:render gold))]))
+    [gold     3 (crop (s:render gold))]
+
+    [rand     ? question-icon]
+
+    ))
 
 

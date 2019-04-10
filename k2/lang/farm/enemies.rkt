@@ -18,32 +18,33 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define (crop i)
-    (h:crop 0 0 32 32 i))
-
-  (define (crop-left i)
-    (define w (h:image-width i))
-    (define h (h:image-height i))
-    (h:crop (- w 32) 0 w 32 i))
+  (define l (list llama horse cow rabbit sheep dog wolf))
+  
+  (define rand
+    (list-ref l (random 0 6)))
 
   (define-visual-language farm-lang "../animal/animal-lang.rkt" 
-    [start  x play-icon]
+    [start    x play-icon]
     
-    [llama    l (crop (crop-left (s:render llama)))]
-    [horse    h (crop (crop-left (s:render horse)))]
-    [cow      c (crop (crop-left (s:render cow)))]
-    [rabbit   r (crop (s:render rabbit))]
-    [sheep    s (crop (crop-left (s:render sheep)))]
-    [dog      d (crop (crop-left (s:render dog)))]
-    [wolf     w (crop (crop-left (s:render wolf)))]
+    [llama    l (s:scale-to-fit (s:draw-sprite llama)  32)]
+    [horse    h (s:scale-to-fit (s:draw-sprite horse)  32)]
+    [cow      c (s:scale-to-fit (s:draw-sprite cow)    32)]
+    [rabbit   r (s:scale-to-fit (s:draw-sprite rabbit) 32)]
+    [sheep    s (s:scale-to-fit (s:draw-sprite sheep)  32)]
+    [dog      d (s:scale-to-fit (s:draw-sprite dog)    32)]
+    [wolf     w (s:scale-to-fit (s:draw-sprite wolf)   32)]
     
-    [apple    a (crop (s:render apple))]
-    [grapes   g (crop (s:render grapes))]
-    [kiwi     k (crop (s:render kiwi))]
-    [pepper   p (crop (s:render pepper))]
+    [apple    a (s:scale-to-fit (s:draw-sprite apple)  32)]
+    [grapes   g (s:scale-to-fit (s:draw-sprite grapes) 32)]
+    [kiwi     k (s:scale-to-fit (s:draw-sprite kiwi)   32)]
+    [pepper   p (s:scale-to-fit (s:draw-sprite pepper) 32)]
 
-    [copper   1 (crop (s:render copper))]
-    [silver   2 (crop (s:render silver))]
-    [gold     3 (crop (s:render gold))]))
+    [copper   1 (s:scale-to-fit (s:draw-sprite copper) 32)]
+    [silver   2 (s:scale-to-fit (s:draw-sprite silver) 32)]
+    [gold     3 (s:scale-to-fit (s:draw-sprite gold)   32)]
+
+    [rand     ? question-icon]
+
+    ))
 
 

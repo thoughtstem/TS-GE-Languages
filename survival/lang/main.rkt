@@ -872,7 +872,7 @@
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
         #:starvation-rate  [starvation-rate number?]
-        #:sky              [sky sky?]
+        #:sky              [sky (or/c sky? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -964,9 +964,9 @@
                                              show)))
         e))
 
-  (define LENGTH-OF-DAY    (sky-day-length sky))
-  (define START-OF-DAYTIME (sky-day-start sky))
-  (define END-OF-DAYTIME   (sky-day-end sky))
+  (define LENGTH-OF-DAY    (if sky (sky-day-length sky) 2400))
+  (define START-OF-DAYTIME (if sky (sky-day-start sky) 0))
+  (define END-OF-DAYTIME   (if sky (sky-day-end sky) 2400))
 
     ; === DAY/NIGHT FUNCTIONS FOR ENEMY ===
   (define (store-birth-time g e)
@@ -1061,9 +1061,11 @@
                        (if p (score-entity prefix) #f)
 
                        (tm-entity)
-                       (night-sky-with-lighting #:color         (sky-color sky)
-                                                #:max-alpha     (sky-max-alpha sky)
-                                                #:length-of-day (sky-day-length sky)) 
+                       (if sky
+                           (night-sky-with-lighting #:color         (sky-color sky)
+                                                    #:max-alpha     (sky-max-alpha sky)
+                                                    #:length-of-day (sky-day-length sky))
+                            #f)
 
                        ;(if p (health-entity) #f)
 
@@ -1178,8 +1180,8 @@
            #:target     [target string?]
            #:sound      [sound any/c]
            #:scale      [scale number?]
-           #:components [first-component component-or-system?])
-       #:rest [more-components (listof component-or-system?)]
+           #:components [first-component (or/c component-or-system? observe-change?)])
+       #:rest [more-components (listof (or/c component-or-system? observe-change?))]
        [returns entity?])
 
  @{Returns a custom npc, which will be placed in to the world

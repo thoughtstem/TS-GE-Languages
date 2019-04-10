@@ -58,7 +58,6 @@
 (define/provide play-icon
   (inset/clip (bitmap (build-path images "play.png")) -20))
 
-
 (define/provide square-icon
   (filled-rectangle 10 10))
 

@@ -1,42 +1,45 @@
 #lang racket
 
-(provide (all-from-out "./farm-lang.rkt"))
-(require "./farm-lang.rkt")
+(provide (all-from-out "../animal/animal-lang.rkt")
+         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+
+(require "../animal/animal-lang.rkt"
+         "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/farm/farm-lang)
+  k2/lang/animal/animal-lang)
 
 (module ratchet racket
   
   (require ratchet
-           (submod "./farm-lang.rkt" farm-stuff)
+           (rename-in "../animal/animal-lang.rkt" 
+	              [start-a start])
            "../icons.rkt"
+           "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define (crop i)
-    (h:crop 0 0 32 32 i))
-
-  (define (crop-left i)
-    (define w (h:image-width i))
-    (define h (h:image-height i))
-    (h:crop (- w 32) 0 w 32 i))
+  (define l (list apple brocolli grapes onion potato tomato))
+  
+  (define rand
+    (list-ref l (random 0 6)))
   
   (define-visual-language farm-lang
-    (submod "./farm-lang.rkt" farm-stuff)
-    [start-a  x play-icon]
+    "../animal/animal-lang.rkt" 
+    [start    x play-icon]
 
-    [chicken  c (crop (s:render chicken))]
-    [llama    l (crop (crop-left (s:render llama)))]
-    [horse    h (crop (crop-left (s:render horse)))]
-    [rabbit   r (crop (s:render rabbit))]
+    [chicken  c (s:scale-to-fit (s:draw-sprite chicken)  32)]
+    [llama    l (s:scale-to-fit (s:draw-sprite llama)    32)]
+    [horse    h (s:scale-to-fit (s:draw-sprite horse)    32)]
+    [rabbit   r (s:scale-to-fit (s:draw-sprite rabbit)   32)]
     
-    [apple    a (crop (s:render apple))]
-    [brocolli b (crop (s:render brocolli))]
-    [grapes   g (crop (s:render grapes))]
-    [onion    o (crop (s:render onion))]
-    [potato   p (crop (s:render potato))]
-    [tomato   t (crop (s:render tomato))]
-))
+    [apple    a (s:scale-to-fit (s:draw-sprite apple)    32)]
+    [brocolli b (s:scale-to-fit (s:draw-sprite brocolli) 32)]
+    [grapes   g (s:scale-to-fit (s:draw-sprite grapes)   32)]
+    [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
+    [potato   p (s:scale-to-fit (s:draw-sprite potato)   32)]
+    [tomato   t (s:scale-to-fit (s:draw-sprite tomato)   32)]
 
+    [rand     ? question-icon]
 
+    ))

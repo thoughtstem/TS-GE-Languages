@@ -1,17 +1,21 @@
-
 #lang racket
 
-(provide (all-from-out "./sea-lang.rkt"))
-(require "./sea-lang.rkt")
+
+(provide (all-from-out "../animal/animal-lang.rkt"))
+
+(require "../animal/animal-lang.rkt"
+         "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/sea/sea-lang)
+  k2/lang/animal/animal-lang)
 
 (module ratchet racket
   
   (require ratchet
-           (submod "./sea-lang.rkt" sea-stuff)
+           (rename-in "../animal/animal-lang.rkt" 
+	              [start-a start])
            "../icons.rkt"
+           "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
@@ -19,9 +23,11 @@
     (h:crop 0 0 32 32 i))
 
   (define-visual-language sea-lang
-    (submod "./sea-lang.rkt" sea-stuff)
-    [fish          f (crop s:CAT-SHEET)]
+    "../animal/animal-lang.rkt" 
 
-    [start         s play-icon]))
+    [start       s play-icon]    
+    [fish       f (crop (s:render fish))]))
+
+
 
 

@@ -29,10 +29,10 @@
   
   (define-visual-language zoo-lang
     "../animal/animal-lang.rkt" 
-    [start  x play-icon]
+    [start  s play-icon]
 
     [zookeeper     z (s:scale-to-fit (s:draw-sprite zookeeper) 32)]
-    [lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
+    ;[lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
     [monkey        m (s:scale-to-fit (s:draw-sprite monkey) 32)]
     ;[tiger         t (s:scale-to-fit (s:draw-sprite tiger) 32)]
     [elephant      e (s:scale-to-fit (s:draw-sprite elephant) 32)]

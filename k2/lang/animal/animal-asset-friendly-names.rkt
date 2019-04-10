@@ -30,7 +30,17 @@
 	   (tomato-sprite tomato)
 	   (coppercoin-sprite copper)
 	   (silvercoin-sprite silver)
-	   (goldcoin-sprite gold)))
+	   (goldcoin-sprite gold)
+           (ghostfish-sprite ghost-fish)
+           (greenfish-sprite green-fish)
+           (jellyfish-sprite jellyfish)
+           (orangefish-sprite orange-fish)
+           (redfish-sprite red-fish)
+           (shark-sprite shark)
+           (yellowfish-sprite yellow-fish)
+           (starfish-sprite starfish)
+           (octopus-sprite octopus)
+           (crab-sprite crab)))
 
 
 (module animal-sprites racket
@@ -63,6 +73,15 @@
            whitedog-sprite
            whitehorse-sprite
            wolf-sprite
+           ghostfish-sprite
+           jellyfish-sprite
+           orangefish-sprite
+           redfish-sprite
+           shark-sprite
+           yellowfish-sprite
+           starfish-sprite
+           octopus-sprite
+           crab-sprite
 
            apple-sprite
            banana-sprite
@@ -248,7 +267,69 @@
                    #:row-number 1
                    #:delay 5))
 
+  (define ghostfish-sprite
+    (sheet->sprite ghostfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
 
+  (define jellyfish-sprite
+    (sheet->sprite jellyfish-sheet
+                   #:rows 1
+                   #:columns 8
+                   #:row-number 1
+                   #:delay 5))
+
+  (define orangefish-sprite
+    (sheet->sprite orangefish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define redfish-sprite
+    (sheet->sprite redfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define shark-sprite
+    (sheet->sprite shark-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  (define yellowfish-sprite
+    (sheet->sprite yellowfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define starfish-sprite
+    (sheet->sprite starfish-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  (define octopus-sprite
+    (sheet->sprite octopus-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+    (define crab-sprite
+    (sheet->sprite crab-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 3))
+  
   ; == FOOD
   (define apple-sprite
     (sheet->sprite apple

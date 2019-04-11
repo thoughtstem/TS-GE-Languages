@@ -17,7 +17,7 @@
 
           (apple-sprite apple)
           (banana-sprite banana)
-          (brocolli-sprite brocolli)
+          (brocolli-sprite broccoli)
           (cherries-sprite cherries)
           (eggplant-sprite eggplant)
           (greengrapes-sprite grapes)
@@ -57,7 +57,8 @@
           (crab-sprite crab))
 
          question-icon
-          
+
+         ocean-bg
          )
 
 
@@ -95,6 +96,7 @@
            wolf-sprite
            
            ghostfish-sprite
+           greenfish-sprite
            jellyfish-sprite
            orangefish-sprite
            redfish-sprite
@@ -302,12 +304,19 @@
   ;===== SEA =====
 
   (define ghostfish-sprite
-    (sheet->sprite ghostfish-sheet
+    (sheet->sprite (scale 0.75 ghostfish-sheet)
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
+  (define greenfish-sprite
+    (sheet->sprite (scale 0.75 greenfish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+  
   (define jellyfish-sprite
     (sheet->sprite jellyfish-sheet
                    #:rows 1
@@ -316,21 +325,21 @@
                    #:delay 5))
 
   (define orangefish-sprite
-    (sheet->sprite orangefish-sheet
+    (sheet->sprite (scale 0.75 orangefish-sheet)
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define redfish-sprite
-    (sheet->sprite redfish-sheet
+    (sheet->sprite (scale 0.75 redfish-sheet)
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define shark-sprite
-    (sheet->sprite shark-sheet
+    (sheet->sprite (scale 0.75 shark-sheet)
                    #:rows 1
                    #:columns 2
                    #:row-number 1
@@ -338,28 +347,28 @@
 
   
   (define yellowfish-sprite
-    (sheet->sprite yellowfish-sheet
+    (sheet->sprite (scale 0.75 yellowfish-sheet)
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define starfish-sprite
-    (sheet->sprite starfish-sheet
+    (sheet->sprite (scale 0.75 starfish-sheet)
                    #:rows 1
                    #:columns 2
                    #:row-number 1
                    #:delay 5))
 
   (define octopus-sprite
-    (sheet->sprite octopus-sheet
+    (sheet->sprite (scale 0.75 octopus-sheet)
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
     (define crab-sprite
-    (sheet->sprite crab-sheet
+    (sheet->sprite (scale 0.75 crab-sheet)
                    #:rows 1
                    #:columns 2
                    #:row-number 1

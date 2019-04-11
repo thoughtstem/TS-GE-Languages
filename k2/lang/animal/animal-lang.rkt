@@ -4,6 +4,7 @@
          start-b
          start-c
          start-npc
+         start-ocean-a
          (all-from-out racket))
 
 (require survival
@@ -86,7 +87,8 @@
       (list (app make-coin coin-sprite ) ...))
 
     (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:rows 2
+      (survival-game #:bg           (custom-bg
+                                     #:rows 2
                                                #:columns 2)
                      #:sky          #f
                      #:avatar       (custom-avatar #:sprite avatar-sprite)
@@ -205,6 +207,21 @@
                      #:npc-list     npc-list
                      #:score-prefix "Animals Healed"))
     ))
+
+;start-ocean-a = avatar + foods
+(define-syntax-rule (start-ocean-a avatar-sprite (food-sprite ...))
+  (let ()
+    (define food-list
+      (list (app make-food food-sprite ) ...))
+
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+                                               #:rows 2
+                                               #:columns 2)
+                     #:sky          #f
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:score-prefix "Score"))))
 
 
 (define-syntax-rule (top-level lines ...)

@@ -65,11 +65,6 @@
       (displayln l)
       body ...)))
 
-(define (WIDTH)       480)
-(define (HEIGHT)      360)
-(define (TOTAL-TILES) 9)
-
-
 (define dialog-str? (or/c (listof string?) (listof (listof string?))))
 
 (define rarity-level?
@@ -171,9 +166,10 @@
                       (make-posn 12 9))
                 (rectangle 24 18 'outline 'transparent)))
 
-(define (sky-sprite-with-light color)
+;default sky is sized for 2x 480 by 360
+(define (sky-sprite-with-light color #:scale [scale 1])
   (define sky-img (draw-sky-with-light color))
-  (new-sprite sky-img #:scale 20.167))
+  (new-sprite sky-img #:scale (* scale 20.167)))
 
 (define (sky-sprite-with-light-small color)
   (define sky-img (draw-sky-with-light-small color))
@@ -181,7 +177,8 @@
 
 (define (night-sky-with-lighting #:color         [color 'black]
                                  #:max-alpha     [m-alpha 160]
-                                 #:length-of-day [length-of-day 2400])
+                                 #:length-of-day [length-of-day 2400]
+                                 #:scale         [scale 1])
   (define max-alpha (exact-round (* m-alpha 0.56)))
   (define update-multiplier 2)
   (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
@@ -194,9 +191,9 @@
     (define time-of-day (modulo game-count length-of-day))
     (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
     ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
-    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
+    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val) #:scale scale))
     (update-entity e animated-sprite? new-night-sky))
-  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
+  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha) #:scale scale)
                   #:position (posn 0 0)
                   #:name "night sky"
                   #:components (layer "sky")
@@ -282,25 +279,6 @@
                                        #:start-tile t
                                        #:scale scale)
                   (cons c custom-components)))
-
-; === EXAMPLE GAME DIALOG ===
-(define (player-dialog)
-  (list "Hello. What's your name?"
-        "I'm lost and hungry, can you help me?"))
-
-; Responses must have the same number of lists as items in the player-dialog
-(define (npc1-response)
-  (list (list "Oh, hello! My name is Jordan!"
-              "It's dangerous out here."
-              "You should be careful.")
-        (list "Sorry, I don't have any food to spare."
-              "If you look around though,\nyou might find carrots.")  ))
-
-(define (npc1-response-sprites)
-  (dialog->response-sprites npc1-response
-                            #:game-width (WIDTH)
-                            #:animated #t
-                            #:speed 4))
 
 (define (instructions-entity #:move-keys  [move-keys "ARROW KEYS"]
                              #:mouse-aim? [mouse-aim? #f]
@@ -799,7 +777,7 @@
   (custom-combatant #:name "Enemy"
                     #:sprite s
                     #:position (posn 0 0)
-                    #:mode #f
+                    ;#:mode #f
                     ;#:components 
 
                     ;What is making these guys slow???
@@ -831,16 +809,16 @@
                           #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                    "Sydney" "Charlie" "Andy")))]
                           #:tile       [tile 0]
-                          #:mode       [mode 'wander]
-                          #:game-width [GAME-WIDTH 480]
+                          ;#:mode       [mode 'wander]
+                          ;#:game-width [GAME-WIDTH 480]
                           #:speed      [spd 2]
-                          #:target     [target "player"]
-                          #:sound      [sound #t]
-                          #:scale      [scale 1]
+                          ;#:target     [target "player"]
+                          ;#:sound      [sound #t]
+                          ;#:scale      [scale 1]
                           #:components [c #f] . custom-components )
 
   (define sprite (if (image? s)
-                     (new-sprite s)
+                     (new-sprite s #:animate #f)
                      s))
 
   (sprite->entity sprite
@@ -892,6 +870,9 @@
 
   @{The top-level function for the survival-game language.
          Can be run with no parameters to get a basic, default game.}
+
+  (define GAME-WIDTH (sprite-width (get-component bg-ent animated-sprite?)))
+  (define GAME-HEIGHT (sprite-height (get-component bg-ent animated-sprite?)))
 
   ; === AUTO INSTRUCTIONS ===
 
@@ -1069,7 +1050,8 @@
                        (if sky
                            (night-sky-with-lighting #:color         (sky-color sky)
                                                     #:max-alpha     (sky-max-alpha sky)
-                                                    #:length-of-day (sky-day-length sky))
+                                                    #:length-of-day (sky-day-length sky)
+                                                    #:scale         (/ GAME-WIDTH 480))
                             #f)
 
                        ;(if p (health-entity) #f)

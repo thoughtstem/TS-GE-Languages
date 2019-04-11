@@ -443,7 +443,7 @@
 
 (define (lost? g e)
   (define player (get-entity "player" g))
-  (define health (get-stat "health" player))
+  (define health (get-health player))
   (<= health 0))
 
 (define (bg? e)
@@ -765,31 +765,36 @@
     (define c (~> e
                   (combatant
                    #:stats (list (make-stat-config 'health health (stat-progress-bar 'red #:max health #:offset (posn 0 -30))
-                                                   #:max-value health)) ;(default-health+shields-stats health shield)
+                                                   #:max-value health))
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
                                                             #:hit-sound HIT-SOUND)
                              _)
                   ))
  
     c)
-  
+
+  ; Deaths are not tracked in survival but remains an option if needed
   (define death-broadcast
     (sprite->entity empty-image
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
                     #:components (on-start die)))
   
+  (define (health-is-zero? g e)
+    (define h (get-health e))
+    (and h (<= h 0)))
+  
   (define (die-if-health-is-0)
-    (on-rule (λ(g e)
-               (define h (get-storage-data "health-stat" e))
-               (and h (<= h 0)))
-             (do-many
-              (play-sound EXPLOSION-SOUND)
-              (spawn-on-current-tile particles)
-              (spawn death-broadcast)
-              (λ(g e)
-                (add-component e (after-time 2 die)))
-              )))
+    (observe-change health-is-zero?
+                    (λ (g e1 e2)
+                      (if (health-is-zero? g e2)
+                          ((do-many
+                            (play-sound EXPLOSION-SOUND)
+                            (spawn particles)
+                            (spawn death-broadcast)
+                            (do-after-time 1 die)) g e2)
+                          e2))
+                    ))
   
   (custom-combatant #:name "Enemy"
                     #:sprite s
@@ -995,28 +1000,24 @@
         ent))
 
   (define (score-entity prefix)
-    (define outer-border-img (square 1 'solid 'black))
-    (define inner-border-img (square 1 'solid 'white))
-    (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite (~a (string-titlecase prefix) " : 0")
-                        #:color 'yellow)
-            (new-sprite  box-img
-                        #:animate #f
-                        #:x-scale (* .8 180)
-                        #:y-scale (* .8 24))
-            (new-sprite inner-border-img
-                        #:animate #f
-                        #:x-scale (* .8 184)
-                        #:y-scale (* .8 28))
-            (new-sprite outer-border-img
-                        #:animate #f
-                        #:x-scale (* .8 186)
-                        #:y-scale (* .8 30))
+      (append (list (new-sprite (~a (string-titlecase prefix) ": 0")
+                        #:color 'yellow))
+              (bordered-box-sprite (* 10 (+ 7 (string-length prefix))) 24)
                    ))
 
     (define (recipe-has-cost? r)
       (> (recipe-cost r) 0))
+
+    (define (start-dead-component? c)
+      (and (on-start? c)
+           (eq? (on-start-func c) die)))
+  
+    ;Add more checks to this.
+    (define (npc-healed? g e)
+      (define healed-broadcast (get-entity "NPC Healed Broadcast" g))
+      (and healed-broadcast
+           (get-component healed-broadcast start-dead-component?))) ; This is still read twice in the same tick
     
     (sprite->entity counter-sprite
                     #:name       "score"
@@ -1024,6 +1025,10 @@
                     #:components (static)
                                  (counter 0)
                                  (layer "ui")
+                                 (on-rule npc-healed? (do-many (change-counter-by 1) ; double counting fixed!
+                                                               (draw-counter-rpg #:prefix (~a prefix ": ") #:exact-floor? #t)
+                                                               (do-font-fx)
+                                                               ))
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
  

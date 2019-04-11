@@ -42,7 +42,7 @@
     ;[penguin       p (s:scale-to-fit (s:draw-sprite penguin) 32)]
     
     [apple    a (crop (s:render apple))]
-    [brocolli b (crop (s:render brocolli))]
+    [broccoli b (crop (s:render broccoli))]
     [grapes   g (crop (s:render grapes))]
     [onion    o (crop (s:render onion))]
     [potato   p (crop (s:render potato))]

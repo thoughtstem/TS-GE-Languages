@@ -17,7 +17,7 @@
 
           (apple-sprite apple)
           (banana-sprite banana)
-          (brocolli-sprite brocolli)
+          (broccoli-sprite broccoli)
           (cherries-sprite cherries)
           (eggplant-sprite eggplant)
           (greengrapes-sprite grapes)
@@ -102,7 +102,7 @@
 
            apple-sprite
            banana-sprite
-           brocolli-sprite
+           broccoli-sprite
            cherries-sprite
            eggplant-sprite
            greengrapes-sprite
@@ -336,8 +336,8 @@
                    #:row-number 1
                    #:delay 5))
 
-  (define brocolli-sprite
-    (sheet->sprite brocolli
+  (define broccoli-sprite
+    (sheet->sprite broccoli
                    #:rows 1
                    #:columns 1
                    #:row-number 1

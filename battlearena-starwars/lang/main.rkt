@@ -26,7 +26,18 @@
 
 ;; ----- REBEL
 
-(define/contract/doc (custom-rebel #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-rebel #:sprite          (sprite (first (shuffle (list c3po-sprite
+                                                                                   chewie-sprite
+                                                                                   hansolo-sprite
+                                                                                   lando-sprite
+                                                                                   luke-sprite
+                                                                                   obiwan-sprite
+                                                                                   padawan-sprite
+                                                                                   princessleia-sprite
+                                                                                   r2d2-sprite
+                                                                                   rebelpilot-sprite
+                                                                                   twilek-sprite
+                                                                                   yoda-sprite))))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
                                                                         #:hit-sound HIT-SOUND)]
                                   #:position         [p   (posn 100 100)]

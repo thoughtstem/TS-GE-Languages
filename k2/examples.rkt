@@ -694,7 +694,7 @@
     (blue fish))
    (green fish)))
 
-; ==== FARM LANG
+; ==== FARM/FOODS
 (define-example-code k2/lang/farm/foods
   farm-001
   (start chicken
@@ -703,12 +703,12 @@
 (define-example-code k2/lang/farm/foods
   farm-002
   (start chicken
-         (brocolli)))
+         (broccoli)))
 
 (define-example-code k2/lang/farm/foods
   farm-003
   (start horse
-         (brocolli apple onion)))
+         (broccoli apple onion)))
 
 (define-example-code k2/lang/farm/foods
   farm-004
@@ -723,139 +723,174 @@
 (define-example-code k2/lang/farm/foods
   farm-006
   (start rand
-         (apple brocolli grapes onion potato tomato)))
+         (apple broccoli grapes onion potato tomato)))
+
+(define-example-code k2/lang/farm/foods
+  farm-007
+  (start apple
+         (broccoli)))
+
+(define-example-code k2/lang/farm/foods
+  farm-008
+  (start tomato
+         (rand rand)))
+
+(define-example-code k2/lang/farm/foods
+  farm-009
+  (start onion
+         (rand rand rand)))
+
+(define-example-code k2/lang/farm/foods
+  farm-010
+  (start rabbit
+         (rabbit)))
+
+; ==== FARM/COINS
 
 (define-example-code k2/lang/farm/coins
-  farm-007
+  farm-011
   (start cow
          (kiwi)
          (copper)))
 
 (define-example-code k2/lang/farm/coins
-  farm-008
+  farm-012
   (start rand
          (rand)
          (rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-009
+  farm-013
   (start sheep
          (kiwi rand)
          (silver rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-010
+  farm-014
   (start rabbit
          (banana apple)
          (gold)))
 
 (define-example-code k2/lang/farm/coins
-  farm-011
+  farm-015
   (start rand
          (copper)
          (apple)))
 
 (define-example-code k2/lang/farm/coins
-  farm-012
+  farm-016
   (start rand
          (rand rand)
          (rand rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-013
+  farm-017
   (start rand
          (potato)
          (rand rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-014
+  farm-018
   (start rand
          (rand rand)
          (copper silver gold)))
 
 (define-example-code k2/lang/farm/coins
-  farm-015
+  farm-019
+  (start potato
+         (rand)
+         (rand)))
+
+(define-example-code k2/lang/farm/coins
+  farm-020
   (start rand
          (rand rand rand rand rand)
          (rand rand rand rand rand)))
 
+; ==== FARM/ENEMIES
+
 (define-example-code k2/lang/farm/enemies
-  farm-016
+  farm-021
   (start sheep
          (grapes)
          (silver)
          (dog)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-017
+  farm-022
   (start horse
          (pepper kiwi)
          (silver gold)
          (wolf)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-018
+  farm-023
   (start rand
          (rand apple)
          (rand silver)
          (rand)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-019
+  farm-024
   (start wolf
          (apple grapes)
          (kiwi pepper)
          (sheep cow)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-020
+  farm-025
   (start apple
          (wolf dog)
          (horse llama)
          (grapes kiwi apple)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-021
+  farm-026
   (start cow
          (cow)
          (cow)
          (cow)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-022
+  farm-027
   (start rand
          (rand rand)
          (rand rand rand)
          (rand rand rand rand)))
 
-#|(define-example-code k2/lang/farm/enemies
-  farm-023
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-024
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-025
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-026
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-027
-  (start ))
-
 (define-example-code k2/lang/farm/enemies
   farm-028
-  (start ))
+  (start rabbit
+         (apple)
+         (gold)
+         (dog))
+  (start rabbit
+         (kiwi)
+         (silver)
+         (wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-029
-  (start ))
+  (start rand
+         (apple grapes)
+         (silver gold)
+         (wolf))
+  (start rand
+         (apple grapes)
+         (copper silver)
+         (wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-030
-  (start ))|#
+  (start rand
+         (rand rand)
+         (gold)
+         (rand))
+  (start rand
+         (rand rand)
+         (silver)
+         (rand rand))
+  (start rand
+         (rand rand)
+         (copper)
+         (rand rand rand)))

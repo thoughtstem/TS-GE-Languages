@@ -28,9 +28,9 @@
     "../animal/animal-lang.rkt"
     
     [zookeeper     z (s:scale-to-fit (s:draw-sprite zookeeper) 32)]
-    [lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
+    ;[lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
     [monkey        m (s:scale-to-fit (s:draw-sprite monkey) 32)]
-    [tiger         t (s:scale-to-fit (s:draw-sprite tiger) 32)]
+    ;[tiger         t (s:scale-to-fit (s:draw-sprite tiger) 32)]
     [elephant      e (s:scale-to-fit (s:draw-sprite elephant) 32)]
     [giraffe       g (s:scale-to-fit (s:draw-sprite giraffe) 32)]
     [hippo         h (s:scale-to-fit (s:draw-sprite hippo) 32)]

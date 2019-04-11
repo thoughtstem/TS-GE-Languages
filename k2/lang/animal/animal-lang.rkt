@@ -11,8 +11,6 @@
          ratchet/util
          (prefix-in a: "./animal-asset-friendly-names.rkt"))
 
-
-
 (define growl-sprite
   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
                   -3 3
@@ -31,7 +29,6 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
-
 
 (define (make-food sprite)
   (custom-food #:sprite sprite)) 
@@ -128,7 +125,7 @@
                     #:components (on-start die)))
 
 (define (health-at-max? g e)
-  (define h (get-storage-data "health-stat" e))
+  (define h (get-health e))       ;(get-storage-data "health-stat" e))
   (define max-h (get-storage-data "max-health-stat" e))
   (and h
        (= h max-h)))
@@ -139,7 +136,7 @@
                     (if (health-at-max? g e2)
                         ((do-many
                           (play-sound PICKUP-SOUND)
-                          (spawn-on-current-tile (custom-particles))
+                          (spawn (custom-particles))
                           (spawn (toast-entity "HEALED" #:color 'green))
                           (spawn healed-broadcast)) g e2)
                         e2))
@@ -151,7 +148,7 @@
   ; is this actually faster than equal?
   (define (fast-sprite-equal? s1 s2)
     (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
-  (define name-and-dialog (cond [(fast-sprite-equal? sprite a:lion)     (list "Lion"     "RoaAaRR!")]
+  (define name-and-dialog (cond ;[(fast-sprite-equal? sprite a:lion)     (list "Lion"     "RoaAaRR!")]
                                 [(fast-sprite-equal? sprite a:monkey)   (list "Monkey"   "*screams*")]
                                 [(fast-sprite-equal? sprite a:elephant) (list "Elephant" "*trumpet sound*")]
                                 [(fast-sprite-equal? sprite a:giraffe)  (list "Giraffe"  "...")]
@@ -159,7 +156,7 @@
                                 [(fast-sprite-equal? sprite a:kangaroo) (list "Kangaroo" "Phmpt!")]
                                 [(fast-sprite-equal? sprite a:penguin)  (list "Penguin"  "...")]
                                 [(fast-sprite-equal? sprite a:zebra)    (list "Zebra"    "Barrk!")]
-                                [(fast-sprite-equal? sprite a:tiger)    (list "Tiger"    "RoaAr!")]
+                                ;[(fast-sprite-equal? sprite a:tiger)    (list "Tiger"    "RoaAr!")]
                                 [else                                   (list "Animal"   "...")]))
                                 
   (define (become-combatant g e)

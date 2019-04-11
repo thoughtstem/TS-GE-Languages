@@ -10,8 +10,6 @@
          ratchet/util
          (prefix-in a: "./animal-asset-friendly-names.rkt"))
 
-
-
 (define growl-sprite
   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
                   -3 3
@@ -30,7 +28,6 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
-
 
 (define (make-food sprite)
   (custom-food #:sprite sprite)) 

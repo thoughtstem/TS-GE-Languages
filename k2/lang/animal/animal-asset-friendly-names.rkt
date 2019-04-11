@@ -17,7 +17,7 @@
 
           (apple-sprite apple)
           (banana-sprite banana)
-          (brocolli-sprite brocolli)
+          (broccoli-sprite broccoli)
           (cherries-sprite cherries)
           (eggplant-sprite eggplant)
           (greengrapes-sprite grapes)
@@ -45,13 +45,20 @@
           (penguin-sprite penguin)
           (zebra-sprite zebra)
 
-          (coppercoin-sprite copper)
-          (silvercoin-sprite silver)
-          (goldcoin-sprite gold)
-          )
+          (ghostfish-sprite ghost-fish)
+          (greenfish-sprite green-fish)
+          (jellyfish-sprite jellyfish)
+          (orangefish-sprite orange-fish)
+          (redfish-sprite red-fish)
+          (shark-sprite shark)
+          (yellowfish-sprite yellow-fish)
+          (starfish-sprite starfish)
+          (octopus-sprite octopus)
+          (crab-sprite crab))
 
          question-icon
-          
+
+         ocean-bg
          )
 
 
@@ -88,6 +95,17 @@
            whitehorse-sprite
            wolf-sprite
            
+           ghostfish-sprite
+           greenfish-sprite
+           jellyfish-sprite
+           orangefish-sprite
+           redfish-sprite
+           shark-sprite
+           yellowfish-sprite
+           starfish-sprite
+           octopus-sprite
+           crab-sprite
+           
            zookeeper-sprite
            ;lion-sprite
            monkey-sprite
@@ -98,11 +116,10 @@
            kangaroo-sprite
            penguin-sprite
            zebra-sprite
-           
 
            apple-sprite
            banana-sprite
-           brocolli-sprite
+           broccoli-sprite
            cherries-sprite
            eggplant-sprite
            greengrapes-sprite
@@ -284,6 +301,79 @@
                    #:row-number 1
                    #:delay 5))
 
+  ;===== SEA =====
+
+  (define ghostfish-sprite
+    (sheet->sprite (scale 0.75 ghostfish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define greenfish-sprite
+    (sheet->sprite (scale 0.75 greenfish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+  
+  (define jellyfish-sprite
+    (sheet->sprite jellyfish-sheet
+                   #:rows 1
+                   #:columns 8
+                   #:row-number 1
+                   #:delay 5))
+
+  (define orangefish-sprite
+    (sheet->sprite (scale 0.75 orangefish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define redfish-sprite
+    (sheet->sprite (scale 0.75 redfish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define shark-sprite
+    (sheet->sprite (scale 0.75 shark-sheet)
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  
+  (define yellowfish-sprite
+    (sheet->sprite (scale 0.75 yellowfish-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define starfish-sprite
+    (sheet->sprite (scale 0.75 starfish-sheet)
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  (define octopus-sprite
+    (sheet->sprite (scale 0.75 octopus-sheet)
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+    (define crab-sprite
+    (sheet->sprite (scale 0.75 crab-sheet)
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 3))
+
   ; === ZOO ANIMALS ===
   
   (define zookeeper-sprite
@@ -321,8 +411,7 @@
   (define zebra-sprite
     (new-sprite (make-wiggle-animation (scale 0.2 round-zebra)) 5))
   
-
-
+  
   ; == FOOD
   (define apple-sprite
     (sheet->sprite apple
@@ -338,8 +427,8 @@
                    #:row-number 1
                    #:delay 5))
 
-  (define brocolli-sprite
-    (sheet->sprite brocolli
+  (define broccoli-sprite
+    (sheet->sprite broccoli
                    #:rows 1
                    #:columns 1
                    #:row-number 1

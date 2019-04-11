@@ -31,6 +31,18 @@
    #:rebel (my-rebel))
   )
 
+(define-example-code battlearena-starwars alt/avatar-5
+  (define (my-rebel)
+    (custom-rebel #:sprite     obiwan-sprite
+                  #:speed      20
+                  #:item-slots 5
+                  #:health     200
+                  #:max-health 200
+                  #:shield     200
+                  #:max-shield 200))
+  (starwars-game
+   #:rebel (my-rebel))
+  )
 ; ---------------
 
 (define-example-code battlearena-starwars alt/enemy-3
@@ -56,6 +68,17 @@
     (custom-imperial #:ai 'hard
                      #:sprite bobafett-sprite
                      #:health 200))
+ 
+  (starwars-game
+   #:imperial-list (list (easy-enemy) (hard-enemy)))
+  )
+
+(define-example-code battlearena-starwars alt/enemy-5
+  (define (hard-enemy)
+    (custom-imperial #:ai              'hard
+                     #:sprite          darthvader-sprite
+                     #:amount-in-world 5
+                     #:weapon          (lightsaber #:damage 50)))
  
   (starwars-game
    #:imperial-list (list (easy-enemy) (hard-enemy)))

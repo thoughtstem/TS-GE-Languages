@@ -19,7 +19,7 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define l (list apple brocolli grapes onion potato tomato))
+  (define l (list apple broccoli grapes onion potato tomato))
   
   (define rand
     (list-ref l (random 0 6)))
@@ -34,7 +34,7 @@
     [rabbit   r (s:scale-to-fit (s:draw-sprite rabbit)   32)]
     
     [apple    a (s:scale-to-fit (s:draw-sprite apple)    32)]
-    [brocolli b (s:scale-to-fit (s:draw-sprite brocolli) 32)]
+    [broccoli b (s:scale-to-fit (s:draw-sprite broccoli) 32)]
     [grapes   g (s:scale-to-fit (s:draw-sprite grapes)   32)]
     [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
     [potato   p (s:scale-to-fit (s:draw-sprite potato)   32)]

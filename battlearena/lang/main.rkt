@@ -1013,7 +1013,7 @@
     (define counter-sprite
       (append (list (new-sprite (~a (string-titlecase prefix) " Left: " total-enemies)
                                 #:color 'yellow))
-              (bordered-box-sprite (* 10 (+ 7 (string-length prefix))) 24)
+              (bordered-box-sprite (* 10 (+ 7 5 (string-length prefix))) 24)
               ))
     
     (register-fonts! bold-font)

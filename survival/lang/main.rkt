@@ -171,10 +171,6 @@
   (define sky-img (draw-sky-with-light color))
   (new-sprite sky-img #:scale (* scale 20.167)))
 
-(define (sky-sprite-with-light-small color)
-  (define sky-img (draw-sky-with-light-small color))
-  (new-sprite sky-img #:scale 40.333))
-
 (define (night-sky-with-lighting #:color         [color 'black]
                                  #:max-alpha     [m-alpha 160]
                                  #:length-of-day [length-of-day 2400]
@@ -804,7 +800,7 @@
                     ))
 
 
-(define (custom-combatant #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+(define (custom-combatant #:sprite     [s (random-character-sprite)]
                           #:position   [p (posn 0 0)]
                           #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                    "Sydney" "Charlie" "Andy")))]
@@ -1029,11 +1025,11 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN"))
+                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 30))
                                     (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN")))
+                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
   
@@ -1051,7 +1047,9 @@
                            (night-sky-with-lighting #:color         (sky-color sky)
                                                     #:max-alpha     (sky-max-alpha sky)
                                                     #:length-of-day (sky-day-length sky)
-                                                    #:scale         (/ GAME-WIDTH 480))
+                                                    #:scale         (if (>= GAME-WIDTH GAME-HEIGHT)
+                                                                        (/ GAME-WIDTH 480)
+                                                                        (/ GAME-HEIGHT 360)))
                             #f)
 
                        ;(if p (health-entity) #f)
@@ -1141,7 +1139,7 @@
                                (cons c custom-components)))
 
 
-(define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+(define/contract/doc (custom-npc #:sprite     [s (random-character-sprite)]
                                  #:position   [p (posn 200 200)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]

@@ -5,6 +5,8 @@
          start-c
          start-npc
          start-ocean-a
+         start-ocean-b
+         start-ocean-c
          (all-from-out racket))
 
 (require survival
@@ -205,7 +207,10 @@
                      #:score-prefix "Animals Healed"))
     ))
 
-;start-ocean-a = avatar + foods
+; ==== basic games with ocean bg =====
+;note: ocean bg is ugly. find a better one?
+
+;start-ocean-a = avatar + foods ... with ocean bg
 (define-syntax-rule (start-ocean-a avatar-sprite (food-sprite ...))
   (let ()
     (define food-list
@@ -219,6 +224,49 @@
                      #:avatar       (custom-avatar #:sprite avatar-sprite)
                      #:food-list    food-list
                      #:score-prefix "Score"))))
+
+;start-ocean-b = avatar + foods + coins ... with ocean bg
+(define-syntax-rule (start-ocean-b avatar-sprite (food-sprite ...) (coin-sprite ...))
+  (let ()
+    (define food-list
+      (list (app make-food food-sprite ) ...))
+    (define coin-list
+      (list (app make-coin coin-sprite ) ...))
+
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+                                               #:rows 2
+                                               #:columns 2)
+                     #:sky          #f
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"))
+    
+    ))
+
+;start-ocean-c = avatar + foods + coins + enemies ... with ocean bg
+(define-syntax-rule (start-ocean-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+  (let ()
+    (define food-list
+      (list (app make-food food-sprite ) ...))
+    (define coin-list
+      (list (app make-coin coin-sprite ) ...))
+    (define enemy-list
+      (list (app make-enemy enemy-sprite ) ...))
+
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+                                               #:rows 2
+                                               #:columns 2)
+                     #:sky          #f
+                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:food-list    food-list
+                     #:enemy-list   enemy-list
+                     #:coin-list    coin-list
+                     #:score-prefix "Score"))
+    ))
+
 
 
 (define-syntax-rule (top-level lines ...)

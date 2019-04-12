@@ -377,8 +377,10 @@
   ; === ZOO ANIMALS ===
   
   (define zookeeper-sprite
-    (sheet->sprite mystery-sheet
+    (sheet->sprite zookeeper-sheet
+                   #:rows 4
                    #:columns 4
+                   #:row-number 3
                    #:delay 5))
 
   (define (make-wiggle-animation img)

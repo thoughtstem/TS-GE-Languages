@@ -74,8 +74,8 @@
                     #:amount-in-world 3))
   
   (avengers-game 
-   #:villain-list (list (easy-enemy)
-                        (hard-enemy)))
+   #:villain-list (list (easy-villain)
+                        (hard-villain)))
   )
 
 ; ---------------

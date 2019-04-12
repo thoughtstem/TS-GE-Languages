@@ -58,7 +58,7 @@
 
          question-icon
 
-         ocean-bg
+         sea-bg
          )
 
 
@@ -304,14 +304,14 @@
   ;===== SEA =====
 
   (define ghostfish-sprite
-    (sheet->sprite (scale 0.75 ghostfish-sheet)
+    (sheet->sprite  ghostfish-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define greenfish-sprite
-    (sheet->sprite (scale 0.75 greenfish-sheet)
+    (sheet->sprite greenfish-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
@@ -325,21 +325,21 @@
                    #:delay 5))
 
   (define orangefish-sprite
-    (sheet->sprite (scale 0.75 orangefish-sheet)
+    (sheet->sprite orangefish-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define redfish-sprite
-    (sheet->sprite (scale 0.75 redfish-sheet)
+    (sheet->sprite redfish-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define shark-sprite
-    (sheet->sprite (scale 0.75 shark-sheet)
+    (sheet->sprite shark-sheet
                    #:rows 1
                    #:columns 2
                    #:row-number 1
@@ -347,28 +347,28 @@
 
   
   (define yellowfish-sprite
-    (sheet->sprite (scale 0.75 yellowfish-sheet)
+    (sheet->sprite yellowfish-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
   (define starfish-sprite
-    (sheet->sprite (scale 0.75 starfish-sheet)
+    (sheet->sprite starfish-sheet
                    #:rows 1
                    #:columns 2
                    #:row-number 1
                    #:delay 5))
 
   (define octopus-sprite
-    (sheet->sprite (scale 0.75 octopus-sheet)
+    (sheet->sprite octopus-sheet
                    #:rows 1
                    #:columns 4
                    #:row-number 1
                    #:delay 5))
 
     (define crab-sprite
-    (sheet->sprite (scale 0.75 crab-sheet)
+    (sheet->sprite crab-sheet
                    #:rows 1
                    #:columns 2
                    #:row-number 1

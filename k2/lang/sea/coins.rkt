@@ -8,13 +8,13 @@
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/sea/sea-coins-lang)
 
 (module ratchet racket
   
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-ocean-b start])
+	              [start-sea-b start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)

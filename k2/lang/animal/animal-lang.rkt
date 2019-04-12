@@ -4,9 +4,10 @@
          start-b
          start-c
          start-npc
-         start-ocean-a
-         start-ocean-b
-         start-ocean-c
+         start-sea-a
+         start-sea-b
+         start-sea-c
+         start-sea-npc
          (all-from-out racket))
 
 (require survival
@@ -159,7 +160,19 @@
                                 [(fast-sprite-equal? sprite a:penguin)  (list "Penguin"  "...")]
                                 [(fast-sprite-equal? sprite a:zebra)    (list "Zebra"    "Barrk!")]
                                 ;[(fast-sprite-equal? sprite a:tiger)    (list "Tiger"    "RoaAr!")]
-                                [else                                   (list "Animal"   "...")]))
+                                ;adding sea animals
+                                [(fast-sprite-equal? sprite a:ghost-fish)  (list "Ghost Fish" "Boo!")]
+                                [(fast-sprite-equal? sprite a:green-fish)  (list "Gladys"     "Gluub")]
+                                [(fast-sprite-equal? sprite a:jellyfish)   (list "Jelly"      "Bloop")]
+                                [(fast-sprite-equal? sprite a:orange-fish) (list "Orville"    "Blubb")]
+                                [(fast-sprite-equal? sprite a:red-fish)    (list "Ronald"     "*swish*")]
+                                [(fast-sprite-equal? sprite a:shark)       (list "Bruce"      "*chomp!*")]
+                                [(fast-sprite-equal? sprite a:yellow-fish) (list "Matilda"    "Gloop?")]
+                                [(fast-sprite-equal? sprite a:starfish)    (list "Patrick"    "HI!!")]
+                                [(fast-sprite-equal? sprite a:octopus)     (list "Octavia"    "Fwoosh")]
+                                [(fast-sprite-equal? sprite a:crab)        (list "Christoph"  "*snip snip*")]
+                                
+                                [else                                      (list "Animal"   "...")]))
                                 
   (define (become-combatant g e)
     (define c (~> e
@@ -207,17 +220,17 @@
                      #:score-prefix "Animals Healed"))
     ))
 
-; ==== basic games with ocean bg =====
-;note: ocean bg is ugly. find a better one?
+; ==== basic games with sea bg =====
+;note: sea bg is ugly. find a better one?
 
-;start-ocean-a = avatar + foods ... with ocean bg
-(define-syntax-rule (start-ocean-a avatar-sprite (food-sprite ...))
+;start-sea-a = avatar + foods ... with sea bg
+(define-syntax-rule (start-sea-a avatar-sprite (food-sprite ...))
   (let ()
     (define food-list
       (list (app make-food food-sprite ) ...))
 
     (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+      (survival-game #:bg           (custom-bg #:image a:sea-bg
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
@@ -225,8 +238,8 @@
                      #:food-list    food-list
                      #:score-prefix "Score"))))
 
-;start-ocean-b = avatar + foods + coins ... with ocean bg
-(define-syntax-rule (start-ocean-b avatar-sprite (food-sprite ...) (coin-sprite ...))
+;start-sea-b = avatar + foods + coins ... with sea bg
+(define-syntax-rule (start-sea-b avatar-sprite (food-sprite ...) (coin-sprite ...))
   (let ()
     (define food-list
       (list (app make-food food-sprite ) ...))
@@ -234,7 +247,7 @@
       (list (app make-coin coin-sprite ) ...))
 
     (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+      (survival-game #:bg           (custom-bg #:image a:sea-bg
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
@@ -245,8 +258,8 @@
     
     ))
 
-;start-ocean-c = avatar + foods + coins + enemies ... with ocean bg
-(define-syntax-rule (start-ocean-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+;start-sea-c = avatar + foods + coins + enemies ... with sea bg
+(define-syntax-rule (start-sea-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
   (let ()
     (define food-list
       (list (app make-food food-sprite ) ...))
@@ -256,7 +269,7 @@
       (list (app make-enemy enemy-sprite ) ...))
 
     (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:ocean-bg
+      (survival-game #:bg           (custom-bg #:image a:sea-bg
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
@@ -265,6 +278,31 @@
                      #:enemy-list   enemy-list
                      #:coin-list    coin-list
                      #:score-prefix "Score"))
+    ))
+
+;start-sea-npc = avatar + npc + healing? ... with sea bg
+(define-syntax-rule (start-sea-npc avatar-sprite (npc-sprite ...))
+  (let ()
+    (define npc-list
+      (list (app make-hurt-animal npc-sprite) ...))
+
+    (launch-for-ratchet
+      (survival-game #:bg           (custom-bg #:image a:sea-bg
+                                               #:rows 2
+                                               #:columns 2)
+                     #:sky          #f
+                     #:starvation-rate -1000
+                     #:avatar       (custom-avatar #:sprite avatar-sprite
+                                                   #:components (custom-weapon-system
+                                                                 #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
+                                                                                  #:damage -10
+                                                                                  #:speed 5)
+                                                                 #:fire-mode 'random
+                                                                 #:fire-rate 10
+                                                                 #:fire-key  'h
+                                                                 #:fire-sound BUBBLE-SOUND))
+                     #:npc-list     npc-list
+                     #:score-prefix "Animals Healed"))
     ))
 
 

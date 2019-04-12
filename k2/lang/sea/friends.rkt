@@ -2,19 +2,19 @@
 
 
 (provide (all-from-out "../animal/animal-lang.rkt")
-         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+         (all-from-out "../animal/animal-asset-friendly-names.rkt"))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/sea/sea-enemies-lang)
+  k2/lang/sea/sea-friends-lang)
 
 (module ratchet racket
   
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-sea-c start])
+	              [start-sea-npc start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
@@ -34,16 +34,15 @@
     [jellyfish   j (s:scale-to-fit (s:draw-sprite jellyfish)   32)]
     [octopus     o (s:scale-to-fit (s:draw-sprite octopus)     32)]
     [crab        c (s:scale-to-fit (s:draw-sprite crab)        32)]
+    [green-fish  n (s:scale-to-fit (s:draw-sprite green-fish)  32)]
+    [yellow-fish y (s:scale-to-fit (s:draw-sprite yellow-fish) 32)]
+    [starfish    h (s:scale-to-fit (s:draw-sprite starfish)    32)]
     
-    [potato      p (s:scale-to-fit (s:draw-sprite potato)      32)]
-    [strawberry  b (s:scale-to-fit (s:draw-sprite strawberry)  32)]
-    [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
-    [cherries    i (s:scale-to-fit (s:draw-sprite cherries)    32)]
-
-    [copper      1 (s:scale-to-fit (s:draw-sprite copper)      32)]
-    [silver      2 (s:scale-to-fit (s:draw-sprite silver)      32)]
-    [gold        3 (s:scale-to-fit (s:draw-sprite gold)        32)]
-    
+    ;[apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
+    ;[broccoli    b (s:scale-to-fit (s:draw-sprite broccoli)    32)]
+    ;[kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
+    ;[mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
+    ;[pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
     ))
 
 

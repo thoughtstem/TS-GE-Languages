@@ -6,7 +6,7 @@
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/farm/farm-enemy-lang)
 
 (module ratchet racket
   

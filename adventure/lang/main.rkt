@@ -396,8 +396,8 @@
   (define (remove-gold g e1 e2)
     (if ((crafting? product-name) g e2)
         ((do-many (change-counter-by (- product-cost))
-                  (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                  (do-font-fx)
+                  ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                  ;(do-font-fx)
                   (spawn coin-toast-entity)) g e2)
         e2))
   (observe-change (crafting? product-name) remove-gold))
@@ -479,8 +479,8 @@
                                           (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
                                                                                                   (not/c bg?))))
                     (do-many (change-counter-by coin-value)
-                             (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                             (do-font-fx)
+                             ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                             ;(do-font-fx)
                              (spawn coin-toast-entity))))
       #f))
 
@@ -952,6 +952,7 @@
                   #:score-prefix    [prefix "Gold"]
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:rewards-list    [rewards-list '()]
                   #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -967,7 +968,8 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
+        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        #:rewards-list     [rewards-list (listof component-or-system?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -1095,7 +1097,14 @@
                                  (counter 0)
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
-                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
+                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
+                                 rewards-list
+                                 (observe-change (λ (g e)
+                                                   (get-counter e))
+                                                 (λ (g e1 e2)
+                                                   ((do-many (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                                                             (do-font-fx)) g e2)))
+                                 ))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile e-list)))

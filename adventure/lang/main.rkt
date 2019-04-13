@@ -45,7 +45,7 @@
          acid-sprite
          ice-sprite
 
-         cutscene
+         custom-cutscene
          page
          )
 
@@ -506,9 +506,9 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components       [first-component (or/c component-or-system? false? (listof false?))]
+        #:components       [first-component (or/c component-or-system? false? (listof false?) observe-change?)]
         )
-       #:rest (rest (listof component-or-system?))
+       #:rest (rest (listof (or/c component-or-system? observe-change?)))
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world
@@ -858,8 +858,7 @@
     (cond [(image-or-images? item)       (list (new-sprite item))]
           [(string-or-text-frame? item)  (list (new-sprite item #:color 'yellow))]
           [(animated-sprite? item)       (list item)]
-          [(and (list? item)
-                ((listof sprite?) (flatten item))) (map ensure-sprite (flatten item))]
+          [((listof sprite?) (flatten item)) (map ensure-sprite (flatten item))]
           [else (error "That wasn't a valid cut-scene item!")]))
   
   (define items-list
@@ -894,9 +893,9 @@
                   #:name       name
                   #:position   (posn (/ game-width 2) (/ game-height 2))
                   #:components (layer "ui")
-                               ;(hidden)
-                               ;(on-start (do-many (go-to-pos 'center)
-                               ;                   show))
+                               (hidden)                                ; This is here just in case
+                               (on-start (do-many (go-to-pos 'center)  ; page gets spawned without
+                                                  show))               ; relative? #f
                                (on-key 'space die)
                                (on-key 'enter die)
                                (storable)))
@@ -919,7 +918,7 @@
             (add-components _ (get-components (list-ref cut-scenes next-scene-index) animated-sprite?))
             (update-entity _ counter? (counter next-scene-index))))))
 
-(define (cutscene . pages)
+(define (custom-cutscene . pages)
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
   (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
@@ -944,7 +943,7 @@
                   #:bg              [bg-ent (plain-forest-bg)]
                   #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                   #:sky             [sky (custom-sky)]
-                  #:cutscene-list   [cutscene-list '()]
+                  #:intro-cutscene  [intro-cutscene #f]
                   #:npc-list        [npc-list  '()]
                   #:enemy-list      [e-list    '()]
                   #:coin-list       [coin-list '()]
@@ -960,7 +959,7 @@
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
         #:sky              [sky (or/c sky? #f)]
-        #:cutscene-list    [cutscene-list (listof entity?)]
+        #:intro-cutscene   [intro-cutscene entity?]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -1119,9 +1118,9 @@
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
                            (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
-                  (if (empty? cutscene-list)
-                      #f
-                      (after-time 1 (spawn (apply cutscene cutscene-list) #:relative? #f)))
+                  (if intro-cutscene
+                      (after-time 1 (spawn intro-cutscene #:relative? #f))
+                      #f)
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
   
@@ -1401,6 +1400,8 @@
                                   #:amount-in-world  [world-amt 10]
                                   #:value            [val 10]
                                   #:respawn?         [respawn? #t]
+                                  #:on-pickup        [pickup-function (λ (g e) e)]
+                                  #:cutscene         [cutscene #f]
                                   #:components       [c #f]
                                   . custom-entities)
 
@@ -1414,6 +1415,8 @@
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
+            #:on-pickup [pickup-function procedure?]
+            #:cutscene   [cutscene (or/c entity? #f)]
             #:components [first-component (or/c component-or-system?
                                                 false?
                                                 (listof false?))])
@@ -1444,7 +1447,13 @@
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
-                                         die))))
+                                         (do-many pickup-function
+                                                  (if cutscene
+                                                      (spawn cutscene #:relative? #f)
+                                                      (λ (g e) e)
+                                                      )
+                                                  (do-after-time 1 die) ; 1 tick delay incase function is spawn
+                                                  )))))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]

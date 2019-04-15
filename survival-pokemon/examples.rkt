@@ -11,7 +11,7 @@
 
 (define-example-code survival-pokemon alt/avatar-2
   (define (my-pokemon)
-    (custom-pokemon #:sprite charmander-sprite))
+    (custom-pokemon #:sprite bulbasaur-sprite))
   
   (pokemon-game
    #:pokemon (my-pokemon))
@@ -28,9 +28,21 @@
 
 (define-example-code survival-pokemon alt/avatar-4
   (define (my-pokemon)
-     (custom-pokemon #:sprite charmander-sprite
-                     #:speed 20
+     (custom-pokemon #:sprite   armoredmewtwo-sprite
+                     #:speed    25
                      #:key-mode 'wasd))
+  
+  (pokemon-game
+   #:pokemon (my-pokemon))
+  )
+
+(define-example-code survival-pokemon alt/avatar-5
+  (define (my-pokemon)
+     (custom-pokemon #:sprite     armoredmewtwo-sprite
+                     #:speed      20
+                     #:key-mode   'wasd
+                     #:health     200
+                     #:max-health 200))
   
   (pokemon-game
    #:pokemon (my-pokemon))
@@ -120,6 +132,31 @@
    #:pokemon (custom-pokemon)
    #:trainer-list (list (easy-trainer)
                         (medium-trainer)))
+  )
+
+(define-example-code survival-pokemon alt/enemy-6
+  (define (easy-trainer)
+    (custom-trainer #:ai 'easy
+                    #:sprite greenboy-sprite
+                    #:amount-in-world 5))
+ 
+  (define (medium-trainer)
+    (custom-trainer #:ai 'medium
+                    #:sprite redgirl-sprite
+                    #:amount-in-world 3))
+
+  (define (hard-trainer)
+    (custom-trainer #:ai              'hard
+                    #:sprite          james-sprite
+                    #:amount-in-world 1
+                    #:night-only?     #t
+                    #:weapon          (pokeball #:damage 50)))
+  
+  (pokemon-game
+   #:pokemon (custom-pokemon)
+   #:trainer-list (list (easy-trainer)
+                        (medium-trainer)
+                        (hard-trainer)))
   )
 
 ;=================================

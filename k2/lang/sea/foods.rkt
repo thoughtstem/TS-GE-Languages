@@ -20,7 +20,12 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-
+  (define l
+    (list yellow-fish green-fish red-fish crab starfish pineapple
+          broccoli kiwi tomato apple))
+  
+  (define rand
+    (list-ref l (random 0 6)))
 
   (define-visual-language sea-lang
     "../animal/animal-lang.rkt"
@@ -38,7 +43,8 @@
     [kiwi      k (s:scale-to-fit (s:draw-sprite kiwi)      32)]
     [tomato    t (s:scale-to-fit (s:draw-sprite tomato)    32)]
     [apple     a (s:scale-to-fit (s:draw-sprite apple)     32)]
-    
+
+    [rand     ? question-icon]
     ))
 
 

@@ -20,6 +20,13 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
+  (define l
+    (list shark ghost-fish red-fish orange-fish jellyfish octopus
+          crab green-fish yellow-fish starfish
+          apple broccoli kiwi mushroom pineapple))
+
+  (define rand
+    (list-ref l (random 0 6)))
 
 
   (define-visual-language sea-lang
@@ -38,11 +45,13 @@
     [yellow-fish y (s:scale-to-fit (s:draw-sprite yellow-fish) 32)]
     [starfish    h (s:scale-to-fit (s:draw-sprite starfish)    32)]
     
-    ;[apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
-    ;[broccoli    b (s:scale-to-fit (s:draw-sprite broccoli)    32)]
-    ;[kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
-    ;[mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
-    ;[pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
+    [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
+    [broccoli    b (s:scale-to-fit (s:draw-sprite broccoli)    32)]
+    [kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
+    [mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
+    [pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
+
+    [rand     ? question-icon]
     ))
 
 

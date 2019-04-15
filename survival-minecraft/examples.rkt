@@ -30,7 +30,7 @@
   (minecraft-game
    #:skin (my-hero)))
 
-(define-example-code survival-minecraft avatar-5
+(define-example-code survival-minecraft alt/avatar-5
   (define (my-hero)
     (custom-skin #:sprite alex-sprite
                  #:speed 20
@@ -41,8 +41,7 @@
 
 ;======================================================
 
-(define-example-code survival-minecraft alt/enemy-3
-  
+(define-example-code survival-minecraft alt/enemy-3  
   (define (my-mob)
     (custom-mob #:ai 'medium
                 #:sprite skeleton-sprite
@@ -54,7 +53,6 @@
   )
 
 (define-example-code survival-minecraft alt/enemy-4
-
   (define (easy-mob)
     (custom-mob #:ai 'easy
                 #:sprite creeper-sprite
@@ -71,7 +69,33 @@
    #:mob-list (list (easy-mob) (medium-mob)))
   )
 
-(define-example-code survival-minecraft alt/enemy-5
+(define-example-code survival-minecraft alt/enemy-5 
+  (define (easy-mob)
+    (custom-mob #:ai 'easy
+                #:sprite creeper-sprite
+                #:amount-in-world 5))
+  
+  (define (medium-mob)
+    (custom-mob #:ai 'medium
+                #:sprite skeleton-sprite
+                #:amount-in-world 3
+                ))
+  
+  (define (hard-mob)
+    (custom-mob #:ai              'hard
+                #:sprite          ghast-sprite
+                #:amount-in-world 5
+                #:night-only?     #t
+                #:weapon          (acid-spitter #:damage 50)))
+ 
+  (minecraft-game
+   #:skin     (custom-skin)
+   #:mob-list (list (easy-mob)
+                    (medium-mob)
+                    (hard-mob)))
+  )
+
+(define-example-code survival-minecraft alt/enemy-6
  
   (define (hard-mob)
     (custom-mob #:ai              'hard
@@ -125,8 +149,33 @@
   (minecraft-game
    #:skin     (custom-skin)
    #:ore-list (list (gold-ore)
-                    (diamond))))
+                    (diamond)))
+  )
 
+(define-example-code survival-minecraft alt/coin-5  
+  (define (copper)
+    (custom-ore #:sprite copperlump-sprite
+                #:name   "Copper Lump"))
+
+  (define (diamond)
+    (custom-ore #:sprite           diamond-sprite
+                 #:name            "Diamond"
+                 #:value           500
+                 #:amount-in-world 5))
+
+    (define (mesecrystal)
+    (custom-ore #:sprite           mesecrystal-sprite
+                 #:name            "Mese Crystal"
+                 #:value           1000
+                 #:amount-in-world 1
+                 #:respawn?        #f))
+
+  (minecraft-game
+   #:skin     (custom-skin)
+   #:ore-list (list (copper)
+                    (diamond)
+                    (mesecrystal)))
+  )
 ;=========================================================
 
 #;(define-example-code survival-minecraft alt/npc-2

@@ -39,6 +39,19 @@
    #:avatar (my-avatar))
   )
 
+
+(define-example-code survival avatar-5
+  (define (my-avatar)
+    (custom-avatar #:sprite wizard-sprite
+                   #:speed  20
+                   #:key-mode 'wasd
+                   #:health     200
+                   #:max-health 200
+                   ))
+
+  (survival-game
+   #:avatar (my-avatar))
+  )
 ; -----------------
 
 (define-example-code survival coin-1
@@ -68,8 +81,7 @@
    #:coin-list  (list (my-coin)))
   )
 
-(define-example-code survival coin-4
-  
+(define-example-code survival coin-4  
   (define (my-coin)
     (custom-coin #:sprite silver-coin-sprite
                  #:name   "Silver Coin"))
@@ -85,6 +97,27 @@
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)
                       (my-special-coin)))
+  )
+
+(define-example-code survival coin-5
+  (define (silver-coin)
+    (custom-coin #:sprite silver-coin-sprite
+                 #:name   "Silver Coin"
+                 #:value  "500"
+                 #:ammount-in-world 5))
+  
+  (define (gold-coin)
+    (custom-coin #:sprite          gold-coin-sprite
+                 #:name            "Gold Coin"
+                 #:value           1000
+                 #:amount-in-world 1
+                 #:respawn?        #f))
+
+  (survival-game
+   #:avatar     (custom-avatar)
+   #:coin-list  (list (custom-coin)
+                      (silver-coin)
+                      (gold-coin)))
   )
 
 ; -----------------
@@ -235,7 +268,7 @@
 (define-example-code survival enemy-2
   (survival-game
    #:avatar     (custom-avatar)
-   #:enemy-list (list (curry custom-enemy #:amount-in-world 10)))
+   #:enemy-list (list (custom-enemy #:amount-in-world 10)))
   )
 
 (define-example-code survival enemy-3 
@@ -275,6 +308,32 @@
   (survival-game
    #:avatar       (custom-avatar)
    #:enemy-list   (list (hard-enemy)))
+  )
+
+(define-example-code survival enemy-6
+  (define (easy-enemy)
+    (custom-enemy #:ai             'easy
+                  #:sprite          slime-sprite
+                  #:amount-in-world 5))
+  
+  (define (medium-enemy)
+    (custom-enemy #:ai              'medium
+                  #:sprite          snake-sprite
+                  #:amount-in-world 3
+                  ))
+
+  (define (hard-enemy)
+    (custom-enemy #:ai              'hard
+                  #:sprite          bat-sprite
+                  #:amount-in-world 1
+                  #:night-only?     #t
+                  #:weapon          (acid-spitter #:damage 50)))
+ 
+  (survival-game
+   #:avatar       (custom-avatar)
+   #:enemy-list   (list (easy-enemy)
+                        (meidum-enemy)
+                        (hard-enemy)))
   )
 
 ; -----------------
@@ -331,7 +390,7 @@
 (define-example-code survival food-5
   (define (my-food)
     (custom-food #:sprite          cherry-sprite
-                 #:name            "Cherry"
+                 #:name            "Cherries"
                  #:amount-in-world 20
                  #:heals-by        50))
   
@@ -339,6 +398,32 @@
    #:avatar          (custom-avatar)
    #:food-list       (list (my-food))
    #:starvation-rate 100)
+  )
+
+(define-example-code survival food-6
+  (define (basic-cherry)
+    (custom-food #:sprite          cherry-sprite
+                 #:name            "Cherries"
+                 #:amount-in-world 10))
+
+  (define (basic-smores)
+    (custom-food #:sprite          smores-sprite
+                 #:name            "Smore"
+                 #:heals-by        -10
+                 #:amount-in-world 5))
+
+  (define (special-carrot)
+    (custom-food #:sprite   carrot-sprite
+                 #:name     "Carrots"
+                 #:tile     4
+                 #:heals-by 50
+                 #:respawn? #f))
+  
+  (survival-game
+   #:avatar          (custom-avatar)
+   #:food-list       (list (basic-cherry)
+                           (basic-smores)
+                           (special-carrot)))
   )
 ; -----------------
 

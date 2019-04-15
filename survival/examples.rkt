@@ -103,8 +103,8 @@
   (define (silver-coin)
     (custom-coin #:sprite silver-coin-sprite
                  #:name   "Silver Coin"
-                 #:value  "500"
-                 #:ammount-in-world 5))
+                 #:value  500
+                 #:amount-in-world 5))
   
   (define (gold-coin)
     (custom-coin #:sprite          gold-coin-sprite
@@ -120,7 +120,7 @@
                       (gold-coin)))
   )
 
-; -----------------
+; ------------
 
 (define-example-code survival crafter-1
   (survival-game
@@ -332,7 +332,7 @@
   (survival-game
    #:avatar       (custom-avatar)
    #:enemy-list   (list (easy-enemy)
-                        (meidum-enemy)
+                        (medium-enemy)
                         (hard-enemy)))
   )
 

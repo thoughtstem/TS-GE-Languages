@@ -71,7 +71,9 @@
              #:components (cons c custom-components)))
 
 ; ---------   Custom Pokemon
-(define/contract/doc (custom-pokemon #:sprite           [sprite pikachu-sprite]
+(define/contract/doc (custom-pokemon #:sprite           [sprite (first (shuffle (list bulbasaur-sprite
+                                                                                      squirtle-sprite
+                                                                                      charmander-sprite)))]
                                      #:damage-processor [dp (filter-damage-by-tag #:filter-out  '(friendly-team passive)
                                                                                   #:show-damage? #t
                                                                                   #:hit-sound HIT-SOUND

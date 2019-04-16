@@ -20,7 +20,13 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
+  (define l
+    (list shark ghost-fish red-fish orange-fish jellyfish octopus crab
+          potato strawberry apple cherries
+          copper silver gold))
 
+  (define rand
+    (list-ref l (random 0 6)))
 
   (define-visual-language sea-lang
     "../animal/animal-lang.rkt"
@@ -43,7 +49,8 @@
     [copper      1 (s:scale-to-fit (s:draw-sprite copper)      32)]
     [silver      2 (s:scale-to-fit (s:draw-sprite silver)      32)]
     [gold        3 (s:scale-to-fit (s:draw-sprite gold)        32)]
-    
+
+    [rand     ? question-icon]
     ))
 
 

@@ -1,12 +1,15 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt")) 
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-npc start])) 
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/zoo/friends
+  )
 
 (module ratchet racket
   

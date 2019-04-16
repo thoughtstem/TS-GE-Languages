@@ -2,13 +2,14 @@
 
 
 (provide (all-from-out "../animal/animal-lang.rkt")
-         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+         (all-from-out "../animal/animal-asset-friendly-names.rkt"  )
+         (rename-out [start-sea-c start]))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/sea/sea-enemies-lang)
+  k2/lang/sea/enemies)
 
 (module ratchet racket
   
@@ -45,12 +46,12 @@
     [strawberry  b (s:scale-to-fit (s:draw-sprite strawberry)  32)]
     [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
     [cherries    i (s:scale-to-fit (s:draw-sprite cherries)    32)]
+    [banana      b (s:scale-to-fit (s:draw-sprite banana)      32)]
+    [kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
+    [tomato      t (s:scale-to-fit (s:draw-sprite tomato)      32)]
+    [mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
 
-    [copper      1 (s:scale-to-fit (s:draw-sprite copper)      32)]
-    [silver      2 (s:scale-to-fit (s:draw-sprite silver)      32)]
-    [gold        3 (s:scale-to-fit (s:draw-sprite gold)        32)]
-
-    [rand     ? question-icon]
+    [rand        ? question-icon]
     ))
 
 

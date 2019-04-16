@@ -259,12 +259,10 @@
     ))
 
 ;start-sea-c = avatar + foods + coins + enemies ... with sea bg
-(define-syntax-rule (start-sea-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+(define-syntax-rule (start-sea-c avatar-sprite (food-sprite ...) (enemy-sprite ...) )
   (let ()
     (define food-list
       (list (app make-food food-sprite ) ...))
-    (define coin-list
-      (list (app make-coin coin-sprite ) ...))
     (define enemy-list
       (list (app make-enemy enemy-sprite ) ...))
 
@@ -276,7 +274,6 @@
                      #:avatar       (custom-avatar #:sprite avatar-sprite)
                      #:food-list    food-list
                      #:enemy-list   enemy-list
-                     #:coin-list    coin-list
                      #:score-prefix "Score"))
     ))
 

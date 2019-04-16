@@ -1,13 +1,14 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt")
-         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-a start]))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/farm/farm-food-lang)
+  k2/lang/farm/foods)
 
 (module ratchet racket
   

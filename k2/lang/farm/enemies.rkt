@@ -21,7 +21,7 @@
   (define l (list llama horse cow rabbit sheep dog wolf))
   
   (define rand
-    (list-ref l (random 0 6)))
+    (list-ref l (random 0 7)))
 
   (define-visual-language farm-lang "../animal/animal-lang.rkt" 
     [start    x play-icon]

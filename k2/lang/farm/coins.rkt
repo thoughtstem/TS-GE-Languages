@@ -21,7 +21,7 @@
   (define l (list llama apple banana potato kiwi copper silver gold))
   
   (define rand
-    (list-ref l (random 0 6)))
+    (list-ref l (random 0 8)))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 

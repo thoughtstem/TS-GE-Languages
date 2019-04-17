@@ -1,12 +1,14 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt")) 
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-c start]))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/farm/farm-enemy-lang)
+  k2/lang/farm/enemies)
 
 (module ratchet racket
   
@@ -21,7 +23,7 @@
   (define l (list llama horse cow rabbit sheep dog wolf))
   
   (define rand
-    (list-ref l (random 0 6)))
+    (list-ref l (random 0 7)))
 
   (define-visual-language farm-lang "../animal/animal-lang.rkt" 
     [start    x play-icon]

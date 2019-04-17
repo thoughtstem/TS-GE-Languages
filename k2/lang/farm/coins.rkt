@@ -1,12 +1,14 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt"))
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-b start]))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/farm/farm-coin-lang)
+  k2/lang/farm/coins)
 
 (module ratchet racket
 
@@ -21,7 +23,7 @@
   (define l (list llama apple banana potato kiwi copper silver gold))
   
   (define rand
-    (list-ref l (random 0 6)))
+    (list-ref l (random 0 8)))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 

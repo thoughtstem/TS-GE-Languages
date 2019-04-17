@@ -947,62 +947,63 @@
          (green-fish)))
 
 ; ==== SEA/COINS
+; commented out to keep from funneling into summer collection
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-011
   (start shark
          (kiwi)
          (copper)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-012
   (start rand
          (rand)
          (rand)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-013
   (start octopus
          (pineapple rand)
          (silver rand)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-014
   (start jellyfish
          (broccoli apple)
          (gold)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-015
   (start rand
          (copper)
          (apple)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-016
   (start rand
          (rand rand)
          (rand rand)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-017
   (start rand
          (tomato)
          (rand rand)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-018
   (start rand
          (rand rand)
          (copper silver gold)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-019
   (start broccoli
          (rand)
          (rand)))
 
-(define-example-code k2/lang/sea/coins
+#;(define-example-code k2/lang/sea/coins
   sea-020
   (start rand
          (rand rand rand rand rand)
@@ -1014,41 +1015,35 @@
   sea-021
   (start ghost-fish
          (strawberry)
-         (silver)
          (shark)))
 
 (define-example-code k2/lang/sea/enemies
   sea-022
   (start jellyfish
          (potato cherries)
-         (silver gold)
          (red-fish)))
 
 (define-example-code k2/lang/sea/enemies
   sea-023
   (start rand
-         (rand apple)
-         (rand silver)
+         (rand mushroom)
          (rand)))
 
 (define-example-code k2/lang/sea/enemies
   sea-024
   (start shark
          (apple strawberry)
-         (potato cherries)
          (crab jellyfish)))
 
 (define-example-code k2/lang/sea/enemies
   sea-025
   (start strawberry
          (orange-fish octopus)
-         (ghost-fish crab)
-         (potato apple cherries)))
+         (tomato kiwi banana)))
 
 (define-example-code k2/lang/sea/enemies
   sea-026
   (start shark
-         (shark)
          (shark)
          (shark)))
 
@@ -1056,44 +1051,36 @@
   sea-027
   (start rand
          (rand rand)
-         (rand rand rand)
          (rand rand rand rand)))
 
 (define-example-code k2/lang/sea/enemies
   sea-028
   (start octopus
          (apple)
-         (copper)
          (crab))
   (start octopus
          (cherries)
-         (gold)
          (shark)))
 
 (define-example-code k2/lang/sea/enemies
   sea-029
   (start rand
          (strawberry potato)
-         (copper silver)
          (orange-fish))
   (start rand
          (strawberry potato)
-         (silver gold)
-         (orange-fish)))
+         (jellyfish)))
 
 (define-example-code k2/lang/sea/enemies
   sea-030
   (start rand
          (rand rand)
-         (copper)
          (rand))
   (start rand
          (rand rand)
-         (silver)
          (rand rand))
   (start rand
          (rand rand)
-         (gold)
          (rand rand rand)))
 
 ;==== SEA/FRIENDS ====

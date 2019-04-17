@@ -2,13 +2,14 @@
 
 
 (provide (all-from-out "../animal/animal-lang.rkt")
-         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+         (all-from-out "../animal/animal-asset-friendly-names.rkt"  )
+         (rename-out [start-sea-a start]))
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/sea/sea-foods-lang)
+  k2/lang/sea/foods)
 
 (module ratchet racket
   

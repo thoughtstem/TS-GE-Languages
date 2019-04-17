@@ -34,29 +34,50 @@
                #:components (on-start (random-size 0.5 1))))
 
 (define (make-food sprite)
-  (custom-food #:sprite sprite)) 
+  (if (procedure? sprite)
+      (λ ()
+        (custom-food #:sprite (sprite)))
+      ;(custom-food #:sprite (sprite))
+      (custom-food #:sprite sprite)))
 
 (define (make-friend sprite)
-  (custom-npc #:sprite sprite
+  (if (procedure? sprite)
+      (λ ()
+        (custom-npc #:sprite (sprite)
               #:tile (random 0 4)))
+      (custom-npc #:sprite sprite
+                  #:tile (random 0 4))))
 
 (define (make-enemy sprite)
-  (custom-enemy #:sprite sprite
-                #:weapon (custom-weapon #:name "Evilness"
-                                        #:dart (growl-dart))))
+  (if (procedure? sprite)
+      (λ ()
+        (custom-enemy #:sprite (sprite)
+                      #:weapon (custom-weapon #:name "Evilness"
+                                              #:dart (growl-dart))))
+      (custom-enemy #:sprite sprite
+                    #:weapon (custom-weapon #:name "Evilness"
+                                            #:dart (growl-dart)))))
 
 (define (make-coin sprite)
+  (define s (if (procedure? sprite)
+                (sprite)
+                sprite))
   (cond
-    [(equal? sprite a:gold) (custom-coin #:sprite sprite
+    [(equal? sprite a:gold) (custom-coin #:sprite s
                                          #:value  3
                                          #:amount-in-world 1
                                          #:name "Gold")]
-    [(equal? sprite a:silver) (custom-coin #:sprite sprite
+    [(equal? sprite a:silver) (custom-coin #:sprite s
                                            #:value  2
                                            #:amount-in-world 5
                                            #:name "Silver")]
-    [else  (custom-coin #:sprite sprite
-                        #:value 1)])) 
+    [else  (custom-coin #:sprite s
+                        #:value 1)]))
+
+(define (call-if-proc p)
+  (if (procedure? p)
+      (p)
+      p))
 
 (define-syntax (app stx)
   (syntax-case stx ()
@@ -74,7 +95,7 @@
       (survival-game #:bg           (custom-bg #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:score-prefix "Score"))))
 
@@ -91,7 +112,7 @@
                                      #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:coin-list    coin-list
                      #:score-prefix "Score"))
@@ -112,7 +133,7 @@
       (survival-game #:bg           (custom-bg #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:enemy-list   enemy-list
                      #:coin-list    coin-list
@@ -207,7 +228,7 @@
                                                #:columns 2)
                      #:sky          #f
                      #:starvation-rate -1000
-                     #:avatar       (custom-avatar #:sprite avatar-sprite
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
                                                    #:components (custom-weapon-system
                                                                  #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
                                                                                   #:damage -10
@@ -234,7 +255,7 @@
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:score-prefix "Score"))))
 
@@ -251,7 +272,7 @@
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:coin-list    coin-list
                      #:score-prefix "Score"))
@@ -273,7 +294,7 @@
                                                #:rows 2
                                                #:columns 2)
                      #:sky          #f
-                     #:avatar       (custom-avatar #:sprite avatar-sprite)
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                      #:food-list    food-list
                      #:enemy-list   enemy-list
                      #:coin-list    coin-list
@@ -292,7 +313,7 @@
                                                #:columns 2)
                      #:sky          #f
                      #:starvation-rate -1000
-                     #:avatar       (custom-avatar #:sprite avatar-sprite
+                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
                                                    #:components (custom-weapon-system
                                                                  #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
                                                                                   #:damage -10

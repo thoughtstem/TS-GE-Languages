@@ -2,14 +2,20 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt"
                        "../animal/animal-asset-friendly-names.rkt")
-         (rename-out [start-a start])) 
+         (rename-out [start-a start])
+         rand) 
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
+(define rand
+  (lambda () (first (shuffle (list apple banana grapes onion potato tomato)))))
+
 (module reader syntax/module-reader
   k2/lang/zoo/foods
   )
+  
+
 
 (module ratchet racket
   
@@ -21,8 +27,14 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
+  (define rand
+    (lambda () (first (shuffle (list apple banana grapes onion potato tomato)))))
+
   (define (crop i)
     (h:crop 0 0 32 32 i))
+
+  (define (fit i)
+    (s:scale-to-fit i 32))
 
   (define (crop-left i)
     (define w (h:image-width i))
@@ -33,21 +45,20 @@
     "../animal/animal-lang.rkt" 
     [start  s play-icon]
 
-    [zookeeper     z (s:scale-to-fit (s:draw-sprite zookeeper) 32)]
-    ;[lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
-    [monkey        m (s:scale-to-fit (s:draw-sprite monkey) 32)]
-    ;[tiger         t (s:scale-to-fit (s:draw-sprite tiger) 32)]
-    [elephant      e (s:scale-to-fit (s:draw-sprite elephant) 32)]
-    ;[giraffe       g (s:scale-to-fit (s:draw-sprite giraffe) 32)]
-    [hippo         h (s:scale-to-fit (s:draw-sprite hippo) 32)]
-    [kangaroo      k (s:scale-to-fit (s:draw-sprite kangaroo) 32)]
-    ;[penguin       p (s:scale-to-fit (s:draw-sprite penguin) 32)]
+    ;[zookeeper     z (fit (s:draw-sprite zookeeper))]
+    [monkey        m (fit (s:draw-sprite monkey))]
+    [elephant      e (fit (s:draw-sprite elephant))]
+    [hippo         h (fit (s:draw-sprite hippo))]
+    [kangaroo      k (fit (s:draw-sprite kangaroo))]
     
-    [apple    a (crop (s:render apple))]
-    [broccoli b (crop (s:render broccoli))]
-    [grapes   g (crop (s:render grapes))]
-    [onion    o (crop (s:render onion))]
-    [potato   p (crop (s:render potato))]
-    [tomato   t (crop (s:render tomato))]))
+    [apple    a (fit (s:draw-sprite apple))]
+    [banana   b (fit (s:draw-sprite banana))]
+    [grapes   g (fit (s:draw-sprite grapes))]
+    [onion    o (fit (s:draw-sprite onion))]
+    [potato   p (fit (s:draw-sprite potato))]
+    [tomato   t (fit (s:draw-sprite tomato))]
+
+    [rand     ? question-icon]
+    ))
 
 

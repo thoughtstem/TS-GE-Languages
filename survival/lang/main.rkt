@@ -1058,7 +1058,7 @@
 
                        (clone-by-rarity weapon-list) ; surival doesn't need weapons in the wild
                        
-                       npc-list
+                       (clone-by-amount-in-world npc-list)
                        
                        c-list
                        

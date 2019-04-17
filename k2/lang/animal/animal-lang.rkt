@@ -34,7 +34,9 @@
                #:components (on-start (random-size 0.5 1))))
 
 (define (make-food sprite)
-  (custom-food #:sprite sprite)) 
+  (if (procedure? sprite)
+      (custom-food #:sprite (sprite))
+      (custom-food #:sprite sprite))) 
 
 (define (make-friend sprite)
   (custom-npc #:sprite sprite

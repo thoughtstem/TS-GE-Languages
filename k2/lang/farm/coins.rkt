@@ -2,10 +2,14 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt"
                        "../animal/animal-asset-friendly-names.rkt")
-         (rename-out [start-b start]))
+         (rename-out [start-b start])
+         rand)
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
+
+(define rand
+  (lambda () (first (shuffle (list llama apple banana potato kiwi copper silver gold)))))
 
 (module reader syntax/module-reader
   k2/lang/farm/coins)
@@ -20,10 +24,8 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define l (list llama apple banana potato kiwi copper silver gold))
-  
   (define rand
-    (list-ref l (random 0 8)))
+    (lambda () (first (shuffle (list llama apple banana potato kiwi copper silver gold)))))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 

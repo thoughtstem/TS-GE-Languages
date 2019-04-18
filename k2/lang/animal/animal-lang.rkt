@@ -38,7 +38,6 @@
       (λ ()
         (custom-food #:sprite (sprite)
                      #:amount-in-world amt))
-      ;(custom-food #:sprite (sprite))
       (custom-food #:sprite sprite
                    #:amount-in-world amt)))
 

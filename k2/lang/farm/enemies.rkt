@@ -2,10 +2,14 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt"
                        "../animal/animal-asset-friendly-names.rkt")
-         (rename-out [start-c start]))
+         (rename-out [start-c start])
+         rand)
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
+
+(define rand
+  (lambda () (first (shuffle (list llama horse cow rabbit sheep dog wolf)))))
 
 (module reader syntax/module-reader
   k2/lang/farm/enemies)
@@ -20,10 +24,8 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define l (list llama horse cow rabbit sheep dog wolf))
-  
   (define rand
-    (list-ref l (random 0 7)))
+    (lambda () (first (shuffle (list llama horse cow rabbit sheep dog wolf)))))
 
   (define-visual-language farm-lang "../animal/animal-lang.rkt" 
     [start    x play-icon]

@@ -17,7 +17,7 @@
 (module ratchet racket
   
   (require ratchet
-           (submod "./hero-lang.rkt" hero-stuff)
+           "./hero-lang.rkt"
            "../icons.rkt"
            (prefix-in a: battlearena-avengers/assets)
            (prefix-in h: 2htdp/image)
@@ -28,7 +28,7 @@
     (h:crop 0 0 32 32 i))
 
   (define-visual-language fish-lang
-    (submod "./hero-lang.rkt" hero-stuff)
+    "./hero-lang.rkt" 
     [blackwidow     b (crop a:blackwidow-sheet)]   
     [gamora         g (crop a:gamora-sheet)]
     [captainamerica c (crop a:captainamerica-sheet)]

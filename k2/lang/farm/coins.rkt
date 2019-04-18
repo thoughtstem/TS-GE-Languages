@@ -29,7 +29,7 @@
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 
-    [start    x play-icon]
+    [start    = play-icon]
     
     [llama    l (s:scale-to-fit (s:draw-sprite llama)  32)]
     [cow      c (s:scale-to-fit (s:draw-sprite cow)    32)]
@@ -41,9 +41,9 @@
     [potato   p (s:scale-to-fit (s:draw-sprite potato) 32)]
     [kiwi     k (s:scale-to-fit (s:draw-sprite kiwi)   32)]
 
-    [copper   1 (s:scale-to-fit (s:draw-sprite copper) 32)]
-    [silver   2 (s:scale-to-fit (s:draw-sprite silver) 32)]
-    [gold     3 (s:scale-to-fit (s:draw-sprite gold)   32)]
+    [copper   x (s:scale-to-fit (s:draw-sprite copper) 32)]
+    [silver   y (s:scale-to-fit (s:draw-sprite silver) 32)]
+    [gold     z (s:scale-to-fit (s:draw-sprite gold)   32)]
 
     [rand     ? question-icon]
 

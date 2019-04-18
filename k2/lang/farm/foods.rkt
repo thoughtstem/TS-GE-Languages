@@ -30,7 +30,7 @@
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 
-    [start    x play-icon]
+    [start    = play-icon]
 
     [chicken  c (s:scale-to-fit (s:draw-sprite chicken)  32)]
     [llama    l (s:scale-to-fit (s:draw-sprite llama)    32)]

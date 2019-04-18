@@ -439,66 +439,65 @@
 
 
 (define-example-code k2/lang/hero/basic
-  hero-0
+  hero-000
   blackwidow)
 
 (define-example-code k2/lang/hero/basic
-  hero-3
+  hero-003
   (start gamora))
 
 (define-example-code k2/lang/hero/basic
-  hero-4
+  hero-004
   (start ironman))
 
 (define-example-code k2/lang/hero/basic
-  hero-5
+  hero-005
   (start blackwidow))
 
 (define-example-code k2/lang/hero/basic
-  hero-6
+  hero-006
   (start blackwidow gamora ironman))
 
 (define-example-code k2/lang/hero/basic
-  hero-7
+  hero-007
   (start ironman gamora blackwidow))
 
 (define-example-code k2/lang/hero/basic
-  hero-8
-  (start ironman ironman)) (define-example-code k2/lang/hero/basic
-                             hero-9
-                             (start ironman ironman ironman ironman))
+  hero-008
+  (start ironman ironman))
 
 (define-example-code k2/lang/hero/basic
-  hero-10
+  hero-009
+  (start ironman ironman ironman ironman))
+
+(define-example-code k2/lang/hero/basic
+  hero-010
   (start gamora gamora gamora gamora gamora))
 
-
 (define-example-code k2/lang/hero/powers
-  hero-11
+  hero-011
   (start ironman (gamora hammer)))
 
-
 (define-example-code k2/lang/hero/powers
-  hero-12
+  hero-012
   (start ironman (gamora hammer) gamora gamora))
 
 (define-example-code k2/lang/hero/powers
-  hero-13
+  hero-013
   (start ironman
          (gamora hammer)
          (gamora hammer)
          (gamora hammer)))
 
-
 (define-example-code k2/lang/hero/powers
-  hero-14
+  hero-014
   (start ironman
          (drax hammer)
          (hawkeye hammer)
          (gamora hammer)))
 
 (define-example-code k2/lang/hero/powers
-  hero-15
+  hero-015
   (start (ironman hammer)
          ironman
          ironman
@@ -506,7 +505,7 @@
          ironman))
 
 (define-example-code k2/lang/hero/powers
-  hero-16
+  hero-016
   (start (ironman hammer)
          (ironman hammer)
          (ironman hammer)
@@ -514,7 +513,7 @@
          (ironman hammer)))
 
 (define-example-code k2/lang/hero/powers
-  hero-17
+  hero-017
   (start (ironman hammer)
          (ironman magic-orb)
          (ironman magic-orb)
@@ -522,7 +521,7 @@
          (ironman magic-orb)))
 
 (define-example-code k2/lang/hero/powers
-  hero-18
+  hero-018
   (start (ironman hammer)
          (drax magic-orb)
          (drax magic-orb)
@@ -530,7 +529,7 @@
          (blackwidow hammer)))
 
 (define-example-code k2/lang/hero/powers
-  hero-19
+  hero-019
   (start (ironman hammer)
          (drax magic-orb)
          (drax magic-orb)
@@ -540,26 +539,26 @@
          gamora))
 
 (define-example-code k2/lang/hero/powers
-  hero-20
+  hero-020
   (start (ironman (magic-orb red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-21
+  hero-021
   (start (ironman (star-bit red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-22
+  hero-022
   (start (ironman (energy-blast red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-23
+  hero-023
   (start (ironman (magic-orb red))
          (ironman (magic-orb orange))
          (ironman (magic-orb yellow))
          (ironman (magic-orb green))))
 
 (define-example-code k2/lang/hero/powers
-  hero-24
+  hero-024
   (start (ironman (magic-orb red))
          (ironman (magic-orb orange))
          (ironman (magic-orb yellow))
@@ -568,7 +567,7 @@
          (ironman (magic-orb purple))))
 
 (define-example-code k2/lang/hero/powers
-  hero-25
+  hero-025
   (start (ironman (magic-orb red))
          (drax (magic-orb orange))
          (drax (magic-orb yellow))
@@ -577,7 +576,7 @@
          (drax (magic-orb purple))))
 
 (define-example-code k2/lang/hero/powers
-  hero-26
+  hero-026
   (start (ironman (magic-orb red))
          (drax hammer)
          (drax (star-bit yellow))
@@ -588,30 +587,30 @@
          ironman))
 
 (define-example-code k2/lang/hero/powers
-  hero-27
+  hero-027
   (start ironman gamora)
   (start ironman drax))
 
 (define-example-code k2/lang/hero/powers
-  hero-28
+  hero-028
   (start ironman gamora)
   (start ironman drax)
   (start ironman hawkeye))
 
 (define-example-code k2/lang/hero/powers
-  hero-29
+  hero-029
   (start ironman gamora)
   (start ironman gamora gamora)
   (start ironman gamora gamora gamora))
 
 (define-example-code k2/lang/hero/powers
-  hero-30
+  hero-030
   (start ironman (gamora (magic-orb green)))
   (start ironman (gamora (magic-orb yellow)))
   (start ironman (gamora (magic-orb red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-31
+  hero-031
   (start ironman
          (gamora (magic-orb green)))
   (start ironman
@@ -623,7 +622,7 @@
          (gamora (magic-orb red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-32
+  hero-032
   (start ironman
          (gamora (magic-orb green)))
   (start ironman
@@ -635,7 +634,7 @@
          (hawkeye (magic-orb red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-33
+  hero-033
   (start ironman
          ironman
          (gamora (magic-orb green)))
@@ -653,7 +652,7 @@
          (hawkeye (magic-orb red))))
 
 (define-example-code k2/lang/hero/powers
-  hero-34
+  hero-034
   (start (ironman (energy-blast green))
          (gamora (magic-orb green)))
   (start (ironman (energy-blast yellow))
@@ -727,18 +726,18 @@
 
 (define-example-code k2/lang/farm/foods
   farm-007
-  (start apple
-         (broccoli)))
+  (start chicken
+         ((apple 5) (tomato 5))))
 
 (define-example-code k2/lang/farm/foods
   farm-008
-  (start tomato
-         (rand rand)))
+  (start llama
+         ((rand 3) (rand 5))))
 
 (define-example-code k2/lang/farm/foods
   farm-009
-  (start onion
-         (rand rand rand)))
+  (start horse
+         (rand (rand 2) (rand 3))))
 
 (define-example-code k2/lang/farm/foods
   farm-010
@@ -768,19 +767,19 @@
 (define-example-code k2/lang/farm/coins
   farm-014
   (start rabbit
-         (banana apple)
+         ((banana 5) (apple 5))
          (gold)))
 
 (define-example-code k2/lang/farm/coins
   farm-015
   (start rand
-         (copper)
-         (apple)))
+         ((kiwi 10))
+         (copper)))
 
 (define-example-code k2/lang/farm/coins
   farm-016
   (start rand
-         (rand rand)
+         ((rand 3) (rand 5))
          (rand rand)))
 
 (define-example-code k2/lang/farm/coins
@@ -798,8 +797,8 @@
 (define-example-code k2/lang/farm/coins
   farm-019
   (start potato
-         (rand)
-         (rand)))
+         ((silver 3))
+         (apple)))
 
 (define-example-code k2/lang/farm/coins
   farm-020
@@ -826,35 +825,35 @@
 (define-example-code k2/lang/farm/enemies
   farm-023
   (start rand
-         (rand apple)
-         (rand silver)
+         ((apple 3) (rand 5))
+         (silver rand)
          (rand)))
 
 (define-example-code k2/lang/farm/enemies
   farm-024
   (start wolf
-         (apple grapes)
+         (apple (grapes 10))
          (kiwi pepper)
          (sheep cow)))
 
 (define-example-code k2/lang/farm/enemies
   farm-025
-  (start apple
-         (wolf dog)
-         (horse llama)
-         (grapes kiwi apple)))
+  (start horse
+         ((pepper 3) (grapes 3) (kiwi 3))
+         (silver gold)
+         ((dog 3) wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-026
-  (start cow
-         (cow)
-         (cow)
-         (cow)))
+  (start apple
+         ((apple 5))
+         (apple)
+         ((apple 2))))
 
 (define-example-code k2/lang/farm/enemies
   farm-027
   (start rand
-         (rand rand)
+         ((rand 5) (rand 5))
          (rand rand rand)
          (rand rand rand rand)))
 
@@ -862,19 +861,17 @@
   farm-028
   (start rabbit
          (apple)
-         (gold)
-         (dog))
+         (gold))
   (start rabbit
          (kiwi)
          (silver)
-         (wolf)))
+         (dog)))
 
 (define-example-code k2/lang/farm/enemies
   farm-029
   (start rand
-         (apple grapes)
-         (silver gold)
-         (wolf))
+         ((apple 3) (grapes 5))
+         (silver gold))
   (start rand
          (apple grapes)
          (copper silver)
@@ -882,18 +879,18 @@
 
 (define-example-code k2/lang/farm/enemies
   farm-030
-  (start rand
-         (rand rand)
+  (start horse
+         ((apple 5) (grapes 5) (kiwi 5))
          (gold)
-         (rand))
-  (start rand
-         (rand rand)
+         (dog))
+  (start llama
+         ((apple 5) (grapes 5))
          (silver)
-         (rand rand))
-  (start rand
-         (rand rand)
+         ((dog 2) wolf))
+  (start rabbit
+         ((apple 5))
          (copper)
-         (rand rand rand)))
+         ((wolf 3))))
 
 ; ==== SEA/FOODS
 (define-example-code k2/lang/sea/foods
@@ -950,64 +947,64 @@
 ; commented out to keep from funneling into summer collection
 
 #;(define-example-code k2/lang/sea/coins
-  sea-011
-  (start shark
-         (kiwi)
-         (copper)))
+    sea-011
+    (start shark
+           (kiwi)
+           (copper)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-012
-  (start rand
-         (rand)
-         (rand)))
+    sea-012
+    (start rand
+           (rand)
+           (rand)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-013
-  (start octopus
-         (pineapple rand)
-         (silver rand)))
+    sea-013
+    (start octopus
+           (pineapple rand)
+           (silver rand)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-014
-  (start jellyfish
-         (broccoli apple)
-         (gold)))
+    sea-014
+    (start jellyfish
+           (broccoli apple)
+           (gold)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-015
-  (start rand
-         (copper)
-         (apple)))
+    sea-015
+    (start rand
+           (copper)
+           (apple)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-016
-  (start rand
-         (rand rand)
-         (rand rand)))
+    sea-016
+    (start rand
+           (rand rand)
+           (rand rand)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-017
-  (start rand
-         (tomato)
-         (rand rand)))
+    sea-017
+    (start rand
+           (tomato)
+           (rand rand)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-018
-  (start rand
-         (rand rand)
-         (copper silver gold)))
+    sea-018
+    (start rand
+           (rand rand)
+           (copper silver gold)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-019
-  (start broccoli
-         (rand)
-         (rand)))
+    sea-019
+    (start broccoli
+           (rand)
+           (rand)))
 
 #;(define-example-code k2/lang/sea/coins
-  sea-020
-  (start rand
-         (rand rand rand rand rand)
-         (rand rand rand rand rand)))
+    sea-020
+    (start rand
+           (rand rand rand rand rand)
+           (rand rand rand rand rand)))
 
 ; ==== SEA/ENEMIES
 

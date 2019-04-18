@@ -3,13 +3,19 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt")
          (all-from-out "../animal/animal-asset-friendly-names.rkt")
-         (rename-out [start-sea-npc start]))
+         (rename-out [start-sea-npc start])
+         rand)
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
   k2/lang/sea/friends)
+
+(define rand
+  (lambda () (first (shuffle (list shark ghost-fish red-fish orange-fish jellyfish octopus
+                                   crab green-fish yellow-fish starfish
+                                   apple broccoli kiwi mushroom pineapple)))))
 
 (module ratchet racket
   
@@ -21,13 +27,10 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define l
-    (list shark ghost-fish red-fish orange-fish jellyfish octopus
-          crab green-fish yellow-fish starfish
-          apple broccoli kiwi mushroom pineapple))
-
   (define rand
-    (list-ref l (random 0 6)))
+    (lambda () (first (shuffle (list shark ghost-fish red-fish orange-fish jellyfish octopus
+                                     crab green-fish yellow-fish starfish
+                                     apple broccoli kiwi mushroom pineapple)))))
 
 
   (define-visual-language sea-lang

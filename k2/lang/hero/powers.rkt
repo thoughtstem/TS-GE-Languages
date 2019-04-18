@@ -9,7 +9,7 @@
 (module ratchet racket
   
   (require ratchet
-           (submod "./hero-lang.rkt" hero-stuff)
+           "./hero-lang.rkt"
            "../icons.rkt"
            (prefix-in a: battlearena-avengers)
            (prefix-in h: 2htdp/image)
@@ -24,7 +24,7 @@
     (h:crop 0 0 32 32 i))
 
   (define-visual-language #:wrapper begin hero-lang
-    (submod "./hero-lang.rkt" hero-stuff)
+    "./hero-lang.rkt" 
     [start          q play-icon]
 
     [blackwidow     a (crop a:blackwidow-sheet)]   

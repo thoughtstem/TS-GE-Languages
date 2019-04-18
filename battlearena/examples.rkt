@@ -64,6 +64,20 @@
    #:avatar (my-avatar))
   )
 
+(define-example-code battlearena avatar-5
+  (define (my-avatar)
+    (custom-avatar #:sprite pirateboy-sprite
+                   #:speed 20
+                   #:item-slots 5
+                   #:health     200
+                   #:max-health 200
+                   #:shield     200
+                   #:max-shield 200
+                   ))
+  
+  (battlearena-game
+   #:avatar (my-avatar))
+  )
 ;-----------------
 
 (define-example-code battlearena enemy-1

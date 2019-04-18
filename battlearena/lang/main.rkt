@@ -276,25 +276,23 @@
     (sprite->entity empty-image
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
-                    #:components (on-start die)
-                                 #;(counter 0)
-                                 #;(every-tick (do-many (change-counter-by 1)
-                                                      (λ(g e)
-                                                        (displayln (~a "I'M ALIVE: " (get-counter e)))
-                                                        e)))
-                    ))
+                    #:components (on-start die)))
+
+  (define (health-is-zero? g e)
+    (define h (get-health e))
+    (and h (<= h 0)))
   
   (define (die-if-health-is-0)
-    (on-rule (λ(g e)
-               (define h (get-storage-data "health-stat" e))
-               (and h (<= h 0)))
-             (do-many
-              (play-sound EXPLOSION-SOUND)
-              (spawn-on-current-tile particles)
-              (spawn death-broadcast)
-              (λ(g e)
-                (add-component e (after-time 2 die)))
-              )))
+    (observe-change health-is-zero?
+                    (λ (g e1 e2)
+                      (if (health-is-zero? g e2)
+                          ((do-many
+                            (play-sound EXPLOSION-SOUND)
+                            (spawn particles)
+                            (spawn death-broadcast)
+                            (do-after-time 1 die)) g e2)
+                          e2))
+                    ))
 
   
   (custom-npc #:name "Enemy"
@@ -419,7 +417,7 @@
 
 (define (lost? g e)
   (define player (get-entity "player" g))
-  (define health (get-stat "health" player))
+  (define health (get-health player)) ;(get-stat "health" player))
   (<= health 0))
 
 (define (tops? e)
@@ -1012,26 +1010,11 @@
    
 
   (define (enemy-counter-entity prefix)
-    (define outer-border-img (square 1 'solid 'black))
-    (define inner-border-img (square 1 'solid 'white))
-    (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite (~a prefix " Left: " total-enemies)
-                        #:color 'yellow)
-            (new-sprite  box-img
-                        #:animate #f
-                        #:x-scale 180
-                        #:y-scale 24)
-            (new-sprite inner-border-img
-                        #:animate #f
-                        #:x-scale 184
-                        #:y-scale 28)
-            (new-sprite outer-border-img
-                        #:animate #f
-                        #:x-scale 186
-                        #:y-scale 30)
-                   ))
-    
+      (append (list (new-sprite (~a (string-titlecase prefix) " Left: " total-enemies)
+                                #:color 'yellow))
+              (bordered-box-sprite (* 10 (+ 7 5 (string-length prefix))) 24)
+              ))
     
     (register-fonts! bold-font)
 
@@ -1067,7 +1050,7 @@
                     #:components (static)
                                  (counter total-enemies)
                                  (layer "ui")
-                                 (on-rule enemy-died? (do-many (change-counter-by -0.5) ; still getting doubled counted
+                                 (on-rule enemy-died? (do-many (change-counter-by -1) ; double counting fixed!
                                                                (draw-counter-rpg #:prefix (~a prefix " Left: ") #:exact-floor? #t)
                                                                (do-font-fx)
                                                                ))

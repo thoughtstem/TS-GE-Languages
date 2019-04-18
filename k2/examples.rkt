@@ -694,7 +694,7 @@
     (blue fish))
    (green fish)))
 
-; ==== FARM LANG
+; ==== FARM/FOODS
 (define-example-code k2/lang/farm/foods
   farm-001
   (start chicken
@@ -703,12 +703,12 @@
 (define-example-code k2/lang/farm/foods
   farm-002
   (start chicken
-         (brocolli)))
+         (broccoli)))
 
 (define-example-code k2/lang/farm/foods
   farm-003
   (start horse
-         (brocolli apple onion)))
+         (broccoli apple onion)))
 
 (define-example-code k2/lang/farm/foods
   farm-004
@@ -723,139 +723,587 @@
 (define-example-code k2/lang/farm/foods
   farm-006
   (start rand
-         (apple brocolli grapes onion potato tomato)))
+         (apple broccoli grapes onion potato tomato)))
+
+(define-example-code k2/lang/farm/foods
+  farm-007
+  (start apple
+         (broccoli)))
+
+(define-example-code k2/lang/farm/foods
+  farm-008
+  (start tomato
+         (rand rand)))
+
+(define-example-code k2/lang/farm/foods
+  farm-009
+  (start onion
+         (rand rand rand)))
+
+(define-example-code k2/lang/farm/foods
+  farm-010
+  (start rabbit
+         (rabbit)))
+
+; ==== FARM/COINS
 
 (define-example-code k2/lang/farm/coins
-  farm-007
+  farm-011
   (start cow
          (kiwi)
          (copper)))
 
 (define-example-code k2/lang/farm/coins
-  farm-008
+  farm-012
   (start rand
          (rand)
          (rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-009
+  farm-013
   (start sheep
          (kiwi rand)
          (silver rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-010
+  farm-014
   (start rabbit
          (banana apple)
          (gold)))
 
 (define-example-code k2/lang/farm/coins
-  farm-011
+  farm-015
   (start rand
          (copper)
          (apple)))
 
 (define-example-code k2/lang/farm/coins
-  farm-012
+  farm-016
   (start rand
          (rand rand)
          (rand rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-013
+  farm-017
   (start rand
          (potato)
          (rand rand)))
 
 (define-example-code k2/lang/farm/coins
-  farm-014
+  farm-018
   (start rand
          (rand rand)
          (copper silver gold)))
 
 (define-example-code k2/lang/farm/coins
-  farm-015
+  farm-019
+  (start potato
+         (rand)
+         (rand)))
+
+(define-example-code k2/lang/farm/coins
+  farm-020
   (start rand
          (rand rand rand rand rand)
          (rand rand rand rand rand)))
 
+; ==== FARM/ENEMIES
+
 (define-example-code k2/lang/farm/enemies
-  farm-016
+  farm-021
   (start sheep
          (grapes)
          (silver)
          (dog)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-017
+  farm-022
   (start horse
          (pepper kiwi)
          (silver gold)
          (wolf)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-018
+  farm-023
   (start rand
          (rand apple)
          (rand silver)
          (rand)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-019
+  farm-024
   (start wolf
          (apple grapes)
          (kiwi pepper)
          (sheep cow)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-020
+  farm-025
   (start apple
          (wolf dog)
          (horse llama)
          (grapes kiwi apple)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-021
+  farm-026
   (start cow
          (cow)
          (cow)
          (cow)))
 
 (define-example-code k2/lang/farm/enemies
-  farm-022
+  farm-027
   (start rand
          (rand rand)
          (rand rand rand)
          (rand rand rand rand)))
 
-#|(define-example-code k2/lang/farm/enemies
-  farm-023
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-024
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-025
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-026
-  (start ))
-
-(define-example-code k2/lang/farm/enemies
-  farm-027
-  (start ))
-
 (define-example-code k2/lang/farm/enemies
   farm-028
-  (start ))
+  (start rabbit
+         (apple)
+         (gold)
+         (dog))
+  (start rabbit
+         (kiwi)
+         (silver)
+         (wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-029
-  (start ))
+  (start rand
+         (apple grapes)
+         (silver gold)
+         (wolf))
+  (start rand
+         (apple grapes)
+         (copper silver)
+         (wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-030
-  (start ))|#
+  (start rand
+         (rand rand)
+         (gold)
+         (rand))
+  (start rand
+         (rand rand)
+         (silver)
+         (rand rand))
+  (start rand
+         (rand rand)
+         (copper)
+         (rand rand rand)))
+
+; ==== SEA/FOODS
+(define-example-code k2/lang/sea/foods
+  sea-001
+  (start yellow-fish
+         (pineapple)))
+
+(define-example-code k2/lang/sea/foods
+  sea-002
+  (start crab
+         (kiwi)))
+
+(define-example-code k2/lang/sea/foods
+  sea-003
+  (start red-fish
+         (broccoli tomato apple)))
+
+(define-example-code k2/lang/sea/foods
+  sea-004
+  (start starfish
+         (pineapple rand rand)))
+
+(define-example-code k2/lang/sea/foods
+  sea-005
+  (start rand
+         (rand rand rand)))
+
+(define-example-code k2/lang/sea/foods
+  sea-006
+  (start rand
+         (pineapple broccoli kiwi tomato apple)))
+
+(define-example-code k2/lang/sea/foods
+  sea-007
+  (start apple
+         (broccoli)))
+
+(define-example-code k2/lang/sea/foods
+  sea-008
+  (start pineapple
+         (rand rand)))
+
+(define-example-code k2/lang/sea/foods
+  sea-009
+  (start kiwi
+         (rand rand rand)))
+
+(define-example-code k2/lang/sea/foods
+  sea-010
+  (start green-fish
+         (green-fish)))
+
+; ==== SEA/COINS
+; commented out to keep from funneling into summer collection
+
+#;(define-example-code k2/lang/sea/coins
+  sea-011
+  (start shark
+         (kiwi)
+         (copper)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-012
+  (start rand
+         (rand)
+         (rand)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-013
+  (start octopus
+         (pineapple rand)
+         (silver rand)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-014
+  (start jellyfish
+         (broccoli apple)
+         (gold)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-015
+  (start rand
+         (copper)
+         (apple)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-016
+  (start rand
+         (rand rand)
+         (rand rand)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-017
+  (start rand
+         (tomato)
+         (rand rand)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-018
+  (start rand
+         (rand rand)
+         (copper silver gold)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-019
+  (start broccoli
+         (rand)
+         (rand)))
+
+#;(define-example-code k2/lang/sea/coins
+  sea-020
+  (start rand
+         (rand rand rand rand rand)
+         (rand rand rand rand rand)))
+
+; ==== SEA/ENEMIES
+
+(define-example-code k2/lang/sea/enemies
+  sea-021
+  (start ghost-fish
+         (strawberry)
+         (shark)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-022
+  (start jellyfish
+         (potato cherries)
+         (red-fish)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-023
+  (start rand
+         (rand mushroom)
+         (rand)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-024
+  (start shark
+         (apple strawberry)
+         (crab jellyfish)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-025
+  (start strawberry
+         (orange-fish octopus)
+         (tomato kiwi banana)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-026
+  (start shark
+         (shark)
+         (shark)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-027
+  (start rand
+         (rand rand)
+         (rand rand rand rand)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-028
+  (start octopus
+         (apple)
+         (crab))
+  (start octopus
+         (cherries)
+         (shark)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-029
+  (start rand
+         (strawberry potato)
+         (orange-fish))
+  (start rand
+         (strawberry potato)
+         (jellyfish)))
+
+(define-example-code k2/lang/sea/enemies
+  sea-030
+  (start rand
+         (rand rand)
+         (rand))
+  (start rand
+         (rand rand)
+         (rand rand))
+  (start rand
+         (rand rand)
+         (rand rand rand)))
+
+;==== SEA/FRIENDS ====
+
+(define-example-code k2/lang/sea/friends
+  sea-031
+  (start starfish
+         (octopus)))
+
+(define-example-code k2/lang/sea/friends
+  sea-032
+  (start jellyfish
+         (green-fish orange-fish red-fish)))
+
+(define-example-code k2/lang/sea/friends
+  sea-033
+  (start shark
+         (yellow-fish ghost-fish)))
+
+(define-example-code k2/lang/sea/friends
+  sea-034
+  (start crab
+         (crab crab crab)))
+
+(define-example-code k2/lang/sea/friends
+  sea-035
+  (start rand
+         (red-fish starfish broccoli)))
+
+(define-example-code k2/lang/sea/friends
+  sea-036
+  (start mushroom
+         (apple kiwi pineapple broccoli)))
+
+(define-example-code k2/lang/sea/friends
+  sea-037
+  (start rand
+         (yellow-fish shark rand rand)))
+
+(define-example-code k2/lang/sea/friends
+  sea-038
+  (start ghost-fish
+         (starfish orange-fish))
+  (start ghost-fish
+         (crab rand rand rand)))
+
+(define-example-code k2/lang/sea/friends
+  sea-039
+  (start rand
+         (octopus rand rand))
+  (start rand
+         (green-fish rand rand)))
+
+(define-example-code k2/lang/sea/friends
+  sea-040
+  (start rand
+         (rand rand rand rand)))
+
+; ==== ZOO/FOODS
+(define-example-code k2/lang/zoo/foods
+  zoo-001
+  (start monkey
+         (banana)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-002
+  (start elephant
+         (grapes)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-003
+  (start hippo
+         (apple potato onion)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-004
+  (start kangaroo
+         (apple rand rand)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-005
+  (start rand
+         (rand rand rand)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-006
+  (start rand
+         (apple banana grapes onion tomato)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-007
+  (start apple
+         (banana)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-008
+  (start potato
+         (rand rand)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-009
+  (start grapes
+         (rand rand rand)))
+
+(define-example-code k2/lang/zoo/foods
+  zoo-010
+  (start hippo
+         (rand rand rand rand rand rand)))
+
+; ==== ZOO/COINS
+
+(define-example-code k2/lang/zoo/coins
+  zoo-011
+  (start giraffe
+         (apple)
+         (copper)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-012
+  (start rand
+         (rand)
+         (rand)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-013
+  (start elephant
+         (apple rand)
+         (silver rand)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-014
+  (start jellyfish
+         (apple banana)
+         (gold)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-015
+  (start rand
+         (copper)
+         (apple)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-016
+  (start rand
+         (rand rand)
+         (rand rand)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-017
+  (start rand
+         (apple)
+         (rand rand)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-018
+  (start rand
+         (rand rand)
+         (copper silver gold)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-019
+  (start banana
+         (rand)
+         (rand)))
+
+(define-example-code k2/lang/zoo/coins
+  zoo-020
+  (start rand
+         (rand rand rand rand rand)
+         (rand rand rand rand rand)))
+
+;==== ZOO/FRIENDS ====
+
+(define-example-code k2/lang/zoo/friends
+  zoo-021
+  (start zookeeper
+         (monkey)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-022
+  (start zookeeper
+         (monkey elephant giraffe)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-023
+  (start zookeeper
+         (hippo kangaroo)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-024
+  (start zookeeper
+         (penguin penguin penguin)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-025
+  (start rand
+         (monkey monkey elephant elephant)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-026
+  (start zookeeper
+         (apple apple apple apple)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-027
+  (start penguin
+         (zookeeper zookeeper zookeeper)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-028
+  (start zookeeper
+         (monkey elephant))
+  (start zookeeper
+         (giraffe rand rand rand)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-029
+  (start zookeeper
+         (hippo rand rand))
+  (start zookeeper
+         (kangaroo rand rand)))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-030
+  (start zookeeper
+         (rand rand rand rand)))

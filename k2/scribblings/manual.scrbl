@@ -3,7 +3,7 @@
 @require[scribble/extract]
 @require[@for-label["../main.rkt" racket/base]]
 
-@title{k2 docs}
+@title{K2}
 @author{thoughtstem}
 
 @defmodulelang[k2]

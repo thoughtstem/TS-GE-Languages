@@ -15,10 +15,33 @@
 
 (define-example-code battlearena-avengers alt/avatar-3
   (define (my-hero)
-    (custom-hero #:sprite     thor-sprite
-                 #:speed      15
+    (custom-hero #:sprite     hulk-sprite
+                 #:speed      15))
+  
+  (avengers-game
+   #:hero (my-hero))
+  )
+
+(define-example-code battlearena-avengers alt/avatar-4
+  (define (my-hero)
+    (custom-hero #:sprite     starlord-sprite
+                 #:speed      20
                  #:key-mode   'arrow-keys
                  #:item-slots 5))
+  (avengers-game
+   #:hero (my-hero))
+  )
+
+(define-example-code battlearena-avengers alt/avatar-5
+  (define (my-hero)
+    (custom-hero #:sprite     drax-sprite
+                 #:speed      25
+                 #:item-slots 5
+                 #:health     200
+                 #:max-health 200
+                 #:shield     200
+                 #:max-shield 200 ))
+  
   (avengers-game
    #:hero (my-hero))
   )
@@ -26,7 +49,7 @@
 ; ---------------
 
 (define-example-code battlearena-avengers alt/enemy-3
-  (define (my-enemy)
+  (define (my-villain)
     (custom-villain #:sprite          loki-sprite
                     #:ai              'medium
                     #:health          200
@@ -34,7 +57,25 @@
                     #:amount-in-world 5))
   
   (avengers-game 
-   #:villain-list (list (my-enemy)))
+   #:villain-list (list (my-villain)))
+  )
+
+(define-example-code battlearena-avengers alt/enemy-4
+  (define (easy-villain)
+    (custom-villain #:sprite          wintersoldier-sprite
+                    #:ai              'easy
+                    #:health          50
+                    #:amount-in-world 5))
+
+  (define (hard-villain)
+    (custom-villain #:sprite          redskull-sprite
+                    #:ai              'hard
+                    #:health          200
+                    #:amount-in-world 3))
+  
+  (avengers-game 
+   #:villain-list (list (easy-villain)
+                        (hard-villain)))
   )
 
 ; ---------------

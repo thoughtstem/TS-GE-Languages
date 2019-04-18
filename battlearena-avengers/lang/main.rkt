@@ -38,7 +38,19 @@
 
 ;; ----- HERO
 
-(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-hero #:sprite           (sprite (first (shuffle (list blackwidow-sprite
+                                                                                   gamora-sprite
+                                                                                   ironman-sprite
+                                                                                   starlord-sprite
+                                                                                   captainamerica-sprite
+                                                                                   hawkeye-sprite
+                                                                                   rocketracoon-sprite
+                                                                                   thor-sprite
+                                                                                   drax-sprite
+                                                                                   hulk-sprite
+                                                                                   nickfury-sprite
+                                                                                   tonystark-sprite
+                                                                                   ironpatriot-sprite))))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
                                                                         #:hit-sound HIT-SOUND)]
                                   #:position         [p   (posn 100 100)]
@@ -88,7 +100,13 @@
 ;; ----- VILLAIN
 
 (define/contract/doc (custom-villain #:amount-in-world (amount-in-world 1)
-                                     #:sprite (sprite wintersoldier-sprite)
+                                     #:sprite (sprite (first (shuffle (list mandarin-sprite
+                                                                            redskull-sprite
+                                                                            wintersoldier-sprite
+                                                                            loki-sprite
+                                                                            nebula-sprite
+                                                                            malekith-sprite
+                                                                            ronan-sprite))))
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)

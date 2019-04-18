@@ -45,7 +45,7 @@
          acid-sprite
          ice-sprite
 
-         cutscene
+         custom-cutscene
          page
          )
 
@@ -67,11 +67,6 @@
     (let ()
       (displayln l)
       body ...)))
-
-(define (WIDTH)       480)
-(define (HEIGHT)      360)
-(define (TOTAL-TILES) 9)
-
 
 (define dialog-str? (or/c (listof string?) (listof (listof string?))))
 
@@ -174,17 +169,15 @@
                       (make-posn 12 9))
                 (rectangle 24 18 'outline 'transparent)))
 
-(define (sky-sprite-with-light color)
+;default sky is sized for 2x 480 by 360
+(define (sky-sprite-with-light color #:scale [scale 1])
   (define sky-img (draw-sky-with-light color))
-  (new-sprite sky-img #:scale 20.167))
-
-(define (sky-sprite-with-light-small color)
-  (define sky-img (draw-sky-with-light-small color))
-  (new-sprite sky-img #:scale 40.333))
+  (new-sprite sky-img #:scale (* scale 20.167)))
 
 (define (night-sky-with-lighting #:color         [color 'black]
                                  #:max-alpha     [m-alpha 160]
-                                 #:length-of-day [length-of-day 2400])
+                                 #:length-of-day [length-of-day 2400]
+                                 #:scale         [scale 1])
   (define max-alpha (exact-round (* m-alpha 0.56)))
   (define update-multiplier 2)
   (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
@@ -197,9 +190,9 @@
     (define time-of-day (modulo game-count length-of-day))
     (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
     ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
-    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
+    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val) #:scale scale))
     (update-entity e animated-sprite? new-night-sky))
-  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
+  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha) #:scale scale)
                   #:position (posn 0 0)
                   #:name "night sky"
                   #:components (layer "sky")
@@ -285,25 +278,6 @@
                                        #:start-tile t
                                        #:scale scale)
                   (cons c custom-components)))
-
-; === EXAMPLE GAME DIALOG ===
-(define (player-dialog)
-  (list "Hello. What's your name?"
-        "I'm lost and hungry, can you help me?"))
-
-; Responses must have the same number of lists as items in the player-dialog
-(define (npc1-response)
-  (list (list "Oh, hello! My name is Jordan!"
-              "It's dangerous out here."
-              "You should be careful.")
-        (list "Sorry, I don't have any food to spare."
-              "If you look around though,\nyou might find carrots.")  ))
-
-(define (npc1-response-sprites)
-  (dialog->response-sprites npc1-response
-                            #:game-width (WIDTH)
-                            #:animated #t
-                            #:speed 4))
 
 (define (instructions-entity #:move-keys  [move-keys "ARROW KEYS"]
                              #:mouse-aim? [mouse-aim? #f]
@@ -422,8 +396,8 @@
   (define (remove-gold g e1 e2)
     (if ((crafting? product-name) g e2)
         ((do-many (change-counter-by (- product-cost))
-                  (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                  (do-font-fx)
+                  ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                  ;(do-font-fx)
                   (spawn coin-toast-entity)) g e2)
         e2))
   (observe-change (crafting? product-name) remove-gold))
@@ -446,7 +420,7 @@
 
 (define (lost? g e)
   (define player (get-entity "player" g))
-  (define health (get-stat "health" player))
+  (define health (get-health player))
   (<= health 0))
 
 (define (bg? e)
@@ -505,8 +479,8 @@
                                           (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
                                                                                                   (not/c bg?))))
                     (do-many (change-counter-by coin-value)
-                             (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                             (do-font-fx)
+                             ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                             ;(do-font-fx)
                              (spawn coin-toast-entity))))
       #f))
 
@@ -532,9 +506,9 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components       [first-component (or/c component-or-system? false? (listof false?))]
+        #:components       [first-component (or/c component-or-system? false? (listof false?) observe-change?)]
         )
-       #:rest (rest (listof component-or-system?))
+       #:rest (rest (listof (or/c component-or-system? observe-change?)))
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world
@@ -784,22 +758,26 @@
                     #:position (posn 0 0)
                     #:components (on-start die)))
   
+  (define (health-is-zero? g e)
+    (define h (get-health e))
+    (and h (<= h 0)))
+  
   (define (die-if-health-is-0)
-    (on-rule (λ(g e)
-               (define h (get-storage-data "health-stat" e))
-               (and h (<= h 0)))
-             (do-many
-              (play-sound EXPLOSION-SOUND)
-              (spawn-on-current-tile particles)
-              (spawn death-broadcast)
-              (λ(g e)
-                (add-component e (after-time 2 die)))
-              )))
+    (observe-change health-is-zero?
+                    (λ (g e1 e2)
+                      (if (health-is-zero? g e2)
+                          ((do-many
+                            (play-sound EXPLOSION-SOUND)
+                            (spawn particles)
+                            (spawn death-broadcast)
+                            (do-after-time 1 die)) g e2)
+                          e2))
+                    ))
   
   (custom-combatant #:name "Enemy"
                     #:sprite s
                     #:position (posn 0 0)
-                    #:mode #f
+                    ;#:mode #f
                     ;#:components 
 
                     ;What is making these guys slow???
@@ -826,17 +804,17 @@
                     ))
 
 
-(define (custom-combatant #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+(define (custom-combatant #:sprite     [s (random-character-sprite)]
                           #:position   [p (posn 0 0)]
                           #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                    "Sydney" "Charlie" "Andy")))]
                           #:tile       [tile 0]
-                          #:mode       [mode 'wander]
-                          #:game-width [GAME-WIDTH 480]
+                          ;#:mode       [mode 'wander]
+                          ;#:game-width [GAME-WIDTH 480]
                           #:speed      [spd 2]
-                          #:target     [target "player"]
-                          #:sound      [sound #t]
-                          #:scale      [scale 1]
+                          ;#:target     [target "player"]
+                          ;#:sound      [sound #t]
+                          ;#:scale      [scale 1]
                           #:components [c #f] . custom-components )
 
   (define sprite (if (image? s)
@@ -880,8 +858,7 @@
     (cond [(image-or-images? item)       (list (new-sprite item))]
           [(string-or-text-frame? item)  (list (new-sprite item #:color 'yellow))]
           [(animated-sprite? item)       (list item)]
-          [(and (list? item)
-                ((listof sprite?) (flatten item))) (map ensure-sprite (flatten item))]
+          [((listof sprite?) (flatten item)) (map ensure-sprite (flatten item))]
           [else (error "That wasn't a valid cut-scene item!")]))
   
   (define items-list
@@ -916,9 +893,9 @@
                   #:name       name
                   #:position   (posn (/ game-width 2) (/ game-height 2))
                   #:components (layer "ui")
-                               ;(hidden)
-                               ;(on-start (do-many (go-to-pos 'center)
-                               ;                   show))
+                               (hidden)                                ; This is here just in case
+                               (on-start (do-many (go-to-pos 'center)  ; page gets spawned without
+                                                  show))               ; relative? #f
                                (on-key 'space die)
                                (on-key 'enter die)
                                (storable)))
@@ -941,7 +918,7 @@
             (add-components _ (get-components (list-ref cut-scenes next-scene-index) animated-sprite?))
             (update-entity _ counter? (counter next-scene-index))))))
 
-(define (cutscene . pages)
+(define (custom-cutscene . pages)
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
   (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
@@ -966,7 +943,7 @@
                   #:bg              [bg-ent (plain-forest-bg)]
                   #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                   #:sky             [sky (custom-sky)]
-                  #:cutscene-list   [cutscene-list '()]
+                  #:intro-cutscene  [intro-cutscene #f]
                   #:npc-list        [npc-list  '()]
                   #:enemy-list      [e-list    '()]
                   #:coin-list       [coin-list '()]
@@ -975,14 +952,15 @@
                   #:score-prefix    [prefix "Gold"]
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:rewards-list    [rewards-list '()]
                   #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
        (#:headless         [headless boolean?]
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
-        #:sky              [sky sky?]
-        #:cutscene-list    [cutscene-list (listof entity?)]
+        #:sky              [sky (or/c sky? #f)]
+        #:intro-cutscene   [intro-cutscene entity?]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -990,7 +968,8 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
+        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        #:rewards-list     [rewards-list (listof component-or-system?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
        [res () game?])
@@ -998,6 +977,9 @@
   @{The top-level function for the adventure-game language.
          Can be run with no parameters to get a basic, default game.}
 
+  (define GAME-WIDTH (sprite-width (get-component bg-ent animated-sprite?)))
+  (define GAME-HEIGHT (sprite-height (get-component bg-ent animated-sprite?)))
+  
   ; === AUTO INSTRUCTIONS ===
 
   (define (weapon-entity->player-system e)
@@ -1068,9 +1050,9 @@
                                              show)))
         e))
 
-  (define LENGTH-OF-DAY    (sky-day-length sky))
-  (define START-OF-DAYTIME (sky-day-start sky))
-  (define END-OF-DAYTIME   (sky-day-end sky))
+  (define LENGTH-OF-DAY    (if sky (sky-day-length sky) 2400))
+  (define START-OF-DAYTIME (if sky (sky-day-start sky) 0))
+  (define END-OF-DAYTIME   (if sky (sky-day-end sky) 2400))
 
     ; === DAY/NIGHT FUNCTIONS FOR ENEMY ===
   (define (store-birth-time g e)
@@ -1099,24 +1081,10 @@
         ent))
 
   (define (score-entity prefix)
-    (define outer-border-img (square 1 'solid 'black))
-    (define inner-border-img (square 1 'solid 'white))
-    (define box-img (square 1 'solid 'dimgray))
     (define counter-sprite
-      (list (new-sprite (~a (string-titlecase prefix) " : 0")
-                        #:color 'yellow)
-            (new-sprite  box-img
-                        #:animate #f
-                        #:x-scale (* .8 180)
-                        #:y-scale (* .8 24))
-            (new-sprite inner-border-img
-                        #:animate #f
-                        #:x-scale (* .8 184)
-                        #:y-scale (* .8 28))
-            (new-sprite outer-border-img
-                        #:animate #f
-                        #:x-scale (* .8 186)
-                        #:y-scale (* .8 30))
+      (append (list (new-sprite (~a (string-titlecase prefix) ": 0")
+                        #:color 'yellow))
+              (bordered-box-sprite (* 10 (+ 7 (string-length prefix))) 24)
                    ))
 
     (define (recipe-has-cost? r)
@@ -1129,7 +1097,14 @@
                                  (counter 0)
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
-                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
+                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
+                                 rewards-list
+                                 (observe-change (λ (g e)
+                                                   (get-counter e))
+                                                 (λ (g e1 e2)
+                                                   ((do-many (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                                                             (do-font-fx)) g e2)))
+                                 ))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile e-list)))
@@ -1147,14 +1122,14 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN"))
+                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 30))
                                     (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN")))
-                  (if (empty? cutscene-list)
-                      #f
-                      (after-time 1 (spawn (apply cutscene cutscene-list) #:relative? #f)))
+                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
+                  (if intro-cutscene
+                      (after-time 1 (spawn intro-cutscene #:relative? #f))
+                      #f)
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
   
@@ -1168,9 +1143,14 @@
                        (if p (score-entity prefix) #f)
 
                        (tm-entity)
-                       (night-sky-with-lighting #:color         (sky-color sky)
-                                                #:max-alpha     (sky-max-alpha sky)
-                                                #:length-of-day (sky-day-length sky)) 
+                       (if sky
+                           (night-sky-with-lighting #:color         (sky-color sky)
+                                                    #:max-alpha     (sky-max-alpha sky)
+                                                    #:length-of-day (sky-day-length sky)
+                                                    #:scale         (if (>= GAME-WIDTH GAME-HEIGHT)
+                                                                        (/ GAME-WIDTH 480)
+                                                                        (/ GAME-HEIGHT 360)))
+                            #f)
 
                        ;(if p (health-entity) #f)
 
@@ -1259,7 +1239,7 @@
                                (cons c custom-components)))
 
 
-(define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+(define/contract/doc (custom-npc #:sprite     [s (random-character-sprite)]
                                  #:position   [p (posn 200 200)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]
@@ -1429,6 +1409,8 @@
                                   #:amount-in-world  [world-amt 10]
                                   #:value            [val 10]
                                   #:respawn?         [respawn? #t]
+                                  #:on-pickup        [pickup-function (λ (g e) e)]
+                                  #:cutscene         [cutscene #f]
                                   #:components       [c #f]
                                   . custom-entities)
 
@@ -1442,6 +1424,8 @@
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
+            #:on-pickup [pickup-function procedure?]
+            #:cutscene   [cutscene (or/c entity? #f)]
             #:components [first-component (or/c component-or-system?
                                                 false?
                                                 (listof false?))])
@@ -1472,7 +1456,13 @@
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
-                                         die))))
+                                         (do-many pickup-function
+                                                  (if cutscene
+                                                      (spawn cutscene #:relative? #f)
+                                                      (λ (g e) e)
+                                                      )
+                                                  (do-after-time 1 die) ; 1 tick delay incase function is spawn
+                                                  )))))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]

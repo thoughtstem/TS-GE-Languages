@@ -1,13 +1,19 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt")
-         (all-from-out "../animal/animal-asset-friendly-names.rkt"  ))
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-a start])
+         rand
+         )
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
+(define rand
+  (lambda () (first (shuffle (list apple broccoli grapes onion potato tomato)))))
+
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/farm/foods)
 
 (module ratchet racket
   
@@ -19,10 +25,8 @@
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
-  (define l (list apple brocolli grapes onion potato tomato))
-  
   (define rand
-    (list-ref l (random 0 6)))
+    (lambda () (first (shuffle (list apple broccoli grapes onion potato tomato)))))
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 
@@ -34,7 +38,7 @@
     [rabbit   r (s:scale-to-fit (s:draw-sprite rabbit)   32)]
     
     [apple    a (s:scale-to-fit (s:draw-sprite apple)    32)]
-    [brocolli b (s:scale-to-fit (s:draw-sprite brocolli) 32)]
+    [broccoli b (s:scale-to-fit (s:draw-sprite broccoli) 32)]
     [grapes   g (s:scale-to-fit (s:draw-sprite grapes)   32)]
     [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
     [potato   p (s:scale-to-fit (s:draw-sprite potato)   32)]

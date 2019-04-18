@@ -17,7 +17,7 @@
 
           (apple-sprite apple)
           (banana-sprite banana)
-          (brocolli-sprite brocolli)
+          (broccoli-sprite broccoli)
           (cherries-sprite cherries)
           (eggplant-sprite eggplant)
           (greengrapes-sprite grapes)
@@ -35,9 +35,9 @@
           (goldcoin-sprite gold)
 
           (zookeeper-sprite zookeeper)
-          (lion-sprite lion)
+          ;(lion-sprite lion)
           (monkey-sprite monkey)
-          (tiger-sprite tiger)
+          ;(tiger-sprite tiger)
           (elephant-sprite elephant)
           (giraffe-sprite giraffe)
           (hippo-sprite hippo)
@@ -45,13 +45,20 @@
           (penguin-sprite penguin)
           (zebra-sprite zebra)
 
-          (coppercoin-sprite copper)
-          (silvercoin-sprite silver)
-          (goldcoin-sprite gold)
-          )
+          (ghostfish-sprite ghost-fish)
+          (greenfish-sprite green-fish)
+          (jellyfish-sprite jellyfish)
+          (orangefish-sprite orange-fish)
+          (redfish-sprite red-fish)
+          (shark-sprite shark)
+          (yellowfish-sprite yellow-fish)
+          (starfish-sprite starfish)
+          (octopus-sprite octopus)
+          (crab-sprite crab))
 
          question-icon
-          
+
+         sea-bg
          )
 
 
@@ -88,21 +95,31 @@
            whitehorse-sprite
            wolf-sprite
            
+           ghostfish-sprite
+           greenfish-sprite
+           jellyfish-sprite
+           orangefish-sprite
+           redfish-sprite
+           shark-sprite
+           yellowfish-sprite
+           starfish-sprite
+           octopus-sprite
+           crab-sprite
+           
            zookeeper-sprite
-           lion-sprite
+           ;lion-sprite
            monkey-sprite
-           tiger-sprite
+           ;tiger-sprite
            elephant-sprite
            giraffe-sprite
            hippo-sprite
            kangaroo-sprite
            penguin-sprite
            zebra-sprite
-           
 
            apple-sprite
            banana-sprite
-           brocolli-sprite
+           broccoli-sprite
            cherries-sprite
            eggplant-sprite
            greengrapes-sprite
@@ -284,31 +301,86 @@
                    #:row-number 1
                    #:delay 5))
 
-  ; === ZOO ANIMALS ===
-  (define lion-sprite
-    (sheet->sprite lion-sheet
-                   #:rows 4
-                   #:columns 3
-                   #:row-number 2
-                   #:delay 5))
+  ;===== SEA =====
 
-  (define monkey-sprite
-    (sheet->sprite monkey-sheet
-                   #:rows 4
-                   #:columns 3
-                   #:row-number 2
-                   #:delay 5))
-
-  (define tiger-sprite
-    (sheet->sprite tiger-sheet
-                   #:rows 4
-                   #:columns 3
-                   #:row-number 2
-                   #:delay 5))
-
-  (define zookeeper-sprite
-    (sheet->sprite mystery-sheet
+  (define ghostfish-sprite
+    (sheet->sprite  ghostfish-sheet
+                   #:rows 1
                    #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define greenfish-sprite
+    (sheet->sprite greenfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+  
+  (define jellyfish-sprite
+    (sheet->sprite jellyfish-sheet
+                   #:rows 1
+                   #:columns 8
+                   #:row-number 1
+                   #:delay 5))
+
+  (define orangefish-sprite
+    (sheet->sprite orangefish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define redfish-sprite
+    (sheet->sprite redfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define shark-sprite
+    (sheet->sprite shark-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  
+  (define yellowfish-sprite
+    (sheet->sprite yellowfish-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+  (define starfish-sprite
+    (sheet->sprite starfish-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 5))
+
+  (define octopus-sprite
+    (sheet->sprite octopus-sheet
+                   #:rows 1
+                   #:columns 4
+                   #:row-number 1
+                   #:delay 5))
+
+    (define crab-sprite
+    (sheet->sprite crab-sheet
+                   #:rows 1
+                   #:columns 2
+                   #:row-number 1
+                   #:delay 3))
+
+  ; === ZOO ANIMALS ===
+  
+  (define zookeeper-sprite
+    (sheet->sprite zookeeper-sheet
+                   #:rows 4
+                   #:columns 4
+                   #:row-number 3
                    #:delay 5))
 
   (define (make-wiggle-animation img)
@@ -319,25 +391,27 @@
           
 
   (define elephant-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-elephant)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-elephant)) 5))
 
   (define giraffe-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-giraffe)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-giraffe)) 5))
 
   (define hippo-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-hippo)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-hippo)) 5))
 
   (define kangaroo-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-kangaroo)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-kangaroo)) 5))
+
+  (define monkey-sprite
+    (new-sprite (make-wiggle-animation (scale 0.2 round-monkey)) 5))
 
   (define penguin-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-penguin)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-penguin)) 5))
 
   (define zebra-sprite
-    (new-sprite (make-wiggle-animation (scale 0.25 round-zebra)) 5))
+    (new-sprite (make-wiggle-animation (scale 0.2 round-zebra)) 5))
   
-
-
+  
   ; == FOOD
   (define apple-sprite
     (sheet->sprite apple
@@ -353,8 +427,8 @@
                    #:row-number 1
                    #:delay 5))
 
-  (define brocolli-sprite
-    (sheet->sprite brocolli
+  (define broccoli-sprite
+    (sheet->sprite broccoli
                    #:rows 1
                    #:columns 1
                    #:row-number 1

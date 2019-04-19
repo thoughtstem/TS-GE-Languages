@@ -27,7 +27,7 @@
   (define (crop i)
     (h:crop 0 0 32 32 i))
 
-  (define-visual-language fish-lang
+  (define-visual-language hero-lang
     "./hero-lang.rkt" 
     [blackwidow     b (crop a:blackwidow-sheet)]   
     [gamora         g (crop a:gamora-sheet)]

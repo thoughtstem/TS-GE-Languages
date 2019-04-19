@@ -693,7 +693,7 @@
     (blue fish))
    (green fish)))
 
-; ==== FARM/FOODS
+; ==== FARM/FOODS -- day 1
 (define-example-code k2/lang/farm/foods
   farm-001
   (start chicken
@@ -724,39 +724,42 @@
   (start rand
          (apple broccoli grapes onion potato tomato)))
 
-(define-example-code k2/lang/farm/foods
-  farm-007
-  (start chicken
-         ((apple 5) (tomato 5))))
+; ==== FARM/COINS -- day 2
 
-(define-example-code k2/lang/farm/foods
+(define-example-code k2/lang/farm/coins
+  farm-007
+  (start cow
+         ((apple 5) (kiwi 5))))
+
+(define-example-code k2/lang/farm/coins
   farm-008
   (start llama
          ((rand 3) (rand 5))))
 
-(define-example-code k2/lang/farm/foods
+(define-example-code k2/lang/farm/coins
   farm-009
-  (start horse
+  (start cow
          (rand (rand 2) (rand 3))))
 
-(define-example-code k2/lang/farm/foods
+(define-example-code k2/lang/farm/coins
   farm-010
   (start rabbit
-         (rabbit)))
-
-; ==== FARM/COINS
+         (apple)
+         (copper)))
 
 (define-example-code k2/lang/farm/coins
   farm-011
   (start cow
          (kiwi)
-         (copper)))
+         (gold)))
 
 (define-example-code k2/lang/farm/coins
   farm-012
   (start rand
          (rand)
          (rand)))
+
+; ==== FARM/COINS -- day 3
 
 (define-example-code k2/lang/farm/coins
   farm-013
@@ -794,24 +797,26 @@
          (rand rand)
          (copper silver gold)))
 
-(define-example-code k2/lang/farm/coins
-  farm-019
-  (start potato
-         ((silver 3))
-         (apple)))
+; ==== FARM/ENEMIES -- day 4
 
-(define-example-code k2/lang/farm/coins
+(define-example-code k2/lang/farm/enemies
+  farm-019
+  (start sheep
+         (apple)
+         (silver)
+         (dog)))
+
+(define-example-code k2/lang/farm/enemies
   farm-020
   (start rand
          (rand rand rand rand rand)
          (rand rand rand rand rand)))
 
-; ==== FARM/ENEMIES
 
 (define-example-code k2/lang/farm/enemies
   farm-021
   (start sheep
-         (grapes)
+         (kiwi grapes)
          (silver)
          (dog)))
 
@@ -820,7 +825,7 @@
   (start horse
          (pepper kiwi)
          (silver gold)
-         (wolf)))
+         (dog wolf)))
 
 (define-example-code k2/lang/farm/enemies
   farm-023

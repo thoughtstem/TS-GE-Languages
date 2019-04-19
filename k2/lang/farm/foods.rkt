@@ -2,7 +2,7 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt"
                        "../animal/animal-asset-friendly-names.rkt")
-         (rename-out [start-a start])
+         (rename-out [start-animal start])
          rand
          )
 
@@ -19,7 +19,7 @@
   
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-a start])
+	              [start-animal start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
@@ -30,7 +30,7 @@
   
   (define-visual-language farm-lang
     "../animal/animal-lang.rkt" 
-    [start    x play-icon]
+    [start    = play-icon]
 
     [chicken  c (s:scale-to-fit (s:draw-sprite chicken)  32)]
     [llama    l (s:scale-to-fit (s:draw-sprite llama)    32)]

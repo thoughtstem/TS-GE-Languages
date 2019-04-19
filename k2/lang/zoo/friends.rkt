@@ -9,10 +9,10 @@
          "../animal/animal-asset-friendly-names.rkt")
 
 (define rand
-  (lambda ()
-    (first (shuffle (list zookeeper monkey elephant giraffe
-                          hippo kangaroo penguin apple
-                          copper silver gold)))))
+    (lambda ()
+      (first (shuffle (list zookeeper monkey elephant giraffe
+                            hippo kangaroo penguin
+                            apple banana cherries)))))
 
 (module reader syntax/module-reader
   k2/lang/zoo/friends
@@ -31,8 +31,8 @@
   (define rand
     (lambda ()
       (first (shuffle (list zookeeper monkey elephant giraffe
-                            hippo kangaroo penguin apple
-                            copper silver gold)))))
+                            hippo kangaroo penguin
+                            apple banana cherries)))))
 
   (define (crop i)
     (h:crop 0 0 32 32 i))
@@ -56,11 +56,16 @@
     [kangaroo      k (fit (s:draw-sprite kangaroo))]
     [penguin       p (fit (s:draw-sprite penguin))]
     
-    [apple    a (fit (s:draw-sprite apple))]
+    [apple          a (fit (s:draw-sprite apple))]
+    [banana         b (fit (s:draw-sprite banana))]
+    [cherries       c (fit (s:draw-sprite cherries))]
 
-    [copper   1 (fit (s:draw-sprite copper))]
-    [silver   2 (fit (s:draw-sprite silver))]
-    [gold     3 (fit (s:draw-sprite gold))]
+    [red            R (h:square 32 'solid 'red)]
+    [orange         O (h:square 32 'solid 'orange)]
+    [yellow         Y (h:square 32 'solid 'yellow)]
+    [green          G (h:square 32 'solid 'green)]
+    [blue           B (h:square 32 'solid 'blue)]
+    [purple         P (h:square 32 'solid 'purple)]
 
     [rand     ? question-icon]
     ))

@@ -374,52 +374,6 @@
 ; ==== basic games with sea bg =====
 ;note: sea bg is ugly. find a better one?
 
-;start-sea = avatar + foods + enemies... with sea bg
-#;(define-syntax start-sea
-  (syntax-rules ()
-    [(start-sea avatar-sprite (food-sprite ...))
-     (let ()
-       (define food-list
-         (list (app make-food food-sprite ) ...))
-       (define enemy-list
-         (list (app make-enemy enemy-sprite ) ...))
-
-       (define instructions
-         (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food"
-                            "ENTER to close dialogs"
-                            "I to open these instructions"))
-
-       (launch-for-ratchet
-        (survival-game #:bg           (custom-bg #:image a:sea-bg
-                                                 #:rows 2
-                                                 #:columns 2)
-                       #:sky          #f
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                       #:food-list    food-list
-                       #:score-prefix "Score"
-                       #:instructions instructions)))]))
-
-;start-sea-b = avatar + foods + coins ... with sea bg
-#;(define-syntax-rule (start-sea-b avatar-sprite (food-sprite ...) (coin-sprite ...))
-  (let ()
-    (define food-list
-      (list (app make-food food-sprite ) ...))
-    (define coin-list
-      (list (app make-coin coin-sprite ) ...))
-
-    (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:sea-bg
-                                               #:rows 2
-                                               #:columns 2)
-                     #:sky          #f
-                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                     #:food-list    food-list
-                     #:coin-list    coin-list
-                     #:score-prefix "Score"))
-    
-    ))
-
 ;start-sea = avatar + foods + enemies + coins (no katas, hidden option) ... with sea bg
 (define-syntax start-sea
   (syntax-rules ()

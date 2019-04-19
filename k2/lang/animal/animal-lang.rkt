@@ -1,11 +1,7 @@
 #lang racket
 
-(provide start-a
-         start-b
-         start-c
+(provide start-animal
          start-npc
-         ;start-sea-a
-         ;start-sea-b
          start-sea
          start-sea-npc
          (all-from-out racket))
@@ -49,6 +45,27 @@
                         (curry set-img-hue h)
                         sprite))
 
+(define (make-avatar sprite . options)
+  (define color (findf (or/c string? symbol?) options))
+  (define s (call-if-proc sprite))
+  (custom-avatar #:sprite (if color
+                              (colorize-sprite color s)
+                              s)))
+(define (make-healing-avatar sprite . options)
+  (define color (findf (or/c string? symbol?) options))
+  (define s (call-if-proc sprite))
+  (custom-avatar #:sprite (if color
+                              (colorize-sprite color s)
+                              s)
+                 #:components (custom-weapon-system
+                               #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
+                                                #:damage -10
+                                                #:speed 5)
+                               #:fire-mode 'random
+                               #:fire-rate 10
+                               #:fire-key  'h
+                               #:fire-sound BUBBLE-SOUND)))
+                 
 (define (make-food sprite . options)
   (define amount (or (findf number? options)
                      1))
@@ -148,71 +165,13 @@
 (provide-strings red orange yellow green blue purple
                  pink lightgreen lightblue cyan magenta salmon)
 
-;start-a = avatar + foods
-(define-syntax start-a
+;start-c = avatar + foods (optional) + coins (optional) + enemies (optional)
+(define-syntax start-animal
   (syntax-rules ()
-    [(start-a avatar-sprite (food-sprite ...))
+    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
      (let ()
-       (define food-list
-         (list (app make-food food-sprite ) ...))
-
-       (define instructions
-         (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food"
-                            "ENTER to close dialogs"
-                            "I to open these instructions"))
-
-       (launch-for-ratchet
-        (survival-game #:bg           (custom-bg #:rows 2
-                                                 #:columns 2)
-                       #:sky          #f
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                       #:food-list    food-list
-                       #:score-prefix "Score"
-                       #:instructions instructions))
-       )]
-    [(start-a)                                 (start-a a:question-icon ())]
-    [(start-a avatar-sprite)                   (start-a avatar-sprite ())]
-    ))
-
-;start-b = avatar + foods + coins
-(define-syntax start-b
-  (syntax-rules ()
-    [(start-b avatar-sprite (food-sprite ...) (coin-sprite ...))
-     (let ()
-       (define food-list
-         (list (app make-food food-sprite ) ...))
-       (define coin-list
-         (list (app make-coin coin-sprite ) ...))
-
-       (define instructions
-         (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food and collect coins"
-                            "ENTER to close dialogs"
-                            "I to open these instructions"))
-
-       (launch-for-ratchet
-        (survival-game #:bg           (custom-bg
-                                       #:rows 2
-                                       #:columns 2)
-                       #:sky          #f
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                       #:food-list    food-list
-                       #:coin-list    coin-list
-                       #:score-prefix "Score"
-                       #:instructions instructions))
-    
-       )]
-    [(start-b)                                 (start-b a:question-icon () ())]
-    [(start-b avatar-sprite)                   (start-b avatar-sprite () ())]
-    [(start-b avatar-sprite (food-sprite ...)) (start-b avatar-sprite (food-sprite ...) ())]
-    ))
-
-;start-c = avatar + foods + coins + enemies
-(define-syntax start-c
-  (syntax-rules ()
-    [(start-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
-     (let ()
+       (define avatar
+         (app make-avatar avatar-sprite))
        (define food-list
          (list (app make-food food-sprite ) ...))
        (define coin-list
@@ -230,18 +189,18 @@
         (survival-game #:bg           (custom-bg #:rows 2
                                                  #:columns 2)
                        #:sky          #f
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
+                       #:avatar       avatar
                        #:food-list    food-list
                        #:enemy-list   enemy-list
                        #:coin-list    coin-list
                        #:score-prefix "Score"
                        #:instructions instructions))
        )]
-    [(start-c)                                 (start-c a:question-icon () () ())]
-    [(start-c avatar-sprite)                   (start-c avatar-sprite () () ())]
-    [(start-c avatar-sprite (food-sprite ...)) (start-c avatar-sprite (food-sprite ...) () ())]
-    [(start-c avatar-sprite (food-sprite ...)
-                            (coin-sprite ...)) (start-c avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+    [(start-animal)                                 (start-animal a:question-icon () () ())]
+    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
+    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
+    [(start-animal avatar-sprite (food-sprite ...)
+                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
     ))
     
 
@@ -273,10 +232,14 @@
                         e2))
                    ))
 
-(define (make-hurt-animal s)
-  (define sprite (if (procedure? s) (s) s))
+(define (make-hurt-animal s . options)
+  (define amount (or (findf number? options)
+                     1))
+  (define color (findf (or/c string? symbol?) options))
+  (define sprite (call-if-proc s))
   (define health 10)
   (define max-health 100)
+  
   ; is this actually faster than equal?
   (define (fast-sprite-equal? s1 s2)
     (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
@@ -316,13 +279,16 @@
                   ))
     c)
   
-  (custom-npc #:sprite sprite
+  (custom-npc #:sprite (if color
+                           (colorize-sprite color sprite)
+                           sprite)
               #:tile (random 0 4)
               #:name (first name-and-dialog)
               #:dialog (list (second name-and-dialog))
               #:components (damager 10 (list 'passive 'enemy-team 'bullet))
                            (spawn-message-when-healed)
                            (on-start become-combatant)
+                           (storage "amount-in-world" amount)
               ))
 
 ;start-npc = avatar + npc + healing? + food (optional) coin (optional) enemy (optional)
@@ -330,6 +296,8 @@
   (syntax-rules ()
     [(start-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...))
      (let ()
+       (define avatar
+         (app make-healing-avatar avatar-sprite))
        (define npc-list
          (list (app make-hurt-animal npc-sprite) ...))
        (define food-list
@@ -350,15 +318,7 @@
                                                  #:components (on-key 'm (open-mini-map #:close-key 'm)))
                        #:sky          #f
                        #:starvation-rate -1000
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
-                                                     #:components (custom-weapon-system
-                                                                   #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
-                                                                                    #:damage -10
-                                                                                    #:speed 5)
-                                                                   #:fire-mode 'random
-                                                                   #:fire-rate 10
-                                                                   #:fire-key  'h
-                                                                   #:fire-sound BUBBLE-SOUND))
+                       #:avatar       avatar
                        #:npc-list     npc-list
                        #:food-list    food-list
                        #:enemy-list   enemy-list
@@ -379,6 +339,8 @@
   (syntax-rules ()
     [(start-sea avatar-sprite (food-sprite ...) (enemy-sprite ...) (coin-sprite ...))
      (let ()
+       (define avatar
+         (app make-avatar avatar-sprite))
        (define food-list
          (list (app make-food food-sprite ) ...))
        (define enemy-list
@@ -397,7 +359,7 @@
                                                  #:rows 2
                                                  #:columns 2)
                        #:sky          #f
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
+                       #:avatar       avatar
                        #:food-list    food-list
                        #:enemy-list   enemy-list
                        #:score-prefix "Score"
@@ -418,6 +380,8 @@
   (syntax-rules ()
     [(start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...)(coin-sprite ...))
      (let ()
+       (define avatar
+         (app make-healing-avatar avatar-sprite))
        (define npc-list
          (list (app make-hurt-animal npc-sprite) ...))
        (define food-list
@@ -440,15 +404,7 @@
                                                  #:columns 2)
                        #:sky          #f
                        #:starvation-rate -1000
-                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
-                                                     #:components (custom-weapon-system
-                                                                   #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
-                                                                                    #:damage -10
-                                                                                    #:speed 5)
-                                                                   #:fire-mode 'random
-                                                                   #:fire-rate 10
-                                                                   #:fire-key  'h
-                                                                   #:fire-sound BUBBLE-SOUND))
+                       #:avatar       avatar
                        #:npc-list     npc-list
                        #:food-list    food-list
                        #:enemy-list   enemy-list

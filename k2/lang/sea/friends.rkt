@@ -55,6 +55,13 @@
     [mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
     [pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
 
+    [red    R (h:square 32 'solid 'red)]
+    [orange O (h:square 32 'solid 'orange)]
+    [yellow Y (h:square 32 'solid 'yellow)]
+    [green  G (h:square 32 'solid 'green)]
+    [blue   B (h:square 32 'solid 'blue)]
+    [purple P (h:square 32 'solid 'purple)]
+
     [rand     ? question-icon]
     ))
 

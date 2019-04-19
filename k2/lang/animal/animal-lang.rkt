@@ -4,9 +4,9 @@
          ;start-b
          ;start-c
          start-npc
-         start-sea-a
-         start-sea-b
-         start-sea-c
+         ;start-sea-a
+         ;start-sea-b
+         start-sea
          start-sea-npc
          (all-from-out racket))
 
@@ -374,23 +374,34 @@
 ; ==== basic games with sea bg =====
 ;note: sea bg is ugly. find a better one?
 
-;start-sea-a = avatar + foods ... with sea bg
-(define-syntax-rule (start-sea-a avatar-sprite (food-sprite ...))
-  (let ()
-    (define food-list
-      (list (app make-food food-sprite ) ...))
+;start-sea = avatar + foods + enemies... with sea bg
+#;(define-syntax start-sea
+  (syntax-rules ()
+    [(start-sea avatar-sprite (food-sprite ...))
+     (let ()
+       (define food-list
+         (list (app make-food food-sprite ) ...))
+       (define enemy-list
+         (list (app make-enemy enemy-sprite ) ...))
 
-    (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:sea-bg
-                                               #:rows 2
-                                               #:columns 2)
-                     #:sky          #f
-                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                     #:food-list    food-list
-                     #:score-prefix "Score"))))
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"))
+
+       (launch-for-ratchet
+        (survival-game #:bg           (custom-bg #:image a:sea-bg
+                                                 #:rows 2
+                                                 #:columns 2)
+                       #:sky          #f
+                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
+                       #:food-list    food-list
+                       #:score-prefix "Score"
+                       #:instructions instructions)))]))
 
 ;start-sea-b = avatar + foods + coins ... with sea bg
-(define-syntax-rule (start-sea-b avatar-sprite (food-sprite ...) (coin-sprite ...))
+#;(define-syntax-rule (start-sea-b avatar-sprite (food-sprite ...) (coin-sprite ...))
   (let ()
     (define food-list
       (list (app make-food food-sprite ) ...))
@@ -409,48 +420,104 @@
     
     ))
 
-;start-sea-c = avatar + foods + coins + enemies ... with sea bg
-(define-syntax-rule (start-sea-c avatar-sprite (food-sprite ...) (enemy-sprite ...) )
-  (let ()
-    (define food-list
-      (list (app make-food food-sprite ) ...))
-    (define enemy-list
-      (list (app make-enemy enemy-sprite ) ...))
+;start-sea = avatar + foods + enemies + coins (no katas, hidden option) ... with sea bg
+(define-syntax start-sea
+  (syntax-rules ()
+    [(start-sea avatar-sprite (food-sprite ...) (enemy-sprite ...) (coin-sprite ...))
+     (let ()
+       (define food-list
+         (list (app make-food food-sprite ) ...))
+       (define enemy-list
+         (list (app make-enemy enemy-sprite ) ...))
+       (define coin-list
+         (list (app make-coin coin-sprite ) ...))
 
-    (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:sea-bg
-                                               #:rows 2
-                                               #:columns 2)
-                     #:sky          #f
-                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
-                     #:food-list    food-list
-                     #:enemy-list   enemy-list
-                     #:score-prefix "Score"))
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"))
+
+       (launch-for-ratchet
+        (survival-game #:bg           (custom-bg #:image a:sea-bg
+                                                 #:rows 2
+                                                 #:columns 2)
+                       #:sky          #f
+                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
+                       #:food-list    food-list
+                       #:enemy-list   enemy-list
+                       #:score-prefix "Score"
+                       #:instructions instructions)))]
+    
+    [(start-sea)                                  (start-sea a:question-icon () () ())]
+    [(start-sea avatar-sprite)                    (start-sea avatar-sprite () () ())]
+    [(start-sea avatar-sprite (food-sprite ...))  (start-sea avatar-sprite (food-sprite ...) () ())]
+    [(start-sea avatar-sprite (food-sprite ...)
+                              (enemy-sprite ...)) (start-sea avatar-sprite (food-sprite ...) (enemy-sprite ...) ())]
+    [(start-sea avatar-sprite (food-sprite ...)
+                              (enemy-sprite ...)
+                              (coin-sprite ...))  (start-sea avatar-sprite (food-sprite ...) (enemy-sprite ...) (coin-sprite ...))]
     ))
 
-;start-sea-npc = avatar + npc + healing? ... with sea bg
-(define-syntax-rule (start-sea-npc avatar-sprite (npc-sprite ...))
-  (let ()
-    (define npc-list
-      (list (app make-hurt-animal npc-sprite) ...))
+;start-sea-npc = avatar + npc + food + enemy + coin ... with sea bg
+(define-syntax start-sea-npc
+  (syntax-rules ()
+    [(start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...)(coin-sprite ...))
+     (let ()
+       (define npc-list
+         (list (app make-hurt-animal npc-sprite) ...))
+       (define food-list
+         (list (app make-food food-sprite ) ...))
+       (define enemy-list
+         (list (app make-enemy enemy-sprite ) ...))
+       (define coin-list
+         (list (app make-coin coin-sprite ) ...))
 
-    (launch-for-ratchet
-      (survival-game #:bg           (custom-bg #:image a:sea-bg
-                                               #:rows 2
-                                               #:columns 2)
-                     #:sky          #f
-                     #:starvation-rate -1000
-                     #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
-                                                   #:components (custom-weapon-system
-                                                                 #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
-                                                                                  #:damage -10
-                                                                                  #:speed 5)
-                                                                 #:fire-mode 'random
-                                                                 #:fire-rate 10
-                                                                 #:fire-key  'h
-                                                                 #:fire-sound BUBBLE-SOUND))
-                     #:npc-list     npc-list
-                     #:score-prefix "Animals Healed"))
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and talk"
+                            "ENTER to close dialogs"
+                            "H to heal"
+                            "I to open these instructions"))
+
+       (launch-for-ratchet
+        (survival-game #:bg           (custom-bg #:image a:sea-bg
+                                                 #:rows 2
+                                                 #:columns 2)
+                       #:sky          #f
+                       #:starvation-rate -1000
+                       #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
+                                                     #:components (custom-weapon-system
+                                                                   #:dart (ice-dart #:sprite (new-sprite "+" #:color 'lightgreen)
+                                                                                    #:damage -10
+                                                                                    #:speed 5)
+                                                                   #:fire-mode 'random
+                                                                   #:fire-rate 10
+                                                                   #:fire-key  'h
+                                                                   #:fire-sound BUBBLE-SOUND))
+                       #:npc-list     npc-list
+                       #:food-list    food-list
+                       #:enemy-list   enemy-list
+                       #:coin-list    coin-list
+                       #:score-prefix "Animals Healed"
+                       #:instructions instructions)))]
+
+    [(start-sea-npc)                    (start-sea-npc a:question-icon () () () ())]
+    [(start-sea-npc avatar-sprite)      (start-sea-npc avatar-sprite () () () ())]
+    [(start-sea-npc avatar-sprite
+                    (npc-sprite ...))   (start-sea-npc avatar-sprite (npc-sprite ...) () () ())]
+    [(start-sea-npc avatar-sprite
+                    (npc-sprite ...)
+                    (food-sprite ...))  (start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) () ())]
+    [(start-sea-npc avatar-sprite
+                    (npc-sprite ...)
+                    (food-sprite ...)
+                    (enemy-sprite ...)) (start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...) ())]
+    [(start-sea-npc avatar-sprite
+                    (npc-sprite ...)
+                    (food-sprite ...)
+                    (enemy-sprite ...)
+                    (coin-sprite ...))  (start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...) (coin-sprite ...))]
     ))
 
 

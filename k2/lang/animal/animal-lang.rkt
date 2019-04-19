@@ -12,7 +12,10 @@
 
 (require survival
          ratchet/util
+         (for-syntax racket)
          (prefix-in a: "./animal-asset-friendly-names.rkt"))
+
+
 
 (define growl-sprite
   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
@@ -33,49 +36,93 @@
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
 
-(define (make-food sprite [amt 1])
-  (if (procedure? sprite)
-      (λ ()
-        (custom-food #:sprite (sprite)
-                     #:amount-in-world amt))
-      (custom-food #:sprite sprite
-                   #:amount-in-world amt)))
+; Color a sprite using setting hue and saturation but not brightness
+; UPDATE: Commenting out saturation for now.
+;         Settting both sat and hue seems to result in scary red eyes.
+(define/contract (colorize-sprite color-name sprite)
+  (-> (or/c string? symbol?) animated-sprite? animated-sprite?)
+  (define c-hsb (name->color-hsb color-name))
+  (define h (color-hsb-hue c-hsb))
+  ;(define s (color-hsb-sat c-hsb))
+  (apply-image-function ;(compose (curry set-img-sat s)
+                        ;         (curry set-img-hue h))
+                        (curry set-img-hue h)
+                        sprite))
 
-(define (make-friend sprite)
+(define (make-food sprite . options)
+  (define amount (or (findf number? options)
+                     1))
+  (define color (findf (or/c string? symbol?) options))
+  
   (if (procedure? sprite)
       (λ ()
-        (custom-npc #:sprite (sprite)
+        (custom-food #:sprite (if color
+                                  (colorize-sprite color (sprite))
+                                  (sprite))
+                     #:amount-in-world amount))
+      (custom-food #:sprite (if color
+                                (colorize-sprite color sprite)
+                                sprite)
+                   #:amount-in-world amount)))
+
+;NOTE: amount-in-world for custom-npc has not been implemented yet
+(define (make-friend sprite . options)
+  (define amount (or (findf number? options)
+                     1))
+  (define color (findf (or/c string? symbol?) options))
+  (if (procedure? sprite)
+      (λ ()
+        (custom-npc #:sprite (if color
+                                  (colorize-sprite color (sprite))
+                                  (sprite))
               #:tile (random 0 4)))
-      (custom-npc #:sprite sprite
+      (custom-npc #:sprite (if color
+                                (colorize-sprite color sprite)
+                                sprite)
                   #:tile (random 0 4))))
 
-(define (make-enemy sprite [amt 1])
+(define (make-enemy sprite . options)
+  (define amount (or (findf number? options)
+                     1))
+  (define color (findf (or/c string? symbol?) options))
+  
   (if (procedure? sprite)
       (λ ()
-        (custom-enemy #:sprite (sprite)
-                      #:amount-in-world amt
+        (custom-enemy #:sprite (if color
+                                  (colorize-sprite color (sprite))
+                                  (sprite))
+                      #:amount-in-world amount
                       #:weapon (custom-weapon #:name "Evilness"
                                               #:dart (growl-dart))))
-      (custom-enemy #:sprite sprite
-                    #:amount-in-world amt
+      (custom-enemy #:sprite (if color
+                                (colorize-sprite color sprite)
+                                sprite)
+                    #:amount-in-world amount
                     #:weapon (custom-weapon #:name "Evilness"
                                             #:dart (growl-dart)))))
 
-(define (make-coin sprite [amt #f])
+(define (make-coin sprite . options)
+  (define amount (findf number? options))
+  (define color (findf (or/c string? symbol?) options))
+  
   (define s (if (procedure? sprite)
-                (sprite)
-                sprite))
+                (if color
+                    (colorize-sprite color (sprite))
+                    (sprite))
+                (if color
+                    (colorize-sprite color sprite)
+                    sprite)))
   (cond
     [(equal? sprite a:gold) (custom-coin #:sprite s
                                          #:value  3
-                                         #:amount-in-world (or amt 1)
+                                         #:amount-in-world (or amount 1)
                                          #:name "Gold")]
     [(equal? sprite a:silver) (custom-coin #:sprite s
                                            #:value  2
-                                           #:amount-in-world (or amt 5) 
+                                           #:amount-in-world (or amount 5) 
                                            #:name "Silver")]
     [else  (custom-coin #:sprite s
-                        #:value (or amt 1))]))
+                        #:value (or amount 1))]))
 
 (define (call-if-proc p)
   (if (procedure? p)
@@ -88,6 +135,19 @@
 
     [(_ f arg) #'(f arg)] ) )
 
+(define-syntax (provide-string stx)
+  (define id (second (syntax->datum stx)))
+  (datum->syntax stx
+                 `(begin
+                    (provide ,id)
+                    (define ,id ,(~a id)))))
+
+(define-syntax-rule (provide-strings s ...)
+  (begin (provide-string s) ...))
+
+(provide-strings red orange yellow green blue purple
+                 pink lightgreen lightblue cyan magenta salmon)
+
 ;start-a = avatar + foods
 (define-syntax start-a
   (syntax-rules ()
@@ -96,13 +156,21 @@
        (define food-list
          (list (app make-food food-sprite ) ...))
 
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"))
+
        (launch-for-ratchet
         (survival-game #:bg           (custom-bg #:rows 2
                                                  #:columns 2)
                        #:sky          #f
                        #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                        #:food-list    food-list
-                       #:score-prefix "Score")))]
+                       #:score-prefix "Score"
+                       #:instructions instructions))
+       )]
     [(start-a)                                 (start-a a:question-icon ())]
     [(start-a avatar-sprite)                   (start-a avatar-sprite ())]
     ))
@@ -117,6 +185,12 @@
        (define coin-list
          (list (app make-coin coin-sprite ) ...))
 
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and collect coins"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"))
+
        (launch-for-ratchet
         (survival-game #:bg           (custom-bg
                                        #:rows 2
@@ -125,7 +199,8 @@
                        #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite))
                        #:food-list    food-list
                        #:coin-list    coin-list
-                       #:score-prefix "Score"))
+                       #:score-prefix "Score"
+                       #:instructions instructions))
     
        )]
     [(start-b)                                 (start-b a:question-icon () ())]
@@ -145,6 +220,12 @@
        (define enemy-list
          (list (app make-enemy enemy-sprite ) ...))
 
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and collect coins"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"))
+
        (launch-for-ratchet
         (survival-game #:bg           (custom-bg #:rows 2
                                                  #:columns 2)
@@ -153,7 +234,8 @@
                        #:food-list    food-list
                        #:enemy-list   enemy-list
                        #:coin-list    coin-list
-                       #:score-prefix "Score"))
+                       #:score-prefix "Score"
+                       #:instructions instructions))
        )]
     [(start-c)                                 (start-c a:question-icon () () ())]
     [(start-c avatar-sprite)                   (start-c avatar-sprite () () ())]
@@ -178,13 +260,15 @@
        (= h max-h)))
 
 (define (spawn-message-when-healed)
+  (define healed-toast (toast-entity "HEALED" #:color 'green))
+  (precompile! healed-toast)
   (observe-change health-at-max?
                   (λ (g e1 e2)
                     (if (health-at-max? g e2)
                         ((do-many
                           (play-sound PICKUP-SOUND)
                           (spawn (custom-particles))
-                          (spawn (toast-entity "HEALED" #:color 'green))
+                          (spawn healed-toast)
                           (spawn healed-broadcast)) g e2)
                         e2))
                    ))
@@ -253,9 +337,17 @@
        (define enemy-list
          (list (app make-enemy enemy-sprite ) ...))
 
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and talk"
+                            "ENTER to close dialogs"
+                            "H to heal animals"
+                            "I to open these instructions"))
+
        (launch-for-ratchet
         (survival-game #:bg           (custom-bg #:rows 2
-                                                 #:columns 2)
+                                                 #:columns 2
+                                                 #:components (on-key 'm (open-mini-map #:close-key 'm)))
                        #:sky          #f
                        #:starvation-rate -1000
                        #:avatar       (custom-avatar #:sprite (call-if-proc avatar-sprite)
@@ -270,7 +362,8 @@
                        #:npc-list     npc-list
                        #:food-list    food-list
                        #:enemy-list   enemy-list
-                       #:score-prefix "Animals Healed"))
+                       #:score-prefix "Animals Healed"
+                       #:instructions instructions))
        )]
     [(start-npc)                                (start-npc a:question-icon () () ())]
     [(start-npc avatar-sprite)                  (start-npc avatar-sprite () () ())]

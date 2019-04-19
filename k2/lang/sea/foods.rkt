@@ -3,7 +3,7 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt")
          (all-from-out "../animal/animal-asset-friendly-names.rkt"  )
-         (rename-out [start-sea-a start])
+         (rename-out [start-sea start])
          rand)
 
 (require "../animal/animal-lang.rkt"
@@ -20,7 +20,7 @@
   
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-sea-a start])
+	              [start-sea start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
@@ -46,6 +46,13 @@
     [kiwi      k (s:scale-to-fit (s:draw-sprite kiwi)      32)]
     [tomato    t (s:scale-to-fit (s:draw-sprite tomato)    32)]
     [apple     a (s:scale-to-fit (s:draw-sprite apple)     32)]
+
+    [red    R (h:square 32 'solid 'red)]
+    [orange O (h:square 32 'solid 'orange)]
+    [yellow Y (h:square 32 'solid 'yellow)]
+    [green  G (h:square 32 'solid 'green)]
+    [blue   B (h:square 32 'solid 'blue)]
+    [purple P (h:square 32 'solid 'purple)]
 
     [rand     ? question-icon]
     ))

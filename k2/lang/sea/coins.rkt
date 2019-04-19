@@ -3,7 +3,7 @@
 
 (provide (all-from-out "../animal/animal-lang.rkt")
          (all-from-out "../animal/animal-asset-friendly-names.rkt"  )
-         (rename-out [start-sea-b start])
+         (rename-out [start-sea start])
          rand)
 
 (require "../animal/animal-lang.rkt"
@@ -21,7 +21,7 @@
   
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-sea-b start])
+	              [start-sea start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
@@ -50,6 +50,13 @@
     [copper     1 (s:scale-to-fit (s:draw-sprite copper)     32)]
     [silver     2 (s:scale-to-fit (s:draw-sprite silver)     32)]
     [gold       3 (s:scale-to-fit (s:draw-sprite gold)       32)]
+
+    [red    R (h:square 32 'solid 'red)]
+    [orange O (h:square 32 'solid 'orange)]
+    [yellow Y (h:square 32 'solid 'yellow)]
+    [green  G (h:square 32 'solid 'green)]
+    [blue   B (h:square 32 'solid 'blue)]
+    [purple P (h:square 32 'solid 'purple)]
 
     [rand     ? question-icon]
     ))

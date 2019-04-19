@@ -923,6 +923,8 @@
   (start rand
          (pineapple broccoli kiwi tomato apple)))
 
+;day 1/2 split
+
 (define-example-code k2/lang/sea/foods
   sea-007
   (start apple
@@ -944,67 +946,7 @@
          (green-fish)))
 
 ; ==== SEA/COINS
-; commented out to keep from funneling into summer collection
-
-#;(define-example-code k2/lang/sea/coins
-    sea-011
-    (start shark
-           (kiwi)
-           (copper)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-012
-    (start rand
-           (rand)
-           (rand)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-013
-    (start octopus
-           (pineapple rand)
-           (silver rand)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-014
-    (start jellyfish
-           (broccoli apple)
-           (gold)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-015
-    (start rand
-           (copper)
-           (apple)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-016
-    (start rand
-           (rand rand)
-           (rand rand)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-017
-    (start rand
-           (tomato)
-           (rand rand)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-018
-    (start rand
-           (rand rand)
-           (copper silver gold)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-019
-    (start broccoli
-           (rand)
-           (rand)))
-
-#;(define-example-code k2/lang/sea/coins
-    sea-020
-    (start rand
-           (rand rand rand rand rand)
-           (rand rand rand rand rand)))
+; removed from katas. optional addition at the end of start-sea and start-sea-npc
 
 ; ==== SEA/ENEMIES
 

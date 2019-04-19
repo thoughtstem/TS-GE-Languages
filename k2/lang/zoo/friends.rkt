@@ -60,9 +60,12 @@
     [banana         b (fit (s:draw-sprite banana))]
     [cherries       c (fit (s:draw-sprite cherries))]
 
-    [red            r (h:square 32 'solid 'red)]
-    [orange         o (h:square 32 'solid 'orange)]
-    [yellow         y (h:square 32 'solid 'yellow)]
+    [red            R (h:square 32 'solid 'red)]
+    [orange         O (h:square 32 'solid 'orange)]
+    [yellow         Y (h:square 32 'solid 'yellow)]
+    [green          G (h:square 32 'solid 'green)]
+    [blue           B (h:square 32 'solid 'blue)]
+    [purple         P (h:square 32 'solid 'purple)]
 
     [rand     ? question-icon]
     ))

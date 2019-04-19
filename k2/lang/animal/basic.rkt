@@ -21,6 +21,6 @@
     "./animal-lang.rkt"
     [cat     c (crop s:CAT-SHEET)]
 
-    [start-a   s play-icon]))
+    [start-animal   s play-icon]))
 
 

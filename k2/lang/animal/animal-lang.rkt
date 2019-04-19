@@ -1,8 +1,8 @@
 #lang racket
 
-(provide start-a
-         start-b
-         start-c
+(provide start-animal
+         ;start-b
+         ;start-c
          start-npc
          start-sea-a
          start-sea-b
@@ -149,7 +149,7 @@
                  pink lightgreen lightblue cyan magenta salmon)
 
 ;start-a = avatar + foods
-(define-syntax start-a
+#|(define-syntax start-a
   (syntax-rules ()
     [(start-a avatar-sprite (food-sprite ...))
      (let ()
@@ -206,12 +206,12 @@
     [(start-b)                                 (start-b a:question-icon () ())]
     [(start-b avatar-sprite)                   (start-b avatar-sprite () ())]
     [(start-b avatar-sprite (food-sprite ...)) (start-b avatar-sprite (food-sprite ...) ())]
-    ))
+    ))|#
 
-;start-c = avatar + foods + coins + enemies
-(define-syntax start-c
+;start-c = avatar + foods (optional) + coins (optional) + enemies (optional)
+(define-syntax start-animal
   (syntax-rules ()
-    [(start-c avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
      (let ()
        (define food-list
          (list (app make-food food-sprite ) ...))
@@ -237,11 +237,11 @@
                        #:score-prefix "Score"
                        #:instructions instructions))
        )]
-    [(start-c)                                 (start-c a:question-icon () () ())]
-    [(start-c avatar-sprite)                   (start-c avatar-sprite () () ())]
-    [(start-c avatar-sprite (food-sprite ...)) (start-c avatar-sprite (food-sprite ...) () ())]
-    [(start-c avatar-sprite (food-sprite ...)
-                            (coin-sprite ...)) (start-c avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+    [(start-animal)                                 (start-animal a:question-icon () () ())]
+    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
+    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
+    [(start-animal avatar-sprite (food-sprite ...)
+                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
     ))
     
 

@@ -1,7 +1,6 @@
 #lang racket
 
 (require ts-kata-util
-         "./lang/main.rkt"
          battlearena-avengers)
 
 (define-example-code/from* battlearena/examples)

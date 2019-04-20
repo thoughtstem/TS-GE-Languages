@@ -11,7 +11,8 @@
          (for-syntax racket)
          (prefix-in a: "./animal-asset-friendly-names.rkt"))
 
-
+(define (fast-sprite-equal? s1 s2)
+    (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
 
 (define growl-sprite
   (overlay/offset (rotate -45 (rectangle 6 4 'solid 'black))
@@ -130,16 +131,17 @@
                     (colorize-sprite color sprite)
                     sprite)))
   (cond
-    [(equal? sprite a:gold) (custom-coin #:sprite s
-                                         #:value  3
-                                         #:amount-in-world (or amount 1)
-                                         #:name "Gold")]
-    [(equal? sprite a:silver) (custom-coin #:sprite s
-                                           #:value  2
-                                           #:amount-in-world (or amount 5) 
-                                           #:name "Silver")]
+    [(fast-sprite-equal? (call-if-proc sprite) a:gold) (custom-coin #:sprite s
+                                                                    #:value  3
+                                                                    #:amount-in-world (or amount 1)
+                                                                    #:name "Gold")]
+    [(fast-sprite-equal? (call-if-proc sprite) a:silver) (custom-coin #:sprite s
+                                                                      #:value  2
+                                                                      #:amount-in-world (or amount 5) 
+                                                                      #:name "Silver")]
     [else  (custom-coin #:sprite s
-                        #:value (or amount 1))]))
+                        #:value 1
+                        #:amount-in-world (or amount 10))]))
 
 (define (call-if-proc p)
   (if (procedure? p)
@@ -240,9 +242,6 @@
   (define health 10)
   (define max-health 100)
   
-  ; is this actually faster than equal?
-  (define (fast-sprite-equal? s1 s2)
-    (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
   (define name-and-dialog (cond ;[(fast-sprite-equal? sprite a:lion)     (list "Lion"     "RoaAaRR!")]
                                 [(fast-sprite-equal? sprite a:monkey)   (list "Monkey"   "*screams*")]
                                 [(fast-sprite-equal? sprite a:elephant) (list "Elephant" "*trumpet sound*")]

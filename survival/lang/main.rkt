@@ -473,7 +473,7 @@
                  #:components       [c #f]
                                     . custom-components)
   (->i ()
-       (#:sprite           [sprite sprite?]
+       (#:sprite           [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position         [position posn?]
         #:speed            [speed number?]
@@ -564,8 +564,8 @@
                                     #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite (or/c sprite? (listof sprite?))]
-        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
+        #:sprite            [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?) string? (listof string?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]
@@ -694,7 +694,7 @@
                                    )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite [sprite (or/c sprite? (listof sprite?))]
+           #:sprite [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
            #:ai [ai ai-level?]
            #:health [health positive?]
            ;#:shield [shield positive?]
@@ -1096,7 +1096,7 @@
        (#:position   [position posn?]
         #:tile       [tile number?]
         #:name       [name string?]
-        #:sprite     [sprite (or/c sprite? (listof sprite?))]
+        #:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
         #:open-key     [open-key (or/c string? symbol?)]
         #:open-sound   [open-sound (or/c rsound? procedure? '() #f)]
         #:select-sound [select-sound (or/c rsound? procedure? '() #f)]
@@ -1137,7 +1137,7 @@
                                  #:components [c (on-start (respawn 'anywhere))]
                                  . custom-components )
 
-  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -1244,7 +1244,7 @@
                                   #:components       [c #f]
                                   . custom-entities)
   (->i () (#:entity     [entity entity?]
-           #:sprite     [sprite (or/c sprite? (listof sprite?))]
+           #:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -1263,6 +1263,7 @@
   
   (define sprite (cond [(image? s)           (new-sprite s)]
                        [(animated-sprite? s) s             ]
+                       [(string? s)          (new-sprite s)]
                        [else              #f]))
   (define name   (if n (entity-name n) #f))
   (define tile   (if t (active-on-bg t) #f))
@@ -1298,7 +1299,7 @@
 
   ;change contracts to accept #f
    (->i () (#:entity   [entity entity?]
-            #:sprite   [sprite (or/c sprite? (listof sprite?) #f)]
+            #:sprite   [sprite (or/c sprite? (listof sprite?) string? (listof string?) #f)]
             #:position [position (or/c posn? #f)]
             #:name     [name (or/c string? #f)]
             #:tile     [tile (or/c number? #f)]

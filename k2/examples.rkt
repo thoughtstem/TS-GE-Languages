@@ -1249,7 +1249,7 @@
 
 (define-example-code k2/lang/zoo/friends
   zoo-026
-  (start (zookeper red)
+  (start (zookeeper red)
          ((giraffe green 4) (giraffe purple 4))))
 
 (define-example-code k2/lang/zoo/friends

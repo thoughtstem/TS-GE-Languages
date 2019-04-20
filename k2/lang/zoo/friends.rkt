@@ -59,6 +59,7 @@
     [apple          a (fit (s:draw-sprite apple))]
     [banana         b (fit (s:draw-sprite banana))]
     [cherries       c (fit (s:draw-sprite cherries))]
+    [fish           f (fit (s:draw-sprite fish))]
 
     [red            R (h:square 32 'solid 'red)]
     [orange         O (h:square 32 'solid 'orange)]

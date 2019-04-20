@@ -1132,140 +1132,152 @@
   (start rand
          (apple banana grapes onion tomato)))
 
-(define-example-code k2/lang/zoo/foods
+; ==== ZOO/FOOD+COINS DAY 2
+
+(define-example-code k2/lang/zoo/coins
   zoo-007
-  (start apple
-         (banana)))
+  (start hippo
+         ((apple 5) (banana 5))))
 
 (define-example-code k2/lang/zoo/foods
   zoo-008
-  (start potato
-         (rand rand)))
+  (start hippo
+         ((apple 3) (rand 5))))
 
 (define-example-code k2/lang/zoo/foods
   zoo-009
-  (start grapes
-         (rand rand rand)))
+  (start monkey
+         ((banana red) (banana green) (banana blue))))
 
 (define-example-code k2/lang/zoo/foods
   zoo-010
   (start hippo
-         (rand rand rand rand rand rand)))
-
-; ==== ZOO/COINS
+         (rand purple 5)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-011
-  (start giraffe
-         (apple)
+  (start penguin
+         (fish)
          (copper)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-012
   (start rand
          (rand)
-         (rand)))
+         (gold green 5)))
+
+; ==== ZOO/FARM+COINS DAY 3
 
 (define-example-code k2/lang/zoo/coins
   zoo-013
-  (start elephant
-         (apple rand)
-         (silver rand)))
+  (start zookeeper
+         (apple)
+         (copper silver gold)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-014
-  (start jellyfish
+  (start zookeeper
          (apple banana)
-         (gold)))
+         ((gold 2) (silver 4) (copper 6))))
 
 (define-example-code k2/lang/zoo/coins
   zoo-015
   (start rand
-         (copper)
-         (apple)))
+         ((rand 10))
+         ((gold purple 10))))
 
 (define-example-code k2/lang/zoo/coins
   zoo-016
-  (start rand
-         (rand rand)
-         (rand rand)))
+  (start (penguin green)
+         (fish blue 5)
+         (gold red 10)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-017
-  (start rand
-         (apple)
-         (rand rand)))
+  (start monkey
+         (banana 10))
+  (start monkey
+         (banana 10)
+         (silver 10)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-018
   (start rand
          (rand rand)
-         (copper silver gold)))
-
-(define-example-code k2/lang/zoo/coins
-  zoo-019
-  (start banana
-         (rand)
-         (rand)))
-
-(define-example-code k2/lang/zoo/coins
-  zoo-020
+         ((copper 5))
   (start rand
-         (rand rand rand rand rand)
-         (rand rand rand rand rand)))
+         (rand rand)
+         ((gold 10))
+         )))
 
-;==== ZOO/FRIENDS ====
+;==== ZOO/FRIENDS DAY 4
 
 (define-example-code k2/lang/zoo/friends
-  zoo-021
+  zoo-019
   (start zookeeper
          (monkey)))
 
 (define-example-code k2/lang/zoo/friends
-  zoo-022
+  zoo-020
   (start zookeeper
          (monkey elephant giraffe)))
 
 (define-example-code k2/lang/zoo/friends
-  zoo-023
+  zoo-021
   (start zookeeper
          (hippo kangaroo)))
 
 (define-example-code k2/lang/zoo/friends
-  zoo-024
+  zoo-022
   (start zookeeper
          (penguin penguin penguin)))
 
 (define-example-code k2/lang/zoo/friends
-  zoo-025
-  (start rand
+  zoo-023
+  (start zookeeper
          (monkey monkey elephant elephant)))
 
 (define-example-code k2/lang/zoo/friends
-  zoo-026
+  zoo-024
   (start zookeeper
-         (apple apple apple apple)))
+         ((monkey 2) (elephant 2))))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-025
+  (start (zookeeper purple)
+         ((monkey 2) (elephant 4) (penguin 6))))
+
+(define-example-code k2/lang/zoo/friends
+  zoo-026
+  (start (zookeper red)
+         ((giraffe green 4) (giraffe purple 4))))
 
 (define-example-code k2/lang/zoo/friends
   zoo-027
-  (start penguin
-         (zookeeper zookeeper zookeeper)))
+  (start zookeeper
+         ((rand red 4) (rand green 4) (rand blue 4))))
 
 (define-example-code k2/lang/zoo/friends
   zoo-028
   (start zookeeper
-         (monkey elephant))
-  (start zookeeper
-         (giraffe rand rand rand)))
+         ((monkey 5) (hippo 5))
+         ((apple 5) (banana 5))))
 
 (define-example-code k2/lang/zoo/friends
   zoo-029
   (start zookeeper
-         (hippo rand rand))
+         ((monkey red 4) (monkey blue 4) (monkey green 4)))
   (start zookeeper
-         (kangaroo rand rand)))
+         ((giraffe orange 4) (giraffe yellow 4) (giraffe purple 4))))
 
 (define-example-code k2/lang/zoo/friends
   zoo-030
   (start zookeeper
-         (rand rand rand rand)))
+         ((monkey 2))
+         ((banana 2)))
+  (start zookeeper
+         ((penguin 4))
+         ((fish 4)))
+  (start zookeeper
+         ((hippo 6))
+         ((apple 6))))

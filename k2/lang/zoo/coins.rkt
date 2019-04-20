@@ -51,19 +51,18 @@
     [zookeeper     z (fit (s:draw-sprite zookeeper))]
     [monkey        m (fit (s:draw-sprite monkey))]
     [elephant      e (fit (s:draw-sprite elephant))]
-    [giraffe       g (fit (s:draw-sprite giraffe))]
     [hippo         h (fit (s:draw-sprite hippo))]
     [kangaroo      k (fit (s:draw-sprite kangaroo))]
     [penguin       p (fit (s:draw-sprite penguin))]
     
     [apple    a (fit (s:draw-sprite apple))]
     [banana   b (fit (s:draw-sprite banana))]
-    ;[potato   p (fit (s:draw-sprite potato))]
-    ;[kiwi     k (fit (s:draw-sprite kiwi))]
+    [fish     f (fit (s:draw-sprite fish))]
+    [tomato   t (fit (s:draw-sprite tomato))]
 
-    [copper   1 (fit (s:draw-sprite copper))]
-    [silver   2 (fit (s:draw-sprite silver))]
-    [gold     3 (fit (s:draw-sprite gold))]
+    [copper   c (fit (s:draw-sprite copper))]
+    [silver   s (fit (s:draw-sprite silver))]
+    [gold     g (fit (s:draw-sprite gold))]
 
     [rand     ? question-icon]
 

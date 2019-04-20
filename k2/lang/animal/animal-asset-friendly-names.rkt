@@ -61,6 +61,8 @@
          sea-bg
          )
 
+(require survival)
+
 
 (module animal-sprites racket
 
@@ -195,7 +197,7 @@
                    #:row-number 1
                    #:delay 5))
 
-  (define fish-sprite
+  #;(define fish-sprite
     (sheet->sprite (beside (square 32 'solid 'blue) 
                            (square 32 'solid 'red))
                    #:rows 1

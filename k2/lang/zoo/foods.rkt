@@ -45,7 +45,6 @@
     "../animal/animal-lang.rkt" 
     [start  s play-icon]
     
-    ;[zookeeper     z (fit (s:draw-sprite zookeeper))]
     [monkey        m (fit (s:draw-sprite monkey))]
     [elephant      e (fit (s:draw-sprite elephant))]
     [hippo         h (fit (s:draw-sprite hippo))]
@@ -53,6 +52,7 @@
     
     [apple    a (fit (s:draw-sprite apple))]
     [banana   b (fit (s:draw-sprite banana))]
+    [fish     f (fit (s:draw-sprite fish))]
     [grapes   g (fit (s:draw-sprite grapes))]
     [onion    o (fit (s:draw-sprite onion))]
     [potato   p (fit (s:draw-sprite potato))]

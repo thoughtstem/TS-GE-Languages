@@ -1139,17 +1139,17 @@
   (start hippo
          ((apple 5) (banana 5))))
 
-(define-example-code k2/lang/zoo/foods
+(define-example-code k2/lang/zoo/coins
   zoo-008
   (start hippo
          ((apple 3) (rand 5))))
 
-(define-example-code k2/lang/zoo/foods
+(define-example-code k2/lang/zoo/coins
   zoo-009
   (start monkey
          ((banana red) (banana green) (banana blue))))
 
-(define-example-code k2/lang/zoo/foods
+(define-example-code k2/lang/zoo/coins
   zoo-010
   (start hippo
          (rand purple 5)))
@@ -1204,11 +1204,11 @@
   zoo-018
   (start rand
          (rand rand)
-         ((copper 5))
+         ((copper 5)))
   (start rand
          (rand rand)
          ((gold 10))
-         )))
+         ))
 
 ;==== ZOO/FRIENDS DAY 4
 
@@ -1281,3 +1281,5 @@
   (start zookeeper
          ((hippo 6))
          ((apple 6))))
+
+;(test-all-examples-as-games 'k2)

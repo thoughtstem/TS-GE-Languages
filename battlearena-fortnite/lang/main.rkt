@@ -23,6 +23,7 @@
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Enemies"]
                       #:enable-world-objects? [world-objects? #f]
+                      #:instructions     [instructions #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -35,6 +36,7 @@
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
+        #:instructions   [instructions (or/c #f entity?)]
         #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest            [rest (listof entity?)]
        [res () game?])
@@ -50,4 +52,5 @@
                     #:item-list      item-list
                     #:score-prefix   prefix
                     #:enable-world-objects? world-objects?
+                    #:instructions   instructions
                     #:other-entities (filter identity (flatten (cons ent custom-entities)))))

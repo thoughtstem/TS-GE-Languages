@@ -280,9 +280,6 @@
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
 
-  ;(define (instruction->sprite text offset)
-  ;  (new-sprite text #:y-offset offset #:color 'yellow))
-
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"

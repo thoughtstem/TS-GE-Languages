@@ -283,9 +283,6 @@
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
 
-  (define (instruction->sprite text offset)
-    (new-sprite text #:y-offset offset #:color 'yellow))
-
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"
@@ -297,29 +294,7 @@
                                         "Z to pick up items"
                                         "X to drop items"
                                         "B to open and close backpack")))
-  (define i-length (length i-list))
-  
-  (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
-  
-  (define i
-    (sprite->entity (~> bg
-                        (set-x-scale 340 _)             
-                        (set-y-scale (* 26 i-length) _) 
-                        (set-y-offset 0 _))             
-                    #:position   (posn 0 0)
-                    #:name       "instructions"
-                    #:components (layer "ui")
-                                 (hidden)
-                                 (on-start (do-many (go-to-pos 'center)
-                                                    show))
-                                 (on-key 'enter die)
-                                 (on-key 'space die)
-                                 (on-key "i" die)))
-
-  (define last-y-pos (* 20 i-length))
-
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
-                  ))
+  (apply make-instructions i-list))
      
 ; ==== NEW HELPER SYSTEMS ====
 ; todo: maybe put this in game-engine?
@@ -952,6 +927,7 @@
                   #:score-prefix    [prefix "Gold"]
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:instructions    [instructions #f]
                   #:rewards-list    [rewards-list '()]
                   #:other-entities  [ent #f]
                                    . custom-entities)
@@ -969,6 +945,7 @@
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
         #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        #:instructions     [instructions (or/c #f entity?)]
         #:rewards-list     [rewards-list (listof component-or-system?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
@@ -1028,17 +1005,22 @@
                                        (filter-not (curry get-storage "Weapon") known-products-list))))
         #f))
 
-  ;--------
+  ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse
   (define shoot-key (if (and player-with-recipes-and-weapons (get-component player-with-recipes-and-weapons on-mouse?))
                         "LEFT-CLICK"
                         "F"))
   ;--------
 
+  (define automated-instructions-entity
+    (if instructions
+        instructions
+        (instructions-entity #:move-keys move-keys
+                             #:mouse-aim? mouse-aim?
+                             #:shoot-key shoot-key)))
+  
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn (instructions-entity #:move-keys move-keys
-                                                               #:mouse-aim? mouse-aim?
-                                                               #:shoot-key shoot-key)
+                                   (spawn automated-instructions-entity
                                           #:relative? #f))))
   
   (define (add-random-start-pos e)
@@ -1136,9 +1118,7 @@
   (define es (filter identity
                      (flatten
                       (list
-                       (instructions-entity #:move-keys move-keys
-                                            #:mouse-aim? mouse-aim?
-                                            #:shoot-key shoot-key)
+                       automated-instructions-entity
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity prefix) #f)
 

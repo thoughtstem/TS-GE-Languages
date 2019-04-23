@@ -351,6 +351,7 @@
                   #:score-prefix    [prefix "Ore"]
                   #:tool-list       [tool-list '()]
                   #:enable-world-objects? [world-objects? #f]
+                  #:instructions     [instructions #f]
                   #:other-entities  [ent #f]
                   . custom-entities)
   (->i ()
@@ -367,6 +368,7 @@
         #:score-prefix    [prefix         string?]
         #:tool-list       [tool-list      (listof (or/c entity? procedure?))]
         #:enable-world-objects? [world-objects? boolean?]
+        #:instructions   [instructions (or/c #f entity?)]
         #:other-entities  [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest  [rest (listof entity?)]
        [res () game?])
@@ -388,6 +390,7 @@
    #:score-prefix    prefix
    #:weapon-list     tool-list
    #:enable-world-objects? world-objects?
+   #:instructions   instructions
    #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
 
 

@@ -823,8 +823,8 @@
 (define (page #:name         [name "Cut Scene"]
               #:bg-color     [bg-color (color 50 50 50)]
               #:border-color [border-color 'white]
-              #:game-width   [game-width 480]
-              #:game-height  [game-height 360]
+              ;#:game-width   [game-width 480]
+              ;#:game-height  [game-height 360]
               #:line-padding [line-padding 4]
               . items
               )
@@ -838,6 +838,18 @@
   
   (define items-list
     (map ensure-list-of-sprites items))
+
+  (define outer-border-img (square 1 'solid 'black))
+  (define inner-border-img (square 1 'solid border-color))
+  (define box-img (square 1 'solid bg-color))
+
+  ;(displayln "==== PRECOMPILING UI ====")
+  (precompile! outer-border-img
+               inner-border-img
+               box-img)
+  
+  ;(displayln "==== PRECOMPILING PAGES ====")
+  (apply precompile! (flatten items-list)) ; Now works with sprites!
   
 
   (define (get-sprite-height as)
@@ -863,14 +875,26 @@
                                          (get-y-offset s)) s))
                       item)))))
 
-  (sprite->entity (append offset-items-list
-                          (bordered-box-sprite game-width game-height #:color bg-color #:border-color border-color))
+  (define (set-fullscreen-page)
+    (lambda (g e)
+      (define G-WIDTH (game-width g))
+      (define G-HEIGHT (game-height g))
+      (define sprites-list
+        (append offset-items-list
+                (bordered-box-sprite G-WIDTH G-HEIGHT #:color bg-color #:border-color border-color)))
+      ;((change-sprite sprites-list) g e)))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (reverse sprites-list)))))
+
+  (sprite->entity empty-image
                   #:name       name
-                  #:position   (posn (/ game-width 2) (/ game-height 2))
+                  #:position   (posn 0 0)
                   #:components (layer "ui")
-                               (hidden)                                ; This is here just in case
-                               (on-start (do-many (go-to-pos 'center)  ; page gets spawned without
-                                                  show))               ; relative? #f
+                               (hidden)                               
+                               (on-start (do-many (set-fullscreen-page)
+                                                  (go-to-pos 'center)  
+                                                  show))               
                                (on-key 'space die)
                                (on-key 'enter die)
                                (storable)))
@@ -896,17 +920,33 @@
 (define (custom-cutscene . pages)
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
-  (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
-  (sprite->entity (reverse (get-components (first pages) animated-sprite?))
+  ;(apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
+  (define (set-first-page)
+    (lambda (g e)
+      (define cut-scenes (get-storage-data "cut-scenes" e))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (get-components (first cut-scenes) animated-sprite?)))))
+
+  (define (bake-and-store-pages)
+    (lambda (g e)
+      (define (bake-page page)
+        ((on-start-func (get-component page on-start?)) g page))
+      (define baked-pages (map bake-page pages))
+      (add-components e (storage "cut-scenes" baked-pages))))
+  
+  (sprite->entity empty-image ;(reverse (get-components (first pages) animated-sprite?))
                   #:name "Multi Cut Scene"
                   #:position (posn 0 0)
                   #:components (layer "ui")
                                (hidden)
                                ;(apply precompiler (flatten (map (curryr get-components image-animated-sprite?) pages)))
-                               (storage "cut-scenes" pages)
+                               ;;(storage "cut-scenes" pages)
                                (counter 0)
                                (storable)
-                               (on-start (do-many (go-to-pos 'center)
+                               (on-start (do-many (bake-and-store-pages)
+                                                  (set-first-page)
+                                                  (go-to-pos 'center)
                                                   show))
                                (on-key 'enter (change-cutscene))))
 

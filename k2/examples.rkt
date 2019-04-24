@@ -1,9 +1,9 @@
 #lang racket
 
 (require ts-kata-util
-         k2/lang/ocean/fish
-         k2/lang/classroom/basic
-         #;k2/lang/hero/basic
+         ;k2/lang/ocean/fish
+         ;k2/lang/classroom/basic
+         ;k2/lang/hero/basic
          )
 
 (define-example-code k2/lang/classroom/basic
@@ -437,10 +437,9 @@
                     (say 'B))))
 
 
-
 (define-example-code k2/lang/hero/basic
   hero-000
-  blackwidow)
+  (start))
 
 (define-example-code k2/lang/hero/basic
   hero-003
@@ -695,6 +694,10 @@
 
 ; ==== FARM/FOODS -- day 1
 (define-example-code k2/lang/farm/foods
+  farm-000
+  (start))
+
+(define-example-code k2/lang/farm/foods
   farm-001
   (start chicken
          (apple)))
@@ -900,6 +903,10 @@
 ; ==== SEA/FOODS
 ;day 1 start
 (define-example-code k2/lang/sea/foods
+  sea-000
+  (start))
+
+(define-example-code k2/lang/sea/foods
   sea-001
   (start yellow-fish
          (pineapple)))
@@ -1102,6 +1109,10 @@
          ((red-fish 3) (yellow-fish 3))))
 
 ; ==== ZOO/FOODS
+(define-example-code k2/lang/zoo/foods
+  zoo-000
+  (start))
+
 (define-example-code k2/lang/zoo/foods
   zoo-001
   (start monkey

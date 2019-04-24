@@ -79,16 +79,25 @@
 
     [(_ f arg) #'(f arg)] ) )
 
-(define-syntax-rule (start hero villains ...)
-  (let ()
-    (define vs
-      (list 
-        (app make-villain villains ) ...))
-
-    (launch-for-ratchet
-      (a:avengers-game #:planet (a:custom-planet #:rows 2
-                                                 #:columns 2)
-                       #:hero (app make-hero hero)
-                       #:villain-list vs))))
+(define-syntax start
+  (syntax-rules ()
+    [(start hero villains ...)
+     (let ()
+       (define avatar
+         (app make-hero hero))
+       (define vs
+         (list (app make-villain villains ) ...))
+       
+       (launch-for-ratchet
+        (a:avengers-game #:planet (a:custom-planet #:rows 2
+                                                   #:columns 2)
+                         #:hero avatar 
+                         #:villain-list vs))
+       )]
+    [(start)         (start a:mystery-sprite)]
+    
+    ))
+    
+    
 
 

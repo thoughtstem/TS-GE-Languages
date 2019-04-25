@@ -47,6 +47,9 @@
 
          custom-cutscene
          page
+
+         if/r
+         custom-item
          )
 
 (require scribble/srcdoc)
@@ -61,6 +64,28 @@
          game-engine-demos-common
          (only-in lang/posn make-posn)
          )
+
+(define STORABLE-ITEM-ID-COUNTER 0)
+
+(define (next-storable-item-id)
+  (set! STORABLE-ITEM-ID-COUNTER (add1 STORABLE-ITEM-ID-COUNTER))
+  STORABLE-ITEM-ID-COUNTER)
+
+(define (in-backpack-by-id? item-id)
+  (lambda (g e)
+    (define item-ids (map (compose (curry get-storage-data "item-id")
+                                item-entity)
+                       (get-items (get-entity "player" g))))
+    (if (member item-id item-ids) #t #f)))
+
+; rule helper to use with observe-change
+(define (if/r rule do-func [else-func (λ (g e) e)])
+  (lambda (g e1 e2)
+    (if (void? e1)
+        e2
+        (if (rule g e2)
+            (do-func g e2)
+            (else-func g e2)))))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -1483,6 +1508,58 @@
                                                       )
                                                   (do-after-time 1 die) ; 1 tick delay incase function is spawn
                                                   )))))
+
+; ==== CUSTOM ITEM DEFINITION ====
+(define (custom-item #:name              [n "Custom Item"]
+                     #:sprite            [s chest-sprite]
+                     #:tile              [tile #f]
+                     #:position          [pos #f]
+                     #:amount-in-world   [world-amt 1]
+                     #:storable?         [storable? #t]
+                     #:consumable?       [consumable? #f]
+                     #:value             [val 10]
+                     #:respawn?          [respawn? #t]
+                     #:on-pickup         [pickup-func (λ (g e) e)]
+                     #:on-store          [store-func (λ (g e) e)]
+                     #:on-drop           [drop-func (λ (g e) e)]
+                     #:components        [c #f]
+                     . custom-components)
+  (define (do-nothing)
+    (λ (g e) e))
+  
+  (define (pickup-component)
+    (on-key 'space #:rule (and/r near-player?
+                                 (nearest-to-player? #:filter (has-component? on-key?)))
+            (do-many pickup-func
+                     (if respawn?
+                         (do-after-time 1 (do-many (respawn 'anywhere)
+                                                   (active-on-random)))
+                         (do-after-time 1 die) ; 1 tick delay in case function is spawn
+                         ))))
+  
+  (define item-id (next-storable-item-id))
+  
+  (sprite->entity s
+                  #:name n
+                  #:position    (or pos (posn 0 0))
+                  #:components  (active-on-bg (or tile 0))
+                                (physical-collider)
+                                (hidden)
+                                (storage "amount-in-world" world-amt)
+                                (storage "value" val)
+                                (on-start (do-many (if pos  (do-nothing) (respawn 'anywhere))
+                                                   (if tile (do-nothing) (active-on-random))
+                                                   show))
+                                (if storable? (storable) #f)
+                                (if consumable? (pickup-component) #f)
+                                (storage "item-id" item-id)
+                                (storage "backpack-observer"
+                                         (observe-change (in-backpack-by-id? item-id)
+                                                         (if/r (in-backpack-by-id? item-id)
+                                                               store-func
+                                                               drop-func)))
+                                (cons c custom-components)
+                                ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]

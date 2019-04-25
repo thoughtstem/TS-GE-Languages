@@ -25,7 +25,7 @@
 
   (define-visual-language #:wrapper begin hero-lang
     "./hero-lang.rkt" 
-    [start          q play-icon]
+    [start          w play-icon]
 
     [blackwidow     a (crop a:blackwidow-sheet)]   
     [gamora         s (crop a:gamora-sheet)]

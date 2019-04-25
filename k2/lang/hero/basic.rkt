@@ -38,6 +38,6 @@
     [ironman        i (crop a:ironman-sheet)]
     [loki           l (crop a:loki-sheet)]
 
-    [start         s play-icon]))
+    [start         w play-icon]))
 
 

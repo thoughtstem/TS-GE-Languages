@@ -1,4 +1,3 @@
-
 #lang racket
 
 ;This allows the lang to be used as a module:
@@ -19,25 +18,17 @@
   (require ratchet
            "./hero-lang.rkt"
            "../icons.rkt"
-           (prefix-in a: battlearena-avengers/assets)
-           (prefix-in h: 2htdp/image)
-           (prefix-in p: pict)
-           (prefix-in p: pict/flash))
-
-  (define (crop i)
-    (h:crop 0 0 32 32 i))
+           (prefix-in a: battlearena-avengers))
 
   (define-visual-language hero-lang
-    "./hero-lang.rkt" 
-    [blackwidow     b (crop a:blackwidow-sheet)]   
-    [gamora         g (crop a:gamora-sheet)]
-    [captainamerica c (crop a:captainamerica-sheet)]
-    [drax           d (crop a:drax-sheet)]
-    [hawkeye        h (crop a:hawkeye-sheet)]
-    [hulk           u (crop a:hulk-sheet)]
-    [ironman        i (crop a:ironman-sheet)]
-    [loki           l (crop a:loki-sheet)]
-
-    [start         w play-icon]))
-
-
+    "./hero-lang.rkt"
+    [start          w play-icon]
+    
+    [blackwidow     b (a:scale-to-fit (a:draw-sprite a:blackwidow-sprite)     32)]   
+    [gamora         g (a:scale-to-fit (a:draw-sprite a:gamora-sprite)         32)]
+    [captainamerica c (a:scale-to-fit (a:draw-sprite a:captainamerica-sprite) 32)]
+    [drax           d (a:scale-to-fit (a:draw-sprite a:drax-sprite)           32)]
+    [hulk           u (a:scale-to-fit (a:draw-sprite a:hulk-sprite)           32)]
+    [ironman        i (a:scale-to-fit (a:draw-sprite a:ironman-sprite)        32)]
+    [loki           l (a:scale-to-fit (a:draw-sprite a:loki-sprite)           32)]
+    ))

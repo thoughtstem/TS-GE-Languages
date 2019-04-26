@@ -57,6 +57,11 @@
           (crab-sprite crab))
 
          question-icon
+         health-icon
+         grow-icon
+         shrink-icon
+         speed-icon
+         forcefield-icon
 
          sea-bg
          )

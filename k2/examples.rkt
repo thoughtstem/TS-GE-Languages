@@ -1056,7 +1056,7 @@
          ((apple 4)))
   (start rand
          ((yellow-fish 4) (rand 4))
-         ((apple BLUE 4))))
+         ((apple blue 4))))
 
 ;Day 5
 

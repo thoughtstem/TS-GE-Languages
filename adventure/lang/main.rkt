@@ -50,6 +50,7 @@
 
          if/r
          custom-item
+         in-backpack-by-id?
          )
 
 (require scribble/srcdoc)

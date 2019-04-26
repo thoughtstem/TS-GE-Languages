@@ -788,8 +788,8 @@
                           ;#:scale      [scale 1]
                           #:components [c #f] . custom-components )
 
-  (define sprite (if (image? s)
-                     (new-sprite s #:animate #f)
+  (define sprite (if ((or/c string? (listof string?)) s)
+                     (new-sprite s #:color 'red)
                      s))
 
   (sprite->entity sprite
@@ -1314,6 +1314,7 @@
               via the @racket[#:coin-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]
+                       [((or/c string? (listof string?)) s) (new-sprite s #:color 'gold)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))
   (define name   (if n (entity-name n) #f))

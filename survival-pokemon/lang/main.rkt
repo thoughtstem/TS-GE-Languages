@@ -381,7 +381,7 @@
        (#:headless        [headless boolean?]
         #:town-bg         [town-ent entity?]
         #:pokemon         [pokemon (or/c entity? #f)]
-        #:starvation-rate [starvation-rate number?]
+        #:starvation-rate [starvation-rate (or/c number? #f)]
         #:sky             [sky sky?]
         #:friend-list     [friend-list    (listof (or/c entity? procedure?))]
         #:trainer-list    [trainer-list   (listof (or/c entity? procedure?))]

@@ -358,7 +358,7 @@
        (#:headless        [headless boolean?]
         #:biome           [biome-ent entity?]
         #:skin            [skin (or/c entity? #f)]
-        #:starvation-rate [starvation-rate number?]
+        #:starvation-rate [starvation-rate (or/c number? #f)]
         #:sky             [sky sky?]
         #:entity-list     [entity-list    (listof (or/c entity? procedure?))]
         #:mob-list        [mob-list       (listof (or/c entity? procedure?))]

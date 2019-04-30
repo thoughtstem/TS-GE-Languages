@@ -826,7 +826,7 @@
        (#:headless         [headless boolean?]
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
-        #:starvation-rate  [starvation-rate number?]
+        #:starvation-rate  [starvation-rate (or/c number? #f)]
         #:sky              [sky (or/c sky? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
@@ -873,7 +873,9 @@
     (define heal-amt (get-storage-data "heals-by" f))
     (player-toast-entity (~a "+" heal-amt) #:color "green"))
 
-  (define starvation-period (max 1 (- 100 (min 100 sr))))
+  (define starvation-period (if sr
+                                (max 1 (- 100 (min 100 sr)))
+                                #f))
 
   ;(define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
 
@@ -896,9 +898,14 @@
                                (append (remove-duplicates updated-food-list
                                                           name-eq?)
                                        (filter-not (curry get-storage "Weapon") known-products-list)))                  ;f-list
-                          (do-every starvation-period
+                          (if (and starvation-period
+                                   (not (zero? sr)))
+                              (do-every starvation-period
                                     (do-many (change-health-by -1)
-                                             (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
+                                             (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f)))
+                              #f)
+
+                          )
         #f))
 
   ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse

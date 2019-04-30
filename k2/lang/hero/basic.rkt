@@ -23,12 +23,16 @@
   (define-visual-language hero-lang
     "./hero-lang.rkt"
     [start          w play-icon]
-    
-    [blackwidow     b (a:scale-to-fit (a:draw-sprite a:blackwidow-sprite)     32)]   
-    [gamora         g (a:scale-to-fit (a:draw-sprite a:gamora-sprite)         32)]
-    [captainamerica c (a:scale-to-fit (a:draw-sprite a:captainamerica-sprite) 32)]
-    [drax           d (a:scale-to-fit (a:draw-sprite a:drax-sprite)           32)]
-    [hulk           u (a:scale-to-fit (a:draw-sprite a:hulk-sprite)           32)]
+
     [ironman        i (a:scale-to-fit (a:draw-sprite a:ironman-sprite)        32)]
+    [blackwidow     b (a:scale-to-fit (a:draw-sprite a:blackwidow-sprite)     32)]
+    [captainamerica c (a:scale-to-fit (a:draw-sprite a:captainamerica-sprite) 32)]      
+    [gamora         g (a:scale-to-fit (a:draw-sprite a:gamora-sprite)         32)]
+    [hulk           u (a:scale-to-fit (a:draw-sprite a:hulk-sprite)           32)]
+    
     [loki           l (a:scale-to-fit (a:draw-sprite a:loki-sprite)           32)]
+    [redskull       r (a:scale-to-fit (a:draw-sprite a:redskull-sprite)       32)]
+    [mandarin       m (a:scale-to-fit (a:draw-sprite a:mandarin-sprite)       32)]
+    [nebula         n (a:scale-to-fit (a:draw-sprite a:nebula-sprite)         32)]
+    
     ))

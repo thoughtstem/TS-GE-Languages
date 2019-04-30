@@ -35,9 +35,7 @@
           (goldcoin-sprite gold)
 
           (zookeeper-sprite zookeeper)
-          ;(lion-sprite lion)
           (monkey-sprite monkey)
-          ;(tiger-sprite tiger)
           (elephant-sprite elephant)
           (giraffe-sprite giraffe)
           (hippo-sprite hippo)
@@ -62,6 +60,7 @@
          shrink-icon
          speed-icon
          forcefield-icon
+         rainbow-icon
 
          sea-bg
          )
@@ -114,9 +113,7 @@
            crab-sprite
            
            zookeeper-sprite
-           ;lion-sprite
            monkey-sprite
-           ;tiger-sprite
            elephant-sprite
            giraffe-sprite
            hippo-sprite

@@ -31,16 +31,34 @@
 
 (provide-strings red orange yellow green blue purple)
 
-(provide-arena-sprites blackwidow gamora captainamerica drax hawkeye hulk ironman loki)
+(provide-arena-sprites ironman blackwidow captainamerica thor hulk
+                       loki redskull mandarin malekith
+                       rocketracoon starlord drax gamora nebula)
 
 (provide hammer
          magic-orb
          star-bit
          energy-blast
-         start)
+         start
+         
+         randp
+         randc
 
-(define (hammer (color #f)) 
-  (a:hammer-dart))
+         health
+         grow
+         shrink
+         speed
+         forcefield
+         )
+
+(define health "Health")
+(define grow "Grow")
+(define shrink "Shrink")
+(define speed "Speed")
+(define forcefield "Force Field")
+
+(define (hammer (color "black")) 
+  (a:hammer-dart #:color color))
 
 (define (magic-orb (color "yellow"))
   (a:magic-orb-dart #:color color))
@@ -51,8 +69,17 @@
 (define (energy-blast (color "green"))
   (a:energy-blast-dart #:color color))
 
-(define (make-hero sprite (dart #f))
-  (define real-dart (call-if-proc dart))
+(define (randp (color #f))
+    (define w (first (shuffle (list hammer magic-orb star-bit energy-blast))))
+  (define real-color (call-if-proc color))
+    (if color (w real-color) (w)))
+      
+(define randc
+    (lambda () (first (shuffle (list "red" "orange" "yellow" "green" "blue" "purple")))))
+
+(define (make-hero sprite (dart-f #f) (color "green"))
+  (define real-color (call-if-proc color))
+  (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
     (a:custom-hero #:sprite sprite
                    #:components
@@ -61,8 +88,9 @@
                                            ))
     (a:custom-hero #:sprite sprite)) )
 
-(define (make-villain sprite (dart #f) )
-  (define real-dart (call-if-proc dart))
+(define (make-villain sprite (dart-f #f) (color "red") )
+  (define real-color (call-if-proc color))
+  (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
     (a:custom-villain #:sprite sprite
                       #:power (a:custom-power #:dart real-dart))

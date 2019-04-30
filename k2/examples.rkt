@@ -436,231 +436,267 @@
           (whenever (see 'D)
                     (say 'B))))
 
-
+; ===== HERO - INTRO
 (define-example-code k2/lang/hero/basic
   hero-000
   (start))
 
+;===== HERO - BASIC
+(define-example-code k2/lang/hero/basic
+  hero-001
+  (start ironman)
+  )
+
+(define-example-code k2/lang/hero/basic
+  hero-002
+  (start gamora)
+  )
+
 (define-example-code k2/lang/hero/basic
   hero-003
-  (start gamora))
+  (start gamora
+         (nebula))
+  )
 
 (define-example-code k2/lang/hero/basic
   hero-004
-  (start ironman))
+  (start hulk
+         (loki redskull mandarin))
+  )
 
 (define-example-code k2/lang/hero/basic
   hero-005
-  (start blackwidow))
+  (start ironman
+         (captainamerica hulk))
+  )
 
 (define-example-code k2/lang/hero/basic
   hero-006
-  (start blackwidow gamora ironman))
+  (start captainamerica
+         (captainamerica captainamerica))
+  )
 
-(define-example-code k2/lang/hero/basic
+; ===== HERO - POWERS
+
+(define-example-code k2/lang/hero/powers
   hero-007
-  (start ironman gamora blackwidow))
+  (start (thor hammer)
+         (loki))
+  )
 
-(define-example-code k2/lang/hero/basic
+(define-example-code k2/lang/hero/powers
   hero-008
-  (start ironman ironman))
+  (start (starlord star-bit)
+         (mandarin))
+  )
 
-(define-example-code k2/lang/hero/basic
+(define-example-code k2/lang/hero/powers
   hero-009
-  (start ironman ironman ironman ironman))
+  (start (gamora magic-orb)
+         ((nebula energy-blast)))
+  )
 
-(define-example-code k2/lang/hero/basic
+(define-example-code k2/lang/hero/powers
   hero-010
-  (start gamora gamora gamora gamora gamora))
+  (start (loki energy-blast)
+         ((thor hammer)
+          (starlord star-bit)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-011
-  (start ironman (gamora hammer)))
+  (start (nebula energy-blast)
+         ((rocketracoon star-bit)
+         (gamora star-bit)
+         (drax magic-orb)
+         (starlord magic-orb)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-012
-  (start ironman (gamora hammer) gamora gamora))
+  (start (thor randp)
+         ((loki randp)
+          (malekith randp)
+          (mandarin randp)
+          (nebula randp)))
+  )
+
+; ===== HERO - POWERS + COLORS
 
 (define-example-code k2/lang/hero/powers
   hero-013
-  (start ironman
-         (gamora hammer)
-         (gamora hammer)
-         (gamora hammer)))
+  (start (gamora magic-orb green )
+         ((nebula energy-blast blue)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-014
-  (start ironman
-         (drax hammer)
-         (hawkeye hammer)
-         (gamora hammer)))
+  (start (loki energy-blast yellow)
+         ((thor hammer orange)
+          (starlord star-bit purple)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-015
-  (start (ironman hammer)
-         ironman
-         ironman
-         ironman
-         ironman))
+  (start (nebula energy-blast green)
+         ((rocketracoon star-bit red)
+          (gamora star-bit red)
+          (drax magic-orb red)
+          (starlord magic-orb red)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-016
-  (start (ironman hammer)
-         (ironman hammer)
-         (ironman hammer)
-         (ironman hammer)
-         (ironman hammer)))
+  (start (loki star-bit)
+         ((thor hammer red)
+          (thor hammer orange)
+          (thor hammer yellow)
+          (thor hammer green)
+          (thor hammer blue)
+          (thor hammer purple)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-017
-  (start (ironman hammer)
-         (ironman magic-orb)
-         (ironman magic-orb)
-         (ironman magic-orb)
-         (ironman magic-orb)))
+  (start (gamora randp red)
+         ((nebula randp orange)
+          (mandarin randp yellow)))
+  )
 
 (define-example-code k2/lang/hero/powers
   hero-018
-  (start (ironman hammer)
-         (drax magic-orb)
-         (drax magic-orb)
-         (blackwidow hammer)
-         (blackwidow hammer)))
+  (start (starlord randp randc)
+         ((rocketracoon randp randc)
+          (drax randp randc)
+          (gamora randp randc)))
+  )
 
-(define-example-code k2/lang/hero/powers
+; ===== HERO - ITEMS
+
+(define-example-code k2/lang/hero/items
   hero-019
-  (start (ironman hammer)
-         (drax magic-orb)
-         (drax magic-orb)
-         (blackwidow hammer)
-         (blackwidow hammer)
-         gamora
-         gamora))
+  (start (drax energy-blast)
+         ((loki magic-orb)
+          (thor hammer)))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-020
-  (start (ironman (magic-orb red))))
+  (start (ironman magic-orb red)
+         ((mandarin energy-blast orange)
+          (mandarin randp randc)))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-021
-  (start (ironman (star-bit red))))
+  (start (ironman star-bit)
+         ((nebula magic-orb)
+          (loki energy-blast))
+         (health forcefield))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-022
-  (start (ironman (energy-blast red))))
+  (start (thor hammer blue)
+         ((loki randp randc)
+          (mandarin randp randc))
+         (grow shrink speed))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-023
-  (start (ironman (magic-orb red))
-         (ironman (magic-orb orange))
-         (ironman (magic-orb yellow))
-         (ironman (magic-orb green))))
+  (start (nebula star-bit randc)
+         ((blackwidow randp red)
+          (ironman energy-blast blue))
+         (health speed))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-024
-  (start (ironman (magic-orb red))
-         (ironman (magic-orb orange))
-         (ironman (magic-orb yellow))
-         (ironman (magic-orb green))
-         (ironman (magic-orb blue))
-         (ironman (magic-orb purple))))
+  (start (ironman magic-orb red)
+         ((ironman randp randc)
+          (ironman randp randc)
+          (ironman randp randc))
+         (forcefield speed))
+  )
 
-(define-example-code k2/lang/hero/powers
+; ===== HERO - ITEMS - MULTI-GAMES
+(define-example-code k2/lang/hero/items
   hero-025
-  (start (ironman (magic-orb red))
-         (drax (magic-orb orange))
-         (drax (magic-orb yellow))
-         (drax (magic-orb green))
-         (drax (magic-orb blue))
-         (drax (magic-orb purple))))
+  (start (drax randp randc)
+         ((loki randp randc)
+          (malekith randp randc)
+          (mandarin randp randc)
+          (nebula randp randc))
+         (health grow shrink speed forcefield))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-026
-  (start (ironman (magic-orb red))
-         (drax hammer)
-         (drax (star-bit yellow))
-         (drax (star-bit yellow))
-         (drax (energy-blast blue))
-         (drax (energy-blast blue))
-         ironman
-         ironman))
+  (start (thor hammer)
+         ((loki magic-orb)
+          (loki star-bit)))
+  (start (thor hammer green)
+         ((loki magic-orb red)
+          (loki star-bit red)))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-027
-  (start ironman gamora)
-  (start ironman drax))
+  (start (ironman magic-orb green)
+         ((mandarin magic-orb red)))
+  (start (ironman magic-orb green)
+         ((mandarin (magic-orb red))
+          (mandarin (magic-orb orange))))
+  (start (ironman magic-orb green)
+         ((mandarin magic-orb red)
+          (mandarin magic-orb orange)
+          (mandarin magic-orb yellow)))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-028
-  (start ironman gamora)
-  (start ironman drax)
-  (start ironman hawkeye))
+  (start (blackwidow randp randc)
+         ((nebula randp randc)))
+  (start (blackwidow randp randc)
+         ((nebula randp randc)
+          (nebula randp randc)))
+  (start (blackwidow randp randc)
+         ((nebula randp randc)
+          (nebula randp randc)
+          (nebula randp randc))
+         (health speed))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-029
-  (start ironman gamora)
-  (start ironman gamora gamora)
-  (start ironman gamora gamora gamora))
+  (start (ironman randp randc)
+         ((loki randp randc)))
+  (start (drax randp randc)
+         ((malekith randp randc)
+          (mandarin randp randc)))
+  (start (blackwidow randp randc)
+         ((nebula randp randc)
+          (loki randp randc))
+         (health speed))
+  )
 
-(define-example-code k2/lang/hero/powers
+(define-example-code k2/lang/hero/items
   hero-030
-  (start ironman (gamora (magic-orb green)))
-  (start ironman (gamora (magic-orb yellow)))
-  (start ironman (gamora (magic-orb red))))
-
-(define-example-code k2/lang/hero/powers
-  hero-031
-  (start ironman
-         (gamora (magic-orb green)))
-  (start ironman
-         (gamora (magic-orb yellow))
-         (gamora (magic-orb yellow)))
-  (start ironman
-         (gamora (magic-orb red))
-         (gamora (magic-orb red))
-         (gamora (magic-orb red))))
-
-(define-example-code k2/lang/hero/powers
-  hero-032
-  (start ironman
-         (gamora (magic-orb green)))
-  (start ironman
-         (drax (magic-orb yellow))
-         (drax (magic-orb yellow)))
-  (start ironman
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))))
-
-(define-example-code k2/lang/hero/powers
-  hero-033
-  (start ironman
-         ironman
-         (gamora (magic-orb green)))
-  (start ironman
-         ironman
-         ironman
-         (drax (magic-orb yellow))
-         (drax (magic-orb yellow)))
-  (start ironman
-         ironman
-         ironman
-         ironman
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))))
-
-(define-example-code k2/lang/hero/powers
-  hero-034
-  (start (ironman (energy-blast green))
-         (gamora (magic-orb green)))
-  (start (ironman (energy-blast yellow))
-         (drax (magic-orb yellow))
-         (drax (magic-orb yellow)))
-  (start (ironman (energy-blast red))
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))
-         (hawkeye (magic-orb red))))
+  (start (ironman randp randc)
+         ((loki randp randc))
+         (health))
+  (start (drax randp randc)
+         ((loki randp randc)
+          (malekith randp randc))
+         (health grow shrink))
+  (start (blackwidow randp randc)
+         ((loki randp randc)
+          (malekith randp randc)
+          (mandarin randp randc)
+          (nebula randp randc))
+         (health grow shrink speed forcefield))
+  )
 
 
 

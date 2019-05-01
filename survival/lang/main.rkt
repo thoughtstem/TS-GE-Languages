@@ -280,9 +280,6 @@
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
 
-  ;(define (instruction->sprite text offset)
-  ;  (new-sprite text #:y-offset offset #:color 'yellow))
-
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"
@@ -481,9 +478,8 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components       [first-component (or/c component-or-system? false? (listof false?))]
-        )
-       #:rest (rest (listof component-or-system?))
+        #:components       [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest (rest (listof (or/c component-or-system? #f (listof #f))))
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world
@@ -701,8 +697,8 @@
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
-           #:components [first-component any/c])
-       #:rest [more-components (listof any/c)]
+           #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [returns entity?])
 
   @{Returns a custom enemy, which will be placed in to the world
@@ -791,8 +787,8 @@
                           ;#:scale      [scale 1]
                           #:components [c #f] . custom-components )
 
-  (define sprite (if (image? s)
-                     (new-sprite s #:animate #f)
+  (define sprite (if ((or/c string? (listof string?)) s)
+                     (new-sprite s #:color 'red)
                      s))
 
   (sprite->entity sprite
@@ -829,7 +825,7 @@
        (#:headless         [headless boolean?]
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
-        #:starvation-rate  [starvation-rate number?]
+        #:starvation-rate  [starvation-rate (or/c number? #f)]
         #:sky              [sky (or/c sky? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
@@ -876,7 +872,9 @@
     (define heal-amt (get-storage-data "heals-by" f))
     (player-toast-entity (~a "+" heal-amt) #:color "green"))
 
-  (define starvation-period (max 1 (- 100 (min 100 sr))))
+  (define starvation-period (if sr
+                                (max 1 (- 100 (min 100 sr)))
+                                #f))
 
   ;(define food-img-list (map (λ (f) (render (get-component f animated-sprite?))) f-list))
 
@@ -899,9 +897,14 @@
                                (append (remove-duplicates updated-food-list
                                                           name-eq?)
                                        (filter-not (curry get-storage "Weapon") known-products-list)))                  ;f-list
-                          (do-every starvation-period
+                          (if (and starvation-period
+                                   (not (zero? sr)))
+                              (do-every starvation-period
                                     (do-many (change-health-by -1)
-                                             (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f))))
+                                             (spawn (player-toast-entity "-1" #:color "orangered") #:relative? #f)))
+                              #f)
+
+                          )
         #f))
 
   ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse
@@ -1101,8 +1104,8 @@
         #:open-sound   [open-sound (or/c rsound? procedure? '() #f)]
         #:select-sound [select-sound (or/c rsound? procedure? '() #f)]
         #:recipe-list [recipe-list (listof recipe?)]
-        #:components [first-component component-or-system?])
-       #:rest       [more-components (listof component-or-system?)]
+        #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [result entity?])
 
   @{Returns a custom crafter, which will be placed in to the world
@@ -1134,7 +1137,7 @@
                                  #:target     [target "player"]
                                  #:sound      [sound #t]
                                  #:scale      [scale 1]
-                                 #:components [c (on-start (respawn 'anywhere))]
+                                 #:components [c #f]
                                  . custom-components )
 
   (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
@@ -1146,10 +1149,10 @@
            #:game-width [game-width number?]
            #:speed      [speed number?]
            #:target     [target string?]
-           #:sound      [sound any/c]
+           #:sound      [sound boolean?]
            #:scale      [scale number?]
-           #:components [first-component (or/c component-or-system? observe-change?)])
-       #:rest [more-components (listof (or/c component-or-system? observe-change?))]
+           #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
        [returns entity?])
 
  @{Returns a custom npc, which will be placed in to the world
@@ -1175,11 +1178,7 @@
                                       #:animated #t
                                       #:speed 2))))
   
-  (define sprite (if (image? s)
-                     (new-sprite s)
-                     s))
-  
-  (create-npc #:sprite      sprite
+  (create-npc #:sprite      s
               #:name        name
               #:position    p
               #:active-tile tile
@@ -1189,7 +1188,8 @@
               #:target      target
               #:sound       sound
               #:scale       scale
-              #:components  (cons c custom-components)))
+              #:components  (list (on-start (respawn 'anywhere))
+                                  (cons c custom-components))))
 
 (define/contract/doc (custom-bg #:image      [bg FOREST-BG]
                                 #:rows       [rows 3]
@@ -1206,7 +1206,7 @@
         #:start-tile [start-tile number?]
         #:hd?        [high-def? boolean?]
         #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest [more-components (listof component-or-system?)]
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [result entity?])
 
   @{Returns a custom background, which will be used
@@ -1251,10 +1251,8 @@
            #:amount-in-world [amount-in-world number?]
            #:heals-by   [heal-amt number?]
            #:respawn?   [respawn? boolean?]
-           #:components [first-component (or/c component-or-system?
-                                               false?
-                                               (listof false?))])
-       #:rest [more-components (listof component-or-system?)]
+           #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [returns entity?])
 
   @{Returns a custom food, which will be placed into the world
@@ -1306,10 +1304,8 @@
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
-            #:components [first-component (or/c component-or-system?
-                                                false?
-                                                (listof false?))])
-        #:rest [more-components (listof component-or-system?)]
+            #:components [first-component (or/c component-or-system? #f (listof #f))])
+        #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world
@@ -1317,6 +1313,7 @@
               via the @racket[#:coin-list] parameter.}
   
   (define sprite (cond [(image? s)           (new-sprite s)]
+                       [((or/c string? (listof string?)) s) (new-sprite s #:color 'gold)]
                        [(animated-sprite? s) s             ]
                        [else              #f]))
   (define name   (if n (entity-name n) #f))

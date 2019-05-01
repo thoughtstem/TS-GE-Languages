@@ -47,6 +47,10 @@
 
          custom-cutscene
          page
+
+         if/r
+         custom-item
+         in-backpack-by-id?
          )
 
 (require scribble/srcdoc)
@@ -61,6 +65,28 @@
          game-engine-demos-common
          (only-in lang/posn make-posn)
          )
+
+(define STORABLE-ITEM-ID-COUNTER 0)
+
+(define (next-storable-item-id)
+  (set! STORABLE-ITEM-ID-COUNTER (add1 STORABLE-ITEM-ID-COUNTER))
+  STORABLE-ITEM-ID-COUNTER)
+
+(define (in-backpack-by-id? item-id)
+  (lambda (g e)
+    (define item-ids (map (compose (curry get-storage-data "item-id")
+                                item-entity)
+                       (get-items (get-entity "player" g))))
+    (if (member item-id item-ids) #t #f)))
+
+; rule helper to use with observe-change
+(define (if/r rule do-func [else-func (λ (g e) e)])
+  (lambda (g e1 e2)
+    (if (void? e1)
+        e2
+        (if (rule g e2)
+            (do-func g e2)
+            (else-func g e2)))))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -283,9 +309,6 @@
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
 
-  (define (instruction->sprite text offset)
-    (new-sprite text #:y-offset offset #:color 'yellow))
-
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"
@@ -297,29 +320,7 @@
                                         "Z to pick up items"
                                         "X to drop items"
                                         "B to open and close backpack")))
-  (define i-length (length i-list))
-  
-  (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
-  
-  (define i
-    (sprite->entity (~> bg
-                        (set-x-scale 340 _)             
-                        (set-y-scale (* 26 i-length) _) 
-                        (set-y-offset 0 _))             
-                    #:position   (posn 0 0)
-                    #:name       "instructions"
-                    #:components (layer "ui")
-                                 (hidden)
-                                 (on-start (do-many (go-to-pos 'center)
-                                                    show))
-                                 (on-key 'enter die)
-                                 (on-key 'space die)
-                                 (on-key "i" die)))
-
-  (define last-y-pos (* 20 i-length))
-
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
-                  ))
+  (apply make-instructions i-list))
      
 ; ==== NEW HELPER SYSTEMS ====
 ; todo: maybe put this in game-engine?
@@ -848,8 +849,8 @@
 (define (page #:name         [name "Cut Scene"]
               #:bg-color     [bg-color (color 50 50 50)]
               #:border-color [border-color 'white]
-              #:game-width   [game-width 480]
-              #:game-height  [game-height 360]
+              ;#:game-width   [game-width 480]
+              ;#:game-height  [game-height 360]
               #:line-padding [line-padding 4]
               . items
               )
@@ -863,6 +864,18 @@
   
   (define items-list
     (map ensure-list-of-sprites items))
+
+  (define outer-border-img (square 1 'solid 'black))
+  (define inner-border-img (square 1 'solid border-color))
+  (define box-img (square 1 'solid bg-color))
+
+  ;(displayln "==== PRECOMPILING UI ====")
+  (precompile! outer-border-img
+               inner-border-img
+               box-img)
+  
+  ;(displayln "==== PRECOMPILING PAGES ====")
+  (apply precompile! (flatten items-list)) ; Now works with sprites!
   
 
   (define (get-sprite-height as)
@@ -888,14 +901,26 @@
                                          (get-y-offset s)) s))
                       item)))))
 
-  (sprite->entity (append offset-items-list
-                          (bordered-box-sprite game-width game-height #:color bg-color #:border-color border-color))
+  (define (set-fullscreen-page)
+    (lambda (g e)
+      (define G-WIDTH (game-width g))
+      (define G-HEIGHT (game-height g))
+      (define sprites-list
+        (append offset-items-list
+                (bordered-box-sprite G-WIDTH G-HEIGHT #:color bg-color #:border-color border-color)))
+      ;((change-sprite sprites-list) g e)))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (reverse sprites-list)))))
+
+  (sprite->entity empty-image
                   #:name       name
-                  #:position   (posn (/ game-width 2) (/ game-height 2))
+                  #:position   (posn 0 0)
                   #:components (layer "ui")
-                               (hidden)                                ; This is here just in case
-                               (on-start (do-many (go-to-pos 'center)  ; page gets spawned without
-                                                  show))               ; relative? #f
+                               (hidden)                               
+                               (on-start (do-many (set-fullscreen-page)
+                                                  (go-to-pos 'center)  
+                                                  show))               
                                (on-key 'space die)
                                (on-key 'enter die)
                                (storable)))
@@ -921,17 +946,33 @@
 (define (custom-cutscene . pages)
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
-  (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
-  (sprite->entity (reverse (get-components (first pages) animated-sprite?))
+  ;(apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
+  (define (set-first-page)
+    (lambda (g e)
+      (define cut-scenes (get-storage-data "cut-scenes" e))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (get-components (first cut-scenes) animated-sprite?)))))
+
+  (define (bake-and-store-pages)
+    (lambda (g e)
+      (define (bake-page page)
+        ((on-start-func (get-component page on-start?)) g page))
+      (define baked-pages (map bake-page pages))
+      (add-components e (storage "cut-scenes" baked-pages))))
+  
+  (sprite->entity empty-image ;(reverse (get-components (first pages) animated-sprite?))
                   #:name "Multi Cut Scene"
                   #:position (posn 0 0)
                   #:components (layer "ui")
                                (hidden)
                                ;(apply precompiler (flatten (map (curryr get-components image-animated-sprite?) pages)))
-                               (storage "cut-scenes" pages)
+                               ;;(storage "cut-scenes" pages)
                                (counter 0)
                                (storable)
-                               (on-start (do-many (go-to-pos 'center)
+                               (on-start (do-many (bake-and-store-pages)
+                                                  (set-first-page)
+                                                  (go-to-pos 'center)
                                                   show))
                                (on-key 'enter (change-cutscene))))
 
@@ -952,6 +993,7 @@
                   #:score-prefix    [prefix "Gold"]
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:instructions    [instructions #f]
                   #:rewards-list    [rewards-list '()]
                   #:other-entities  [ent #f]
                                    . custom-entities)
@@ -969,6 +1011,7 @@
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
         #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        #:instructions     [instructions (or/c #f entity?)]
         #:rewards-list     [rewards-list (listof component-or-system?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
        #:rest [rest (listof entity?)]
@@ -1028,17 +1071,22 @@
                                        (filter-not (curry get-storage "Weapon") known-products-list))))
         #f))
 
-  ;--------
+  ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse
   (define shoot-key (if (and player-with-recipes-and-weapons (get-component player-with-recipes-and-weapons on-mouse?))
                         "LEFT-CLICK"
                         "F"))
   ;--------
 
+  (define automated-instructions-entity
+    (if instructions
+        instructions
+        (instructions-entity #:move-keys move-keys
+                             #:mouse-aim? mouse-aim?
+                             #:shoot-key shoot-key)))
+  
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn (instructions-entity #:move-keys move-keys
-                                                               #:mouse-aim? mouse-aim?
-                                                               #:shoot-key shoot-key)
+                                   (spawn automated-instructions-entity
                                           #:relative? #f))))
   
   (define (add-random-start-pos e)
@@ -1136,9 +1184,7 @@
   (define es (filter identity
                      (flatten
                       (list
-                       (instructions-entity #:move-keys move-keys
-                                            #:mouse-aim? mouse-aim?
-                                            #:shoot-key shoot-key)
+                       automated-instructions-entity
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity prefix) #f)
 
@@ -1463,6 +1509,58 @@
                                                       )
                                                   (do-after-time 1 die) ; 1 tick delay incase function is spawn
                                                   )))))
+
+; ==== CUSTOM ITEM DEFINITION ====
+(define (custom-item #:name              [n "Custom Item"]
+                     #:sprite            [s chest-sprite]
+                     #:tile              [tile #f]
+                     #:position          [pos #f]
+                     #:amount-in-world   [world-amt 1]
+                     #:storable?         [storable? #t]
+                     #:consumable?       [consumable? #f]
+                     #:value             [val 10]
+                     #:respawn?          [respawn? #t]
+                     #:on-pickup         [pickup-func (λ (g e) e)]
+                     #:on-store          [store-func (λ (g e) e)]
+                     #:on-drop           [drop-func (λ (g e) e)]
+                     #:components        [c #f]
+                     . custom-components)
+  (define (do-nothing)
+    (λ (g e) e))
+  
+  (define (pickup-component)
+    (on-key 'space #:rule (and/r near-player?
+                                 (nearest-to-player? #:filter (has-component? on-key?)))
+            (do-many pickup-func
+                     (if respawn?
+                         (do-after-time 1 (do-many (respawn 'anywhere)
+                                                   (active-on-random)))
+                         (do-after-time 1 die) ; 1 tick delay in case function is spawn
+                         ))))
+  
+  (define item-id (next-storable-item-id))
+  
+  (sprite->entity s
+                  #:name n
+                  #:position    (or pos (posn 0 0))
+                  #:components  (active-on-bg (or tile 0))
+                                (physical-collider)
+                                (hidden)
+                                (storage "amount-in-world" world-amt)
+                                (storage "value" val)
+                                (on-start (do-many (if pos  (do-nothing) (respawn 'anywhere))
+                                                   (if tile (do-nothing) (active-on-random))
+                                                   show))
+                                (if storable? (storable) #f)
+                                (if consumable? (pickup-component) #f)
+                                (storage "item-id" item-id)
+                                (storage "backpack-observer"
+                                         (observe-change (in-backpack-by-id? item-id)
+                                                         (if/r (in-backpack-by-id? item-id)
+                                                               store-func
+                                                               drop-func)))
+                                (cons c custom-components)
+                                ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]

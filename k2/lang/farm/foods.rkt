@@ -22,8 +22,7 @@
 	              [start-animal start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
-           (prefix-in s: survival)
-           (prefix-in h: 2htdp/image))
+           (prefix-in s: survival))
 
   (define rand
     (lambda () (first (shuffle (list apple broccoli grapes onion potato tomato)))))

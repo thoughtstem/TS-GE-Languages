@@ -88,7 +88,7 @@
                                      . custom-components)
   
   (->i ()
-       (#:sprite [sprite (or/c sprite? (listof sprite?))]
+       (#:sprite [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
         #:damage-processor [damage-processor damage-processor?]
         #:position [position posn?]
         #:speed [speed number?]
@@ -121,16 +121,20 @@
                                     #:position   [p (posn 0 0)]
                                     #:name       [name "Bulbasaur"]
                                     #:tile       [tile 0]
-                                    #:dialog     [d  #f]
+                                    #:dialog     [d  (first (shuffle (list (list "It's dangerous out here!")
+                                                                           (list "You should find food to survive.")
+                                                                           (list "Watch out for those trainers!")
+                                                                           (list "Go collect some Evolution Stones."))))]
                                     #:mode       [mode 'wander]
                                     #:game-width [GAME-WIDTH 480]
                                     #:speed      [spd 2]
                                     #:target     [target "player"]
                                     #:sound      [sound #t]
                                     #:scale      [scale 1]
-                                    #:components [c (on-start (respawn 'anywhere))] . custom-components )
+                                    #:components [c #f]
+                                    . custom-components )
 
-  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
+  (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
            #:position   [position posn?]
            #:name       [name string?]
            #:tile       [tile number?]
@@ -148,37 +152,19 @@
   @{Returns a custom friend, which will be placed in to the world
          automatically if it is passed into @racket[pokemon-game]
          via the @racket[#:friend-list] parameter.}
-
-  (define dialog
-    (if (not d)
-        (dialog->sprites (first (shuffle (list (list "It's dangerous out here!")
-                                               (list "You should find food to survive.")
-                                               (list "Watch out for those trainers!")
-                                               (list "Go collect some Evolution Stones."))))
-                     #:game-width GAME-WIDTH
-                     #:animated #t
-                     #:speed 4)
-        (if (string? (first d))
-            (dialog->sprites d
-                             #:game-width GAME-WIDTH
-                             #:animated #t
-                             #:speed    4)
-            (dialog->response-sprites d
-                                      #:game-width GAME-WIDTH
-                                      #:animated #t
-                                      #:speed 4))))
   
-  (create-npc #:sprite      s
-              #:name        name
-              #:position    p
-              #:active-tile tile
-              #:dialog      dialog
-              #:mode        mode
-              #:speed       spd
-              #:target      target
-              #:sound       sound
-              #:scale       scale
-              #:components  (cons c custom-components)))
+  (custom-npc #:sprite     s
+              #:position   p
+              #:name       name
+              #:tile       tile
+              #:dialog     d
+              #:game-width GAME-WIDTH
+              #:mode       mode
+              #:speed      spd
+              #:target     target
+              #:sound      sound
+              #:scale      scale
+              #:components (cons c custom-components)))
 
 ; ---------   Custom Trainer
 (define (pokeball-style n)
@@ -234,7 +220,7 @@
                                      . custom-components)
 
   (->i () (#:amount-in-world [amount-in-world positive?]
-           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:sprite          [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
            #:ai              [ai ai-level?]
            #:health          [health positive?] 
            #:weapon          [w entity?]
@@ -270,7 +256,7 @@
                                    . custom-entities)
 
    (->i () (#:type       [type entity?]
-            #:sprite     [sprite (or/c sprite? (listof sprite?))]
+            #:sprite     [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
             #:position   [position posn?]
             #:name       [name string?]
             #:tile       [tile number?]
@@ -316,7 +302,7 @@
                                     #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:sprite            [sprite (or/c sprite? (listof sprite?) string? (listof string?))]
         #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]

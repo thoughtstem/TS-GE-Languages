@@ -48,9 +48,12 @@
          custom-cutscene
          page
 
-         if/r
+         ;if/r
          custom-item
          in-backpack-by-id?
+         in-game-by-id?
+
+         fetch-quest
          )
 
 (require scribble/srcdoc)
@@ -71,22 +74,6 @@
 (define (next-storable-item-id)
   (set! STORABLE-ITEM-ID-COUNTER (add1 STORABLE-ITEM-ID-COUNTER))
   STORABLE-ITEM-ID-COUNTER)
-
-(define (in-backpack-by-id? item-id)
-  (lambda (g e)
-    (define item-ids (map (compose (curry get-storage-data "item-id")
-                                item-entity)
-                       (get-items (get-entity "player" g))))
-    (if (member item-id item-ids) #t #f)))
-
-; rule helper to use with observe-change
-(define (if/r rule do-func [else-func (λ (g e) e)])
-  (lambda (g e1 e2)
-    (if (void? e1)
-        e2
-        (if (rule g e2)
-            (do-func g e2)
-            (else-func g e2)))))
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -978,6 +965,24 @@
 
 ; ===== END OF MULTI-PAGE CUT-SCENE =====
 
+; ===== QUEST FUNCTIONS =====
+(define (fetch-quest #:item item
+                     #:quest-complete-dialog [quest-complete-dialog (list (~a "Thanks for finding my " (get-name item)))]
+                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                        "I don't know what I would do"
+                                                                        (~a "without my " (get-name item)))]
+                     #:cutscene              [cutscene #f])
+  (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
+                       (near? "player"))
+         #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+         #:new-response-dialog (if ((listof (listof string?)) new-response-dialog)
+                                   (dialog->response-sprites new-response-dialog #:game-width 480)
+                                   (dialog->sprites new-response-dialog #:game-width 480))
+         #:cutscene cutscene))
+
+
+
+; ===== END OF QUEST FUNCTIONS =====
 
 (define/contract/doc
   (adventure-game #:headless        [headless #f]
@@ -1311,8 +1316,8 @@
            #:target     [target string?]
            #:sound      [sound any/c]
            #:scale      [scale number?]
-           #:components [first-component component-or-system?])
-       #:rest [more-components (listof component-or-system?)]
+           #:components [first-component (or/c component-or-system? observe-change? #f) ])
+       #:rest [more-components (listof (or/c component-or-system? observe-change? #f))]
        [returns entity?])
 
  @{Returns a custom npc, which will be placed in to the world

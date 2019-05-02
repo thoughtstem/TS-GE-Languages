@@ -1328,5 +1328,3 @@
   (start zookeeper
          ((hippo 6))
          ((apple 6))))
-
-;(test-all-examples-as-games 'k2)

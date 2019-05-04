@@ -886,8 +886,8 @@
         #:score-prefix [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
         #:instructions     [instructions (or/c #f entity?)]
-        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
-       #:rest [rest (listof entity?)]
+        #:other-entities [other-entities (or/c #f entity? (listof #f) (listof entity?))])
+       #:rest [rest (listof (or/c #f entity? (listof #f) (listof entity?)))]
        [res () game?])
 
   @{The top-level function for the battlearena language.

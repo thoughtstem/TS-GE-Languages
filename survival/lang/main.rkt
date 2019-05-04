@@ -837,7 +837,7 @@
         #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
         #:instructions     [instructions (or/c #f entity?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
-       #:rest [rest (listof entity?)]
+       #:rest [rest (listof (or/c #f entity? (listof #f) (listof entity?)))]
        [res () game?])
 
   @{The top-level function for the survival-game language.

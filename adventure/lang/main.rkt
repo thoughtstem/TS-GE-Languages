@@ -494,9 +494,8 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components       [first-component (or/c component-or-system? false? (listof false?) observe-change?)]
-        )
-       #:rest (rest (listof (or/c component-or-system? observe-change?)))
+        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world
@@ -714,8 +713,8 @@
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
-           #:components [first-component any/c])
-       #:rest [more-components (listof any/c)]
+           #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [returns entity?])
 
   @{Returns a custom enemy, which will be placed in to the world
@@ -967,18 +966,26 @@
 
 ; ===== QUEST FUNCTIONS =====
 (define (fetch-quest #:item item
-                     #:quest-complete-dialog [quest-complete-dialog (list (~a "Thanks for finding my " (get-name item)))]
+                     #:reward-amount [reward-amount #f]  
+                     #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                            (list (~a "Thanks for finding my " (get-name item))
+                                                                                  (if reward-amount "Here's a reward for helping me out!" #f)))]
                      #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                         "I don't know what I would do"
-                                                                        (~a "without my " (get-name item)))]
+                                                                        (~a "without my " (get-name item) "."))]
                      #:cutscene              [cutscene #f])
-  (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
-                       (near? "player"))
-         #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
-         #:new-response-dialog (if ((listof (listof string?)) new-response-dialog)
-                                   (dialog->response-sprites new-response-dialog #:game-width 480)
-                                   (dialog->sprites new-response-dialog #:game-width 480))
-         #:cutscene cutscene))
+  (flatten (list (storage (~a "fetch-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
+                 (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
+                                      ;(near? "player") ;removing since observe change gets re-triggered by moving 
+                                      )
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
 
 
 
@@ -999,7 +1006,6 @@
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
                   #:instructions    [instructions #f]
-                  #:rewards-list    [rewards-list '()]
                   #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
@@ -1017,9 +1023,8 @@
         #:enable-world-objects? [world-objects? boolean?]
         #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
         #:instructions     [instructions (or/c #f entity?)]
-        #:rewards-list     [rewards-list (listof component-or-system?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
-       #:rest [rest (listof entity?)]
+       #:rest [rest (listof (or/c #f entity? (listof #f) (listof entity?)))]
        [res () game?])
 
   @{The top-level function for the adventure-game language.
@@ -1032,6 +1037,9 @@
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
+
+  (define (item-entity->backpack-observer e)
+    (get-storage-data "backpack-observer" e))
 
   ;------------------
   (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
@@ -1064,6 +1072,18 @@
     (member (get-name e) (map get-name known-weapons-list)))
   
   (define world-weapon-list (filter (not/c known-weapon?) weapon-list))
+
+  (define (reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "fetch-reward-")))
+
+  (define (npc->fetch-quest-items npc)
+    (define reward-components (get-components npc reward-storage?))
+    (and (not (empty? reward-components))
+         (map (compose first
+                       storage-data) reward-components)))
+  
+  (define item-list (filter identity (flatten (map npc->fetch-quest-items npc-list))))
   
   (define player-with-recipes-and-weapons
     (if p
@@ -1073,7 +1093,9 @@
                           (map food->component
                                (append (remove-duplicates updated-food-list
                                                           name-eq?)
-                                       (filter-not (curry get-storage "Weapon") known-products-list))))
+                                       (filter-not (curry get-storage "Weapon") known-products-list)))
+                          (map item-entity->backpack-observer item-list)
+                          )
         #f))
 
   ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse
@@ -1132,6 +1154,14 @@
                             (on-rule daytime? die)
                             (on-rule should-be-dead? die))
         ent))
+  
+  (define (npc->fetch-quest-rewards npc)
+    (define quest-giver-name (get-name npc))
+    (define fetch-rewards (map storage-data (get-components npc reward-storage?)))
+    (map (λ (fr) (quest-reward
+                  #:quest-giver quest-giver-name
+                  #:quest-item (first fr)
+                  #:reward     (second fr))) fetch-rewards))
 
   (define (score-entity prefix)
     (define counter-sprite
@@ -1151,7 +1181,7 @@
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
-                                 rewards-list
+                                 (map npc->fetch-quest-rewards npc-list)
                                  (observe-change (λ (g e)
                                                    (get-counter e))
                                                  (λ (g e1 e2)
@@ -1212,6 +1242,7 @@
                        npc-list
                        
                        c-list
+                       item-list
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
@@ -1269,8 +1300,8 @@
         #:open-sound   [open-sound (or/c rsound? procedure? '() #f)]
         #:select-sound [select-sound (or/c rsound? procedure? '() #f)]
         #:recipe-list [recipe-list (listof recipe?)]
-        #:components [first-component component-or-system?])
-       #:rest       [more-components (listof component-or-system?)]
+        #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [result entity?])
 
   @{Returns a custom crafter, which will be placed in to the world
@@ -1289,6 +1320,11 @@
                                (apply precompiler (map (λ (r) (recipe-product r)) r-list))
                                (cons c custom-components)))
 
+;(define loose-component?
+;  (or/c component? observe-change? #f))
+
+;(define component-or-system?
+;  (or/c loose-component? (listof loose-component?)))
 
 (define/contract/doc (custom-npc #:sprite     [s (random-character-sprite)]
                                  #:position   [p (posn 200 200)]
@@ -1302,7 +1338,7 @@
                                  #:target     [target "player"]
                                  #:sound      [sound #t]
                                  #:scale      [scale 1]
-                                 #:components [c (on-start (respawn 'anywhere))]
+                                 #:components [c #f]
                                  . custom-components )
 
   (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
@@ -1316,8 +1352,8 @@
            #:target     [target string?]
            #:sound      [sound any/c]
            #:scale      [scale number?]
-           #:components [first-component (or/c component-or-system? observe-change? #f) ])
-       #:rest [more-components (listof (or/c component-or-system? observe-change? #f))]
+           #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
  @{Returns a custom npc, which will be placed in to the world
@@ -1343,11 +1379,7 @@
                                       #:animated #t
                                       #:speed 2))))
   
-  (define sprite (if (image? s)
-                     (new-sprite s)
-                     s))
-  
-  (create-npc #:sprite      sprite
+  (create-npc #:sprite      s
               #:name        name
               #:position    p
               #:active-tile tile
@@ -1357,7 +1389,8 @@
               #:target      target
               #:sound       sound
               #:scale       scale
-              #:components  (cons c custom-components)))
+              #:components  (list (on-start (respawn 'anywhere))
+                                  (cons c custom-components))))
 
 (define/contract/doc (custom-bg #:image      [bg FOREST-BG]
                                 #:rows       [rows 3]
@@ -1374,7 +1407,7 @@
         #:start-tile [start-tile number?]
         #:hd?        [high-def? boolean?]
         #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest [more-components (listof component-or-system?)]
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [result entity?])
 
   @{Returns a custom background, which will be used
@@ -1419,10 +1452,8 @@
            #:amount-in-world [amount-in-world number?]
            #:heals-by   [heal-amt number?]
            #:respawn?   [respawn? boolean?]
-           #:components [first-component (or/c component-or-system?
-                                               false?
-                                               (listof false?))])
-       #:rest [more-components (listof component-or-system?)]
+           #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [returns entity?])
 
   @{Returns a custom food, which will be placed into the world
@@ -1477,10 +1508,8 @@
             #:respawn? [respawn boolean?]
             #:on-pickup [pickup-function procedure?]
             #:cutscene   [cutscene (or/c entity? #f)]
-            #:components [first-component (or/c component-or-system?
-                                                false?
-                                                (listof false?))])
-        #:rest [more-components (listof component-or-system?)]
+            #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world

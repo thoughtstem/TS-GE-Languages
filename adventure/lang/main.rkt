@@ -713,8 +713,8 @@
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
-           #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
+           #:components [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Returns a custom enemy, which will be placed in to the world
@@ -968,7 +968,7 @@
 (define (fetch-quest #:item item
                      #:reward-amount [reward-amount #f]  
                      #:quest-complete-dialog [quest-complete-dialog (filter identity
-                                                                            (list (~a "Thanks for finding my " (get-name item))
+                                                                            (list (~a "Thanks for finding my " (get-name item) ".")
                                                                                   (if reward-amount "Here's a reward for helping me out!" #f)))]
                      #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                         "I don't know what I would do"
@@ -1013,7 +1013,7 @@
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
         #:sky              [sky (or/c sky? #f)]
-        #:intro-cutscene   [intro-cutscene entity?]
+        #:intro-cutscene   [intro-cutscene (or/c entity? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -1154,10 +1154,14 @@
                             (on-rule daytime? die)
                             (on-rule should-be-dead? die))
         ent))
+
+  (define (has-reward? c)
+    (not (false? (second (storage-data c)))))
   
   (define (npc->fetch-quest-rewards npc)
     (define quest-giver-name (get-name npc))
-    (define fetch-rewards (map storage-data (get-components npc reward-storage?)))
+    (define fetch-rewards (map storage-data (get-components npc (and/c reward-storage?
+                                                                       has-reward?))))
     (map (λ (fr) (quest-reward
                   #:quest-giver quest-giver-name
                   #:quest-item (first fr)
@@ -1300,8 +1304,8 @@
         #:open-sound   [open-sound (or/c rsound? procedure? '() #f)]
         #:select-sound [select-sound (or/c rsound? procedure? '() #f)]
         #:recipe-list [recipe-list (listof recipe?)]
-        #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
+        #:components [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom crafter, which will be placed in to the world
@@ -1338,6 +1342,7 @@
                                  #:target     [target "player"]
                                  #:sound      [sound #t]
                                  #:scale      [scale 1]
+                                 #:quest-list [quests '()]
                                  #:components [c #f]
                                  . custom-components )
 
@@ -1352,6 +1357,7 @@
            #:target     [target string?]
            #:sound      [sound any/c]
            #:scale      [scale number?]
+           #:quest-list [quests (listof component-or-system?)]
            #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
@@ -1390,6 +1396,7 @@
               #:sound       sound
               #:scale       scale
               #:components  (list (on-start (respawn 'anywhere))
+                                  quests
                                   (cons c custom-components))))
 
 (define/contract/doc (custom-bg #:image      [bg FOREST-BG]
@@ -1406,8 +1413,8 @@
         #:columns [columns number?]
         #:start-tile [start-tile number?]
         #:hd?        [high-def? boolean?]
-        #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
+        #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
   @{Returns a custom background, which will be used
@@ -1452,8 +1459,8 @@
            #:amount-in-world [amount-in-world number?]
            #:heals-by   [heal-amt number?]
            #:respawn?   [respawn? boolean?]
-           #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
+           #:components [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Returns a custom food, which will be placed into the world
@@ -1508,8 +1515,8 @@
             #:respawn? [respawn boolean?]
             #:on-pickup [pickup-function procedure?]
             #:cutscene   [cutscene (or/c entity? #f)]
-            #:components [first-component (or/c component-or-system? #f (listof #f))])
-       #:rest [more-components (listof (or/c component-or-system? #f (listof #f)))]
+            #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world
@@ -1552,8 +1559,8 @@
                      #:amount-in-world   [world-amt 1]
                      #:storable?         [storable? #t]
                      #:consumable?       [consumable? #f]
-                     #:value             [val 10]
-                     #:respawn?          [respawn? #t]
+                     #:value             [val 10]      ;only used if consumable is #t
+                     #:respawn?          [respawn? #t] ;only used if consumable is #t
                      #:on-pickup         [pickup-func (λ (g e) e)]
                      #:on-store          [store-func (λ (g e) e)]
                      #:on-drop           [drop-func (λ (g e) e)]

@@ -1013,7 +1013,7 @@
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
         #:sky              [sky (or/c sky? #f)]
-        #:intro-cutscene   [intro-cutscene entity?]
+        #:intro-cutscene   [intro-cutscene (or/c entity? false?)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]

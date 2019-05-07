@@ -75,3 +75,12 @@
 
 @defthing[smallmario11-sprite animated-sprite?]
 @(sprite->sheet smallmario11-sprite)
+
+
+@;----
+@(include-section adventure/scribblings/assets-library)
+
+@;---
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

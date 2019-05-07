@@ -10,3 +10,11 @@
 
 @defthing[harrypotter-sprite animated-sprite?]
 @(sprite->sheet harrypotter-sprite)
+
+@;----
+@(include-section adventure/scribblings/assets-library)
+
+@;---
+@section{Sprite Sheets}
+
+@(include-extracted "../assets.rkt")

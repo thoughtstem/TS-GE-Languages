@@ -54,6 +54,9 @@
          in-game-by-id?
 
          fetch-quest
+         craft-quest
+         collect-quest
+         hunt-quest
          )
 
 (require scribble/srcdoc)
@@ -987,6 +990,71 @@
                                                 [else #f])
                         #:cutscene cutscene))))
 
+(define (craft-quest #:item item
+                     #:reward-amount [reward-amount #f]  
+                     #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                            (list "Thanks for making me a ... "
+                                                                                  (~a (get-name item) ".")
+                                                                                  (if reward-amount "Here's a reward for helping me out!" #f)))]
+                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                        "I really needed that ... "
+                                                                        (~a (get-name item) "."))]
+                     #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "craft-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
+                 (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
+                                      ;(near? "player") ;removing since observe change gets re-triggered by moving 
+                                      )
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+(define (collect-quest #:collect-amount amount
+                       #:reward-item [reward-item #f]
+                       #:reward-amount [reward-amount #f]
+                       #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                              (list (~a "Thanks for collecting them all!")
+                                                                                    (if reward-item
+                                                                                        (~a "Here's a " (get-name reward-item)) #f)))]
+                       #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                          "I'm not very good at finding things.")]
+                       #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "collect-reward-" amount) (list reward-item (+ (- amount) (or reward-amount 0)))) ;or should i just store the item-id or grab it from the name?
+                 (collect-quest-reward #:amount amount
+                                       #:reward-item reward-item)
+                 (quest #:rule (has-gold? amount)
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+(define (hunt-quest #:hunt-amount amount
+                    #:reward-item [reward-item #f]  
+                    #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                           (list (~a "Thanks for killing " amount " enemies!")
+                                                                                 (if reward-item
+                                                                                     (~a "Here's a " (get-name reward-item)) #f)))]
+                    #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                       "Those guys were realy causing trouble.")]
+                    #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "hunt-reward-" amount) (list reward-item amount)) ;or should i just store the item-id or grab it from the name?
+                 (quest #:rule (has-gold? amount)
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
 
 
 ; ===== END OF QUEST FUNCTIONS =====
@@ -1073,12 +1141,21 @@
   
   (define world-weapon-list (filter (not/c known-weapon?) weapon-list))
 
-  (define (reward-storage? c)
+  (define (fetch-reward-storage? c)
       (and (storage? c)
            (string-prefix? (storage-name c) "fetch-reward-")))
 
+  (define (craft-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "craft-reward-")))
+
+  (define (collect-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "collect-reward-")))
+
   (define (npc->fetch-quest-items npc)
-    (define reward-components (get-components npc reward-storage?))
+    (define reward-components (get-components npc fetch-reward-storage?))
+    
     (and (not (empty? reward-components))
          (map (compose first
                        storage-data) reward-components)))
@@ -1158,14 +1235,16 @@
   (define (has-reward? c)
     (not (false? (second (storage-data c)))))
   
-  (define (npc->fetch-quest-rewards npc)
+  (define (npc->counter-quest-rewards npc)
     (define quest-giver-name (get-name npc))
-    (define fetch-rewards (map storage-data (get-components npc (and/c reward-storage?
+    (define counter-quest-rewards (map storage-data (get-components npc (and/c (or/c fetch-reward-storage?
+                                                                                     craft-reward-storage?
+                                                                                     collect-reward-storage?)
                                                                        has-reward?))))
     (map (λ (fr) (quest-reward
                   #:quest-giver quest-giver-name
                   #:quest-item (first fr)
-                  #:reward     (second fr))) fetch-rewards))
+                  #:reward     (second fr))) counter-quest-rewards))
 
   (define (score-entity prefix)
     (define counter-sprite
@@ -1185,7 +1264,7 @@
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
-                                 (map npc->fetch-quest-rewards npc-list)
+                                 (map npc->counter-quest-rewards npc-list)
                                  (observe-change (λ (g e)
                                                    (get-counter e))
                                                  (λ (g e1 e2)

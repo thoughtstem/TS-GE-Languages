@@ -747,7 +747,7 @@
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
                     #:components (on-start die)))
-  
+
   (define (health-is-zero? g e)
     (define h (get-health e))
     (and h (<= h 0)))
@@ -1018,14 +1018,21 @@
                        #:reward-amount [reward-amount #f]
                        #:quest-complete-dialog [quest-complete-dialog (filter identity
                                                                               (list (~a "Thanks for collecting them all!")
+                                                                                    (if reward-amount
+                                                                                        (~a "I'll let you keep " reward-amount ".") #f)
                                                                                     (if reward-item
-                                                                                        (~a "Here's a " (get-name reward-item)) #f)))]
+                                                                                        (~a "Also, have this " (get-name reward-item) ".") #f))
+                                                                                    )]
                        #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                           "I'm not very good at finding things.")]
                        #:cutscene              [cutscene #f])
-  (flatten (list (storage (~a "collect-reward-" amount) (list reward-item (+ (- amount) (or reward-amount 0)))) ;or should i just store the item-id or grab it from the name?
-                 (collect-quest-reward #:amount amount
-                                       #:reward-item reward-item)
+  (flatten (list (storage (~a "collect-reward-" amount) (list amount
+                                                              (or reward-amount 0)))
+                 (and reward-item
+                      (item-reward-system #:rule (and/r (has-gold? amount)
+                                                        ;npc-last-dialog? ; doesn't work because new-reponse is destructive
+                                                        )
+                                          #:reward-item reward-item))
                  (quest #:rule (has-gold? amount)
                         #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
                         #:new-response-dialog (cond
@@ -1036,17 +1043,31 @@
                                                 [else #f])
                         #:cutscene cutscene))))
 
+(define (enemies-killed? amount)
+  (lambda (g e)
+    (define kill-count (get-storage-data "kill-count" (get-entity "score" g)))
+    (>= kill-count amount)))
+
 (define (hunt-quest #:hunt-amount amount
-                    #:reward-item [reward-item #f]  
+                    #:reward-item [reward-item #f]
+                    #:reward-amount [reward-amount #f]
                     #:quest-complete-dialog [quest-complete-dialog (filter identity
                                                                            (list (~a "Thanks for killing " amount " enemies!")
+                                                                                 (if reward-amount
+                                                                                        (~a "Take this payment of " reward-amount ".") #f)
                                                                                  (if reward-item
-                                                                                     (~a "Here's a " (get-name reward-item)) #f)))]
+                                                                                     (~a "Also, have this " (get-name reward-item) ".") #f)))]
                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                        "Those guys were realy causing trouble.")]
                     #:cutscene              [cutscene #f])
-  (flatten (list (storage (~a "hunt-reward-" amount) (list reward-item amount)) ;or should i just store the item-id or grab it from the name?
-                 (quest #:rule (has-gold? amount)
+  (flatten (list (storage (~a "hunt-reward-" amount) (list amount
+                                                           (or reward-amount 0)))
+                 (and reward-item
+                      (item-reward-system #:rule (and/r (enemies-killed? amount)
+                                                        ;npc-last-dialog? ; doesn't work because new-reponse is destructive
+                                                        )
+                                          #:reward-item reward-item))
+                 (quest #:rule (enemies-killed? amount)
                         #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
                         #:new-response-dialog (cond
                                                 [((listof (listof string?)) new-response-dialog)
@@ -1153,6 +1174,10 @@
       (and (storage? c)
            (string-prefix? (storage-name c) "collect-reward-")))
 
+  (define (hunt-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "hunt-reward-")))
+
   (define (npc->fetch-quest-items npc)
     (define reward-components (get-components npc fetch-reward-storage?))
     
@@ -1237,14 +1262,45 @@
   
   (define (npc->counter-quest-rewards npc)
     (define quest-giver-name (get-name npc))
-    (define counter-quest-rewards (map storage-data (get-components npc (and/c (or/c fetch-reward-storage?
-                                                                                     craft-reward-storage?
-                                                                                     collect-reward-storage?)
-                                                                       has-reward?))))
-    (map (λ (fr) (quest-reward
-                  #:quest-giver quest-giver-name
-                  #:quest-item (first fr)
-                  #:reward     (second fr))) counter-quest-rewards))
+    (define fetch-quest-rewards (map storage-data (get-components npc (and/c (or/c fetch-reward-storage?
+                                                                                   craft-reward-storage?)
+                                                                               has-reward?))))
+    (define collect-quest-rewards (map storage-data (get-components npc (and/c collect-reward-storage?
+                                                                               has-reward?))))
+    (define hunt-quest-rewards (map storage-data (get-components npc (and/c hunt-reward-storage?
+                                                                            has-reward?))))
+    
+    (define fetch-reward-components
+      (map (λ (fr)
+             (quest-reward #:quest-giver quest-giver-name
+                           #:quest-item (first fr)
+                           #:reward     (second fr)))
+           fetch-quest-rewards))
+    
+    (define collect-reward-components
+      (map (λ (cr)
+             (counter-reward-system #:quest-giver-name quest-giver-name
+                                    #:collect-amount  (first cr)
+                                    #:reward-amount   (second cr)))
+           collect-quest-rewards))
+
+    (define hunt-reward-components
+      (map (λ (hr)
+             (hunt-reward-system #:quest-giver-name quest-giver-name
+                                 #:hunt-amount     (first hr)
+                                 #:reward-amount   (second hr)))
+           hunt-quest-rewards))
+    
+    (append fetch-reward-components collect-reward-components hunt-reward-components))
+
+  (define (start-dead-component? c)
+    (and (on-start? c)
+         (eq? (on-start-func c) die)))
+  
+  (define (enemy-died? g e)
+    (define death-broadcast (get-entity "Enemy Death Broadcast" g))
+    (and death-broadcast
+         (get-component death-broadcast start-dead-component?)))
 
   (define (score-entity prefix)
     (define counter-sprite
@@ -1255,12 +1311,17 @@
 
     (define (recipe-has-cost? r)
       (> (recipe-cost r) 0))
+
+    (define (add1-to-kill-count)
+      (lambda (g e)
+        (set-storage "kill-count" e (add1 (get-storage-data "kill-count" e)))))
     
     (sprite->entity counter-sprite
                     #:name       "score"
                     #:position   (posn 330 20)
                     #:components (static)
                                  (counter 0)
+                                 (storage "kill-count" 0)
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
@@ -1270,7 +1331,11 @@
                                                  (λ (g e1 e2)
                                                    ((do-many (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
                                                              (do-font-fx)) g e2)))
+                                 (on-rule enemy-died? (add1-to-kill-count))
                                  ))
+
+  (define (get-kill-count g)
+    (get-storage-data "kill-count" (get-entity "score" g)))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile e-list)))

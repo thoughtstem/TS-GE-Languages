@@ -1,25 +1,43 @@
 #lang racket
 
-(provide (all-from-out "../animal/animal-lang.rkt"))
+(provide (all-from-out "../animal/animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-animal start])
+         rand) 
 
 (require "../animal/animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
+(define rand
+  (lambda ()
+    (first (shuffle (list zookeeper monkey elephant giraffe
+                          hippo kangaroo penguin apple banana
+                          copper silver gold)))))
+
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/zoo/coins
+  )
 
 (module ratchet racket
 
   (require ratchet
            (rename-in "../animal/animal-lang.rkt" 
-                      (start-b start))
+                      (start-animal start))
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
+  (define rand
+    (lambda () (first (shuffle (list zookeeper monkey elephant giraffe
+                                     hippo kangaroo penguin apple banana
+                                     copper silver gold)))))
+
   (define (crop i)
     (h:crop 0 0 32 32 i))
+
+  (define (fit i)
+    (s:scale-to-fit i 32))
 
   (define (crop-left i)
     (define w (h:image-width i))
@@ -30,23 +48,31 @@
     "../animal/animal-lang.rkt" 
     [start    x play-icon]
     
-    [zookeeper     z (s:scale-to-fit (s:draw-sprite zookeeper) 32)]
-    ;[lion          l (s:scale-to-fit (s:draw-sprite lion) 32)]
-    [monkey        m (s:scale-to-fit (s:draw-sprite monkey) 32)]
-    ;[tiger         t (s:scale-to-fit (s:draw-sprite tiger) 32)]
-    [elephant      e (s:scale-to-fit (s:draw-sprite elephant) 32)]
-    [giraffe       g (s:scale-to-fit (s:draw-sprite giraffe) 32)]
-    [hippo         h (s:scale-to-fit (s:draw-sprite hippo) 32)]
-    [kangaroo      k (s:scale-to-fit (s:draw-sprite kangaroo) 32)]
-    [penguin       p (s:scale-to-fit (s:draw-sprite penguin) 32)]
+    [zookeeper     z (fit (s:draw-sprite zookeeper))]
+    [monkey        m (fit (s:draw-sprite monkey))]
+    [elephant      e (fit (s:draw-sprite elephant))]
+    [hippo         h (fit (s:draw-sprite hippo))]
+    [kangaroo      k (fit (s:draw-sprite kangaroo))]
+    [penguin       p (fit (s:draw-sprite penguin))]
     
-    [apple    a (crop (s:render apple))]
-    [banana   b (crop (s:render banana))]
-    ;[potato   p (crop (s:render potato))]
-    ;[kiwi     k (crop (s:render kiwi))]
+    [apple    a (fit (s:draw-sprite apple))]
+    [banana   b (fit (s:draw-sprite banana))]
+    [fish     f (fit (s:draw-sprite fish))]
+    [tomato   t (fit (s:draw-sprite tomato))]
 
-    [copper   1 (crop (s:render copper))]
-    [silver   2 (crop (s:render silver))]
-    [gold     3 (crop (s:render gold))]))
+    [copper   c (fit (s:draw-sprite copper))]
+    [silver   s (fit (s:draw-sprite silver))]
+    [gold     g (fit (s:draw-sprite gold))]
+
+    [rand     ? question-icon]
+
+    [red            R (h:square 32 'solid 'red)]
+    [orange         O (h:square 32 'solid 'orange)]
+    [yellow         Y (h:square 32 'solid 'yellow)]
+    [green          G (h:square 32 'solid 'green)]
+    [blue           B (h:square 32 'solid 'blue)]
+    [purple         P (h:square 32 'solid 'purple)]
+    
+    ))
 
 

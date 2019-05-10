@@ -45,8 +45,18 @@
          acid-sprite
          ice-sprite
 
-         cutscene
+         custom-cutscene
          page
+
+         ;if/r
+         custom-item
+         in-backpack-by-id?
+         in-game-by-id?
+
+         fetch-quest
+         craft-quest
+         collect-quest
+         hunt-quest
          )
 
 (require scribble/srcdoc)
@@ -62,16 +72,17 @@
          (only-in lang/posn make-posn)
          )
 
+(define STORABLE-ITEM-ID-COUNTER 0)
+
+(define (next-storable-item-id)
+  (set! STORABLE-ITEM-ID-COUNTER (add1 STORABLE-ITEM-ID-COUNTER))
+  STORABLE-ITEM-ID-COUNTER)
+
 (define-syntax-rule (define/log l head body ...)
   (define head
     (let ()
       (displayln l)
       body ...)))
-
-(define (WIDTH)       480)
-(define (HEIGHT)      360)
-(define (TOTAL-TILES) 9)
-
 
 (define dialog-str? (or/c (listof string?) (listof (listof string?))))
 
@@ -174,17 +185,15 @@
                       (make-posn 12 9))
                 (rectangle 24 18 'outline 'transparent)))
 
-(define (sky-sprite-with-light color)
+;default sky is sized for 2x 480 by 360
+(define (sky-sprite-with-light color #:scale [scale 1])
   (define sky-img (draw-sky-with-light color))
-  (new-sprite sky-img #:scale 20.167))
-
-(define (sky-sprite-with-light-small color)
-  (define sky-img (draw-sky-with-light-small color))
-  (new-sprite sky-img #:scale 40.333))
+  (new-sprite sky-img #:scale (* scale 20.167)))
 
 (define (night-sky-with-lighting #:color         [color 'black]
                                  #:max-alpha     [m-alpha 160]
-                                 #:length-of-day [length-of-day 2400])
+                                 #:length-of-day [length-of-day 2400]
+                                 #:scale         [scale 1])
   (define max-alpha (exact-round (* m-alpha 0.56)))
   (define update-multiplier 2)
   (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
@@ -197,9 +206,9 @@
     (define time-of-day (modulo game-count length-of-day))
     (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
     ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
-    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val)))
+    (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val) #:scale scale))
     (update-entity e animated-sprite? new-night-sky))
-  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha))
+  (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha) #:scale scale)
                   #:position (posn 0 0)
                   #:name "night sky"
                   #:components (layer "sky")
@@ -286,31 +295,9 @@
                                        #:scale scale)
                   (cons c custom-components)))
 
-; === EXAMPLE GAME DIALOG ===
-(define (player-dialog)
-  (list "Hello. What's your name?"
-        "I'm lost and hungry, can you help me?"))
-
-; Responses must have the same number of lists as items in the player-dialog
-(define (npc1-response)
-  (list (list "Oh, hello! My name is Jordan!"
-              "It's dangerous out here."
-              "You should be careful.")
-        (list "Sorry, I don't have any food to spare."
-              "If you look around though,\nyou might find carrots.")  ))
-
-(define (npc1-response-sprites)
-  (dialog->response-sprites npc1-response
-                            #:game-width (WIDTH)
-                            #:animated #t
-                            #:speed 4))
-
 (define (instructions-entity #:move-keys  [move-keys "ARROW KEYS"]
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
-
-  (define (instruction->sprite text offset)
-    (new-sprite text #:y-offset offset #:color 'yellow))
 
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
@@ -323,29 +310,7 @@
                                         "Z to pick up items"
                                         "X to drop items"
                                         "B to open and close backpack")))
-  (define i-length (length i-list))
-  
-  (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
-  
-  (define i
-    (sprite->entity (~> bg
-                        (set-x-scale 340 _)             
-                        (set-y-scale (* 26 i-length) _) 
-                        (set-y-offset 0 _))             
-                    #:position   (posn 0 0)
-                    #:name       "instructions"
-                    #:components (layer "ui")
-                                 (hidden)
-                                 (on-start (do-many (go-to-pos 'center)
-                                                    show))
-                                 (on-key 'enter die)
-                                 (on-key 'space die)
-                                 (on-key "i" die)))
-
-  (define last-y-pos (* 20 i-length))
-
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
-                  ))
+  (apply make-instructions i-list))
      
 ; ==== NEW HELPER SYSTEMS ====
 ; todo: maybe put this in game-engine?
@@ -422,8 +387,8 @@
   (define (remove-gold g e1 e2)
     (if ((crafting? product-name) g e2)
         ((do-many (change-counter-by (- product-cost))
-                  (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                  (do-font-fx)
+                  ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                  ;(do-font-fx)
                   (spawn coin-toast-entity)) g e2)
         e2))
   (observe-change (crafting? product-name) remove-gold))
@@ -505,8 +470,8 @@
                                           (nearest-entity-to-player-is? coin-name #:filter (and/c (has-component? on-key?)
                                                                                                   (not/c bg?))))
                     (do-many (change-counter-by coin-value)
-                             (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
-                             (do-font-fx)
+                             ;(draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                             ;(do-font-fx)
                              (spawn coin-toast-entity))))
       #f))
 
@@ -532,9 +497,8 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components       [first-component (or/c component-or-system? false? (listof false?))]
-        )
-       #:rest (rest (listof component-or-system?))
+        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world
@@ -740,6 +704,8 @@
                                                                    #:dart (acid-dart)))
                                    #:death-particles (particles (custom-particles))
                                    #:night-only? (night-only? #f)
+                                   #:on-death  [death-func (λ (g e) e)]
+                                   #:drop-list [drop-list '()]
                                    #:components (c #f)
                                    . custom-components
                                    )
@@ -752,14 +718,17 @@
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
-           #:components [first-component any/c])
-       #:rest [more-components (listof any/c)]
+           #:on-death        [death-function procedure?]
+           #:drop-list       [drop-list (listof (or/c entity? procedure?))]
+           #:components [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Returns a custom enemy, which will be placed in to the world
          automatically if it is passed into @racket[adventure-game]
          via the @racket[#:enemy-list] parameter.}
-  
+
+  (apply precompile! drop-list)
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -783,7 +752,7 @@
                     #:name "Enemy Death Broadcast"
                     #:position (posn 0 0)
                     #:components (on-start die)))
-  
+
   (define (health-is-zero? g e)
     (define h (get-health e))
     (and h (<= h 0)))
@@ -792,18 +761,20 @@
     (observe-change health-is-zero?
                     (λ (g e1 e2)
                       (if (health-is-zero? g e2)
-                          ((do-many
-                            (play-sound EXPLOSION-SOUND)
-                            (spawn particles)
-                            (spawn death-broadcast)
-                            (do-after-time 1 die)) g e2)
+                          ((apply do-many
+                                  (flatten (list (play-sound EXPLOSION-SOUND)
+                                                 (spawn particles)
+                                                 (spawn death-broadcast)
+                                                 death-func
+                                                 (map spawn-on-current-tile drop-list)
+                                                 (do-after-time 1 die)))) g e2)
                           e2))
                     ))
   
   (custom-combatant #:name "Enemy"
                     #:sprite s
                     #:position (posn 0 0)
-                    #:mode #f
+                    ;#:mode #f
                     ;#:components 
 
                     ;What is making these guys slow???
@@ -830,17 +801,17 @@
                     ))
 
 
-(define (custom-combatant #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+(define (custom-combatant #:sprite     [s (random-character-sprite)]
                           #:position   [p (posn 0 0)]
                           #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                    "Sydney" "Charlie" "Andy")))]
                           #:tile       [tile 0]
-                          #:mode       [mode 'wander]
-                          #:game-width [GAME-WIDTH 480]
+                          ;#:mode       [mode 'wander]
+                          ;#:game-width [GAME-WIDTH 480]
                           #:speed      [spd 2]
-                          #:target     [target "player"]
-                          #:sound      [sound #t]
-                          #:scale      [scale 1]
+                          ;#:target     [target "player"]
+                          ;#:sound      [sound #t]
+                          ;#:scale      [scale 1]
                           #:components [c #f] . custom-components )
 
   (define sprite (if (image? s)
@@ -874,8 +845,8 @@
 (define (page #:name         [name "Cut Scene"]
               #:bg-color     [bg-color (color 50 50 50)]
               #:border-color [border-color 'white]
-              #:game-width   [game-width 480]
-              #:game-height  [game-height 360]
+              ;#:game-width   [game-width 480]
+              ;#:game-height  [game-height 360]
               #:line-padding [line-padding 4]
               . items
               )
@@ -884,12 +855,23 @@
     (cond [(image-or-images? item)       (list (new-sprite item))]
           [(string-or-text-frame? item)  (list (new-sprite item #:color 'yellow))]
           [(animated-sprite? item)       (list item)]
-          [(and (list? item)
-                ((listof sprite?) (flatten item))) (map ensure-sprite (flatten item))]
+          [((listof sprite?) (flatten item)) (map ensure-sprite (flatten item))]
           [else (error "That wasn't a valid cut-scene item!")]))
   
   (define items-list
     (map ensure-list-of-sprites items))
+
+  (define outer-border-img (square 1 'solid 'black))
+  (define inner-border-img (square 1 'solid border-color))
+  (define box-img (square 1 'solid bg-color))
+
+  ;(displayln "==== PRECOMPILING UI ====")
+  (precompile! outer-border-img
+               inner-border-img
+               box-img)
+  
+  ;(displayln "==== PRECOMPILING PAGES ====")
+  (apply precompile! (flatten items-list)) ; Now works with sprites!
   
 
   (define (get-sprite-height as)
@@ -915,14 +897,26 @@
                                          (get-y-offset s)) s))
                       item)))))
 
-  (sprite->entity (append offset-items-list
-                          (bordered-box-sprite game-width game-height #:color bg-color #:border-color border-color))
+  (define (set-fullscreen-page)
+    (lambda (g e)
+      (define G-WIDTH (game-width g))
+      (define G-HEIGHT (game-height g))
+      (define sprites-list
+        (append offset-items-list
+                (bordered-box-sprite G-WIDTH G-HEIGHT #:color bg-color #:border-color border-color)))
+      ;((change-sprite sprites-list) g e)))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (reverse sprites-list)))))
+
+  (sprite->entity empty-image
                   #:name       name
-                  #:position   (posn (/ game-width 2) (/ game-height 2))
+                  #:position   (posn 0 0)
                   #:components (layer "ui")
-                               ;(hidden)
-                               ;(on-start (do-many (go-to-pos 'center)
-                               ;                   show))
+                               (hidden)                               
+                               (on-start (do-many (set-fullscreen-page)
+                                                  (go-to-pos 'center)  
+                                                  show))               
                                (on-key 'space die)
                                (on-key 'enter die)
                                (storable)))
@@ -945,32 +939,161 @@
             (add-components _ (get-components (list-ref cut-scenes next-scene-index) animated-sprite?))
             (update-entity _ counter? (counter next-scene-index))))))
 
-(define (cutscene . pages)
+(define (custom-cutscene . pages)
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
-  (apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
-  (sprite->entity (reverse (get-components (first pages) animated-sprite?))
+  ;(apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
+  (define (set-first-page)
+    (lambda (g e)
+      (define cut-scenes (get-storage-data "cut-scenes" e))
+      (~> e
+          (remove-components _ animated-sprite?)
+          (add-components _ (get-components (first cut-scenes) animated-sprite?)))))
+
+  (define (bake-and-store-pages)
+    (lambda (g e)
+      (define (bake-page page)
+        ((on-start-func (get-component page on-start?)) g page))
+      (define baked-pages (map bake-page pages))
+      (add-components e (storage "cut-scenes" baked-pages))))
+  
+  (sprite->entity empty-image ;(reverse (get-components (first pages) animated-sprite?))
                   #:name "Multi Cut Scene"
                   #:position (posn 0 0)
                   #:components (layer "ui")
                                (hidden)
                                ;(apply precompiler (flatten (map (curryr get-components image-animated-sprite?) pages)))
-                               (storage "cut-scenes" pages)
+                               ;;(storage "cut-scenes" pages)
                                (counter 0)
                                (storable)
-                               (on-start (do-many (go-to-pos 'center)
+                               (on-start (do-many (bake-and-store-pages)
+                                                  (set-first-page)
+                                                  (go-to-pos 'center)
                                                   show))
                                (on-key 'enter (change-cutscene))))
 
 ; ===== END OF MULTI-PAGE CUT-SCENE =====
 
+; ===== QUEST FUNCTIONS =====
+(define (fetch-quest #:item item
+                     #:reward-amount [reward-amount #f]  
+                     #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                            (list (~a "Thanks for finding my " (get-name item) ".")
+                                                                                  (if reward-amount "Here's a reward for helping me out!" #f)))]
+                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                        "I don't know what I would do"
+                                                                        (~a "without my " (get-name item) "."))]
+                     #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "fetch-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
+                 (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
+                                      ;(near? "player") ;removing since observe change gets re-triggered by moving 
+                                      )
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+(define (craft-quest #:item item
+                     #:reward-amount [reward-amount #f]  
+                     #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                            (list "Thanks for making me a ... "
+                                                                                  (~a (get-name item) ".")
+                                                                                  (if reward-amount "Here's a reward for helping me out!" #f)))]
+                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                        "I really needed that ... "
+                                                                        (~a (get-name item) "."))]
+                     #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "craft-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
+                 (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
+                                      ;(near? "player") ;removing since observe change gets re-triggered by moving 
+                                      )
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+(define (collect-quest #:collect-amount amount
+                       #:reward-item [reward-item #f]
+                       #:reward-amount [reward-amount #f]
+                       #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                              (list (~a "Thanks for collecting them all!")
+                                                                                    (if reward-amount
+                                                                                        (~a "I'll let you keep " reward-amount ".") #f)
+                                                                                    (if reward-item
+                                                                                        (~a "Also, have this " (get-name reward-item) ".") #f))
+                                                                                    )]
+                       #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                          "I'm not very good at finding things.")]
+                       #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "collect-reward-" amount) (list amount
+                                                              (or reward-amount 0)))
+                 (and reward-item
+                      (item-reward-system #:rule (and/r (has-gold? amount)
+                                                        ;npc-last-dialog? ; doesn't work because new-reponse is destructive
+                                                        )
+                                          #:reward-item reward-item))
+                 (quest #:rule (has-gold? amount)
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+(define (enemies-killed? amount)
+  (lambda (g e)
+    (define kill-count (get-storage-data "kill-count" (get-entity "score" g)))
+    (>= kill-count amount)))
+
+(define (hunt-quest #:hunt-amount amount
+                    #:reward-item [reward-item #f]
+                    #:reward-amount [reward-amount #f]
+                    #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                           (list (~a "Thanks for killing " amount " enemies!")
+                                                                                 (if reward-amount
+                                                                                        (~a "Take this payment of " reward-amount ".") #f)
+                                                                                 (if reward-item
+                                                                                     (~a "Also, have this " (get-name reward-item) ".") #f)))]
+                    #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                       "Those guys were realy causing trouble.")]
+                    #:cutscene              [cutscene #f])
+  (flatten (list (storage (~a "hunt-reward-" amount) (list amount
+                                                           (or reward-amount 0)))
+                 (and reward-item
+                      (item-reward-system #:rule (and/r (enemies-killed? amount)
+                                                        ;npc-last-dialog? ; doesn't work because new-reponse is destructive
+                                                        )
+                                          #:reward-item reward-item))
+                 (quest #:rule (enemies-killed? amount)
+                        #:quest-complete-dialog (dialog->sprites quest-complete-dialog #:game-width 480)
+                        #:new-response-dialog (cond
+                                                [((listof (listof string?)) new-response-dialog)
+                                                 (dialog->response-sprites new-response-dialog #:game-width 480)]
+                                                [((listof string?) new-response-dialog)
+                                                 (dialog->sprites new-response-dialog #:game-width 480)]
+                                                [else #f])
+                        #:cutscene cutscene))))
+
+
+; ===== END OF QUEST FUNCTIONS =====
 
 (define/contract/doc
   (adventure-game #:headless        [headless #f]
                   #:bg              [bg-ent (plain-forest-bg)]
                   #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                   #:sky             [sky (custom-sky)]
-                  #:cutscene-list   [cutscene-list '()]
+                  #:intro-cutscene  [intro-cutscene #f]
+                  #:death-cutscene  [death-cutscene #f]
                   #:npc-list        [npc-list  '()]
                   #:enemy-list      [e-list    '()]
                   #:coin-list       [coin-list '()]
@@ -979,14 +1102,16 @@
                   #:score-prefix    [prefix "Gold"]
                   #:enable-world-objects? [world-objects? #f]
                   #:weapon-list     [weapon-list '()] ; adventure doesn't need weapons in the wild
+                  #:instructions    [instructions #f]
                   #:other-entities  [ent #f]
                                    . custom-entities)
   (->i ()
        (#:headless         [headless boolean?]
         #:bg               [bg entity?]
         #:avatar           [avatar (or/c entity? #f)]
-        #:sky              [sky sky?]
-        #:cutscene-list    [cutscene-list (listof entity?)]
+        #:sky              [sky (or/c sky? #f)]
+        #:intro-cutscene   [intro-cutscene (or/c entity? #f)]
+        #:death-cutscene   [death-cutscene (or/c entity? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -994,18 +1119,25 @@
         #:crafter-list     [crafter-list (listof (or/c entity? procedure?))]
         #:score-prefix     [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))] 
+        #:weapon-list      [weapon-list (listof (or/c entity? procedure?))]
+        #:instructions     [instructions (or/c #f entity?)]
         #:other-entities   [other-entities (or/c #f entity? (listof #f) (listof entity?))])
-       #:rest [rest (listof entity?)]
+       #:rest [rest (listof (or/c #f entity? (listof #f) (listof entity?)))]
        [res () game?])
 
   @{The top-level function for the adventure-game language.
          Can be run with no parameters to get a basic, default game.}
 
+  (define GAME-WIDTH (sprite-width (get-component bg-ent animated-sprite?)))
+  (define GAME-HEIGHT (sprite-height (get-component bg-ent animated-sprite?)))
+  
   ; === AUTO INSTRUCTIONS ===
 
   (define (weapon-entity->player-system e)
     (get-storage-data "Weapon" e))
+
+  (define (item-entity->backpack-observer e)
+    (get-storage-data "backpack-observer" e))
 
   ;------------------
   (define move-keys (if (and p (eq? (get-key-mode p) 'wasd))
@@ -1038,6 +1170,31 @@
     (member (get-name e) (map get-name known-weapons-list)))
   
   (define world-weapon-list (filter (not/c known-weapon?) weapon-list))
+
+  (define (fetch-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "fetch-reward-")))
+
+  (define (craft-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "craft-reward-")))
+
+  (define (collect-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "collect-reward-")))
+
+  (define (hunt-reward-storage? c)
+      (and (storage? c)
+           (string-prefix? (storage-name c) "hunt-reward-")))
+
+  (define (npc->fetch-quest-items npc)
+    (define reward-components (get-components npc fetch-reward-storage?))
+    
+    (and (not (empty? reward-components))
+         (map (compose first
+                       storage-data) reward-components)))
+  
+  (define item-list (filter identity (flatten (map npc->fetch-quest-items npc-list))))
   
   (define player-with-recipes-and-weapons
     (if p
@@ -1047,20 +1204,27 @@
                           (map food->component
                                (append (remove-duplicates updated-food-list
                                                           name-eq?)
-                                       (filter-not (curry get-storage "Weapon") known-products-list))))
+                                       (filter-not (curry get-storage "Weapon") known-products-list)))
+                          (map item-entity->backpack-observer item-list)
+                          )
         #f))
 
-  ;--------
+  ;-------- This doesn't work since rapid-fire weapons use do-every with a mouse-down rule instead of an on-mouse
   (define shoot-key (if (and player-with-recipes-and-weapons (get-component player-with-recipes-and-weapons on-mouse?))
                         "LEFT-CLICK"
                         "F"))
   ;--------
 
+  (define automated-instructions-entity
+    (if instructions
+        instructions
+        (instructions-entity #:move-keys move-keys
+                             #:mouse-aim? mouse-aim?
+                             #:shoot-key shoot-key)))
+  
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn (instructions-entity #:move-keys move-keys
-                                                               #:mouse-aim? mouse-aim?
-                                                               #:shoot-key shoot-key)
+                                   (spawn automated-instructions-entity
                                           #:relative? #f))))
   
   (define (add-random-start-pos e)
@@ -1072,9 +1236,9 @@
                                              show)))
         e))
 
-  (define LENGTH-OF-DAY    (sky-day-length sky))
-  (define START-OF-DAYTIME (sky-day-start sky))
-  (define END-OF-DAYTIME   (sky-day-end sky))
+  (define LENGTH-OF-DAY    (if sky (sky-day-length sky) 2400))
+  (define START-OF-DAYTIME (if sky (sky-day-start sky) 0))
+  (define END-OF-DAYTIME   (if sky (sky-day-end sky) 2400))
 
     ; === DAY/NIGHT FUNCTIONS FOR ENEMY ===
   (define (store-birth-time g e)
@@ -1102,6 +1266,51 @@
                             (on-rule should-be-dead? die))
         ent))
 
+  (define (has-reward? c)
+    (not (false? (second (storage-data c)))))
+  
+  (define (npc->counter-quest-rewards npc)
+    (define quest-giver-name (get-name npc))
+    (define fetch-quest-rewards (map storage-data (get-components npc (and/c (or/c fetch-reward-storage?
+                                                                                   craft-reward-storage?)
+                                                                               has-reward?))))
+    (define collect-quest-rewards (map storage-data (get-components npc (and/c collect-reward-storage?
+                                                                               has-reward?))))
+    (define hunt-quest-rewards (map storage-data (get-components npc (and/c hunt-reward-storage?
+                                                                            has-reward?))))
+    
+    (define fetch-reward-components
+      (map (λ (fr)
+             (quest-reward #:quest-giver quest-giver-name
+                           #:quest-item (first fr)
+                           #:reward     (second fr)))
+           fetch-quest-rewards))
+    
+    (define collect-reward-components
+      (map (λ (cr)
+             (counter-reward-system #:quest-giver-name quest-giver-name
+                                    #:collect-amount  (first cr)
+                                    #:reward-amount   (second cr)))
+           collect-quest-rewards))
+
+    (define hunt-reward-components
+      (map (λ (hr)
+             (hunt-reward-system #:quest-giver-name quest-giver-name
+                                 #:hunt-amount     (first hr)
+                                 #:reward-amount   (second hr)))
+           hunt-quest-rewards))
+    
+    (append fetch-reward-components collect-reward-components hunt-reward-components))
+
+  (define (start-dead-component? c)
+    (and (on-start? c)
+         (eq? (on-start-func c) die)))
+  
+  (define (enemy-died? g e)
+    (define death-broadcast (get-entity "Enemy Death Broadcast" g))
+    (and death-broadcast
+         (get-component death-broadcast start-dead-component?)))
+
   (define (score-entity prefix)
     (define counter-sprite
       (append (list (new-sprite (~a (string-titlecase prefix) ": 0")
@@ -1111,15 +1320,31 @@
 
     (define (recipe-has-cost? r)
       (> (recipe-cost r) 0))
+
+    (define (add1-to-kill-count)
+      (lambda (g e)
+        (set-storage "kill-count" e (add1 (get-storage-data "kill-count" e)))))
     
     (sprite->entity counter-sprite
                     #:name       "score"
                     #:position   (posn 330 20)
                     #:components (static)
                                  (counter 0)
+                                 (storage "kill-count" 0)
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
-                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
+                                 (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
+                                 (map npc->counter-quest-rewards npc-list)
+                                 (observe-change (λ (g e)
+                                                   (get-counter e))
+                                                 (λ (g e1 e2)
+                                                   ((do-many (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                                                             (do-font-fx)) g e2)))
+                                 (on-rule enemy-died? (add1-to-kill-count))
+                                 ))
+
+  (define (get-kill-count g)
+    (get-storage-data "kill-count" (get-entity "score" g)))
  
   (define (spawn-many-on-current-tile e-list)
     (apply do-many (map spawn-on-current-tile e-list)))
@@ -1137,30 +1362,37 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN"))
+                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 30))
                                     (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN")))
-                  (if (empty? cutscene-list)
-                      #f
-                      (after-time 1 (spawn (apply cutscene cutscene-list) #:relative? #f)))
+                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
+                  (if intro-cutscene
+                      (after-time 1 (spawn intro-cutscene #:relative? #f))
+                      #f)
+                  (if death-cutscene
+                      (observe-change lost? (if/r lost?
+                                              (do-after-time 50 (spawn death-cutscene #:relative? #f))))
+                      #f)
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
   
   (define es (filter identity
                      (flatten
                       (list
-                       (instructions-entity #:move-keys move-keys
-                                            #:mouse-aim? mouse-aim?
-                                            #:shoot-key shoot-key)
+                       automated-instructions-entity
                        (if p (game-over-screen won? lost?) #f)
                        (if p (score-entity prefix) #f)
 
                        (tm-entity)
-                       (night-sky-with-lighting #:color         (sky-color sky)
-                                                #:max-alpha     (sky-max-alpha sky)
-                                                #:length-of-day (sky-day-length sky)) 
+                       (if sky
+                           (night-sky-with-lighting #:color         (sky-color sky)
+                                                    #:max-alpha     (sky-max-alpha sky)
+                                                    #:length-of-day (sky-day-length sky)
+                                                    #:scale         (if (>= GAME-WIDTH GAME-HEIGHT)
+                                                                        (/ GAME-WIDTH 480)
+                                                                        (/ GAME-HEIGHT 360)))
+                            #f)
 
                        ;(if p (health-entity) #f)
 
@@ -1171,6 +1403,7 @@
                        npc-list
                        
                        c-list
+                       item-list
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
@@ -1248,8 +1481,13 @@
                                (apply precompiler (map (λ (r) (recipe-product r)) r-list))
                                (cons c custom-components)))
 
+;(define loose-component?
+;  (or/c component? observe-change? #f))
 
-(define/contract/doc (custom-npc #:sprite     [s (row->sprite (random-character-row) #:delay 4)]
+;(define component-or-system?
+;  (or/c loose-component? (listof loose-component?)))
+
+(define/contract/doc (custom-npc #:sprite     [s (random-character-sprite)]
                                  #:position   [p (posn 200 200)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]
@@ -1261,7 +1499,8 @@
                                  #:target     [target "player"]
                                  #:sound      [sound #t]
                                  #:scale      [scale 1]
-                                 #:components [c (on-start (respawn 'anywhere))]
+                                 #:quest-list [quests '()]
+                                 #:components [c #f]
                                  . custom-components )
 
   (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
@@ -1275,6 +1514,7 @@
            #:target     [target string?]
            #:sound      [sound any/c]
            #:scale      [scale number?]
+           #:quest-list [quests (listof component-or-system?)]
            #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
@@ -1302,11 +1542,7 @@
                                       #:animated #t
                                       #:speed 2))))
   
-  (define sprite (if (image? s)
-                     (new-sprite s)
-                     s))
-  
-  (create-npc #:sprite      sprite
+  (create-npc #:sprite      s
               #:name        name
               #:position    p
               #:active-tile tile
@@ -1316,7 +1552,9 @@
               #:target      target
               #:sound       sound
               #:scale       scale
-              #:components  (cons c custom-components)))
+              #:components  (list (on-start (respawn 'anywhere))
+                                  quests
+                                  (cons c custom-components))))
 
 (define/contract/doc (custom-bg #:image      [bg FOREST-BG]
                                 #:rows       [rows 3]
@@ -1332,7 +1570,7 @@
         #:columns [columns number?]
         #:start-tile [start-tile number?]
         #:hd?        [high-def? boolean?]
-        #:components [first-component (or/c component-or-system? #f (listof #f))])
+        #:components [first-component component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [result entity?])
 
@@ -1378,9 +1616,7 @@
            #:amount-in-world [amount-in-world number?]
            #:heals-by   [heal-amt number?]
            #:respawn?   [respawn? boolean?]
-           #:components [first-component (or/c component-or-system?
-                                               false?
-                                               (listof false?))])
+           #:components [first-component  component-or-system?])
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
@@ -1419,6 +1655,8 @@
                                   #:amount-in-world  [world-amt 10]
                                   #:value            [val 10]
                                   #:respawn?         [respawn? #t]
+                                  #:on-pickup        [pickup-function (λ (g e) e)]
+                                  #:cutscene         [cutscene #f]
                                   #:components       [c #f]
                                   . custom-entities)
 
@@ -1432,10 +1670,10 @@
             #:amount-in-world [amount-in-world number?]
             #:value    [value number?]
             #:respawn? [respawn boolean?]
-            #:components [first-component (or/c component-or-system?
-                                                false?
-                                                (listof false?))])
-        #:rest [more-components (listof component-or-system?)]
+            #:on-pickup [pickup-function procedure?]
+            #:cutscene   [cutscene (or/c entity? #f)]
+            #:components [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
         [returns entity?])
 
   @{Returns a custom coin, which will be placed into the world
@@ -1462,7 +1700,65 @@
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
-                                         die))))
+                                         (do-many pickup-function
+                                                  (if cutscene
+                                                      (spawn cutscene #:relative? #f)
+                                                      (λ (g e) e)
+                                                      )
+                                                  (do-after-time 1 die) ; 1 tick delay incase function is spawn
+                                                  )))))
+
+; ==== CUSTOM ITEM DEFINITION ====
+(define (custom-item #:name              [n "Custom Item"]
+                     #:sprite            [s chest-sprite]
+                     #:tile              [tile #f]
+                     #:position          [pos #f]
+                     #:amount-in-world   [world-amt 1]
+                     #:storable?         [storable? #t]
+                     #:consumable?       [consumable? #f]
+                     #:value             [val 10]      ;only used if consumable is #t
+                     #:respawn?          [respawn? #t] ;only used if consumable is #t
+                     #:on-pickup         [pickup-func (λ (g e) e)]
+                     #:on-store          [store-func (λ (g e) e)]
+                     #:on-drop           [drop-func (λ (g e) e)]
+                     #:components        [c #f]
+                     . custom-components)
+  (define (do-nothing)
+    (λ (g e) e))
+  
+  (define (pickup-component)
+    (on-key 'space #:rule (and/r near-player?
+                                 (nearest-to-player? #:filter (has-component? on-key?)))
+            (do-many pickup-func
+                     (if respawn?
+                         (do-after-time 1 (do-many (respawn 'anywhere)
+                                                   (active-on-random)))
+                         (do-after-time 1 die) ; 1 tick delay in case function is spawn
+                         ))))
+  
+  (define item-id (next-storable-item-id))
+  
+  (sprite->entity s
+                  #:name n
+                  #:position    (or pos (posn 0 0))
+                  #:components  (active-on-bg (or tile 0))
+                                (physical-collider)
+                                (hidden)
+                                (storage "amount-in-world" world-amt)
+                                (storage "value" val)
+                                (on-start (do-many (if pos  (do-nothing) (respawn 'anywhere))
+                                                   (if tile (do-nothing) (active-on-random))
+                                                   show))
+                                (if storable? (storable) #f)
+                                (if consumable? (pickup-component) #f)
+                                (storage "item-id" item-id)
+                                (storage "backpack-observer"
+                                         (observe-change (in-backpack-by-id? item-id)
+                                                         (if/r (in-backpack-by-id? item-id)
+                                                               store-func
+                                                               drop-func)))
+                                (cons c custom-components)
+                                ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (spear #:name              [n "Spear"]

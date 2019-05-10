@@ -362,9 +362,6 @@
                              #:mouse-aim? [mouse-aim? #f]
                              #:shoot-key  [shoot-key "F"])
 
-  (define (instruction->sprite text offset)
-    (new-sprite text #:y-offset offset #:color 'yellow))
-
   (define i-list (filter identity (list (~a move-keys " to move")
                                         (if mouse-aim?
                                             "MOVE MOUSE to aim"
@@ -378,29 +375,7 @@
                                         "Z to pick up items"
                                         "X to drop items"
                                         "B to open and close backpack")))
-  (define i-length (length i-list))
-  
-  (define bg (new-sprite (rectangle 1 1 'solid (make-color 0 0 0 100))))
-  
-  (define i
-    (sprite->entity (~> bg
-                        (set-x-scale 340 _)             ;260
-                        (set-y-scale (* 26 i-length) _) ;150
-                        (set-y-offset 0 _))             ;60
-                    #:position   (posn 0 0) ;(posn (/ (WIDTH) 2) 50)
-                    #:name       "instructions"
-                    #:components (layer "ui")
-                                 (hidden)
-                                 (on-start (do-many (go-to-pos 'center)
-                                                    show))
-                                 (on-key 'enter die)
-                                 (on-key 'space die)
-                                 (on-key "i" die)))
-
-  (define last-y-pos (* 20 i-length))
-
-  (add-components i (map instruction->sprite i-list (range (- (/ last-y-pos 2)) (add1 (/ last-y-pos 2)) (/ last-y-pos (sub1 i-length))))
-                  ))
+  (apply make-instructions i-list))
 
 ; === WON AND LOST RULES ===
 (define (won? g e)
@@ -897,6 +872,7 @@
    #:item-list      [item-list '()]
    #:score-prefix   [prefix "Enemies"]
    #:enable-world-objects? [world-objects? #f]
+   #:instructions   [instructions #f]
    #:other-entities [ent #f]
    . custom-entities)
 
@@ -909,8 +885,9 @@
         #:item-list   [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
-       #:rest [rest (listof entity?)]
+        #:instructions     [instructions (or/c #f entity?)]
+        #:other-entities [other-entities (or/c #f entity? (listof #f) (listof entity?))])
+       #:rest [rest (listof (or/c #f entity? (listof #f) (listof entity?)))]
        [res () game?])
 
   @{The top-level function for the battlearena language.
@@ -1013,7 +990,7 @@
     (define counter-sprite
       (append (list (new-sprite (~a (string-titlecase prefix) " Left: " total-enemies)
                                 #:color 'yellow))
-              (bordered-box-sprite (* 10 (+ 7 (string-length prefix))) 24)
+              (bordered-box-sprite (* 10 (+ 7 5 (string-length prefix))) 24)
               ))
     
     (register-fonts! bold-font)
@@ -1056,14 +1033,22 @@
                                                                ))
                                  ))
 
-   (define bg-with-instructions
+  (define automated-instructions-entity
+    (if instructions
+        instructions
+        (instructions-entity #:move-keys move-keys
+                             #:mouse-aim? mouse-aim?
+                             #:shoot-key shoot-key)))
+  
+  (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                   (spawn (instructions-entity #:move-keys move-keys #:shoot-key shoot-key #:mouse-aim? mouse-aim?) #:relative? #f))))
+                                   (spawn automated-instructions-entity
+                                          #:relative? #f))))
  
   (define es (filter identity
                      (flatten
                       (list
-                       (instructions-entity #:move-keys move-keys #:shoot-key shoot-key #:mouse-aim? mouse-aim?)
+                       automated-instructions-entity 
                        (if p (game-over-screen won? lost?) #f)
                        (if p (enemy-counter-entity prefix) #f)
 

@@ -12,7 +12,8 @@
          monk-sprite
          pirate-sprite
          wizard-sprite
-         mystery-sprite)
+         mystery-sprite
+         dragon-sprite)
 
 
 (define witch-sprite
@@ -69,3 +70,9 @@
                  #:columns 4
                  #:delay 2))
 
+(define dragon-sprite
+  (sheet->sprite dragon-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))

@@ -1,98 +1,155 @@
 #lang racket
 
-(module hero-stuff racket
-  
-  (require (prefix-in a: battlearena-avengers)
-           battlearena-avengers/assets
-           ratchet/util
-           (for-syntax racket))
+(provide (all-from-out racket))
 
-  (define-syntax (provide-string stx)
-    (define id (second (syntax->datum stx)))
-    (datum->syntax stx
-      `(begin
-         (provide ,id)
-         (define ,id ,(~a id)))))
+(require (prefix-in a: battlearena-avengers)
+         battlearena-avengers/assets
+         ratchet/util
+         (for-syntax racket))
 
-  (define-syntax-rule (provide-strings s ...)
-    (begin (provide-string s) ...))
+(define-syntax (provide-string stx)
+  (define id (second (syntax->datum stx)))
+  (datum->syntax stx
+                 `(begin
+                    (provide ,id)
+                    (define ,id ,(~a id)))))
 
-
-  (define-syntax (provide-arena-sprite stx)
-    (define id (second (syntax->datum stx)))
-    (datum->syntax stx
-      `(begin
-         (provide ,id)
-         (define ,id ,(string->symbol (~a "a:" id "-sprite"))))))
-
-  (define-syntax-rule (provide-arena-sprites s ...)
-    (begin (provide-arena-sprite s) ...))
+(define-syntax-rule (provide-strings s ...)
+  (begin (provide-string s) ...))
 
 
-  (provide-strings red orange yellow green blue purple)
+(define-syntax (provide-arena-sprite stx)
+  (define id (second (syntax->datum stx)))
+  (datum->syntax stx
+                 `(begin
+                    (provide ,id)
+                    (define ,id ,(string->symbol (~a "a:" id "-sprite"))))))
 
-  (provide-arena-sprites blackwidow gamora captainamerica drax hawkeye hulk ironman loki)
+(define-syntax-rule (provide-arena-sprites s ...)
+  (begin (provide-arena-sprite s) ...))
 
-  (provide hammer
-           magic-orb
-           star-bit
-           energy-blast
-           start)
 
-  (define (hammer (color #f)) 
-    (a:hammer-dart))
+(provide-strings red orange yellow green blue purple)
 
-  (define (magic-orb (color "yellow"))
-    (a:magic-orb-dart #:color color))
+(provide-arena-sprites ironman blackwidow captainamerica thor hulk
+                       loki redskull mandarin malekith
+                       rocketracoon starlord drax gamora nebula)
 
-  (define (star-bit (color "green"))
-    (a:star-bit-dart #:color color))
+(provide hammer
+         magic-orb
+         star-bit
+         energy-blast
+         start
+         
+         randp
+         randc
 
-  (define (energy-blast (color "green"))
-    (a:energy-blast-dart #:color color))
+         health
+         grow
+         shrink
+         speed
+         forcefield
+         )
 
-  (define (make-hero sprite (dart #f))
-    (define real-dart (call-if-proc dart))
-    (if real-dart
-         (a:custom-hero #:sprite sprite
-                        #:components
-                        (a:custom-weapon-system #:dart real-dart
-                                                #:mouse-fire-button 'left
-                                                ))
-         (a:custom-hero #:sprite sprite)) )
+(define health "Health")
+(define grow "Grow")
+(define shrink "Shrink")
+(define speed "Speed")
+(define forcefield "Force Field")
 
-  (define (make-villain sprite (dart #f) )
-    (define real-dart (call-if-proc dart))
-    (if real-dart
-      (a:custom-villain #:sprite sprite
-                        #:power (a:custom-power #:dart real-dart))
-      (a:custom-villain #:sprite sprite)))  
+(define (hammer (color "black")) 
+  (a:hammer-dart #:color color))
 
-  (define (call-if-proc p)
-    (if (procedure? p)
-      (p)
-      p))
+(define (magic-orb (color "yellow"))
+  (a:magic-orb-dart #:color color))
 
-  (define-syntax (app stx)
-    (syntax-case stx ()
-      [(_ f (args ...)) #'(f args ...)] 
+(define (star-bit (color "green"))
+  (a:star-bit-dart #:color color))
 
-      [(_ f arg) #'(f arg)] ) )
+(define (energy-blast (color "green"))
+  (a:energy-blast-dart #:color color))
 
-  (define-syntax-rule (start hero villains ...)
-    (let ()
-      (define vs
-        (list 
-          (app make-villain villains ) ...))
+(define (randp (color #f))
+    (define w (first (shuffle (list hammer magic-orb star-bit energy-blast))))
+  (define real-color (call-if-proc color))
+    (if color (w real-color) (w)))
+      
+(define randc
+    (lambda () (first (shuffle (list "red" "orange" "yellow" "green" "blue" "purple")))))
 
-      (launch-for-ratchet
+(define (make-hero sprite (dart-f #f) (color "green"))
+  (define real-color (call-if-proc color))
+  (define real-dart (if dart-f (dart-f real-color) #f))
+  (if real-dart
+    (a:custom-hero #:sprite sprite
+                   #:components
+                   (a:custom-weapon-system #:dart real-dart
+                                           #:mouse-fire-button 'left
+                                           ))
+    (a:custom-hero #:sprite sprite)) )
+
+(define (make-villain sprite (dart-f #f) (color "red") )
+  (define real-color (call-if-proc color))
+  (define real-dart (if dart-f (dart-f real-color) #f))
+  (if real-dart
+    (a:custom-villain #:sprite sprite
+                      #:power (a:custom-power #:dart real-dart))
+    (a:custom-villain #:sprite sprite)))
+
+(define (make-item name)
+  (cond
+    [(eq? "Health" name) (a:custom-item #:name "Health Powerup"
+                                        #:sprite (a:make-icon "HP" 'green 'white)
+                                        #:on-use (a:change-health-by 50))]
+    [(eq? "Grow" name) (a:custom-item #:name "Grow Powerup"
+                                      #:sprite (a:make-icon "BIG" 'red 'white)
+                                      #:on-use (a:scale-sprite 2 #:for 100))]
+    [(eq? "Shrink" name) (a:custom-item #:name "Shrink Powerup"
+                                        #:sprite (a:make-icon "SML" 'blue 'white)
+                                        #:on-use (a:scale-sprite 0.5 #:for 100))]
+    [(eq? "Speed" name) (a:custom-item #:name "Speed Boost"
+                                       #:sprite (a:make-icon "SB" 'yellow)
+                                       #:on-use (a:multiply-speed-by 2 #:for 200))]
+    [(eq? "Force Field" name) (a:custom-item #:name "Force Field"
+                                       #:sprite (a:make-icon "FF")
+                                       #:on-use (a:spawn (a:force-field #:duration 1000)))]
+    ))  
+
+(define (call-if-proc p)
+  (if (procedure? p)
+    (p)
+    p))
+
+(define-syntax (app stx)
+  (syntax-case stx ()
+    [(_ f (args ...)) #'(f args ...)] 
+
+    [(_ f arg) #'(f arg)] ) )
+
+(define-syntax start
+  (syntax-rules ()
+    [(start hero-sprite (villain-sprite ...) (power-ups ...))
+     (let ()
+       (define hero
+         (app make-hero hero-sprite))
+       (define villains
+         (list (app make-villain villain-sprite) ...))
+       (define p-ups
+         (list (app make-item power-ups) ...))
+       
+       (launch-for-ratchet
         (a:avengers-game #:planet (a:custom-planet #:rows 2
                                                    #:columns 2)
-                         #:hero (app make-hero hero)
-                         #:villain-list vs))))
-  
-  )
+                         #:hero hero 
+                         #:villain-list villains
+                         #:item-list p-ups))
+       )]
+    [(start)                     (start a:mystery-sprite () ())]
+    [(start hero)                (start hero () ())]
+    [(start hero (villains ...)) (start hero (villains ...) ())]
+    
+    ))
+    
+    
 
-  
-(require 'hero-stuff)
-(provide (all-from-out racket 'hero-stuff))
+

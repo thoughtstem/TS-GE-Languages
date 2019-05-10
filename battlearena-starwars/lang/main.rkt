@@ -26,7 +26,18 @@
 
 ;; ----- REBEL
 
-(define/contract/doc (custom-rebel #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-rebel #:sprite          (sprite (first (shuffle (list c3po-sprite
+                                                                                   chewie-sprite
+                                                                                   hansolo-sprite
+                                                                                   lando-sprite
+                                                                                   luke-sprite
+                                                                                   obiwan-sprite
+                                                                                   padawan-sprite
+                                                                                   princessleia-sprite
+                                                                                   r2d2-sprite
+                                                                                   rebelpilot-sprite
+                                                                                   twilek-sprite
+                                                                                   yoda-sprite))))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
                                                                         #:hit-sound HIT-SOUND)]
                                   #:position         [p   (posn 100 100)]
@@ -428,6 +439,7 @@
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Imperials"]
                       #:enable-world-objects? [world-objects? #f]
+                      #:instructions     [instructions #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -440,6 +452,7 @@
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
+        #:instructions   [instructions (or/c #f entity?)]
         #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest            [rest (listof entity?)]
        [res () game?])
@@ -455,6 +468,7 @@
                     #:item-list       item-list
                     #:score-prefix    prefix
                     #:enable-world-objects? world-objects?
+                    #:instructions   instructions
                     #:other-entities  (filter identity (flatten (cons ent custom-entities)))))
 
 

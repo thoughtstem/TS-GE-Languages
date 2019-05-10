@@ -38,7 +38,19 @@
 
 ;; ----- HERO
 
-(define/contract/doc (custom-hero #:sprite           (sprite (random-character-sprite))
+(define/contract/doc (custom-hero #:sprite           (sprite (first (shuffle (list blackwidow-sprite
+                                                                                   gamora-sprite
+                                                                                   ironman-sprite
+                                                                                   starlord-sprite
+                                                                                   captainamerica-sprite
+                                                                                   hawkeye-sprite
+                                                                                   rocketracoon-sprite
+                                                                                   thor-sprite
+                                                                                   drax-sprite
+                                                                                   hulk-sprite
+                                                                                   nickfury-sprite
+                                                                                   tonystark-sprite
+                                                                                   ironpatriot-sprite))))
                                   #:damage-processor [dp (divert-damage #:filter-out '(friendly-team passive)
                                                                         #:hit-sound HIT-SOUND)]
                                   #:position         [p   (posn 100 100)]
@@ -88,7 +100,13 @@
 ;; ----- VILLAIN
 
 (define/contract/doc (custom-villain #:amount-in-world (amount-in-world 1)
-                                     #:sprite (sprite wintersoldier-sprite)
+                                     #:sprite (sprite (first (shuffle (list mandarin-sprite
+                                                                            redskull-sprite
+                                                                            wintersoldier-sprite
+                                                                            loki-sprite
+                                                                            nebula-sprite
+                                                                            malekith-sprite
+                                                                            ronan-sprite))))
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
@@ -532,6 +550,7 @@
                       #:item-list        [item-list '()]
                       #:score-prefix     [prefix "Villains"]
                       #:enable-world-objects? [world-objects? #f]
+                      #:instructions     [instructions #f]
                       #:other-entities   [ent #f]
                       . custom-entities)
 
@@ -544,6 +563,7 @@
         #:item-list      [item-list   (listof (or/c entity? procedure?))]
         #:score-prefix   [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
+        #:instructions   [instructions (or/c #f entity?)]
         #:other-entities [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest           [rest (listof entity?)]
        [res () game?])
@@ -559,6 +579,7 @@
                     #:item-list      item-list
                     #:score-prefix   prefix
                     #:enable-world-objects? world-objects?
+                    #:instructions   instructions
                     #:other-entities (filter identity (flatten (cons ent custom-entities)))))
 
 

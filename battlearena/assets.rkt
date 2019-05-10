@@ -134,3 +134,10 @@
   (row->sprite mystery-sheet
                  #:columns 4
                  #:delay 2))
+
+(define dragon-sprite
+  (sheet->sprite dragon-sheet
+                 #:columns 4
+                 #:rows 4
+                 #:row-number 3
+                 #:delay 2))

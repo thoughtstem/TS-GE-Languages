@@ -125,5 +125,62 @@
 @defthing[PINK-BG image?]
 @(scale .25 PINK-BG)
 
+@section{World Objects}
+
+@defthing[pine-tree entity?]
+@(draw-entity (pine-tree))
+
+@defthing[round-tree entity?]
+@(draw-entity (round-tree))
+
+@defthing[snow-pine-tree entity?]
+@(draw-entity (snow-pine-tree))
+
+@defthing[candy-cane-tree entity?]
+@(draw-entity (candy-cane-tree))
+
+@defthing[stone-house entity?]
+@(draw-entity (stone-house))
+
+@defthing[wood-house entity?]
+@(draw-entity (wood-house))
+
+@defthing[brick-house entity?]
+@(draw-entity (brick-house))
+
+@defthing[random-barrels entity?]
+@(draw-entity (random-barrels))
+
+@defthing[barrel entity?]
+@(draw-entity (barrel))
+
+@defthing[barrels entity?]
+@(draw-entity (barrels))
+
+@defthing[random-brown-rock entity?]
+@(draw-entity (random-brown-rock))
+
+@defthing[large-brown-rock entity?]
+@(draw-entity (large-brown-rock))
+
+@defthing[medium-brown-rock entity?]
+@(draw-entity (medium-brown-rock))
+
+@defthing[small-brown-rock entity?]
+@(draw-entity (small-brown-rock))
+
+@defthing[random-gray-rock entity?]
+@(draw-entity (random-gray-rock))
+
+@defthing[large-gray-rock entity?]
+@(draw-entity (large-gray-rock))
+
+@defthing[medium-gray-rock entity?]
+@(draw-entity (medium-gray-rock))
+
+@defthing[small-gray-rock entity?]
+@(draw-entity (small-gray-rock))
+
+
 @section{Sprite Sheets}
 @(include-extracted "../assets.rkt")

@@ -704,6 +704,8 @@
                                                                    #:dart (acid-dart)))
                                    #:death-particles (particles (custom-particles))
                                    #:night-only? (night-only? #f)
+                                   #:on-death  [death-func (λ (g e) e)]
+                                   #:drop-list [drop-list '()]
                                    #:components (c #f)
                                    . custom-components
                                    )
@@ -716,6 +718,8 @@
            #:weapon [weapon entity?]
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
+           #:on-death        [death-function procedure?]
+           #:drop-list       [drop-list (listof (or/c entity? procedure?))]
            #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
        [returns entity?])
@@ -723,7 +727,8 @@
   @{Returns a custom enemy, which will be placed in to the world
          automatically if it is passed into @racket[adventure-game]
          via the @racket[#:enemy-list] parameter.}
-  
+
+  (apply precompile! drop-list)
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -756,11 +761,13 @@
     (observe-change health-is-zero?
                     (λ (g e1 e2)
                       (if (health-is-zero? g e2)
-                          ((do-many
-                            (play-sound EXPLOSION-SOUND)
-                            (spawn particles)
-                            (spawn death-broadcast)
-                            (do-after-time 1 die)) g e2)
+                          ((apply do-many
+                                  (flatten (list (play-sound EXPLOSION-SOUND)
+                                                 (spawn particles)
+                                                 (spawn death-broadcast)
+                                                 death-func
+                                                 (map spawn-on-current-tile drop-list)
+                                                 (do-after-time 1 die)))) g e2)
                           e2))
                     ))
   
@@ -1086,6 +1093,7 @@
                   #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
                   #:sky             [sky (custom-sky)]
                   #:intro-cutscene  [intro-cutscene #f]
+                  #:death-cutscene  [death-cutscene #f]
                   #:npc-list        [npc-list  '()]
                   #:enemy-list      [e-list    '()]
                   #:coin-list       [coin-list '()]
@@ -1103,6 +1111,7 @@
         #:avatar           [avatar (or/c entity? #f)]
         #:sky              [sky (or/c sky? #f)]
         #:intro-cutscene   [intro-cutscene (or/c entity? #f)]
+        #:death-cutscene   [death-cutscene (or/c entity? #f)]
         #:npc-list         [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list       [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list        [coin-list    (listof (or/c entity? procedure?))]
@@ -1360,6 +1369,10 @@
                            (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
                   (if intro-cutscene
                       (after-time 1 (spawn intro-cutscene #:relative? #f))
+                      #f)
+                  (if death-cutscene
+                      (observe-change lost? (if/r lost?
+                                              (do-after-time 50 (spawn death-cutscene #:relative? #f))))
                       #f)
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))

@@ -57,6 +57,7 @@
          craft-quest
          collect-quest
          hunt-quest
+         loot-quest
          )
 
 (require scribble/srcdoc)
@@ -98,6 +99,9 @@
   (define s1 (get-component e1 animated-sprite?))
   (define s2 (get-component e2 animated-sprite?))
   (equal? (render s1) (render s2)))
+
+(define (do-nothing)
+    (λ (g e) e))
 
 (struct sky (color day-length day-start day-end max-alpha))
 
@@ -696,6 +700,8 @@
   (or/c 'easy 'medium 'hard))
 
 (define/contract/doc (custom-enemy #:amount-in-world (amount-in-world 1)
+                                   #:position [pos #f]
+                                   #:tile [tile #f]
                                    #:sprite (s (first (shuffle (list slime-sprite bat-sprite snake-sprite))))
                                    #:ai (ai-level 'medium)
                                    #:health (health 100)
@@ -705,12 +711,14 @@
                                    #:death-particles (particles (custom-particles))
                                    #:night-only? (night-only? #f)
                                    #:on-death  [death-func (λ (g e) e)]
-                                   #:drop-list [drop-list '()]
+                                   #:loot-list [loot-list '()]
                                    #:components (c #f)
                                    . custom-components
                                    )
 
   (->i () (#:amount-in-world [amount-in-world positive?]
+           #:position [pos (or/c posn? #f)]
+           #:tile   [tile (or/c number? #f)]
            #:sprite [sprite (or/c sprite? (listof sprite?))]
            #:ai [ai ai-level?]
            #:health [health positive?]
@@ -719,7 +727,7 @@
            #:death-particles [death-particles entity?]
            #:night-only?     [night-only? boolean?]
            #:on-death        [death-function procedure?]
-           #:drop-list       [drop-list (listof (or/c entity? procedure?))]
+           #:loot-list       [loot-list (listof (or/c entity? procedure?))]
            #:components [first-component component-or-system?])
        #:rest       [more-components (listof component-or-system?)]
        [returns entity?])
@@ -728,7 +736,7 @@
          automatically if it is passed into @racket[adventure-game]
          via the @racket[#:enemy-list] parameter.}
 
-  (apply precompile! drop-list)
+  (apply precompile! loot-list)
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -766,14 +774,15 @@
                                                  (spawn particles)
                                                  (spawn death-broadcast)
                                                  death-func
-                                                 (map spawn-on-current-tile drop-list)
+                                                 (map spawn-on-current-tile loot-list)
                                                  (do-after-time 1 die)))) g e2)
                           e2))
                     ))
   
   (custom-combatant #:name "Enemy"
                     #:sprite s
-                    #:position (posn 0 0)
+                    #:position (or pos (posn 0 0))
+                    #:tile (or tile 0)
                     ;#:mode #f
                     ;#:components 
 
@@ -783,9 +792,8 @@
                     (damager 10 (list 'passive 'enemy-team 'bullet))
                     (hidden)
                     ;(active-on-bg 0) ;Don't leave this in
-                    (on-start (do-many (respawn 'anywhere)
-                                       (active-on-random)
-                                 
+                    (on-start (do-many (if pos (do-nothing) (respawn 'anywhere))
+                                       (if tile (do-nothing) (active-on-random))
                                        show
                                        become-combatant
                                        ))
@@ -1019,6 +1027,21 @@
                                                  (dialog->sprites new-response-dialog #:game-width 480)]
                                                 [else #f])
                         #:cutscene cutscene))))
+
+(define (loot-quest #:item item
+                    #:reward-amount [reward-amount #f]  
+                    #:quest-complete-dialog [quest-complete-dialog (filter identity
+                                                                           (list (~a "Thanks for finding my " (get-name item) ".")
+                                                                                 (if reward-amount "Here's a reward for helping me out!" #f)))]
+                    #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
+                                                                       "I don't know what I would do"
+                                                                       (~a "without my " (get-name item) "."))]
+                    #:cutscene              [cutscene #f])
+  (craft-quest #:item item
+               #:reward-amount reward-amount
+               #:quest-complete-dialog quest-complete-dialog
+               #:new-response-dialog new-response-dialog
+               #:cutscene cutscene))
 
 (define (collect-quest #:collect-amount amount
                        #:reward-item [reward-item #f]
@@ -1723,8 +1746,6 @@
                      #:on-drop           [drop-func (λ (g e) e)]
                      #:components        [c #f]
                      . custom-components)
-  (define (do-nothing)
-    (λ (g e) e))
   
   (define (pickup-component)
     (on-key 'space #:rule (and/r near-player?

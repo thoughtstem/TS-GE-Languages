@@ -46,6 +46,7 @@
 
          acid-sprite
          ice-sprite
+         basic-sprite
 
          custom-cutscene
          page
@@ -636,8 +637,8 @@
 
                                 (static)
                                 (hidden)
-                                (on-start (do-many (respawn 'anywhere)
-                                                   (active-on-random)
+                                (on-start (do-many ;(respawn 'anywhere)
+                                                   ;(active-on-random)
                                                    show))
                                 (storable)))
 
@@ -739,6 +740,7 @@
          via the @racket[#:enemy-list] parameter.}
 
   (apply precompile! loot-list)
+  (precompile! s)
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -1112,10 +1114,12 @@
 
 ; ===== END OF QUEST FUNCTIONS =====
 
+(define basic-sprite (circle 10 'solid 'red))
+
 (define/contract/doc
   (adventure-game #:headless        [headless #f]
                   #:bg              [bg-ent (plain-forest-bg)]
-                  #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
+                  #:avatar          [p      (custom-avatar #:sprite basic-sprite)]
                   #:sky             [sky (custom-sky)]
                   #:intro-cutscene  [intro-cutscene #f]
                   #:death-cutscene  [death-cutscene #f]

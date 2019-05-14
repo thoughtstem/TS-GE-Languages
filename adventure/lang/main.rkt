@@ -33,6 +33,7 @@
          ring-of-fire
          ring-of-ice
          ring-of-blades
+         fireball
          
          acid-dart
          spear-dart
@@ -41,6 +42,7 @@
          ice-dart
          flying-dagger-dart
          ring-of-fire-dart
+         fireball-dart
 
          acid-sprite
          ice-sprite
@@ -1910,6 +1912,51 @@
                        #:point-to-mouse?   [ptm? #f]
                        #:rapid-fire?       [rf? #t]
                        #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite icon
+                 #:dart   d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-key key
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
+
+(define (fireball-dart  #:sprite     [s   flame-sprite]
+                        #:damage     [dmg 10]
+                        #:durability [dur 5]
+                        #:speed      [spd 3]
+                        #:range      [rng 100])
+  (custom-dart #:position (posn 25 0)
+               #:sprite     s
+               #:damage     dmg
+               #:durability dur
+               #:speed      spd
+               #:range      rng))
+
+(define (fireball  #:name              [n "Fireball"]
+                   #:icon              [icon (list flame-sprite
+                                                   (make-icon ""))]
+                   #:sprite            [s   flame-sprite]
+                   #:damage            [dmg 10]
+                   #:durability        [dur 5]
+                   #:speed             [spd 3]
+                   #:range             [rng 100]
+                   #:dart              [d (fireball-dart #:sprite s
+                                                         #:damage dmg
+                                                         #:durability dur
+                                                         #:speed spd
+                                                         #:range rng)]
+                   #:fire-mode         [fm 'normal]
+                   #:fire-rate         [fr 3]
+                   #:fire-key          [key 'f]
+                   #:fire-sound        [fire-sound FIRE-MAGIC-SOUND]
+                   #:mouse-fire-button [button #f]
+                   #:point-to-mouse?   [ptm? #f]
+                   #:rapid-fire?       [rf? #t]
+                   #:rarity            [rarity 'common])
   (custom-weapon #:name n
                  #:sprite icon
                  #:dart   d

@@ -5,71 +5,71 @@
 (define-example-code adventure hello-world-1
   (adventure-game))
 
-#|
+
 ; -----------------
 
-(define-example-code survival avatar-1
-  (survival-game
+(define-example-code adventure avatar-1
+  (adventure-game
    #:avatar (custom-avatar))
   )
                                        
-(define-example-code survival avatar-2
+(define-example-code adventure avatar-2
   (define (my-avatar)
     (custom-avatar #:sprite wizard-sprite))
 
-  (survival-game
+  (adventure-game
    #:avatar (my-avatar))
   )
 
-(define-example-code survival avatar-3
+(define-example-code adventure avatar-3
   (define (my-avatar)
     (custom-avatar #:sprite pirate-sprite
                    #:speed  20))
 
-  (survival-game
+  (adventure-game
    #:avatar (my-avatar))
   )
 
-(define-example-code survival avatar-4
+(define-example-code adventure avatar-4
   (define (my-avatar)
     (custom-avatar #:sprite monk-sprite
                    #:speed  20
                    #:key-mode 'wasd))
 
-  (survival-game
+  (adventure-game
    #:avatar (my-avatar))
   )
 
 ; -----------------
 
-(define-example-code survival coin-1
-  (survival-game
+(define-example-code adventure coin-1
+  (adventure-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (custom-coin)))
   )
 
-(define-example-code survival coin-2 
+(define-example-code adventure coin-2 
   (define (my-coin)
     (custom-coin #:value 500))
  
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)))
   )
 
-(define-example-code survival coin-3
+(define-example-code adventure coin-3
   (define (my-coin)
     (custom-coin #:sprite          silver-coin-sprite
                  #:name            "Silver Coin"
                  #:value           500
                  #:amount-in-world 20))
 
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)))
   )
 
-(define-example-code survival coin-4
+(define-example-code adventure coin-4
   
   (define (my-coin)
     (custom-coin #:sprite silver-coin-sprite
@@ -82,7 +82,7 @@
                  #:amount-in-world 1
                  #:respawn?        #f))
 
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)
                       (my-special-coin)))
@@ -90,21 +90,21 @@
 
 ; -----------------
 
-(define-example-code survival crafter-1
-  (survival-game
+(define-example-code adventure crafter-1
+  (adventure-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter)))
   )
 
-(define-example-code survival crafter-2
-  (survival-game
+(define-example-code adventure crafter-2
+  (adventure-game
    #:avatar       (custom-avatar)
    #:food-list    (list (carrot #:amount-in-world 10))
    #:crafter-list (list (custom-crafter
                          #:recipe-list (list carrot-stew-recipe))))
   )
  
-(define-example-code survival crafter-3
+(define-example-code adventure crafter-3
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
                  #:sprite fish-stew-sprite
@@ -116,14 +116,14 @@
             #:build-time 40
             #:ingredients (list "Fish")))
 
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:food-list    (list (fish #:amount-in-world 10))
    #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
                                         #:recipe-list (list fish-stew-recipe))))
   )
 
-(define-example-code survival crafter-4  
+(define-example-code adventure crafter-4  
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
                  #:sprite fish-stew-sprite
@@ -142,7 +142,7 @@
                     #:recipe-list (list carrot-stew-recipe
                                         fish-stew-recipe)))
   
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:food-list    (list (carrot #:amount-in-world 10)
                         (fish   #:amount-in-world 10))
@@ -150,39 +150,39 @@
   )
 
 ; sword, damage, has-gold? options (spear) fire-magic, etc
-(define-example-code survival weapon-crafter-1
+(define-example-code adventure weapon-crafter-1
   (define my-sword-recipe
     (recipe #:product (sword)
             #:build-time 20))
   
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
                          #:sprite      wood-table-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
-(define-example-code survival weapon-crafter-2
+(define-example-code adventure weapon-crafter-2
   (define my-sword-recipe
     (recipe #:product (sword #:name "Heavy Sword"
                              #:damage 100)
             #:build-time 40))
   
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
                          #:sprite      wood-table-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
-(define-example-code survival weapon-crafter-3
+(define-example-code adventure weapon-crafter-3
   (define my-fire-magic-recipe
     (recipe #:product (fire-magic  #:name "Fire Magic"
                                    #:speed 5)
             #:build-time 60
             #:cost       100))
   
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:coin-list    (list (custom-coin #:value 20
                                      #:amount-in-world 10))
@@ -193,29 +193,29 @@
 
 ; -----------------
 
-(define-example-code survival sky-1 
-  (survival-game
+(define-example-code adventure sky-1 
+  (adventure-game
    #:avatar (custom-avatar)
    #:sky    (custom-sky #:length-of-day 5000))
   )
 
-(define-example-code survival sky-2 
-  (survival-game
+(define-example-code adventure sky-2 
+  (adventure-game
    #:avatar (custom-avatar)
    #:sky    (custom-sky #:length-of-day 500
                         #:max-darkness  255))
   )
 
-(define-example-code survival sky-3 
-  (survival-game
+(define-example-code adventure sky-3 
+  (adventure-game
    #:avatar (custom-avatar)
    #:sky (custom-sky #:night-sky-color  'darkmagenta
                      #:max-darkness     150))
   )
 
-(define-example-code survival sky-4 
+(define-example-code adventure sky-4 
 
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:enemy-list   (list (custom-enemy #:amount-in-world 20
                                       #:night-only? #t))
@@ -226,29 +226,29 @@
 
 ; -----------------
 
-(define-example-code survival enemy-1
-  (survival-game
+(define-example-code adventure enemy-1
+  (adventure-game
    #:avatar     (custom-avatar)
    #:enemy-list (list (custom-enemy)))
   )
 
-(define-example-code survival enemy-2
-  (survival-game
+(define-example-code adventure enemy-2
+  (adventure-game
    #:avatar     (custom-avatar)
    #:enemy-list (list (curry custom-enemy #:amount-in-world 10)))
   )
 
-(define-example-code survival enemy-3 
+(define-example-code adventure enemy-3 
   (define (my-enemy)
     (custom-enemy #:ai              'medium
                   #:sprite          bat-sprite
                   #:amount-in-world 5))
  
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:enemy-list (list (my-enemy))))
 
-(define-example-code survival enemy-4
+(define-example-code adventure enemy-4
   (define (easy-enemy)
     (custom-enemy #:ai           'easy
                   #:sprite       slime-sprite
@@ -260,55 +260,55 @@
                   #:amount-in-world 5
                   #:night-only? #t))
  
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:enemy-list (list (easy-enemy)
                       (medium-enemy))))
 
-(define-example-code survival enemy-5
+(define-example-code adventure enemy-5
   (define (hard-enemy)
     (custom-enemy #:ai              'hard
                   #:sprite          snake-sprite
                   #:amount-in-world 5
                   #:weapon          (acid-spitter #:damage 50)))
  
-  (survival-game
+  (adventure-game
    #:avatar       (custom-avatar)
    #:enemy-list   (list (hard-enemy)))
   )
 
 ; -----------------
 
-(define-example-code survival food-1
-  (survival-game
+(define-example-code adventure food-1
+  (adventure-game
    #:avatar     (custom-avatar)
    #:food-list  (list (custom-food #:amount-in-world 10)))
   )
 
-(define-example-code survival food-2
+(define-example-code adventure food-2
   (define (my-food)
     (custom-food #:amount-in-world 2
                  #:heals-by        20))
  
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:food-list  (list (my-food)))
   )
 
 
-(define-example-code survival food-3
+(define-example-code adventure food-3
   (define (my-food)
     (custom-food #:sprite          apples-sprite
                  #:name            "Apples"
                  #:amount-in-world 2
                  #:heals-by        20))
 
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:food-list  (list (my-food)))
   )
 
-(define-example-code survival food-4
+(define-example-code adventure food-4
 
   (define (my-food)
     (custom-food #:sprite          apples-sprite
@@ -323,44 +323,43 @@
                  #:heals-by        50
                  #:respawn?        #f))
 
-  (survival-game
+  (adventure-game
    #:avatar     (custom-avatar)
    #:food-list  (list (my-food)
                       (special-food))))
 
-(define-example-code survival food-5
+(define-example-code adventure food-5
   (define (my-food)
     (custom-food #:sprite          cherry-sprite
                  #:name            "Cherry"
                  #:amount-in-world 20
                  #:heals-by        50))
   
-  (survival-game
+  (adventure-game
    #:avatar          (custom-avatar)
-   #:food-list       (list (my-food))
-   #:starvation-rate 100)
+   #:food-list       (list (my-food)))
   )
 ; -----------------
 
-(define-example-code survival npc-1
-  (survival-game
+(define-example-code adventure npc-1
+  (adventure-game
    #:avatar   (custom-avatar)
    #:npc-list (list (custom-npc)))
   )
 
 
-(define-example-code survival npc-2
+(define-example-code adventure npc-2
   (define (my-npc)
     (custom-npc
      #:sprite witch-sprite
      #:name   "Witch"))
 
-  (survival-game
+  (adventure-game
    #:avatar   (custom-avatar)
    #:npc-list (list (my-npc)))
   )
 
-(define-example-code survival npc-3
+(define-example-code adventure npc-3
   (define (my-npc)
     (custom-npc
      #:sprite witch-sprite
@@ -368,23 +367,23 @@
      #:tile   3
      #:mode   'follow))
 
-  (survival-game
+  (adventure-game
    #:avatar   (custom-avatar)
    #:npc-list (list (my-npc)))
   )
 
-(define-example-code survival npc-4
+(define-example-code adventure npc-4
   (define (my-npc)
     (custom-npc
      #:dialog (list "Woah, who are you??"
                     "Nevermind -- I'm too busy."
                     "Move along, now!")))
-  (survival-game
+  (adventure-game
    #:avatar   (custom-avatar)
    #:npc-list (list (my-npc)))
   )
 
-(define-example-code survival npc-5
+(define-example-code adventure npc-5
   (define (my-npc)
     (custom-npc
      #:name   "Francis"
@@ -400,38 +399,38 @@
                     "Have you seen an eye of newt?"
                     "Oh, I think I see it!")))
 
-  (survival-game
+  (adventure-game
    #:avatar   (custom-avatar)
    #:npc-list (list (my-npc) (another-npc)))
   )
 
 ; -----------------
 
-(define-example-code survival bg-1
-  (survival-game
+(define-example-code adventure bg-1
+  (adventure-game
    #:avatar (custom-avatar)
    #:bg (custom-bg))
   )
 
-(define-example-code survival bg-2
-  (survival-game
+(define-example-code adventure bg-2
+  (adventure-game
    #:avatar (custom-avatar)
    #:bg (custom-bg #:image DESERT-BG))
   )
 
-(define-example-code survival bg-3
+(define-example-code adventure bg-3
   (define (my-bg)
     (custom-bg
      #:image LAVA-BG
      #:rows 2
      #:columns 2))
 
-  (survival-game
+  (adventure-game
    #:avatar (custom-avatar)
    #:bg (my-bg))
   )
 
-(define-example-code survival bg-4
+(define-example-code adventure bg-4
   (define (my-bg)
     (custom-bg #:image LAVA-BG
                #:rows 2
@@ -439,33 +438,40 @@
                #:start-tile 3
                #:hd? #t))
  
-  (survival-game #:bg (my-bg))
+  (adventure-game #:bg (my-bg))
   )
   
 
 ; -----------------
 
 ; ==== LEVEL DESIGN KATAS ====
-(define-example-code survival level-design-1
 
-  (survival-game
+; Make a game with a forest background
+; filled with default world objects
+(define-example-code adventure level-design-1
+
+  (adventure-game
    #:bg (custom-bg #:image FOREST-BG)
    #:enable-world-objects? #t)
   
   )
 
-(define-example-code survival level-design-2
+; Make a game with a forest background
+; filled with high definition round trees and pine trees
+(define-example-code adventure level-design-2
 
-  (survival-game
+  (adventure-game
    #:bg             (custom-bg #:image FOREST-BG)
    #:other-entities (make-world-objects round-tree
                                         pine-tree
                                         #:hd? #t))
   )
 
-(define-example-code survival level-design-3
+; Make a game with a pink background
+; filled with random color and high definition candy-cane-trees and snow-pine-trees
+(define-example-code adventure level-design-3
 
-  (survival-game
+  (adventure-game
    #:bg             (custom-bg #:image PINK-BG)
    #:other-entities (make-world-objects candy-cane-tree
                                         snow-pine-tree
@@ -474,136 +480,44 @@
   
   )
 
-(define-example-code survival level-design-4
+; Make a game with an HD desert background
+; filled with random HD brown rocks
+(define-example-code adventure level-design-4
+
+  (adventure-game
+   #:bg             (custom-bg #:image DESERT-BG
+                               #:hd? #t)
+   #:other-entities (make-world-objects random-brown-rock
+                                        random-brown-rock
+                                        #:hd? #t))
   
-  (survival-game
-   #:other-entities (pine-tree   (posn 100 200) #:tile 0)
-                    (wood-house  (posn 100 200) #:tile 1 #:size 0.5)
-                    (brick-house (posn 100 200) #:tile 2 #:hue (random 360)))
+  )
+
+; Make a game with an HD lava background
+; filled with random HD gray rocks
+(define-example-code adventure level-design-5
+
+  (adventure-game
+   #:bg             (custom-bg #:image LAVA-BG
+                               #:hd? #t)
+   #:other-entities (make-world-objects random-gray-rock
+                                        random-gray-rock
+                                        #:hd? #t))
+  
+  )
+
+; Make a game with any background and
+; 3 world objects with customized position, tile, size, and/or hue
+(define-example-code adventure level-design-6
+  
+  (adventure-game
+   #:other-entities (barrels (posn 100 200) #:tile 0)
+                    (large-gray-rock  (posn 100 200) #:tile 1 #:size 2)
+                    (brick-house (posn 200 200) #:tile 2 #:hue (random 360)))
   
   )
 
 ; ==============================
-
-(define-example-code survival game-jam-1 
-  (survival-game
-   #:avatar       (custom-avatar)
-   #:coin-list    (list (custom-coin))
-   #:food-list    (list (custom-food #:amount-in-world 10))
-   #:enemy-list   (list (custom-enemy))
-   #:crafter-list (list (custom-crafter))))
-
-(define-example-code survival game-jam-2
-  (define (my-avatar)
-    (custom-avatar #:sprite wizard-sprite))
-
-  (define (silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
-                 #:name "silver coin"
-                 #:amount-in-world 6
-                 #:value 20))
-   
-  (define (gold-coin)
-    (custom-coin #:sprite gold-coin-sprite
-                 #:name "gold coin"
-                 #:amount-in-world 4
-                 #:value 40))
-
-
-  (define (toasted-marshmallow)
-    (custom-food #:sprite          toasted-marshmallow-sprite
-                 #:name            "toasted marshmallow"
-                 #:heals-by        5
-                 #:amount-in-world 5))
-   
-  (define (cherry)
-    (custom-food #:sprite          cherry-sprite
-                 #:name            "cherry"
-                 #:heals-by        50
-                 #:respawn?        #f))
-
-  (define (carrot)
-    (custom-food #:sprite          carrot-sprite
-                 #:name            "carrot"
-                 #:amount-in-world 5))
-
-  (define (bowl)
-    (custom-food #:sprite          bowl-sprite
-                 #:name            "bowl"
-                 #:heals-by        0
-                 #:amount-in-world 2))
-
-  (define (my-enemy-1)
-    (custom-enemy #:ai              'easy
-                  #:sprite          snake-sprite
-                  #:amount-in-world 5))
-   
-  (define (my-enemy-2)
-    (custom-enemy #:ai              'medium
-                  #:sprite          bat-sprite
-                  #:amount-in-world 2
-                  #:night-only?     #t))
-
-  (define (smores)
-    (custom-food #:sprite smores-sprite
-                 #:name "smores"
-                 #:heals-by 40))
-   
-  (define (steak)
-    (custom-food #:sprite  steak-sprite
-                 #:name    "steak"
-                 #:heals-by 50))
-
-  (define (carrot-stew)
-    (custom-food #:sprite   carrot-stew-sprite
-                 #:name     "carrot-stew"
-                 #:heals-by 60))
-   
-   
-  (define smores-recipe
-    (recipe #:product     (smores)
-            #:build-time  10
-            #:ingredients (list "toasted marshmallow")))
-   
-  (define steak-recipe
-    (recipe #:product     (steak)
-            #:build-time  5
-            #:ingredients (list "cherry" "toasted marshmallow")))
-
-  (define carrot-stew-recipe
-    (recipe #:product     (carrot-stew)
-            #:build-time  15
-            #:ingredients (list "carrot" "bowl")))
-  
-   
-  (define (campfire)
-    (custom-crafter #:sprite      campfire-sprite
-                    #:position    (posn 200 200)
-                    #:tile        2
-                    #:recipe-list (list smores-recipe
-                                        steak-recipe)))
-  (define (cauldron)
-    (custom-crafter #:sprite      cauldron-sprite
-                    #:position    (posn 200 200)
-                    #:tile        3
-                    #:recipe-list (list carrot-stew-recipe)))
-
-
-  
-  (survival-game
-   #:avatar       (my-avatar)
-   #:coin-list    (list (silver-coin)
-                        (gold-coin))
-   #:food-list    (list (toasted-marshmallow)
-                        (cherry)
-                        (carrot)
-                        (bowl))
-   #:enemy-list   (list (my-enemy-1)
-                        (my-enemy-2))
-   #:crafter-list (list (cauldron)
-                        (campfire))))
-
-|#
 
 
 ;Tests all examples as games for 10 ticks

@@ -46,6 +46,7 @@
 
          acid-sprite
          ice-sprite
+         basic-sprite
 
          custom-cutscene
          page
@@ -112,6 +113,8 @@
   (define remainder (modulo rounded-num multiple))
   (cond [(= remainder 0) rounded-num]
         [else (+ rounded-num multiple (- remainder))]))
+
+(define known-loot-list '())
 
 (define/contract/doc (custom-sky #:night-sky-color  [color      'black]
                                  #:length-of-day    [day-length 2400]
@@ -636,8 +639,8 @@
 
                                 (static)
                                 (hidden)
-                                (on-start (do-many (respawn 'anywhere)
-                                                   (active-on-random)
+                                (on-start (do-many ;(respawn 'anywhere)
+                                                   ;(active-on-random)
                                                    show))
                                 (storable)))
 
@@ -739,6 +742,10 @@
          via the @racket[#:enemy-list] parameter.}
 
   (apply precompile! loot-list)
+  (precompile! s)
+
+  (set! known-loot-list (append loot-list known-loot-list))
+  
   ;Makes sure that we can run (custom-enemy) through (entity-cloner ...)
   ;  Works because combatant ids get assigned at runtime.
   ;(Otherwise, they'd all end up with the same combatant id, and a shared healthbar)
@@ -794,8 +801,8 @@
                     (damager 10 (list 'passive 'enemy-team 'bullet))
                     (hidden)
                     ;(active-on-bg 0) ;Don't leave this in
-                    (on-start (do-many (if pos (do-nothing) (respawn 'anywhere))
-                                       (if tile (do-nothing) (active-on-random))
+                    (on-start (do-many ;(if pos (do-nothing) (respawn 'anywhere))
+                                       ;(if tile (do-nothing) (active-on-random))
                                        show
                                        become-combatant
                                        ))
@@ -1058,6 +1065,7 @@
                        #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                           "I'm not very good at finding things.")]
                        #:cutscene              [cutscene #f])
+  (and reward-item (set! known-loot-list (append (list reward-item) known-loot-list)))
   (flatten (list (storage (~a "collect-reward-" amount) (list amount
                                                               (or reward-amount 0)))
                  (and reward-item
@@ -1092,6 +1100,7 @@
                     #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                        "Those guys were realy causing trouble.")]
                     #:cutscene              [cutscene #f])
+  (and reward-item (set! known-loot-list (append (list reward-item) known-loot-list)))
   (flatten (list (storage (~a "hunt-reward-" amount) (list amount
                                                            (or reward-amount 0)))
                  (and reward-item
@@ -1112,10 +1121,12 @@
 
 ; ===== END OF QUEST FUNCTIONS =====
 
+(define basic-sprite (circle 10 'solid 'red))
+
 (define/contract/doc
   (adventure-game #:headless        [headless #f]
                   #:bg              [bg-ent (plain-forest-bg)]
-                  #:avatar          [p      (custom-avatar #:sprite (circle 10 'solid 'red))]
+                  #:avatar          [p      (custom-avatar #:sprite basic-sprite)]
                   #:sky             [sky (custom-sky)]
                   #:intro-cutscene  [intro-cutscene #f]
                   #:death-cutscene  [death-cutscene #f]
@@ -1196,6 +1207,10 @@
   
   (define world-weapon-list (filter (not/c known-weapon?) weapon-list))
 
+  (define weapons-from-loot (filter (curry get-storage "Weapon") known-loot-list))
+  (define food-from-loot (filter (curry get-storage "heals-by") known-loot-list))
+  (define coins-from-loot (filter (curry get-storage "value") known-loot-list))
+
   (define (fetch-reward-storage? c)
       (and (storage? c)
            (string-prefix? (storage-name c) "fetch-reward-")))
@@ -1223,13 +1238,23 @@
   
   (define player-with-recipes-and-weapons
     (if p
-        (add-components p (map weapon-entity->player-system known-weapons-list)
-                          (map weapon-entity->player-system world-weapon-list)
-                          (map recipe->system known-recipes-list) 
+        (add-components p (map weapon-entity->player-system
+                               (remove-duplicates
+                                (append known-weapons-list
+                                        world-weapon-list
+                                        weapons-from-loot)
+                                name-eq?))
+                        
+                          ;(map weapon-entity->player-system world-weapon-list)
+                          ;(map weapon-entity->player-system weapons-from-loot)
+                          
+                          (map recipe->system known-recipes-list)
                           (map food->component
-                               (append (remove-duplicates updated-food-list
-                                                          name-eq?)
-                                       (filter-not (curry get-storage "Weapon") known-products-list)))
+                               (remove-duplicates
+                                (append  updated-food-list
+                                         food-from-loot
+                                         (filter-not (curry get-storage "Weapon") known-products-list))
+                                name-eq?))
                           (map item-entity->backpack-observer item-list)
                           )
         #f))
@@ -1253,8 +1278,10 @@
                                           #:relative? #f))))
   
   (define (add-random-start-pos e)
-    (define world-amt (get-storage-data "amount-in-world" e))
-    (if (> world-amt 0) 
+    ;(define world-amt (get-storage-data "amount-in-world" e))
+    (define pos (get-posn e))
+    (if ;(and (> world-amt 0)
+     (equal? pos (posn 0 0))
         (add-components e (hidden)
                           (on-start (do-many (active-on-random)
                                              (respawn 'anywhere)
@@ -1357,7 +1384,9 @@
                                  (counter 0)
                                  (storage "kill-count" 0)
                                  (layer "ui")
-                                 (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
+                                 (map (curryr coin->component prefix) (remove-duplicates (append updated-coin-list
+                                                                                                 coins-from-loot)
+                                                                                         name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
                                  (map npc->counter-quest-rewards npc-list)
                                  (observe-change (λ (g e)
@@ -1423,16 +1452,16 @@
 
                        player-with-recipes-and-weapons
 
-                       (clone-by-rarity weapon-list) ; surival doesn't need weapons in the wild
+                       (map add-random-start-pos (clone-by-rarity weapon-list))
                        
-                       npc-list
+                       (map add-random-start-pos npc-list)
                        
-                       c-list
-                       item-list
+                       (map add-random-start-pos c-list)
+                       (map add-random-start-pos item-list)
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
-                       enemies-with-night-code
+                       (map add-random-start-pos enemies-with-night-code)
                        
                        (cons ent custom-entities)
 
@@ -1466,7 +1495,7 @@
                  ;          recipes
                            ))
 
-(define/contract/doc (custom-crafter #:position   [p (posn 100 100)]
+(define/contract/doc (custom-crafter #:position   [p (posn 0 0)]
                                      #:tile       [t 0]
                                      #:name       [name "Crafter"]
                                      #:sprite     [sprite cauldron-sprite]
@@ -1513,9 +1542,10 @@
 ;  (or/c loose-component? (listof loose-component?)))
 
 (define/contract/doc (custom-npc #:sprite     [s (random-character-sprite)]
-                                 #:position   [p (posn 200 200)]
+                                 #:position   [p (posn 0 0)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]
+                                 #:amount-in-world [world-amt 1]
                                  #:tile       [tile 0]
                                  #:dialog     [d  #f]
                                  #:mode       [mode 'wander]
@@ -1531,6 +1561,7 @@
   (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
            #:name       [name string?]
+           #:amount-in-world [world-amt number?]
            #:tile       [tile number?]
            #:dialog     [dialog dialog-str?]
            #:mode       [mode (or/c 'still 'wander 'pace 'follow)]
@@ -1577,7 +1608,8 @@
               #:target      target
               #:sound       sound
               #:scale       scale
-              #:components  (list (on-start (respawn 'anywhere))
+              #:components  (list ;(on-start (respawn 'anywhere))
+                                  (storage "amount-in-world" world-amt)
                                   quests
                                   (cons c custom-components))))
 
@@ -1769,8 +1801,8 @@
                                 (hidden)
                                 (storage "amount-in-world" world-amt)
                                 (storage "value" val)
-                                (on-start (do-many (if pos  (do-nothing) (respawn 'anywhere))
-                                                   (if tile (do-nothing) (active-on-random))
+                                (on-start (do-many ;(if pos  (do-nothing) (respawn 'anywhere))
+                                                   ;(if tile (do-nothing) (active-on-random))
                                                    show))
                                 (if storable? (storable) #f)
                                 (if consumable? (pickup-component) #f)

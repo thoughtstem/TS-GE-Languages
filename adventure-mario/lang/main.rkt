@@ -10,13 +10,55 @@
 
 
 (language-mappings adventure       adventure-mario
-                   [adventure-game mario-game])
+                   [adventure-game mario-game]
+                   [#:avatar       #:character]
+                   [#:bg           #:level]
+                   [custom-avatar  custom-character])
+
+(define/contract/doc (custom-character #:sprite           [sprite (random-character-sprite)]
+                                       #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
+                                                              #:show-damage? #t
+                                                              #:hit-sound HIT-SOUND)]
+                                       #:position         [p   (posn 100 100)]
+                                       #:speed            [spd 10]
+                                       #:key-mode         [key-mode 'arrow-keys]
+                                       #:mouse-aim?       [mouse-aim? #f]
+                                       #:health           [health     100]
+                                       #:max-health       [max-health 100]
+                                       #:components       [c #f]
+                                       . custom-components)
+  (->i ()
+       (#:sprite           [sprite sprite?]
+        #:damage-processor [damage-processor damage-processor?]
+        #:position         [position posn?]
+        #:speed            [speed number?]
+        #:key-mode         [key-mode (or/c 'wasd 'arrow-keys)]
+        #:mouse-aim?       [mouse-aim boolean?]
+        #:health           [health     number?]
+        #:max-health       [max-health number?]
+        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
+       [returns entity?])
+
+  @{Returns a custom character, which will be placed in to the world
+         automatically if it is passed into @racket[mario-game]
+         via the @racket[#:character] parameter.}
+
+  (custom-avatar #:sprite           sprite
+                 #:damage-processor dp
+                 #:position         p
+                 #:speed            spd
+                 #:key-mode         key-mode
+                 #:mouse-aim?       mouse-aim?
+                 #:health           health
+                 #:max-health       max-health
+                 #:components       (cons c custom-components)))
 
 ;------------------- MAIN GAME
 
 (define/contract/doc (mario-game
                       #:headless              [headless #f]
-                      #:planet                [level (plain-forest-bg)]
+                      #:level                 [level (plain-forest-bg)]
                       #:character             [character (custom-avatar #:sprite (circle 10 'solid 'red))]
                       #:sky                   [sky (custom-sky)]
                       #:intro-cutscene        [intro-cutscene #f]
@@ -34,7 +76,7 @@
 
   (->i ()
        (#:headless              [headless boolean?]
-        #:planet                [level entity?]
+        #:level                 [level entity?]
         #:character             [character (or/c entity? false?)]
         #:sky                   [sky (or/c sky? #f)]
         #:intro-cutscene        [intro-cutscene (or/c entity? false?)]

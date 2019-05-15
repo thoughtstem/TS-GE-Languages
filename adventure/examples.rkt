@@ -633,7 +633,7 @@
                  #:sprite cat-sprite))
   
   (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help my find my cat?"
+   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?"
                                                "I've looked everywhere!")
                                 #:quest-list (list (fetch-quest #:item lost-cat)))))
   )
@@ -649,7 +649,7 @@
                            "Mylo is happy to be home!")))
   
   (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help my find my cat?")
+   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?")
                                 #:quest-list (list (fetch-quest #:item lost-cat
                                                                 #:cutscene my-cutscene)))))
   )
@@ -669,7 +669,7 @@
   (adventure-game
    #:npc-list (list (custom-npc #:name "Erin"
                                 #:sprite lightelf-sprite
-                                #:dialog (list "Can you help my find my cats?"
+                                #:dialog (list "Can you help me find my cats?"
                                                "I'll give you a reward for each cat.")
                                 #:quest-list (list fetch-quest-1
                                                    fetch-quest-2))))
@@ -688,7 +688,7 @@
   (adventure-game
    #:npc-list (list (custom-npc #:name "Erin"
                                 #:sprite lightelf-sprite
-                                #:dialog (list "Can you help my find my cat?")
+                                #:dialog (list "Can you help me find my cat?")
                                 #:quest-list (list my-fetch-quest))))
   )
 
@@ -708,7 +708,7 @@
   (adventure-game
    #:npc-list (list (custom-npc #:name "Erin"
                                 #:sprite     lightelf-sprite
-                                #:dialog     (list "Can you help my find my cat?")
+                                #:dialog     (list "Can you help me find my cat?")
                                 #:quest-list (fetch-quest #:item my-quest-item
                                                           #:reward-amount 500
                                                           #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)

@@ -61,6 +61,9 @@
          collect-quest
          hunt-quest
          loot-quest
+
+         ensure-storable-with-id
+         (rename-out (ensure-storable-with-id make-storable))
          )
 
 (require scribble/srcdoc)
@@ -991,16 +994,26 @@
 
 ; ===== END OF MULTI-PAGE CUT-SCENE =====
 
+
+(define (ensure-storable-with-id e)
+  (add-components e (filter identity (list (if (get-storage "item-id" e)
+                                               #f
+                                               (storage "item-id" (next-storable-item-id)))
+                                           (if (get-component e storable?)
+                                               #f
+                                               (storable))))))
+
 ; ===== QUEST FUNCTIONS =====
-(define (fetch-quest #:item item
+(define (fetch-quest #:item i
                      #:reward-amount [reward-amount #f]  
                      #:quest-complete-dialog [quest-complete-dialog (filter identity
-                                                                            (list (~a "Thanks for finding my " (get-name item) ".")
+                                                                            (list (~a "Thanks for finding my " (get-name i) ".")
                                                                                   (if reward-amount "Here's a reward for helping me out!" #f)))]
                      #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                         "I don't know what I would do"
-                                                                        (~a "without my " (get-name item) "."))]
+                                                                        (~a "without my " (get-name i) "."))]
                      #:cutscene              [cutscene #f])
+  (define item (ensure-storable-with-id i))
   (flatten (list (storage (~a "fetch-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
                  (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
                                       ;(near? "player") ;removing since observe change gets re-triggered by moving 
@@ -1014,16 +1027,17 @@
                                                 [else #f])
                         #:cutscene cutscene))))
 
-(define (craft-quest #:item item
+(define (craft-quest #:item i
                      #:reward-amount [reward-amount #f]  
                      #:quest-complete-dialog [quest-complete-dialog (filter identity
                                                                             (list "Thanks for making me a ... "
-                                                                                  (~a (get-name item) ".")
+                                                                                  (~a (get-name i) ".")
                                                                                   (if reward-amount "Here's a reward for helping me out!" #f)))]
                      #:new-response-dialog   [new-response-dialog (list "Thanks again for helping me out!"
                                                                         "I really needed that ... "
-                                                                        (~a (get-name item) "."))]
+                                                                        (~a (get-name i) "."))]
                      #:cutscene              [cutscene #f])
+  (define item (ensure-storable-with-id i))
   (flatten (list (storage (~a "craft-reward-" (get-storage-data "item-id" item)) (list item reward-amount)) ;or should i just store the item-id or grab it from the name?
                  (quest #:rule (and/r (in-game-by-id? (get-storage-data "item-id" item))
                                       ;(near? "player") ;removing since observe change gets re-triggered by moving 

@@ -82,11 +82,6 @@
   )
 
 (define-example-code adventure coin-3
-
-  (define (my-coin)
-    (custom-coin #:name "Silver Coin"
-                 #:sprite silver-coin-sprite))
-  
   (define (my-trick-coin)
     (custom-coin #:name "Gold Coin"
                  #:sprite gold-coin-sprite
@@ -97,16 +92,10 @@
                                                                   #:tile 0))))
   
   (adventure-game
-   #:coin-list (list (my-coin)
-                     (my-trick-coin)))
+   #:coin-list (list (my-trick-coin)))
   )
 
 (define-example-code adventure coin-4
-
-  (define (my-coin)
-    (custom-coin #:name "Silver Coin"
-                 #:sprite silver-coin-sprite))
-  
   (define (my-special-coin)
     (custom-coin #:name "Gold Coin"
                  #:sprite gold-coin-sprite
@@ -117,8 +106,7 @@
                                           "This looks valuable."))))
   
   (adventure-game
-   #:coin-list (list (my-coin)
-                     (my-special-coin)))
+   #:coin-list (list (my-special-coin)))
   )
 
 ; Make a game with 10 gold coins worth 10 each,
@@ -126,16 +114,13 @@
 (define-example-code adventure coin-5
   
   (define (my-coin)
-    (custom-coin #:name "Gold Coin"
-                 #:sprite gold-coin-sprite
-                 #:value 10
+    (custom-coin #:value 10
                  #:amount-in-world 15
                  #:respawn? #f))
 
   (define (npc-with-coin-quest)
-    (custom-npc #:dialog     (list "I've lost 100 worth of coins"
-                                   "in this forest. Can you find"
-                                   "them for me?")
+    (custom-npc #:dialog     (list "I've lost 100 worth of coins."
+                                   "Can you find them for me?")
                 #:quest-list (list (collect-quest #:collect-amount 100
                                                   #:reward-amount 50))))
   
@@ -343,25 +328,17 @@
 ; Make a game with 10 enemies and an npc with a quest to kill 5
 ; and reward you with 50 and a reward-item
 
-(define-example-code adventure enemy-3
-
-  (define (my-silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
-                 #:value 5))
-  
+(define-example-code adventure enemy-3  
   (define (my-gold-coin)
     (custom-coin #:sprite gold-coin-sprite
                  #:value 20))
-  
-  (define (easy-enemy)
-    (custom-enemy #:amount-in-world 5
-                  #:loot-list (list (my-silver-coin))))
 
   (define (hard-enemy)
     (custom-enemy #:amount-in-world 3
                   #:ai 'hard
                   #:loot-list (list (my-gold-coin)
                                     (my-gold-coin))))
+  
   (adventure-game
    #:weapon-list (list (spear))
    #:enemy-list  (list (easy-enemy)
@@ -402,11 +379,10 @@
                 #:reward-item (sword)))
   
   (adventure-game
-   #:death-cutscene (custom-cutscene (page "You died!")
-                                     (page "Try harder!"))
-   #:npc-list (list (custom-npc #:dialog (list "Monsters are keeping me from"
-                                               "my important work. Can you"
-                                               "kill 5 of them for me?")
+   #:death-cutscene (custom-cutscene (page "You died!"
+                                           "Try harder!"))
+   #:npc-list (list (custom-npc #:dialog (list "These monsters are annoying."
+                                               "Can you get rid of 5?")
                                 #:quest-list (list my-hunt-quest)))
    #:weapon-list (list (fireball))
    #:enemy-list  (list (curry custom-enemy #:amount-in-world 10)))

@@ -74,7 +74,6 @@
            survival)
 
   (define-assets-from "../../assets/animal")
-  (define-assets-from "../../assets/zoo")
   (define-assets-from "../../assets")
 
   (provide blackcat-sprite

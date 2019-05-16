@@ -307,6 +307,110 @@
                                 )))
   )
 
+; -----------------
+
+(define-example-code adventure enemy-1
+  (adventure-game
+   #:enemy-list (list (curry custom-enemy
+                             #:ai              'medium
+                             #:amount-in-world 10
+                             #:night-only? #t
+                             #:health 200)))
+  )
+
+(define-example-code adventure enemy-2
+  (define (easy-enemy)
+    (custom-enemy #:ai           'easy
+                  #:sprite       slime-sprite
+                  #:amount-in-world 4))
+  
+  (define (medium-enemy)
+    (custom-enemy #:ai              'medium
+                  #:sprite          bat-sprite
+                  #:amount-in-world 2))
+
+  (define (hard-enemy)
+    (custom-enemy #:ai              'hard
+                  #:sprite          snake-sprite
+                  #:night-only? #t))
+ 
+  (adventure-game
+   #:enemy-list (list (easy-enemy)
+                      (medium-enemy)
+                      (hard-enemy)))
+  )
+
+; Make a game with 10 enemies and an npc with a quest to kill 5
+; and reward you with 50 and a reward-item
+
+(define-example-code adventure enemy-3
+
+  (define (my-silver-coin)
+    (custom-coin #:sprite silver-coin-sprite
+                 #:value 5))
+  
+  (define (my-gold-coin)
+    (custom-coin #:sprite gold-coin-sprite
+                 #:value 20))
+  
+  (define (easy-enemy)
+    (custom-enemy #:amount-in-world 5
+                  #:loot-list (list (my-silver-coin))))
+
+  (define (hard-enemy)
+    (custom-enemy #:amount-in-world 3
+                  #:ai 'hard
+                  #:loot-list (list (my-gold-coin)
+                                    (my-gold-coin))))
+  (adventure-game
+   #:weapon-list (list (spear))
+   #:enemy-list  (list (easy-enemy)
+                       (hard-enemy)))
+  )
+
+; Make a game with 10 enemies and an npc with a quest to kill 5
+; and reward you with 50 and a reward-item
+
+(define-example-code adventure enemy-4
+  
+  (define (easy-enemy)
+    (custom-enemy #:amount-in-world 5))
+
+  (define (hard-enemy)
+    (custom-enemy #:amount-in-world 3
+                  #:ai 'hard
+                  #:weapon (fireball)))
+  
+  (adventure-game
+   #:avatar         (custom-avatar #:sprite steampunkboy-sprite)
+   #:death-cutscene (custom-cutscene (page (set-sprite-angle 90 (render steampunkboy-sprite))
+                                           "You died!")
+                                     (page "Try harder!"))
+   #:weapon-list (list (spear))
+   #:enemy-list  (list (easy-enemy)
+                       (hard-enemy)))
+  )
+
+; Make a game with 10 enemies and an npc with a quest to kill 5
+; and reward you with 50 and a reward-item
+
+(define-example-code adventure enemy-5
+
+  (define my-hunt-quest
+    (hunt-quest #:hunt-amount 5
+                #:reward-amount 50
+                #:reward-item (sword)))
+  
+  (adventure-game
+   #:death-cutscene (custom-cutscene (page "You died!")
+                                     (page "Try harder!"))
+   #:npc-list (list (custom-npc #:dialog (list "Monsters are keeping me from"
+                                               "my important work. Can you"
+                                               "kill 5 of them for me?")
+                                #:quest-list (list my-hunt-quest)))
+   #:weapon-list (list (fireball))
+   #:enemy-list  (list (curry custom-enemy #:amount-in-world 10)))
+  )
 ; -----------
 
 (define-example-code adventure crafter-1
@@ -441,111 +545,6 @@
    #:sky          (custom-sky #:length-of-day    2400
                               #:start-of-daytime 200
                               #:end-of-daytime   2200))
-  )
-
-; -----------------
-
-(define-example-code adventure enemy-1
-  (adventure-game
-   #:enemy-list (list (curry custom-enemy
-                             #:ai              'medium
-                             #:amount-in-world 10
-                             #:night-only? #t
-                             #:health 200)))
-  )
-
-(define-example-code adventure enemy-2
-  (define (easy-enemy)
-    (custom-enemy #:ai           'easy
-                  #:sprite       slime-sprite
-                  #:amount-in-world 4))
-  
-  (define (medium-enemy)
-    (custom-enemy #:ai              'medium
-                  #:sprite          bat-sprite
-                  #:amount-in-world 2))
-
-  (define (hard-enemy)
-    (custom-enemy #:ai              'hard
-                  #:sprite          snake-sprite
-                  #:night-only? #t))
- 
-  (adventure-game
-   #:enemy-list (list (easy-enemy)
-                      (medium-enemy)
-                      (hard-enemy)))
-  )
-
-; Make a game with 10 enemies and an npc with a quest to kill 5
-; and reward you with 50 and a reward-item
-
-(define-example-code adventure enemy-3
-
-  (define (my-silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
-                 #:value 5))
-  
-  (define (my-gold-coin)
-    (custom-coin #:sprite gold-coin-sprite
-                 #:value 20))
-  
-  (define (easy-enemy)
-    (custom-enemy #:amount-in-world 5
-                  #:loot-list (list (my-silver-coin))))
-
-  (define (hard-enemy)
-    (custom-enemy #:amount-in-world 3
-                  #:ai 'hard
-                  #:loot-list (list (my-gold-coin)
-                                    (my-gold-coin))))
-  (adventure-game
-   #:weapon-list (list (spear))
-   #:enemy-list  (list (easy-enemy)
-                       (hard-enemy)))
-  )
-
-; Make a game with 10 enemies and an npc with a quest to kill 5
-; and reward you with 50 and a reward-item
-
-(define-example-code adventure enemy-4
-  
-  (define (easy-enemy)
-    (custom-enemy #:amount-in-world 5))
-
-  (define (hard-enemy)
-    (custom-enemy #:amount-in-world 3
-                  #:ai 'hard
-                  #:weapon (fireball)))
-  
-  (adventure-game
-   #:avatar         (custom-avatar #:sprite steampunkboy-sprite)
-   #:death-cutscene (custom-cutscene (page (set-sprite-angle 90 (render steampunkboy-sprite))
-                                           "You died!")
-                                     (page "Try harder!"))
-   #:weapon-list (list (spear))
-   #:enemy-list  (list (easy-enemy)
-                       (hard-enemy)))
-  )
-
-; Make a game with 10 enemies and an npc with a quest to kill 5
-; and reward you with 50 and a reward-item
-
-(define-example-code adventure enemy-5
-
-  (define my-hunt-quest
-    (hunt-quest #:hunt-amount 5
-                #:reward-amount 50
-                #:reward-item (sword)))
-  
-  (adventure-game
-   #:death-cutscene (custom-cutscene (page "You died!")
-                                     (page "Try harder!"))
-   #:npc-list (list (custom-npc #:dialog (list "Monsters are keeping me from"
-                                               "my important work. Can you"
-                                               "kill 5 of them for me?")
-                                #:quest-list (list my-hunt-quest)))
-   #:weapon-list (list (fireball))
-   #:enemy-list  (list (curry custom-enemy #:amount-in-world 10)))
   )
 
 ; -----------------

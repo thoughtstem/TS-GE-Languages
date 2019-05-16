@@ -10,7 +10,9 @@
          luigi-sprite
          mario-sprite
          yoshi1-sprite
-         yoshi2-sprite       
+         yoshi2-sprite
+         redmushroom-sprite
+         greenmushroom-sprite
          )
 
 (define (easy-sprite sheet r c n)
@@ -147,3 +149,9 @@
 
 (define yoshi2-sprite
   (easy-sprite yoshi-sheet 2 2 2))
+
+(define redmushroom-sprite
+  (easy-sprite redmushroom-sheet 1 1 1))
+
+(define greenmushroom-sprite
+  (easy-sprite greenmushroom-sheet 1 1 1))

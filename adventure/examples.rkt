@@ -144,7 +144,170 @@
    #:coin-list (list (my-coin)))
   )
 
-; -----------------
+; ==== LEVEL DESIGN KATAS ====
+
+; Make a game with a forest background
+; filled with default world objects
+(define-example-code adventure level-design-1
+
+  (adventure-game
+   #:bg (custom-bg #:image FOREST-BG)
+   #:enable-world-objects? #t)
+  
+  )
+
+; Make a game with a pink background
+; filled with random color and high definition candy-cane-trees and snow-pine-trees
+(define-example-code adventure level-design-2
+
+  (adventure-game
+   #:bg             (custom-bg #:image PINK-BG)
+   #:other-entities (make-world-objects candy-cane-tree
+                                        snow-pine-tree
+                                        #:hd? #t
+                                        #:random-color? #t))
+  
+  )
+
+; Make a game with an HD desert background
+; filled with random HD brown rocks
+(define-example-code adventure level-design-3
+
+  (adventure-game
+   #:bg             (custom-bg #:image DESERT-BG
+                               #:hd? #t)
+   #:other-entities (make-world-objects random-brown-rock
+                                        random-brown-rock
+                                        #:hd? #t))
+  
+  )
+
+; Make a game with an HD lava background
+; filled with random HD gray rocks
+(define-example-code adventure level-design-4
+
+  (adventure-game
+   #:bg             (custom-bg #:image LAVA-BG
+                               #:hd? #t)
+   #:intro-cutscene (custom-cutscene (page "Once upon a time"
+                                           "on a volcanic moon"
+                                           "of a distance world...")
+                                     (page "There was a lone soldier"
+                                           "who was banished from his"
+                                           "homeworld.")
+                                     (page (set-sprite-scale 2 basic-sprite)
+                                           "This is his story."))
+   #:other-entities (make-world-objects random-gray-rock
+                                        random-gray-rock
+                                        #:hd? #t))
+  )
+
+; Make a game with any background and
+; 3 world objects with customized position, tile, size, and/or hue
+(define-example-code adventure level-design-5
+  
+  (adventure-game
+   #:bg             (custom-bg)
+   #:avatar         (custom-avatar)
+   #:other-entities (reduce-quality-by 2 (barrels (posn 100 200) #:tile 0))
+                    (large-gray-rock  (posn 100 200) #:tile 1 #:size 2)
+                    (brick-house      (posn 200 200) #:tile 2 #:hue (random 360)))
+  )
+
+; -------------------------- FETCH QUEST KATAS
+
+ ;Make a game with a basic fetch quest
+(define-example-code adventure fetch-quest-1
+  (define lost-cat
+    (custom-item #:name "Mylo"
+                 #:sprite cat-sprite))
+  
+  (adventure-game
+   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?"
+                                               "I've looked everywhere!")
+                                #:quest-list (list (fetch-quest #:item lost-cat)))))
+  )
+
+ ;Make a game with a basic fetch quest with a cutscene
+(define-example-code adventure fetch-quest-2
+  (define lost-cat
+    (custom-item #:name "Mylo"
+                 #:sprite cat-sprite))
+
+  (define my-cutscene
+    (custom-cutscene (page (set-sprite-scale 2 cat-sprite)
+                           "Mylo is happy to be home!")))
+  
+  (adventure-game
+   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?")
+                                #:quest-list (list (fetch-quest #:item lost-cat
+                                                                #:cutscene my-cutscene)))))
+  )
+
+(define-example-code adventure fetch-quest-3
+  
+  (define fetch-quest-1
+    (fetch-quest #:item (custom-item #:name "Mylo"
+                                     #:sprite cat-sprite)
+                 #:reward-amount 200))
+  
+  (define fetch-quest-2
+    (fetch-quest #:item (custom-item #:name "Buttons"
+                                     #:sprite white-cat-sprite)
+                 #:reward-amount 200))
+
+  (adventure-game
+   #:npc-list (list (custom-npc #:name "Erin"
+                                #:sprite lightelf-sprite
+                                #:dialog (list "Can you help me find my cats?"
+                                               "I'll give you a reward for each cat.")
+                                #:quest-list (list fetch-quest-1
+                                                   fetch-quest-2))))
+  )
+
+;Make a game that has an npc with a fetch quest (with customized dialog and reward)
+(define-example-code adventure fetch-quest-4
+  
+  (define my-fetch-quest
+    (fetch-quest #:item (custom-item #:name "Mylo"
+                                     #:sprite cat-sprite)
+                 #:quest-complete-dialog (list "Thank you for finding Mylo!")
+                 #:new-response-dialog   (list "Thanks again for your help.")
+                 #:reward-amount 400 ))
+
+  (adventure-game
+   #:npc-list (list (custom-npc #:name "Erin"
+                                #:sprite lightelf-sprite
+                                #:dialog (list "Can you help me find my cat?")
+                                #:quest-list (list my-fetch-quest))))
+  )
+
+; Make a game that has a customized quest item with on-store and on-drop cutscenes
+; and an npc with a fetch quest (with reward and cutscene)
+(define-example-code adventure fetch-quest-5
+  
+  (define my-quest-item
+    (custom-item #:name "Mylo"
+                 #:sprite  cat-sprite
+                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
+                                         "This must be Erin's lost cat"))
+                 #:on-drop  (spawn (page "Maybe I shouldn't leave him"
+                                         "alone like this.")
+                                   #:rule (not/r (entity-in-game? "Erin")))))
+
+  (adventure-game
+   #:npc-list (list (custom-npc #:name "Erin"
+                                #:sprite     lightelf-sprite
+                                #:dialog     (list "Can you help me find my cat?")
+                                #:quest-list (fetch-quest #:item my-quest-item
+                                                          #:reward-amount 500
+                                                          #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)
+                                                                                 (set-sprite-x-offset 50 cat-sprite))
+                                                                           "Mylo, I've missed you!"))
+                                )))
+  )
+
+; -----------
 
 (define-example-code adventure crafter-1
   (adventure-game
@@ -552,170 +715,10 @@
 
 ; -----------------
 
-; ==== LEVEL DESIGN KATAS ====
-
-; Make a game with a forest background
-; filled with default world objects
-(define-example-code adventure level-design-1
-
-  (adventure-game
-   #:bg (custom-bg #:image FOREST-BG)
-   #:enable-world-objects? #t)
-  
-  )
-
-; Make a game with a pink background
-; filled with random color and high definition candy-cane-trees and snow-pine-trees
-(define-example-code adventure level-design-2
-
-  (adventure-game
-   #:bg             (custom-bg #:image PINK-BG)
-   #:other-entities (make-world-objects candy-cane-tree
-                                        snow-pine-tree
-                                        #:hd? #t
-                                        #:random-color? #t))
-  
-  )
-
-; Make a game with an HD desert background
-; filled with random HD brown rocks
-(define-example-code adventure level-design-3
-
-  (adventure-game
-   #:bg             (custom-bg #:image DESERT-BG
-                               #:hd? #t)
-   #:other-entities (make-world-objects random-brown-rock
-                                        random-brown-rock
-                                        #:hd? #t))
-  
-  )
-
-; Make a game with an HD lava background
-; filled with random HD gray rocks
-(define-example-code adventure level-design-4
-
-  (adventure-game
-   #:bg             (custom-bg #:image LAVA-BG
-                               #:hd? #t)
-   #:intro-cutscene (custom-cutscene (page "Once upon a time"
-                                           "on a volcanic moon"
-                                           "of a distance world...")
-                                     (page "There was a lone soldier"
-                                           "who was banished from his"
-                                           "homeworld.")
-                                     (page (set-sprite-scale 2 basic-sprite)
-                                           "This is his story."))
-   #:other-entities (make-world-objects random-gray-rock
-                                        random-gray-rock
-                                        #:hd? #t))
-  )
-
-; Make a game with any background and
-; 3 world objects with customized position, tile, size, and/or hue
-(define-example-code adventure level-design-5
-  
-  (adventure-game
-   #:bg             (custom-bg)
-   #:avatar         (custom-avatar)
-   #:other-entities (reduce-quality-by 2 (barrels (posn 100 200) #:tile 0))
-                    (large-gray-rock  (posn 100 200) #:tile 1 #:size 2)
-                    (brick-house      (posn 200 200) #:tile 2 #:hue (random 360)))
-  )
 
 ; ==============================
 
-; -------------------------- FETCH QUEST KATAS
 
- ;Make a game with a basic fetch quest
-(define-example-code adventure fetch-quest-1
-  (define lost-cat
-    (custom-item #:name "Mylo"
-                 #:sprite cat-sprite))
-  
-  (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?"
-                                               "I've looked everywhere!")
-                                #:quest-list (list (fetch-quest #:item lost-cat)))))
-  )
-
- ;Make a game with a basic fetch quest with a cutscene
-(define-example-code adventure fetch-quest-2
-  (define lost-cat
-    (custom-item #:name "Mylo"
-                 #:sprite cat-sprite))
-
-  (define my-cutscene
-    (custom-cutscene (page (set-sprite-scale 2 cat-sprite)
-                           "Mylo is happy to be home!")))
-  
-  (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?")
-                                #:quest-list (list (fetch-quest #:item lost-cat
-                                                                #:cutscene my-cutscene)))))
-  )
-
-(define-example-code adventure fetch-quest-3
-  
-  (define fetch-quest-1
-    (fetch-quest #:item (custom-item #:name "Mylo"
-                                     #:sprite cat-sprite)
-                 #:reward-amount 200))
-  
-  (define fetch-quest-2
-    (fetch-quest #:item (custom-item #:name "Buttons"
-                                     #:sprite white-cat-sprite)
-                 #:reward-amount 200))
-
-  (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
-                                #:sprite lightelf-sprite
-                                #:dialog (list "Can you help me find my cats?"
-                                               "I'll give you a reward for each cat.")
-                                #:quest-list (list fetch-quest-1
-                                                   fetch-quest-2))))
-  )
-
-;Make a game that has an npc with a fetch quest (with customized dialog and reward)
-(define-example-code adventure fetch-quest-4
-  
-  (define my-fetch-quest
-    (fetch-quest #:item (custom-item #:name "Mylo"
-                                     #:sprite cat-sprite)
-                 #:quest-complete-dialog (list "Thank you for finding Mylo!")
-                 #:new-response-dialog   (list "Thanks again for your help.")
-                 #:reward-amount 400 ))
-
-  (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
-                                #:sprite lightelf-sprite
-                                #:dialog (list "Can you help me find my cat?")
-                                #:quest-list (list my-fetch-quest))))
-  )
-
-; Make a game that has a customized quest item with on-store and on-drop cutscenes
-; and an npc with a fetch quest (with reward and cutscene)
-(define-example-code adventure fetch-quest-5
-  
-  (define my-quest-item
-    (custom-item #:name "Mylo"
-                 #:sprite  cat-sprite
-                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
-                                         "This must be Erin's lost cat"))
-                 #:on-drop  (spawn (page "Maybe I shouldn't leave him"
-                                         "alone like this.")
-                                   #:rule (not/r (entity-in-game? "Erin")))))
-
-  (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
-                                #:sprite     lightelf-sprite
-                                #:dialog     (list "Can you help me find my cat?")
-                                #:quest-list (fetch-quest #:item my-quest-item
-                                                          #:reward-amount 500
-                                                          #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)
-                                                                                 (set-sprite-x-offset 50 cat-sprite))
-                                                                           "Mylo, I've missed you!"))
-                                )))
-  )
 
 
 

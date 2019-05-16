@@ -5,181 +5,145 @@
 
 (define-assets-from "assets")
 
-(provide bigmario01-sprite
-         bigmario02-sprite
-         bigmario03-sprite
-         bigmario04-sprite
-         bigmario05-sprite
-         bigmario06-sprite
-         bigmario07-sprite
-         bigmario08-sprite
-         bigmario09-sprite
-         bigmario10-sprite
-         bigmario11-sprite
-
-         smallmario01-sprite
-         smallmario02-sprite
-         smallmario03-sprite
-         smallmario04-sprite
-         smallmario05-sprite
-         smallmario06-sprite
-         smallmario07-sprite
-         smallmario08-sprite
-         smallmario09-sprite
-         smallmario10-sprite
-         smallmario11-sprite
+(provide princesspeach-sprite        
+         toad-sprite
+         luigi-sprite
+         mario-sprite
+         yoshi1-sprite
+         yoshi2-sprite       
          )
 
-(define bigmario01-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 1
+(define (easy-sprite sheet r c n)
+  (sheet->sprite sheet
+                 #:rows r
+                 #:columns c
+                 #:row-number n
                  #:delay 5))
 
-(define bigmario02-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 2
-                 #:delay 5))
+(define-syntax-rule (define-sprite sheet r c row1 row2 row3 row4)
+  (begin
+    (provide row1 row2 row3 row4)
+    (define row1 (easy-sprite sheet r c 1))
+    (define row2 (easy-sprite sheet r c 2))
+    (define row3 (easy-sprite sheet r c 3))
+    (define row4 (easy-sprite sheet r c 4))))
 
-(define bigmario03-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-sprite bigmario-sheet 4 4
+  bigmario1-sprite
+  bigmario2-sprite
+  bigmario3-sprite
+  bigmario4-sprite)
 
-(define bigmario04-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 4
-                 #:delay 5))
+(define-sprite block-sheet 4 1
+  block1-sprite
+  block2-sprite
+  block3-sprite
+  block4-sprite)
 
-(define bigmario05-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 5
-                 #:delay 5))
+(define-sprite blooper-sheet 4 2
+  blooper1-sprite
+  blooper2-sprite
+  blooper3-sprite
+  blooper4-sprite)
 
-(define bigmario06-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 6
-                 #:delay 5))
+(define-sprite bowser-sheet 4 4
+  bowser1-sprite
+  bowser2-sprite
+  bowser3-sprite
+  bowser4-sprite)
 
-(define bigmario07-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 7
-                 #:delay 5))
+(define-sprite brick-sheet 4 1
+  brick1-sprite
+  brick2-sprite
+  brick3-sprite
+  brick4-sprite)
 
-(define bigmario08-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 8
-                 #:delay 5))
+(define-sprite buzzy-sheet 4 2
+  buzzy1-sprite
+  buzzy2-sprite
+  buzzy3-sprite
+  buzzy4-sprite)
 
-(define bigmario09-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 9
-                 #:delay 5))
+(define-sprite cheep-sheet 4 2
+  cheep1-sprite
+  cheep2-sprite
+  cheep3-sprite
+  cheep4-sprite)
 
-(define bigmario10-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 10
-                 #:delay 5))
+(define-sprite fence-sheet 4 1
+  fence1-sprite
+  fence2-sprite
+  fence3-sprite
+  fence4-sprite)
 
-(define bigmario11-sprite
-  (sheet->sprite bigmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 11
-                 #:delay 5))
+(define-sprite goomba-sheet 4 2
+  goomba1-sprite
+  goomba2-sprite
+  goomba3-sprite
+  goomba4-sprite)
 
-(define smallmario01-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 1
-                 #:delay 5))
+(define-sprite lakitu-sheet 4 2
+  lakitu1-sprite
+  lakitu2-sprite
+  lakitu3-sprite
+  lakitu4-sprite)
 
-(define smallmario02-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 2
-                 #:delay 5))
+(define-sprite paratroopa-sheet 4 2
+  paratroopa1-sprite
+  paratroopa2-sprite
+  paratroopa3-sprite
+  paratroopa4-sprite)
 
-(define smallmario03-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-sprite pipe-sheet 4 1
+  pipe1-sprite
+  pipe2-sprite
+  pipe3-sprite
+  pipe4-sprite)
 
-(define smallmario04-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 4
-                 #:delay 5))
+(define-sprite piranha-sheet 4 5
+  piranha1-sprite
+  piranha2-sprite
+  piranha3-sprite
+  piranha4-sprite)
 
-(define smallmario05-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 5
-                 #:delay 5))
+(define-sprite question-sheet 4 1
+  question1-sprite
+  question2-sprite
+  question3-sprite
+  question4-sprite)
 
-(define smallmario06-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 6
-                 #:delay 5))
+(define-sprite smallmario-sheet 4 4
+  smallmario1-sprite
+  smallmario2-sprite
+  smallmario3-sprite
+  smallmario4-sprite)
 
-(define smallmario07-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 7
-                 #:delay 5))
+(define-sprite spiny-sheet 4 2
+  spiny1-sprite
+  spiny2-sprite
+  spiny3-sprite
+  spiny4-sprite)
 
-(define smallmario08-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 8
-                 #:delay 5))
+(define-sprite troopa-sheet 4 2
+  troopa1-sprite
+  troopa2-sprite
+  troopa3-sprite
+  troopa4-sprite)
 
-(define smallmario09-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 9
-                 #:delay 5))
+(define princesspeach-sprite
+  (easy-sprite princesspeach-sheet 1 2 1))
 
-(define smallmario10-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 10
-                 #:delay 5))
+(define toad-sprite
+  (easy-sprite toad-sheet 1 2 1))
 
-(define smallmario11-sprite
-  (sheet->sprite smallmario-sheet
-                 #:rows 11
-                 #:columns 4
-                 #:row-number 11
-                 #:delay 5))
+(define luigi-sprite
+  (easy-sprite luigi-sheet 1 2 1))
+
+(define mario-sprite
+  (easy-sprite mario-sheet 1 2 1))
+
+(define yoshi1-sprite
+  (easy-sprite yoshi-sheet 2 2 1))
+
+(define yoshi2-sprite
+  (easy-sprite yoshi-sheet 2 2 2))

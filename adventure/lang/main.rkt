@@ -91,7 +91,7 @@
       (displayln l)
       body ...)))
 
-(define dialog-str? (or/c (listof string?) (listof (listof string?))))
+(define dialog-str? (or/c (listof string?) (listof (listof string?)) #f))
 
 (define rarity-level?
   (or/c 'common 'uncommon 'rare 'epic 'legendary))

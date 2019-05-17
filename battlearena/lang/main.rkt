@@ -202,9 +202,9 @@
    (on-edge 'top    (set-direction 90))
    (on-edge 'bottom (set-direction 270))))
 
-(define (stand-and-shoot target w #:ticks-between-shots (ticks-between-shots 50))
+(define (stand-and-shoot target wc #:ticks-between-shots (ticks-between-shots 50))
   (list (speed 0)
-        (use-weapon-against-player w #:ticks-between-shots ticks-between-shots)
+        (use-weapon-against-player wc #:ticks-between-shots ticks-between-shots)
         (every-tick (point-to target))))
 
 
@@ -1853,9 +1853,12 @@
 
 (provide change-damage-by
          multiply-damage-by
-         set-damage-to)
+         set-damage-to
+         change-fire-rate-by
+         multiply-fire-rate-by
+         set-fire-rate-to)
 
-;Holy crap, why is this so hard.  WE need better tools for
+;  Holy crap, why is this so hard.  WE need better tools for
 ;  applying a function to all things spawned from some entity
 (define (change-damage-by n #:for [d #f])
   (λ(g e)
@@ -1864,8 +1867,8 @@
       (define old-amount (damager-amount a-damager))
       (update-entity e damager? (set-damager-amount a-damager (+ old-amount n))))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1877,12 +1880,23 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
-
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
     
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
     ))
 
 (define (multiply-damage-by n #:for [d #f])
@@ -1892,8 +1906,8 @@
       (define old-amount (damager-amount a-damager))
       (update-entity e damager? (set-damager-amount a-damager (* old-amount n))))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1905,10 +1919,23 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
 
     
     ))
@@ -1919,8 +1946,8 @@
       (define a-damager (get-component e damager?))
       (update-entity e damager? (set-damager-amount a-damager n)))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1932,17 +1959,159 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
 
     
     ))
 
 ;change-fire-rate-by
+(define (change-fire-rate-by n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define fire-interval (do-every-speed wc))
+      (define fire-rate (/ 30 fire-interval))
+      (define new-fire-rate (+ fire-rate n))
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+    
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
+
 ;multiply-fire-rate-by
+(define (multiply-fire-rate-by n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define fire-interval (do-every-speed wc))
+      (define fire-rate (/ 30 fire-interval))
+      (define new-fire-rate (* fire-rate n))
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
+
 ;set-fire-rate-to
+(define (set-fire-rate-to n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define new-fire-rate n)
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+
+    (define (update-revert dur)
+      (if dur
+          (λ (c)
+            (set-after-time-delay c dur))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-component _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
 
 
 #;(module test racket

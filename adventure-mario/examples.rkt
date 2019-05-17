@@ -190,9 +190,8 @@
                               #:item my-quest-item
                               #:reward-amount 500
                               #:cutscene (page
-                                          spiny3-sprite)
-                                          "Spiny, I've missed you!"))
-                     ))
+                                          spiny3-sprite
+                                          "Spiny, I've missed you!")))))
   )
 
 ; -----------------

@@ -65,17 +65,11 @@
                 #:night-only? #t))
  
   (minecraft-game
-   #:skin     (custom-skin)
    #:mob-list (list (easy-mob) (medium-mob)))
   )
 
 (define-example-code survival-minecraft alt/enemy-5 
-  (define (easy-mob)
-    (custom-mob #:ai 'easy
-                #:sprite creeper-sprite
-                #:amount-in-world 5))
-  
-  (define (medium-mob)
+(define (medium-mob)
     (custom-mob #:ai 'medium
                 #:sprite skeleton-sprite
                 #:amount-in-world 3
@@ -89,9 +83,7 @@
                 #:weapon          (acid-spitter #:damage 50)))
  
   (minecraft-game
-   #:skin     (custom-skin)
-   #:mob-list (list (easy-mob)
-                    (medium-mob)
+   #:mob-list (list (medium-mob)
                     (hard-mob)))
   )
 
@@ -153,11 +145,7 @@
   )
 
 (define-example-code survival-minecraft alt/coin-5  
-  (define (copper)
-    (custom-ore #:sprite copperlump-sprite
-                #:name   "Copper Lump"))
-
-  (define (diamond)
+(define (diamond)
     (custom-ore #:sprite           diamond-sprite
                  #:name            "Diamond"
                  #:value           500
@@ -172,8 +160,7 @@
 
   (minecraft-game
    #:skin     (custom-skin)
-   #:ore-list (list (copper)
-                    (diamond)
+   #:ore-list (list (diamond)
                     (mesecrystal)))
   )
 ;=========================================================

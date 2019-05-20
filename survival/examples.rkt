@@ -125,12 +125,13 @@
 (define-example-code survival crafter-1
   (survival-game
    #:avatar       (custom-avatar)
-   #:crafter-list (list (custom-crafter)))
+   #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
+                                        #:position    (posn 200 200)
+                                        #:tile        2)))
   )
 
 (define-example-code survival crafter-2
   (survival-game
-   #:avatar       (custom-avatar)
    #:food-list    (list (carrot #:name "Carrot"
                                 #:amount-in-world 10))
    #:crafter-list (list (custom-crafter
@@ -146,14 +147,11 @@
 
   (define fish-stew-recipe
     (recipe #:product (fish-stew)
-            #:build-time 40
             #:ingredients (list "Fish")))
 
   (survival-game
-   #:avatar       (custom-avatar)
    #:food-list    (list (fish #:amount-in-world 10))
-   #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
-                                        #:recipe-list (list fish-stew-recipe))))
+   #:crafter-list (list (custom-crafter #:recipe-list (list fish-stew-recipe))))
   )
 
 (define-example-code survival crafter-4  
@@ -165,18 +163,13 @@
 
   (define fish-stew-recipe
     (recipe #:product (fish-stew)
-            #:build-time 40
             #:ingredients (list "Fish")))
 
   (define (my-cauldron)
-    (custom-crafter #:sprite      cauldron-sprite
-                    #:position    (posn 200 200)
-                    #:tile        2
-                    #:recipe-list (list carrot-stew-recipe
+    (custom-crafter #:recipe-list (list carrot-stew-recipe
                                         fish-stew-recipe)))
   
   (survival-game
-   #:avatar       (custom-avatar)
    #:food-list    (list (carrot #:amount-in-world 10)
                         (fish #:amount-in-world 10))
    #:crafter-list (list (my-cauldron)))
@@ -189,7 +182,6 @@
             #:build-time 20))
   
   (survival-game
-   #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
                          #:sprite      wood-table-sprite
                          #:recipe-list (list my-sword-recipe))))

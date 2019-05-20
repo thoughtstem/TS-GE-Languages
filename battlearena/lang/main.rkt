@@ -498,10 +498,12 @@
                                     #:speed             [spd 10]
                                     #:damage            [dmg 10]
                                     #:range             [rng 1000]
+                                    #:durability        [dur 10]
                                     #:dart              [b (custom-dart #:sprite ds
                                                                         #:speed spd
                                                                         #:damage dmg
-                                                                        #:range rng)]
+                                                                        #:range rng
+                                                                        #:durability dur)]
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
@@ -517,6 +519,7 @@
         #:speed       [speed  number?]
         #:damage      [damage number?]
         #:range       [range  number?]
+        #:durability  [dur    number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]

@@ -148,16 +148,13 @@
   )
 
 (define-example-code battlearena enemy-weapon-3
-  (define (my-dart)
-    (custom-dart
-     #:damage 5
-     #:speed  1
-     #:range  200))
 
   (define (my-weapon)
     (custom-weapon
      #:name      "Repeator"
-     #:dart      (my-dart)))
+     #:damage 5
+     #:speed  1
+     #:range  200))
 
   (battlearena-game
    #:enemy-list (list (custom-enemy
@@ -339,7 +336,8 @@
   (battlearena-game
    #:item-list (list (custom-item #:name   "Health Powerup"
                                   #:sprite (make-icon "HP" 'green 'white)
-                                  #:on-use (change-health-by 50)))))
+                                  #:on-use (change-health-by 50)
+                                  #:respawn? #t))))
 
 
 
@@ -348,7 +346,8 @@
   (battlearena-game
    #:item-list (list (custom-item #:name   "Max Health Powerup"
                                   #:sprite (make-icon "MHP" 'green 'white)
-                                  #:on-use (set-health-to 100)))))
+                                  #:on-use (set-health-to 100)
+                                  #:rarity 'epic))))
 
 
 
@@ -356,16 +355,13 @@
 
   (define (health-powerup)
     (custom-item #:name     "Health Powerup"
-                 #:sprite   (make-icon "HP" 'green 'white)
-                 #:on-use   (change-health-by 50)
-                 #:rarity   'uncommon
-                 #:respawn? #t))
+                 #:sprite   (make-icon "HP")
+                 #:on-use   (change-health-by 50)))
   
   (define (max-health-powerup)
     (custom-item #:name   "Max Health Powerup"
-                 #:sprite (make-icon "MHP" 'green 'white)
-                 #:on-use (set-health-to 100)
-                 #:rarity 'epic))
+                 #:sprite (make-icon "MHP")
+                 #:on-use (set-health-to 100)))
   
   (battlearena-game
    #:item-list      (list (health-powerup)
@@ -383,33 +379,27 @@
 
 (define-example-code battlearena homing-repeater-2
 
-  (define (my-dart)
-    (custom-dart #:damage 15
-                 #:speed  8
-                 #:range  40))
-  
-  (battlearena-game
-   #:weapon-list    (list (custom-weapon #:name      "Homing Repeater"
-                                         #:sprite    (make-icon "HR")
-                                         #:fire-mode 'homing
-                                         #:dart      (my-dart)))))
+(battlearena-game
+   #:weapon-list (list (custom-weapon #:name      "Homing Repeater"
+                                      #:sprite    (make-icon "HR")
+                                      #:fire-mode 'homing
+                                      #:damage 15
+                                      #:speed  8
+                                      #:range  40))))
 
 
 
 (define-example-code battlearena homing-repeater-3
 
-  (define (my-dart)
-    (custom-dart #:sprite (rectangle 10 2 'solid 'pink)
-                 #:damage 15
-                 #:speed  8
-                 #:range  40))
-
   (define (homing-shot)
     (custom-weapon #:name      "Homing Repeater"
                    #:sprite    (make-icon "HR")
                    #:fire-mode 'homing
-                   #:dart      (my-dart)
-                   #:rarity    'rare))
+                   #:rarity    'rare
+                   #:dart-sprite (rectangle 10 2 'solid 'pink)
+                   #:damage 15
+                   #:speed  8
+                   #:range  40))
   
   (battlearena-game
    #:weapon-list    (list (homing-shot))))
@@ -696,45 +686,45 @@
 (define-example-code battlearena repeater-balance-1
   (battlearena-game
    #:weapon-list (list (custom-weapon #:name "Light Repeater"
-                                      #:dart (custom-dart #:sprite paint-sprite
-                                                          #:damage 20
-                                                          #:durability 1
-                                                          #:speed  30
-                                                          #:range  50)
+                                      #:dart-sprite paint-sprite
+                                      #:damage 20
+                                      #:durability 1
+                                      #:speed  30
+                                      #:range  50
                                       #:rarity 'common))))
 
 (define-example-code battlearena repeater-balance-2
   (battlearena-game
    #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
-                                      #:dart (custom-dart #:sprite (scale 2 paint-sprite)
-                                                          #:damage 500
-                                                          #:durability 100
-                                                          #:speed  10
-                                                          #:range  50)
+                                      #:dart-sprite (scale 2 paint-sprite)
+                                      #:damage 500
+                                      #:durability 100
+                                      #:speed  10
+                                      #:range  50
                                       #:rarity 'uncommon))))
 
 (define-example-code battlearena repeater-balance-3
-  (define (heavy-dart)
-    (custom-dart #:sprite (scale 2 paint-sprite)
-                 #:damage 500
-                 #:durability 100
-                 #:speed  10
-                 #:range  50))
+  (define (heavy-weapon)
+    (custom-weapon #:name "Heavy Repeater"
+                   #:rarity 'uncommon
+                   #:dart-sprite (scale 2 paint-sprite)
+                   #:damage 500
+                   #:durability 100
+                   #:speed  10
+                   #:range  50))
 
-  (define (light-dart)
-    (custom-dart #:sprite paint-sprite
-                 #:damage 20
-                 #:durability 1
-                 #:speed  30
-                 #:range  50))
+  (define (light-weapon)
+    (custom-weapon #:name "Light Repeater"
+                   #:rarity 'common
+                   #:dart-sprite paint-sprite
+                   #:damage 20
+                   #:durability 1
+                   #:speed  30
+                   #:range  50))
   
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
-                                      #:dart (heavy-dart)
-                                      #:rarity 'uncommon)
-                       (custom-weapon #:name "Light Repeater"
-                                      #:dart (light-dart)
-                                      #:rarity 'common))))
+   #:weapon-list (list (heavy-weapon)
+                       (custom-weapon))))
 
 
 
@@ -864,31 +854,28 @@
 
 (define-example-code battlearena single-shot-2
 
-  (define (my-dart)
-    (custom-dart #:damage 20
-                 #:speed  20
-                 #:range  50))
+  (define (my-weapon)
+    (custom-weapon #:name        "Single Shot"
+                   #:sprite      (make-icon "SS")
+                   #:rapid-fire? #f
+                   #:damage      20
+                   #:speed       20
+                   #:range       50))
   
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name      "Single Shot"
-                                      #:sprite    (make-icon "SS")
-                                      #:rapid-fire? #f
-                                      #:dart      (my-dart)))))
+   #:weapon-list (list (my-weapon))))
 
 
 
 (define-example-code battlearena single-shot-3
 
-  (define (my-dart)
-    (custom-dart #:sprite (rectangle 10 2 'solid 'cyan)
-                 #:damage 40
-                 #:speed  20
-                 #:range  50))
-
   (define (single-shot)
     (custom-weapon #:name        "Single Shot"
                    #:sprite      (make-icon "SS")
-                   #:dart        (my-dart)
+                   #:dart-sprite (rectangle 10 2 'solid 'cyan)
+                   #:damage 40
+                   #:speed  20
+                   #:range  50
                    #:rapid-fire? #f
                    #:rarity      'rare))
   
@@ -953,7 +940,7 @@
   (battlearena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spear Tower"
-                        #:sprite (make-icon "ST" 'tan 'white)
+                        #:sprite (make-icon "ST")
                         #:dart (spear-tower-builder
                                 #:sprite (set-sprite-color 'gold spear-sprite)
                                 #:damage 100
@@ -984,12 +971,10 @@
   (battlearena-game
    #:weapon-list (list (custom-weapon
                         #:name "Spike Mine"
-                        #:sprite (make-icon "SM" 'gray 'white)
+                        #:sprite (make-icon "SM")
                         #:dart (spike-mine-builder
                                 #:sprite (set-sprite-color 'red spike-mine-sprite)
-                                #:damage 100
-                                #:speed 10
-                                #:range 50)))))
+                                #:damage 100)))))
 
 
 (define-example-code battlearena spread-shot-1
@@ -1002,33 +987,30 @@
 
 (define-example-code battlearena spread-shot-2
 
-  (define (my-dart)
-    (custom-dart #:damage     20
-                 #:durability 20
-                 #:speed      15))
+  (define (my-weapon)
+    (custom-weapon #:name      "Spread Shot"
+                   #:sprite    (make-icon "SPR")
+                   #:fire-mode 'spread
+                   #:damage     20
+                   #:durability 20
+                   #:speed      15))
   
   (battlearena-game
-   #:weapon-list    (list (custom-weapon #:name      "Spread Shot"
-                                         #:sprite    (make-icon "SPR")
-                                         #:fire-mode 'spread
-                                         #:dart      (my-dart)))))
-
+   #:weapon-list    (list (my-weapon)))
+)
 
 
 (define-example-code battlearena spread-shot-3
-
-  (define (my-dart)
-    (custom-dart #:sprite     (rectangle 10 2 'solid 'orange)
-                 #:damage     20
-                 #:durability 20
-                 #:speed      15))
 
   (define (spread-shot)
     (custom-weapon #:name      "Spread Shot"
                    #:sprite    (make-icon "SPR")
                    #:fire-mode 'spread
-                   #:dart      (my-dart)
-                   #:rarity    'rare))
+                   #:dart-sprite     (rectangle 10 2 'solid 'orange)
+                   #:rarity    'rare
+                   #:damage     20
+                   #:durability 20
+                   #:speed      15))
   
   (battlearena-game
    #:weapon-list    (list (spread-shot))))

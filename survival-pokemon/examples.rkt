@@ -208,8 +208,7 @@
                    #:mode 'pace
                    #:dialog (list
                              "Now where did I put it..."
-                             "Have you seen a leaf stone?"
-                             "Oh, I think I see it!")))
+                             "Have you seen a leaf stone?")))
  
   (pokemon-game
    #:pokemon (custom-pokemon)
@@ -229,7 +228,6 @@
   (pokemon-game
    #:pokemon      (custom-pokemon)
    #:crafter-list (list (custom-crafter
-                         #:sprite      chest-sprite
                          #:recipe-list (list my-attack-recipe))))
   )
 

@@ -23,7 +23,8 @@
          random-coin
          has-gold?
          dialog-str?
-                 
+
+         repeater
          acid-spitter
          spear
          sword
@@ -1336,6 +1337,36 @@
                                          die))))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
+(define (repeater #:name              [n "Repeater"]
+                  #:sprite            [ds (rectangle 10 2 "solid" "green")]
+                  #:icon              [i (list (set-sprite-angle -45 ds)
+                                               (make-icon ""))]
+                  #:speed             [spd 10]
+                  #:damage            [dmg 10]
+                  #:range             [rng 1000]
+                  #:dart              [d (custom-dart #:sprite ds
+                                                      #:speed spd
+                                                      #:damage dmg
+                                                      #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-rate         [fr 3]
+                  #:fire-key          [key 'f]
+                  #:fire-sound        [fire-sound LASER-SOUND]
+                  #:mouse-fire-button [button #f]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]

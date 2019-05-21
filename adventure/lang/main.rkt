@@ -24,6 +24,7 @@
          has-gold?
          dialog-str?
                  
+         repeater
          acid-spitter
          spear
          sword
@@ -1830,6 +1831,36 @@
                                 ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
+(define (repeater #:name              [n "Repeater"]
+                  #:sprite            [ds (rectangle 10 2 "solid" "green")]
+                  #:icon              [i (list (set-sprite-angle -45 ds)
+                                               (make-icon ""))]
+                  #:speed             [spd 10]
+                  #:damage            [dmg 10]
+                  #:range             [rng 1000]
+                  #:dart              [d (custom-dart #:sprite ds
+                                                      #:speed spd
+                                                      #:damage dmg
+                                                      #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-rate         [fr 3]
+                  #:fire-key          [key 'f]
+                  #:fire-sound        [fire-sound LASER-SOUND]
+                  #:mouse-fire-button [button #f]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]
@@ -2282,7 +2313,7 @@
 
 ; ==== PREBUILT FOOD AND RECIPES ===
 (define (carrot #:sprite           [s carrot-sprite]
-                #:position         [p (posn 100 100)]
+                #:position         [p (posn 0 0)]
                 #:name             [n "Carrot"]
                 #:tile             [t 0]
                 #:amount-in-world  [world-amt 1]
@@ -2300,7 +2331,7 @@
                 #:components       (cons c custom-entities)))
 
 (define (fish #:sprite           [s fish-sprite]
-              #:position         [p (posn 100 100)]
+              #:position         [p (posn 0 0)]
               #:name             [n "Fish"]
               #:tile             [t 0]
               #:amount-in-world  [world-amt 1]
@@ -2318,7 +2349,7 @@
                 #:components       (cons c custom-entities)))
 
 (define (carrot-stew #:sprite           [s carrot-stew-sprite]
-                     #:position         [p (posn 100 100)]
+                     #:position         [p (posn 0 0)]
                      #:name             [n "Carrot Stew"]
                      #:tile             [t 0]
                      #:amount-in-world  [world-amt 0]
@@ -2343,7 +2374,7 @@
 ; We could use some more naturally occuring food like
 ;  seeds, berries, nuts, fruit, etc
 (define (random-food #:amount-in-world [amt 1]
-                     #:position        [p (posn 100 100)]
+                     #:position        [p (posn 0 0)]
                      #:tile            [t 0]
                      #:respawn?        [respawn? #f]
                      #:components      [c #f]
@@ -2362,7 +2393,7 @@
                #:components (cons c custom-components)))
 
 (define (random-coin #:amount-in-world [amt 1]
-                     #:position        [p (posn 100 100)]
+                     #:position        [p (posn 0 0)]
                      #:tile            [t 0]
                      #:respawn?        [respawn? #f]
                      #:components      [c #f]

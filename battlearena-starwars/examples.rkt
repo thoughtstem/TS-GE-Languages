@@ -114,14 +114,14 @@
   (starwars-game
    #:item-list (list (custom-armor #:name          "Lightsaber Armor"
                                    #:protects-from "Lightsaber"
-                                   #:sprite        (make-icon "LA"))))
+                                   #:icon        (make-icon "LA"))))
   )
 
 (define-example-code battlearena-starwars alt/sword-armor-2
   (define (l-armor)
     (custom-armor #:name          "Lightsaber Armor"
                   #:protects-from "Lightsaber"
-                  #:sprite        (make-icon "LA")
+                  #:icon        (make-icon "LA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
@@ -133,7 +133,7 @@
   (define (l-armor)
     (custom-armor #:name          "Lightsaber Armor"
                   #:protects-from "Lightsaber"
-                  #:sprite        (make-icon "LA")
+                  #:icon        (make-icon "LA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
@@ -298,14 +298,14 @@
   (starwars-game
    #:item-list (list (custom-armor #:name          "Blaster Armor"
                                    #:protects-from "Blaster"
-                                   #:sprite        (make-icon "BA"))))
+                                   #:icon        (make-icon "BA"))))
   )
 
 (define-example-code battlearena-starwars blaster-armor-2
   (define (b-armor)
     (custom-armor #:name          "Blaster Armor"
                   #:protects-from "Blaster"
-                  #:sprite        (make-icon "BA")
+                  #:icon        (make-icon "BA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
@@ -317,7 +317,7 @@
   (define (b-armor)
     (custom-armor #:name          "Blaster Armor"
                   #:protects-from "Blaster"
-                  #:sprite        (make-icon "BA")
+                  #:icon        (make-icon "BA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   

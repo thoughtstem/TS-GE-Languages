@@ -161,14 +161,14 @@
 (define-example-code battlearena-avengers droid-1
   (avengers-game
     #:power-list (list (custom-power #:name "Droid"
-                                     #:icon (make-icon "D" 'yellow)
+                                     #:sprite (make-icon "D" 'yellow)
                                      #:dart (energy-droid))))
   )
 
 (define-example-code battlearena-avengers droid-2
   (define (my-droid)
     (custom-power #:name "Droid"
-                  #:icon (make-icon "D" 'yellow)
+                  #:sprite (make-icon "D" 'yellow)
                   #:dart (energy-droid #:color 'yellow
                                        #:damage 25
                                        #:fire-rate 2
@@ -181,7 +181,7 @@
 (define-example-code battlearena-avengers droid-3
   (define (my-droid)
     (custom-power #:name "Droid"
-                  #:icon (make-icon "D" 'yellow)
+                  #:sprite (make-icon "D" 'yellow)
                   #:dart (energy-droid #:color 'yellow
                                        #:damage 25)))
     
@@ -196,14 +196,14 @@
   (avengers-game
    #:item-list (list (custom-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
-                                   #:sprite (make-icon "EA"))))
+                                   #:icon (make-icon "EA"))))
   )
 
 (define-example-code battlearena-avengers armor-2
   (avengers-game
    #:item-list (list (custom-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
-                                   #:sprite (make-icon "EA")
+                                   #:icon (make-icon "EA")
                                    #:change-damage (subtract-by 10))))
   )
 
@@ -211,7 +211,7 @@
   (define (energy-armor)
     (custom-armor #:name "Energy Armor"
                   #:protects-from "Energy Blast"
-                  #:sprite (make-icon "LA")
+                  #:icon (make-icon "LA")
                   #:change-damage (subtract-by 10)
                   #:rarity 'rare))
   (avengers-game

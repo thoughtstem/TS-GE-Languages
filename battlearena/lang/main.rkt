@@ -1,6 +1,5 @@
 #lang at-exp racket
 
-
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
@@ -446,13 +445,13 @@
 
 
 (define/contract/doc (custom-armor        #:name          [n "Armor"]
-                                          #:sprite        [s chest-sprite]
+                                          #:icon          [i chest-sprite]
                                           #:protects-from [pf "Bullet"]
                                           #:change-damage [cd identity]
                                           #:rarity      [rarity 'common])
   (->i ()
        ( #:name          [name string?]
-         #:sprite        [sprite (or/c sprite? (listof sprite?))]
+         #:icon          [sprite (or/c sprite? (listof sprite?))]
          #:protects-from [protects-from string?]
          #:change-damage [change-damage procedure?]
          #:rarity        [rarity rarity-level?])
@@ -474,7 +473,7 @@
                                                                                     #:hit-sound HIT-SOUND)
                                                          #:default-processor (divert-damage #:filter-out '(friendly-team passive)
                                                                                             #:hit-sound HIT-SOUND)))
-  (sprite->entity s
+  (sprite->entity i
                   #:name updated-name
                   #:position    (posn 0 0)
                   #:components  (active-on-bg 0)
@@ -493,13 +492,13 @@
 
 
 (define/contract/doc (custom-weapon #:name              [n "Repeater"]
-                                    #:sprite            [s chest-sprite]
-                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:sprite            [i chest-sprite]
+                                    #:dart-sprite       [s (rectangle 10 2 "solid" "green")]
                                     #:speed             [spd 10]
                                     #:damage            [dmg 10]
-                                    #:range             [rng 1000]
+                                    #:range             [rng 10]
                                     #:durability        [dur 10]
-                                    #:dart              [b (custom-dart #:sprite ds
+                                    #:dart              [b (custom-dart #:sprite s
                                                                         #:speed spd
                                                                         #:damage dmg
                                                                         #:range rng
@@ -554,7 +553,7 @@
                                                  #:rapid-fire? rf?
                                                  #:rule (and/r (weapon-is? updated-name)
                                                                (in-backpack? updated-name))))
-  (sprite->entity s
+  (sprite->entity i
                   #:name updated-name
                   #:position    (posn 0 0)
                   #:components  (active-on-bg 0)
@@ -571,7 +570,7 @@
                                 (storable)))
 
 (define/contract/doc (custom-item #:name         [n "Item"]
-                                  #:sprite       [s chest-sprite]
+                                  #:icon         [i chest-sprite]
                                   #:on-use       [f #f]
                                   #:rarity       [r 'common]
                                   #:respawn?     [respawn? #t]
@@ -579,7 +578,7 @@
                                   . custom-entities)
 
   (->i () (#:name [name string?]
-           #:sprite [sprite (or/c sprite? (listof sprite?))]
+           #:icon [sprite (or/c sprite? (listof sprite?))]
            #:on-use [on-use any/c]
            #:rarity [rarity rarity-level?]
            #:respawn? [respawn boolean?]
@@ -592,7 +591,7 @@
          via the @racket[#:item-list] parameter.}
   
   (define new-entity
-    (sprite->entity s
+    (sprite->entity i
                   #:name n
                   #:position (posn 0 0)
                   #:components (physical-collider)

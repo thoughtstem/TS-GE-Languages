@@ -143,12 +143,18 @@
 ;; ----- POWER
 
 (define/contract/doc (custom-power #:name              [n "Energy Blast"]
-                                   #:sprite            [sprite  #f];HACK - REMOVE LINE AFTER BATTLEARENA CHANGES
-                                   #:icon              [icon (make-icon "EB" "green")]
+                                   #:sprite            [s chest-sprite]
+                                   #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
                                    #:color             [c "blue"]
+                                   #:speed             [spd 10]
                                    #:damage            [dmg 10]
-                                   #:dart              [b (energy #:color c
-                                                                  #:damage dmg)]
+                                   #:range             [rng 10]
+                                   #:durability        [dur 10]
+                                   #:dart              [b (custom-dart #:sprite ds
+                                                                       #:speed spd
+                                                                       #:damage dmg
+                                                                       #:range rng
+                                                                       #:durability dur)]
                                    #:fire-mode         [fm 'normal]
                                    #:fire-rate         [fr 3]
                                    #:fire-key          [key 'f]
@@ -159,10 +165,13 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:sprite      [sprite (or/c sprite? (listof sprite?) false?)]
-        #:icon        [icon (or/c sprite? (listof sprite?))]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
+        #:dart-sprite [ds (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
-        #:damage      [dmg number?]
+        #:speed       [speed  number?]
+        #:damage      [damage number?]
+        #:range       [range  number?]
+        #:durability  [dur    number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
@@ -179,9 +188,7 @@
          via the @racket[#:power-list] parameter.}
   
   (custom-weapon #:name              n
-                 #:sprite            (if (equal? sprite #f) ;GET RID OF THIS LATER
-                                         icon
-                                         sprite)
+                 #:sprite            s
                  #:dart              b
                  #:fire-mode         fm
                  #:fire-rate         fr
@@ -284,7 +291,7 @@
                                     (change-direction-by 10)))))
 
 (define (magic-orb #:color             [c "yellow"]
-                   #:sprite            [s   (my-flame-sprite c)]
+                   #:dart-sprite       [s   (my-flame-sprite c)]
                    #:damage            [dmg 5]
                    #:durability        [dur 20]
                    #:speed             [spd 10]
@@ -304,7 +311,7 @@
                                                              #:range      rng)])
 
   (custom-power #:name              "Magic Orb"
-                #:icon              icon
+                #:sprite              icon
                 #:dart              dart
                 #:fire-mode         fm
                 #:fire-rate         fr
@@ -350,7 +357,7 @@
                                                        #:range      rng)])
 
   (custom-power #:name              "Hammer"
-                #:icon              icon
+                #:sprite              icon
                 #:dart              dart
                 #:fire-mode         fm
                 #:fire-rate         fr
@@ -395,7 +402,7 @@
                                                   #:range      rng)])
 
   (custom-power #:name              "Star Bit"
-                #:icon              icon
+                #:sprite              icon
                 #:dart              dart
                 #:fire-mode         fm
                 #:fire-rate         fr
@@ -442,7 +449,7 @@
                                                       #:range      rng)])
 
   (custom-power #:name              "Energy Blast"
-                #:icon              icon
+                #:sprite              icon
                 #:dart              dart
                 #:fire-mode         fm
                 #:fire-rate         fr

@@ -283,9 +283,10 @@
 ;Make a game with an npc that stole a cat and a quest to get him back.
 (define-example-code adventure loot-quest-2
   (define stolen-cat
-    (custom-npc #:name "Mylo"
-                #:sprite cat-sprite
-                #:dialog (list "Meow!")))
+    (make-storable
+     (custom-npc #:name "Mylo"
+                 #:sprite cat-sprite
+                 #:dialog (list "Meow!"))))
   
   (adventure-game
    #:enemy-list  (list (custom-enemy #:loot-list (list stolen-cat)))
@@ -302,12 +303,12 @@
 
   (define my-cutscene
     (custom-cutscene (page (set-sprite-scale 2 apples-sprite)
-                           "Now I can Grandma's apple pie!")))
+                           "Now I can make Grandma's apple pie!")))
   
   (adventure-game
    #:enemy-list  (list (custom-enemy #:loot-list (list stolen-food)))
    #:npc-list    (list (custom-npc #:dialog (list "Help! Someone stole my apples!")
-                                   #:quest-list (list (loot-quest #:item stolen-cat
+                                   #:quest-list (list (loot-quest #:item stolen-food
                                                                   #:cutscene my-cutscene))))
    #:weapon-list (list (repeater #:damage 50)))
   )
@@ -316,9 +317,9 @@
 (define-example-code adventure loot-quest-4
 
   (define stolen-cat
-    (custom-npc #:name "Mylo"
-                #:sprite cat-sprite
-                #:dialog (list "Meow!")))
+    (make-storable (custom-npc #:name "Mylo"
+                               #:sprite cat-sprite
+                               #:dialog (list "Meow!"))))
   
   (define my-loot-quest
     (loot-quest #:item stolen-cat
@@ -331,7 +332,7 @@
    #:npc-list   (list (custom-npc #:name "Erin"
                                   #:sprite lightelf-sprite
                                   #:dialog (list "Help! Someone stole my cat!")
-                                  #:quest-list (list my-fetch-quest)))
+                                  #:quest-list (list my-loot-quest)))
    #:weapon-list (list (ice-magic)))
   )
 

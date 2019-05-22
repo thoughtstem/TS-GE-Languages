@@ -10,42 +10,344 @@
 
 
 (language-mappings adventure       adventure-harrypotter
-                   [adventure-game harrypotter-game])
+                   [#:avatar       #:wizard]
+                   [#:weapon-list  #:wand-list]
+                   [#:crafter-list #:cauldron-list]
+                   [#:enemy-list   #:deatheater-list]
+                   [#:food-list    #:ingredient-list]
+                   [custom-avatar  custom-wizard]
+                   [custom-weapon  custom-wand]
+                   [custom-crafter custom-cauldron]
+                   [custom-enemy   custom-deatheater]
+                   [custom-food    custom-ingredient]
+                   [adventure-game harrypotter-game]
+                   )
+
+(define/contract/doc (custom-wizard #:sprite           [sprite (first (shuffle (list harrypotter-sprite)))]
+                                    #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
+                                                                                 #:show-damage? #t
+                                                                                 #:hit-sound HIT-SOUND)]
+                                    #:position         [p   (posn 100 100)]
+                                    #:speed            [spd 10]
+                                    #:key-mode         [key-mode 'arrow-keys]
+                                    #:mouse-aim?       [mouse-aim? #f]
+                                    #:health           [health     100]
+                                    #:max-health       [max-health 100]
+                                    #:components       [c #f]
+                                    . custom-components)
+  (->i ()
+       (#:sprite           [sprite sprite?]
+        #:damage-processor [damage-processor damage-processor?]
+        #:position         [position posn?]
+        #:speed            [speed number?]
+        #:key-mode         [key-mode (or/c 'wasd 'arrow-keys)]
+        #:mouse-aim?       [mouse-aim boolean?]
+        #:health           [health     number?]
+        #:max-health       [max-health number?]
+        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
+       [returns entity?])
+
+  @{Returns a custom wizard, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:wizard] parameter.}
+
+  (custom-avatar #:sprite           sprite
+                 #:damage-processor dp
+                 #:position         p
+                 #:speed            spd
+                 #:key-mode         key-mode
+                 #:mouse-aim?       mouse-aim?
+                 #:health           health
+                 #:max-health       max-health
+                 #:components       (cons c custom-components)))
+
+; -----------
+
+(define/contract/doc (custom-wand #:name              [n "Wand"]
+                                  #:sprite            [s chest-sprite]
+                                  #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                  #:speed             [spd 10]
+                                  #:damage            [dmg 10]
+                                  #:range             [rng 1000]
+                                  #:dart              [b (custom-dart #:sprite ds
+                                                                      #:speed spd
+                                                                      #:damage dmg
+                                                                      #:range rng)]
+                                  #:fire-mode         [fm 'normal]
+                                  #:fire-rate         [fr 3]
+                                  #:fire-key          [key 'f]
+                                  #:fire-sound        [fire-sound LASER-SOUND]
+                                  #:mouse-fire-button [button #f]
+                                  #:point-to-mouse?   [ptm? #f]
+                                  #:rapid-fire?       [rf? #t]
+                                  #:rarity            [rarity 'common])
+  (->i ()
+       (#:name              [name string?]
+        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
+        #:speed             [speed  number?]
+        #:damage            [damage number?]
+        #:range             [range  number?]
+        #:dart              [dart entity?]
+        #:fire-mode         [fire-mode fire-mode?]
+        #:fire-rate         [fire-rate number?]
+        #:fire-key          [fire-key symbol?]
+        #:fire-sound        [fire-sound (or/c rsound? procedure? '() #f)]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
+        #:point-to-mouse?   [ptm? boolean?]
+        #:rapid-fire?       [rf? boolean?]
+        #:rarity            [rarity rarity-level?])
+       [result entity?])
+
+  @{Returns a custom wand, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:wand-list] parameter.}
+
+  (custom-weapon #:name              n
+                 #:sprite            s
+                 #:dart-sprite       ds
+                 #:speed             spd
+                 #:damage            dmg
+                 #:range             rng
+                 #:dart              b
+                 #:fire-mode         fm 
+                 #:fire-rate         fr
+                 #:fire-key          key
+                 #:fire-sound        fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
+
+; -----------------
+
+(define/contract/doc (custom-cauldron #:position   [p (posn 0 0)]
+                                      #:tile       [t 0]
+                                      #:name       [name "Cauldron"]
+                                      #:sprite     [sprite cauldron-sprite]
+                                      #:open-key     [open-key 'space]
+                                      #:open-sound   [open-sound OPEN-DIALOG-SOUND]
+                                      #:select-sound [select-sound BLIP-SOUND]
+                                      #:recipe-list [r-list (list (recipe #:product (carrot-stew)
+                                                                         #:build-time 30
+                                                                         ))]
+                                     #:components [c #f] . custom-components)
+  (->i ()
+       (#:position   [position posn?]
+        #:tile       [tile number?]
+        #:name       [name string?]
+        #:sprite     [sprite (or/c sprite? (listof sprite?))]
+        #:open-key     [open-key (or/c string? symbol?)]
+        #:open-sound   [open-sound (or/c rsound? procedure? '() #f)]
+        #:select-sound [select-sound (or/c rsound? procedure? '() #f)]
+        #:recipe-list [recipe-list (listof recipe?)]
+        #:components [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
+       [result entity?])
+
+  @{Returns a custom cauldron, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:cauldron-list] parameter.}
+
+  (custom-crafter #:position     p
+                  #:tile         t
+                  #:name         name
+                  #:sprite       sprite
+                  #:open-key     open-key
+                  #:open-sound   open-sound
+                  #:select-sound select-sound
+                  #:recipe-list  r-list
+                  #:components   (cons c custom-components)))
+
+; ----------
+
+(define/contract/doc (custom-deatheater #:amount-in-world [amount-in-world 1]
+                                        #:position        [pos #f]
+                                        #:tile            [tile #f]
+                                        #:sprite          [s (first (shuffle (list harrypotter-sprite)))]
+                                        #:ai              [ai-level 'medium]
+                                        #:health          [health 100]
+                                        #:weapon          [weapon (custom-weapon #:name "Spitter"
+                                                                                 #:dart (acid-dart))]
+                                        #:death-particles [particles (custom-particles)]
+                                        #:night-only?     [night-only? #f]
+                                        #:on-death        [death-func (λ (g e) e)]
+                                        #:loot-list       [loot-list '()]
+                                        #:components      [c #f]
+                                        . custom-components
+                                        )
+
+  (->i () (#:amount-in-world [amount-in-world positive?]
+           #:position        [pos (or/c posn? #f)]
+           #:tile            [tile (or/c number? #f)]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:ai              [ai ai-level?]
+           #:health          [health positive?]
+           #:weapon          [weapon entity?]
+           #:death-particles [death-particles entity?]
+           #:night-only?     [night-only? boolean?]
+           #:on-death        [death-function procedure?]
+           #:loot-list       [loot-list (listof (or/c entity? procedure?))]
+           #:components      [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom deatheater, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:deatheater-list] parameter.}
+
+  (custom-enemy #:amount-in-world amount-in-world
+                #:position        pos
+                #:tile            tile
+                #:sprite          s
+                #:ai              ai-level
+                #:health          health
+                #:weapon          weapon
+                #:death-particles particles
+                #:night-only?     night-only?
+                #:on-death        death-func
+                #:loot-list       loot-list
+                #:components      (cons c custom-components)))
+
+; -----------
+
+(define/contract/doc (custom-ingredient  #:name              [n "Carrot"]
+                                         #:sprite            [s carrot-sprite]
+                                         #:tile              [tile 0]
+                                         #:position          [pos (posn 0 0)]
+                                         #:amount-in-world   [world-amt 1]
+                                         #:storable?         [storable? #t]
+                                         #:consumable?       [consumable? #t]
+                                         #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                         #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                                         #:on-pickup         [pickup-func (λ (g e) e)]
+                                         #:on-store          [store-func (λ (g e) e)]
+                                         #:on-drop           [drop-func (λ (g e) e)]
+                                         #:components        [c #f]
+                                         . custom-components)
+
+  (->i () (#:name            [name string?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:tile            [tile (or/c number? #f)]
+           #:position        [pos (or/c posn? #f)]
+           #:amount-in-world [amount-in-world positive?]
+           #:storable?       [storable? boolean?]
+           #:consumable?     [consumable? boolean?]
+           #:heals-by        [heals-by number?]
+           #:respawn?        [respawn? boolean?]    
+           #:on-pickup       [pickup-func procedure?]
+           #:on-store        [store-func procedure?]
+           #:on-drop         [drop-func procedure?]
+           #:components      [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom ingredient, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:ingredient-list] parameter.}
+
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
+
+; -----------
+
+(define/contract/doc (custom-potion  #:name              [n "Potion"]
+                                     #:sprite            [s potion-sprite]
+                                     #:tile              [tile 0]
+                                     #:position          [pos (posn 0 0)]
+                                     #:amount-in-world   [world-amt 1]
+                                     #:storable?         [storable? #t]
+                                     #:consumable?       [consumable? #t]
+                                     #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                     #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                                     #:on-pickup         [pickup-func (λ (g e) e)]
+                                     #:on-store          [store-func (λ (g e) e)]
+                                     #:on-drop           [drop-func (λ (g e) e)]
+                                     #:components        [c #f]
+                                     . custom-components)
+  
+  (->i () (#:name            [name string?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:tile            [tile (or/c number? #f)]
+           #:position        [pos (or/c posn? #f)]
+           #:amount-in-world [amount-in-world positive?]
+           #:storable?       [storable? boolean?]
+           #:consumable?     [consumable? boolean?]
+           #:heals-by        [heals-by number?]
+           #:respawn?        [respawn? boolean?]    
+           #:on-pickup       [pickup-func procedure?]
+           #:on-store        [store-func procedure?]
+           #:on-drop         [drop-func procedure?]
+           #:components      [first-component component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom ingredient, which will be placed in to the world
+         automatically if it is passed into @racket[harrypotter-game]
+         via the @racket[#:ingredient-list] parameter.}
+
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
 
 ;------------------- MAIN GAME
 
 (define/contract/doc (harrypotter-game
                       #:headless              [headless #f]
-                      #:room                  [room (plain-forest-bg)]
-                      #:wizard                [wizard (custom-avatar #:sprite (circle 10 'solid 'red))]
+                      #:bg                    [bg (plain-forest-bg)]
+                      #:wizard                [wizard (custom-wizard #:sprite (circle 10 'solid 'red))]
                       #:sky                   [sky (custom-sky)]
                       #:intro-cutscene        [intro-cutscene #f]
+                      #:death-cutscene        [death-cutscene #f]
                       #:npc-list              [npc-list  '()]
-                      #:enemy-list            [e-list    '()]
-                      #:coin-list             [coin-list '()]
-                      #:food-list             [f-list    '()]
-                      #:crafter-list          [c-list    '()]
+                      #:deatheater-list       [e-list    '()]
+                      #:currency-list         [currency-list '()]
+                      #:ingredient-list       [f-list    '()]
+                      #:cauldron-list         [c-list    '()]
                       #:score-prefix          [prefix "???"]
                       #:instructions          [instructions #f]
                       #:enable-world-objects? [world-objects? #f]
-                      #:power-list            [power-list '()]
+                      #:wand-list             [wand-list '()]
                       #:other-entities        [ent #f]
                       . custom-entities)
 
   (->i ()
        (#:headless              [headless boolean?]
-        #:room                  [rooom entity?]
+        #:bg                    [bg entity?]
         #:wizard                [wizard (or/c entity? false?)]
         #:sky                   [sky (or/c sky? #f)]
         #:intro-cutscene        [intro-cutscene (or/c entity? false?)]
+        #:death-cutscene        [death-cutscene (or/c entity? #f)]
         #:npc-list              [npc-list     (listof (or/c entity? procedure?))]
-        #:enemy-list            [enemy-list   (listof (or/c entity? procedure?))]
-        #:coin-list             [coin-list    (listof (or/c entity? procedure?))]
-        #:food-list             [food-list    (listof (or/c entity? procedure?))]
-        #:crafter-list          [crafter-list (listof (or/c entity? procedure?))]
+        #:deatheater-list       [deatheater-list   (listof (or/c entity? procedure?))]
+        #:currency-list         [currency-list    (listof (or/c entity? procedure?))]
+        #:ingredient-list       [ingredient-list    (listof (or/c entity? procedure?))]
+        #:cauldron-list         [cauldron-list (listof (or/c entity? procedure?))]
         #:score-prefix          [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:power-list            [power-list (listof (or/c entity? procedure?))]
+        #:wand-list             [wand-list (listof (or/c entity? procedure?))]
         #:instructions          [instructions (or/c #f entity?)]
         #:other-entities        [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest           [rest (listof entity?)]
@@ -55,17 +357,18 @@
          Can be run with no parameters to get a basic, default game.}
 
   (adventure-game #:headless              headless
-                  #:bg                    room
+                  #:bg                    bg
                   #:avatar                wizard
                   #:sky                   sky
                   #:intro-cutscene        intro-cutscene
+                  #:death-cutscene        death-cutscene
                   #:npc-list              npc-list
                   #:enemy-list            e-list   
-                  #:coin-list             coin-list
+                  #:coin-list             currency-list
                   #:food-list             f-list    
                   #:crafter-list          c-list   
                   #:score-prefix          prefix
                   #:enable-world-objects? world-objects?
-                  #:weapon-list           power-list 
+                  #:weapon-list           wand-list 
                   #:instructions          instructions
                   #:other-entities        (filter identity (flatten (cons ent custom-entities)))))

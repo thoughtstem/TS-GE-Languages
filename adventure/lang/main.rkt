@@ -610,8 +610,8 @@
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
         #:rarity            [rarity rarity-level?]
-        #:on-store          [store-func any/c]
-        #:on-drop           [drop-func any/c])
+        #:on-store          [store-func procedure?]
+        #:on-drop           [drop-func procedure?])
        [result entity?])
 
   @{Returns a custom weapon, which will be placed in to the world

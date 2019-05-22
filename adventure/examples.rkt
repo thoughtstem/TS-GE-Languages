@@ -267,6 +267,31 @@
                                 #:quest-list (list my-fetch-quest))))
   )
 
+; Make a game that has a customized quest item with on-store and on-drop cutscenes
+; and an npc with a fetch quest (with reward and cutscene)
+(define-example-code adventure fetch-quest-5
+
+   (define my-quest-item
+    (custom-item #:name "Mylo"
+                 #:sprite  cat-sprite
+                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
+                                         "This must be Erin's lost cat"))
+                 #:on-drop  (spawn (page "Maybe I shouldn't leave him"
+                                         "alone like this.")
+                                   #:rule (not/r (entity-in-game? "Erin")))))
+
+   (adventure-game
+   #:npc-list (list (custom-npc #:name "Erin"
+                                #:sprite     lightelf-sprite
+                                #:dialog     (list "Can you help my find my cat?")
+                                #:quest-list (fetch-quest #:item my-quest-item
+                                                          #:reward-amount 500
+                                                          #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)
+                                                                                 (set-sprite-x-offset 50 cat-sprite))
+                                                                           "Mylo, I've missed you!"))
+                                )))
+  )
+
 ; -------------------------- LOOT QUEST KATAS
 
 ;Make a game with a basic loot quest
@@ -776,7 +801,80 @@
  
   (adventure-game #:bg (my-bg))
   )
+
+
+; ----- WEAPON KATAS
+(define-example-code adventure weapon-1
+  (adventure-game
+   #:weapon-list (list (spear #:name "Needle"
+                              #:speed 15
+                              #:damage 20
+                              #:rarity 'rare)))
+  )
+
+(define-example-code adventure weapon-2
+  (define (my-sword)
+    (sword #:damage 50
+           #:rarity 'legendary))
   
+  (define (my-repater)
+    (repeater #:color 'red
+              #:fire-mode 'spread))
+  
+  (adventure-game
+   #:weapon-list (list (my-sword)
+                       (my-repater))
+   #:enemy-list (list (custom-enemy #:amount-in-world 5)))
+  )
+
+(define-example-code adventure weapon-3
+  (define (my-weapon)
+    (custom-weapon #:name "Character Shooter"
+                   #:sprite (make-icon "?" 'red)
+                   #:dart-sprite (random-character-sprite)
+                   #:speed 5
+                   #:damage 25
+                   #:range 50
+                   ))
+  
+  (adventure-game
+   #:avatar (custom-avatar)
+   #:enemy-list (list (custom-enemy #:amount-in-world 5))
+   #:weapon-list (list (my-weapon)))
+  )
+
+(define-example-code adventure weapon-4
+   (define (my-fire-magic)
+    (fire-magic #:damage 25
+                #:on-store (spawn (page "Ouch, this is hot!"))))
+
+  (define (my-ice-magic)
+    (ice-magic #:damage 25
+               #:on-store (spawn (page "Woah, this is cold!"))))
+  
+  (adventure-game
+   #:avatar (custom-avatar)
+   #:enemy-list (list (custom-enemy #:amount-in-world 10))
+   #:weapon-list (list (my-fire-magic)
+                       (my-ice-magic)))
+  )
+
+(define-example-code adventure weapon-5
+  (define (my-sword)
+    (sword #:damage 50
+           #:on-store (spawn (page (set-sprite-angle 45 swinging-sword-sprite)
+                                   "I found a Sword!"))
+           #:on-drop (spawn (page "Oh no! Better put it back in my backpack."))))
+
+  (define (my-enemy)
+    (custom-enemy #:sprite pirateboy-sprite
+                  #:on-death (spawn (page (set-sprite-angle 90 (render pirateboy-sprite))
+                                          "You won!"))))
+  (adventure-game
+   #:enemy-list (list (my-enemy))
+   #:weapon-list (list (my-sword)))
+  )
+
 ; ==============================
 
 

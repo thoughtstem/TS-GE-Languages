@@ -591,7 +591,9 @@
                                     #:mouse-fire-button [button #f]
                                     #:point-to-mouse?   [ptm? #f]
                                     #:rapid-fire?       [rf? #t]
-                                    #:rarity            [rarity 'common])
+                                    #:rarity            [rarity 'common]
+                                    #:on-store          [store-func (λ (g e) e)]
+                                    #:on-drop           [drop-func (λ (g e) e)])
   (->i ()
        (#:name              [name string?]
         #:sprite            [sprite (or/c sprite? (listof sprite?))]
@@ -607,7 +609,9 @@
         #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
-        #:rarity            [rarity rarity-level?])
+        #:rarity            [rarity rarity-level?]
+        #:on-store          [store-func any/c]
+        #:on-drop           [drop-func any/c])
        [result entity?])
 
   @{Returns a custom weapon, which will be placed in to the world
@@ -634,14 +638,22 @@
                                                  #:rapid-fire? rf?
                                                  #:rule (and/r (weapon-is? updated-name)
                                                                (in-backpack? updated-name))))
+  (define item-id (next-storable-item-id))
+  
   (sprite->entity s
                   #:name updated-name
                   #:position    (posn 0 0)
                   #:components  (active-on-bg 0)
-
+                  
                                 (physical-collider)
                                 (storage "Weapon" weapon-component)
                                 (storage "Rarity" rarity)
+                                (storage "item-id" item-id)
+                                (storage "backpack-observer"
+                                         (observe-change (in-backpack-by-id? item-id)
+                                                         (if/r (in-backpack-by-id? item-id)
+                                                               store-func
+                                                               drop-func)))
 
                                 (static)
                                 (hidden)
@@ -1273,6 +1285,9 @@
                                          (filter-not (curry get-storage "Weapon") known-products-list))
                                 name-eq?))
                           (map item-entity->backpack-observer item-list)
+                          (map item-entity->backpack-observer (append known-weapons-list
+                                                                      world-weapon-list
+                                                                      weapons-from-loot))
                           )
         #f))
 
@@ -1866,7 +1881,8 @@
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (repeater #:name              [n "Repeater"]
-                  #:sprite            [ds (rectangle 10 2 "solid" "green")]
+                  #:color             [c "green"]
+                  #:sprite            [ds (rectangle 10 2 "solid" c)]
                   #:icon              [i (list (set-sprite-angle -45 ds)
                                                (make-icon ""))]
                   #:speed             [spd 10]
@@ -1883,7 +1899,9 @@
                   #:mouse-fire-button [button #f]
                   #:point-to-mouse?   [ptm? #f]
                   #:rapid-fire?       [rf? #t]
-                  #:rarity            [rarity 'common])
+                  #:rarity            [rarity 'common]
+                  #:on-store          [store-func (do-nothing)]
+                  #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -1893,11 +1911,14 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (spear #:name              [n "Spear"]
-               #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]
+               #:icon              [i (list (set-sprite-angle -45 s)
+                                               (make-icon "" 'brown))]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1914,7 +1935,9 @@
                #:mouse-fire-button [button #f]
                #:point-to-mouse?   [ptm? #f]
                #:rapid-fire?       [rf? #f]
-               #:rarity            [rarity 'common])
+               #:rarity            [rarity 'common]
+               #:on-store          [store-func (do-nothing)]
+               #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -1924,7 +1947,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (spear-dart #:sprite     [s spear-sprite]
                     #:damage     [dmg 25]
@@ -1941,8 +1966,9 @@
                                                            (horizontal-flip-sprite)))))
 
 (define (sword #:name              [n "Sword"]
-               #:icon              [i [make-icon "SW" 'silver]]
                #:sprite            [s swinging-sword-sprite]
+               #:icon              [i (list (set-sprite-angle -45 s)
+                                               (make-icon "" 'silver))]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1959,7 +1985,9 @@
                #:mouse-fire-button [button #f]
                #:point-to-mouse?   [ptm? #f]
                #:rapid-fire?       [rf? #f]
-               #:rarity            [rarity 'common])
+               #:rarity            [rarity 'common]
+               #:on-store          [store-func (do-nothing)]
+               #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -1969,7 +1997,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store store-func
+                 #:on-drop  drop-func))
 
 (define (sword-dart #:sprite     [s swinging-sword-sprite]
                     #:damage     [dmg 50]
@@ -2004,8 +2034,9 @@
                #:components (on-start (random-size 0.5 1))))
 
 (define (acid-spitter  #:name              [n "Acid Spitter"]
-                       #:icon              [icon (make-icon "AS")]
                        #:sprite            [s   acid-sprite]
+                       #:icon              [icon (list (set-sprite-angle -45 s)
+                                               (make-icon "" 'green))]
                        #:damage            [dmg 10]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -2022,7 +2053,9 @@
                        #:mouse-fire-button [button #f]
                        #:point-to-mouse?   [ptm? #f]
                        #:rapid-fire?       [rf? #t]
-                       #:rarity            [rarity 'common])
+                       #:rarity            [rarity 'common]
+                       #:on-store          [store-func (do-nothing)]
+                       #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite icon
                  #:dart   d
@@ -2033,7 +2066,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?
-                 #:rarity            rarity))
+                 #:rarity            rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (fireball-dart  #:sprite     [s   flame-sprite]
                         #:damage     [dmg 10]
@@ -2048,9 +2083,9 @@
                #:range      rng))
 
 (define (fireball  #:name              [n "Fireball"]
-                   #:icon              [icon (list flame-sprite
-                                                   (make-icon ""))]
                    #:sprite            [s   flame-sprite]
+                   #:icon              [icon (list (set-sprite-angle -45 s)
+                                                   (make-icon ""))]
                    #:damage            [dmg 10]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -2067,7 +2102,9 @@
                    #:mouse-fire-button [button #f]
                    #:point-to-mouse?   [ptm? #f]
                    #:rapid-fire?       [rf? #t]
-                   #:rarity            [rarity 'common])
+                   #:rarity            [rarity 'common]
+                   #:on-store          [store-func (do-nothing)]
+                   #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite icon
                  #:dart   d
@@ -2078,11 +2115,14 @@
                  #:mouse-fire-button button
                  #:point-to-mouse?   ptm?
                  #:rapid-fire?       rf?
-                 #:rarity            rarity))
+                 #:rarity            rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (fire-magic #:name              [n "Fire Magic"]
-                    #:icon              [i [make-icon "FM" 'red]]
                     #:sprite            [s flame-sprite]
+                    #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'red))]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -2099,7 +2139,9 @@
                     #:mouse-fire-button [button #f]
                     #:point-to-mouse?   [ptm? #f]
                     #:rapid-fire?       [rf? #t]
-                    #:rarity            [rarity 'common])
+                    #:rarity            [rarity 'common]
+                    #:on-store          [store-func (do-nothing)]
+                    #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2109,7 +2151,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (fire-dart #:sprite     [s   flame-sprite]
                    #:damage     [dmg 5]
@@ -2126,8 +2170,9 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
-                   #:icon              [i [make-icon "IM" 'lightcyan]]
                    #:sprite            [s ice-sprite]
+                   #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'lightcyan))]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -2144,7 +2189,9 @@
                    #:mouse-fire-button [button #f]
                    #:point-to-mouse?   [ptm? #f]
                    #:rapid-fire?       [rf? #t]
-                   #:rarity            [rarity 'common])
+                   #:rarity            [rarity 'common]
+                   #:on-store          [store-func (do-nothing)]
+                   #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2154,7 +2201,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store store-func
+                 #:on-drop drop-func))
 
 (define ice-sprite
   (overlay (circle 5 "solid" "white")
@@ -2176,8 +2225,9 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
-                     #:icon              [i [make-icon "SM" 'silver]]
                      #:sprite            [s flying-sword-sprite]
+                     #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'silver))]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -2194,7 +2244,9 @@
                      #:mouse-fire-button [button #f]
                      #:point-to-mouse?   [ptm? #f]
                      #:rapid-fire?       [rf? #t]
-                     #:rarity            [rarity 'common])
+                     #:rarity            [rarity 'common]
+                    #:on-store          [store-func (do-nothing)]
+                    #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2204,7 +2256,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (flying-dagger-dart #:position   [p   (posn 20 0)]
                             #:sprite     [s   flying-sword-sprite]
@@ -2222,8 +2276,9 @@
                (do-every 10 (change-direction-by-random -25 25))))
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
-                        #:icon              [i (make-icon "RoB" 'silver)]
                         #:sprite            [s flying-sword-sprite]
+                        #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'silver))]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -2240,7 +2295,9 @@
                         #:mouse-fire-button [button #f]
                         #:point-to-mouse?   [ptm? #f]
                         #:rapid-fire?       [rf? #t]
-                        #:rarity            [rarity 'common])
+                        #:rarity            [rarity 'common]
+                        #:on-store          [store-func (do-nothing)]
+                        #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2250,7 +2307,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (ring-of-blades-dart #:sprite     [s   flying-sword-sprite]
                              #:damage     [dmg 10]
@@ -2269,8 +2328,9 @@
 
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
-                      #:icon              [i (make-icon "RoF" 'red)]
                       #:sprite            [s flame-sprite]
+                      #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'red))]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -2287,7 +2347,9 @@
                       #:mouse-fire-button [button #f]
                       #:point-to-mouse?   [ptm? #f]
                       #:rapid-fire?       [rf? #t]
-                      #:rarity            [rarity 'common])
+                      #:rarity            [rarity 'common]
+                      #:on-store          [store-func (do-nothing)]
+                      #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2297,11 +2359,14 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
-                     #:icon              [i (make-icon "RoI" 'lightcyan)]
                      #:sprite            [s ice-sprite]
+                     #:icon              [i (list (set-sprite-angle -45 s)
+                                                   (make-icon "" 'lightcyan))]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
@@ -2318,7 +2383,9 @@
                      #:mouse-fire-button [button #f]
                      #:point-to-mouse?   [ptm? #f]
                      #:rapid-fire?       [rf? #t]
-                     #:rarity            [rarity 'common])
+                     #:rarity            [rarity 'common]
+                    #:on-store          [store-func (do-nothing)]
+                    #:on-drop           [drop-func (do-nothing)])
   (custom-weapon #:name n
                  #:sprite i
                  #:dart d
@@ -2328,7 +2395,9 @@
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
                  #:rapid-fire? rf?
-                 #:rarity rarity))
+                 #:rarity rarity
+                 #:on-store          store-func
+                 #:on-drop           drop-func))
 
 (define (ring-of-fire-dart #:sprite     [s   flame-sprite]
                            #:damage     [dmg 5]

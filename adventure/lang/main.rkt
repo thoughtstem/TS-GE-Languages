@@ -52,6 +52,8 @@
          custom-cutscene
          page
 
+         custom-food ;TODO: write contract and autoprovide
+
          ;if/r
          custom-item
          in-backpack-by-id?
@@ -1670,7 +1672,37 @@
       (update-entity e component-pred f)
       e))
 
-(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
+(define (custom-food  #:name              [n "Carrot"]
+                      #:sprite            [s carrot-sprite]
+                      #:tile              [tile 0]
+                      #:position          [pos (posn 0 0)]
+                      #:amount-in-world   [world-amt 1]
+                      #:storable?         [storable? #t]
+                      #:consumable?       [consumable? #t]
+                      #:value             [val    #f]
+                      #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                      #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                      #:on-pickup         [pickup-func (λ (g e) e)]
+                      #:on-store          [store-func (λ (g e) e)]
+                      #:on-drop           [drop-func (λ (g e) e)]
+                      #:components        [c #f]
+                      . custom-components)
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:value             val
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
+
+#;(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
                                   #:name             [n #f]
@@ -1781,7 +1813,7 @@
                                                   )))))
 
 ; ==== CUSTOM ITEM DEFINITION ====
-(define (custom-item #:name              [n "Custom Item"]
+(define (custom-item #:name              [n "Chest"]
                      #:sprite            [s chest-sprite]
                      #:tile              [tile #f]
                      #:position          [pos #f]
@@ -1789,6 +1821,7 @@
                      #:storable?         [storable? #t]
                      #:consumable?       [consumable? #f]
                      #:value             [val 10]      ;only used if consumable is #t
+                     #:heals-by          [heals-by #f]
                      #:respawn?          [respawn? #t] ;only used if consumable is #t
                      #:on-pickup         [pickup-func (λ (g e) e)]
                      #:on-store          [store-func (λ (g e) e)]
@@ -1815,7 +1848,8 @@
                                 (physical-collider)
                                 (hidden)
                                 (storage "amount-in-world" world-amt)
-                                (storage "value" val)
+                                (if val (storage "value" val) #f)
+                                (if heals-by (storage "heals-by" heals-by) #f)
                                 (on-start (do-many ;(if pos  (do-nothing) (respawn 'anywhere))
                                                    ;(if tile (do-nothing) (active-on-random))
                                                    show))

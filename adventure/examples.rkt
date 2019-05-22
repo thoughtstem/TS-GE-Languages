@@ -267,29 +267,95 @@
                                 #:quest-list (list my-fetch-quest))))
   )
 
-; Make a game that has a customized quest item with on-store and on-drop cutscenes
-; and an npc with a fetch quest (with reward and cutscene)
-(define-example-code adventure fetch-quest-5
+; -------------------------- LOOT QUEST KATAS
+
+;Make a game with a basic loot quest
+(define-example-code adventure loot-quest-1
+  (define stolen-chest (custom-item))
   
-  (define my-quest-item
-    (custom-item #:name "Mylo"
-                 #:sprite  cat-sprite
-                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
-                                         "This must be Erin's lost cat"))
-                 #:on-drop  (spawn (page "Maybe I shouldn't leave him"
-                                         "alone like this.")
-                                   #:rule (not/r (entity-in-game? "Erin")))))
+  (adventure-game
+   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-chest)))
+   #:npc-list    (list (custom-npc #:dialog (list "Someone stole my chest!")
+                                   #:quest-list (list (loot-quest #:item stolen-chest))))
+   #:weapon-list (list (spear)))
+  )
+
+;Make a game with an npc that stole a cat and a quest to get him back.
+(define-example-code adventure loot-quest-2
+  (define stolen-cat
+    (custom-npc #:name "Mylo"
+                #:sprite cat-sprite
+                #:dialog (list "Meow!")))
+  
+  (adventure-game
+   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-cat)))
+   #:npc-list    (list (custom-npc #:dialog (list "Someone took my cat!")
+                                   #:quest-list (list (loot-quest #:item stolen-cat))))
+   #:weapon-list (list (fireball #:damage 50)))
+  )
+
+ ;Make a game with a loot quest and a quest cutscene
+(define-example-code adventure loot-quest-3
+  (define stolen-food
+    (custom-food #:name "Apples"
+                 #:sprite apples-sprite))
+
+  (define my-cutscene
+    (custom-cutscene (page (set-sprite-scale 2 apples-sprite)
+                           "Now I can Grandma's apple pie!")))
+  
+  (adventure-game
+   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-food)))
+   #:npc-list    (list (custom-npc #:dialog (list "Help! Someone stole my apples!")
+                                   #:quest-list (list (loot-quest #:item stolen-cat
+                                                                  #:cutscene my-cutscene))))
+   #:weapon-list (list (repeater #:damage 50)))
+  )
+
+;Make a game that has an npc with a loot quest (with customized dialog and reward)
+(define-example-code adventure loot-quest-4
+
+  (define stolen-cat
+    (custom-npc #:name "Mylo"
+                #:sprite cat-sprite
+                #:dialog (list "Meow!")))
+  
+  (define my-loot-quest
+    (loot-quest #:item stolen-cat
+                #:quest-complete-dialog (list "Thank you for finding Mylo!")
+                #:new-response-dialog   (list "Thanks again for your help.")
+                #:reward-amount 400 ))
 
   (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
-                                #:sprite     lightelf-sprite
-                                #:dialog     (list "Can you help me find my cat?")
-                                #:quest-list (fetch-quest #:item my-quest-item
-                                                          #:reward-amount 500
-                                                          #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)
-                                                                                 (set-sprite-x-offset 50 cat-sprite))
-                                                                           "Mylo, I've missed you!"))
-                                )))
+   #:enemy-list (list (custom-enemy #:loot-list (list stolen-cat)))
+   #:npc-list   (list (custom-npc #:name "Erin"
+                                  #:sprite lightelf-sprite
+                                  #:dialog (list "Help! Someone stole my cat!")
+                                  #:quest-list (list my-fetch-quest)))
+   #:weapon-list (list (ice-magic)))
+  )
+
+; Make a game that has a customized quest item with on-store and on-drop cutscenes
+; and an npc with a loot quest
+(define-example-code adventure loot-quest-5
+  
+  (define stolen-item
+    (custom-item #:name "Empty Bowl"
+                 #:sprite  bowl-sprite
+                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
+                                         "This must be Erin's stolen bowl."))
+                 #:on-drop  (spawn (page "Maybe I shouldn't leave it here."
+                                         "It might get taken again.")
+                                   #:rule (not/r (entity-in-game? "Jordan")))))
+
+  (adventure-game
+   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-item)))
+   #:npc-list    (list (custom-npc #:name "Jordan"
+                                   #:dialog     (list "That theif took my only bowl!"
+                                                      "Please get it back!")
+                                   #:quest-list (loot-quest #:item stolen-item)
+                                   ))
+   #:weapon-list (list (fireball #:damage 50)))
   )
 
 ; -----------------
@@ -526,65 +592,88 @@
 ; -----------------
 
 (define-example-code adventure food-1
-  (adventure-game
-   #:avatar     (custom-avatar)
-   #:food-list  (list (custom-food #:amount-in-world 10)))
-  )
-
-(define-example-code adventure food-2
-  (define (my-food)
-    (custom-food #:amount-in-world 2
-                 #:heals-by        20))
  
   (adventure-game
-   #:avatar     (custom-avatar)
-   #:food-list  (list (my-food)))
+   #:food-list  (list (custom-food #:sprite          apples-sprite
+                                   #:name            "Apples"
+                                   #:amount-in-world 10
+                                   #:heals-by        20)))
   )
 
+; Make a game with a 10 apples and a 1 cherry that heals by 50 that doesn't respawn
+(define-example-code adventure food-2
 
-(define-example-code adventure food-3
-  (define (my-food)
+  (define my-food
     (custom-food #:sprite          apples-sprite
                  #:name            "Apples"
-                 #:amount-in-world 2
-                 #:heals-by        20))
+                 #:amount-in-world 10))
 
-  (adventure-game
-   #:avatar     (custom-avatar)
-   #:food-list  (list (my-food)))
-  )
-
-(define-example-code adventure food-4
-
-  (define (my-food)
-    (custom-food #:sprite          apples-sprite
-                 #:name            "Apples"
-                 #:amount-in-world 2
-                 #:heals-by        20))
-
-  (define (special-food)
+  (define special-food
     (custom-food #:sprite          cherry-sprite
                  #:name            "Cherry"
-                 #:amount-in-world 1
                  #:heals-by        50
                  #:respawn?        #f))
 
   (adventure-game
-   #:avatar     (custom-avatar)
-   #:food-list  (list (my-food)
-                      (special-food))))
-
-(define-example-code adventure food-5
-  (define (my-food)
-    (custom-food #:sprite          cherry-sprite
-                 #:name            "Cherry"
-                 #:amount-in-world 20
-                 #:heals-by        50))
-  
-  (adventure-game
-   #:avatar          (custom-avatar)
-   #:food-list       (list (my-food)))
+   #:food-list  (list my-food
+                      special-food))
   )
+
+;Make a game with basic food and a rare food with a cutscene
+(define-example-code adventure food-3
+
+  (define special-food
+    (custom-food #:sprite          steak-sprite
+                 #:name            "Rare Steak"
+                 #:heals-by        100
+                 #:on-pickup (spawn (page (set-sprite-scale 2 steak-sprite)
+                                          "This tastes raw ..."
+                                          "maybe I should have cooked it."))))
+                 
+  (adventure-game
+   #:avatar (custom-avatar #:health 50
+                           #:max-health 200)
+   #:food-list  (list special-food))
+  
+  )
+
+;Make a game with a food and crafter
+(define-example-code adventure food-4
+  (define fish-stew
+    (custom-food #:name "Fish Stew"
+                 #:sprite fish-stew-sprite
+                 #:respawn? #f
+                 #:heals-by 50))
+
+  (define fish-stew-recipe
+    (recipe #:product fish-stew
+            #:build-time 40
+            #:ingredients (list "Fish")))
+
+  (adventure-game
+   #:food-list    (list (fish #:amount-in-world 10))
+   #:crafter-list (list (custom-crafter #:recipe-list (list fish-stew-recipe))))
+  )
+
+; Make a game with a food, recipe, crafter, and npc with a craft quest
+(define-example-code adventure food-5
+  
+  (define carrot-stew
+    (custom-food #:name "Carrot Stew"
+                 #:sprite carrot-stew-sprite))
+
+  (define my-carrot-stew-recipe
+    (recipe #:product carrot-stew
+            #:ingredients (list "Carrot")))
+
+  (adventure-game
+   #:npc-list     (list (custom-npc #:dialog (list "Can you make me some carrot stew?")
+                                    #:quest-list (list (craft-quest #:item carrot-stew))))
+   #:food-list    (list (carrot))
+   #:crafter-list (list (custom-crafter #:recipe-list (list my-carrot-stew-recipe))))
+  
+  )
+
 ; -----------------
 
 (define-example-code adventure npc-1
@@ -687,10 +776,6 @@
   (adventure-game #:bg (my-bg))
   )
   
-
-; -----------------
-
-
 ; ==============================
 
 

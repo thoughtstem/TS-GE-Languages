@@ -663,7 +663,6 @@
           (nebula randp randc)))
   (start (blackwidow randp randc)
          ((nebula randp randc)
-          (nebula randp randc)
           (nebula randp randc))
          (health speed))
   )

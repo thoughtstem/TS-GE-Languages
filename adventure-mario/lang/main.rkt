@@ -38,8 +38,8 @@
                                                                                         toad-sprite
                                                                                         yoshi1-sprite)))]
                                        #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
-                                                              #:show-damage? #t
-                                                              #:hit-sound HIT-SOUND)]
+                                                                                    #:show-damage? #t
+                                                                                    #:hit-sound HIT-SOUND)]
                                        #:position         [p   (posn 100 100)]
                                        #:speed            [spd 10]
                                        #:key-mode         [key-mode 'arrow-keys]
@@ -148,43 +148,43 @@
          automatically if it is passed into @racket[mario-game]
          via the @racket[#:power-list] parameter.}
 
-  (custom-power #:name              n
-                #:sprite            s
-                #:dart-sprite       ds
-                #:speed             spd
-                #:damage            dmg
-                #:range             rng
-                #:dart              b
-                #:fire-mode         fm 
-                #:fire-rate         fr
-                #:fire-key          key
-                #:fire-sound        fire-sound
-                #:mouse-fire-button button
-                #:point-to-mouse?   ptm?
-                #:rapid-fire?       rf?
-                #:rarity            rarity))
+  (custom-weapon #:name              n
+                 #:sprite            s
+                 #:dart-sprite       ds
+                 #:speed             spd
+                 #:damage            dmg
+                 #:range             rng
+                 #:dart              b
+                 #:fire-mode         fm 
+                 #:fire-rate         fr
+                 #:fire-key          key
+                 #:fire-sound        fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse?   ptm?
+                 #:rapid-fire?       rf?
+                 #:rarity            rarity))
 
 ; -----------
 (define/contract/doc (custom-npc #:sprite     [s (first (shuffle (list mario-sprite
-                                                                          luigi-sprite
-                                                                          princesspeach-sprite
-                                                                          toad-sprite
-                                                                          yoshi1-sprite)))]
-                                    #:position   [p (posn 0 0)]
-                                    #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
-                                                                             "Sydney" "Charlie" "Andy")))]
-                                    #:amount-in-world [world-amt 1]
-                                    #:tile       [tile 0]
-                                    #:dialog     [d  #f]
-                                    #:mode       [mode 'wander]
-                                    #:game-width [GAME-WIDTH 480]
-                                    #:speed      [spd 2]
-                                    #:target     [target "player"]
-                                    #:sound      [sound #t]
-                                    #:scale      [scale 1]
-                                    #:quest-list [quests '()]
-                                    #:components [c #f]
-                                    . custom-components )
+                                                                       luigi-sprite
+                                                                       princesspeach-sprite
+                                                                       toad-sprite
+                                                                       yoshi1-sprite)))]
+                                 #:position   [p (posn 0 0)]
+                                 #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
+                                                                          "Sydney" "Charlie" "Andy")))]
+                                 #:amount-in-world [world-amt 1]
+                                 #:tile       [tile 0]
+                                 #:dialog     [d  #f]
+                                 #:mode       [mode 'wander]
+                                 #:game-width [GAME-WIDTH 480]
+                                 #:speed      [spd 2]
+                                 #:target     [target "player"]
+                                 #:sound      [sound #t]
+                                 #:scale      [scale 1]
+                                 #:quest-list [quests '()]
+                                 #:components [c #f]
+                                 . custom-components )
 
   (->i () (#:sprite     [sprite (or/c sprite? (listof sprite?))]
            #:position   [position posn?]
@@ -203,7 +203,7 @@
        #:rest [more-components (listof component-or-system?)]
        [returns entity?])
 
- @{Returns a custom npc, which will be placed in to the world
+  @{Returns a custom npc, which will be placed in to the world
          automatically if it is passed into @racket[mario-game]
          via the @racket[#:npc-list] parameter.}
 
@@ -309,7 +309,7 @@
         #:sky                   [sky (or/c sky? #f)]
         #:intro-cutscene        [intro-cutscene (or/c entity? false?)]
         #:game-over-cutscene    [game-over-cutscene (or/c entity? #f)]
-        #:npc-list           [npc-list     (listof (or/c entity? procedure?))]
+        #:npc-list              [npc-list     (listof (or/c entity? procedure?))]
         #:enemy-list            [enemy-list   (listof (or/c entity? procedure?))]
         #:coin-list             [coin-list    (listof (or/c entity? procedure?))]
         #:food-list             [food-list    (listof (or/c entity? procedure?))]

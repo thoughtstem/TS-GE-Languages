@@ -1860,6 +1860,9 @@
          multiply-fire-rate-by
          set-fire-rate-to)
 
+(define (not-after-time-die? c)
+  (not (eq? (after-time-func c) die)))
+
 ;  Holy crap, why is this so hard.  WE need better tools for
 ;  applying a function to all things spawned from some entity
 (define (change-damage-by n #:for [d #f])
@@ -1883,9 +1886,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
@@ -1893,6 +1898,8 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
+
+            ;this will break any non power up after-time component
             (update-entity _ after-time? (update-revert d)))
         (~> e
             (remove-components _ weapon?)
@@ -1922,9 +1929,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
@@ -1932,6 +1941,8 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
+            
+            ;this will break any non power up after-time component
             (update-entity _ after-time? (update-revert d)))
         (~> e
             (remove-components _ weapon?)
@@ -1962,9 +1973,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
@@ -1972,6 +1985,8 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
+            
+            ;this will break any non power up after-time component
             (update-entity _ after-time? (update-revert d)))
         (~> e
             (remove-components _ weapon?)
@@ -2006,9 +2021,11 @@
           (add-components _ old-weapons)))
     
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
@@ -2051,9 +2068,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
@@ -2094,9 +2113,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
       (if dur
           (λ (c)
-            (set-after-time-delay c dur))
+            (after-time dur (do-many revert
+                                     old-func)))
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f

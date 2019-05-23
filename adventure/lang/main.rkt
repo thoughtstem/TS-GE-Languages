@@ -1,6 +1,7 @@
 #lang at-exp racket
 
 (provide crafting-menu-set!
+         known-recipes-list
          entity-cloner
          player-toast-entity
          plain-bg
@@ -1264,8 +1265,11 @@
                         
                           ;(map weapon-entity->player-system world-weapon-list)
                           ;(map weapon-entity->player-system weapons-from-loot)
-                          
-                          (map recipe->system known-recipes-list)
+
+                        
+                          (begin (displayln (~a "==== KNOWN RECIPES ====\n"
+                                                 known-recipes-list))
+                                  (map recipe->system known-recipes-list))
                           (map food->component
                                (remove-duplicates
                                 (append  updated-food-list
@@ -1503,7 +1507,7 @@
                       ;#:recipes r . recipes
                       #:recipe-list  [r-list '()]
                       )
-  (set! known-recipes-list (append r-list known-recipes-list))
+  (set! known-recipes-list (remove-duplicates (append r-list known-recipes-list) recipe-eq?))
   (crafting-menu #:open-key open-key
                  #:open-sound open-sound
                  #:select-sound select-sound

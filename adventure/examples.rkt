@@ -8,7 +8,7 @@
 
 ; ----------------- AVATAR KATAS
 
-; Make a game with a lightelef avatar with 20 speed
+; Make a game with a lightelf avatar with 20 speed
 (define-example-code adventure avatar-1
 
   (adventure-game
@@ -474,6 +474,98 @@
    #:weapon-list (list (fireball))
    #:enemy-list  (list (curry custom-enemy #:amount-in-world 10)))
   )
+
+;===== NPC KATAS =====
+;TODO get rid of npc from survival
+;in-line 1 npc with default dialog all other keywords
+;QUESTION additional keywords to add? scale, speed?
+(define-example-code adventure npc-1
+  
+  (adventure-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (custom-npc
+                     #:sprite witch-sprite
+                     #:name   "Witch"
+                     #:mode   'follow
+                     #:tile   3)))
+  )
+
+;define 2 npc with simple dialog (inline with def)
+(define-example-code adventure npc-2
+
+  (define (polite-npc)
+    (custom-npc
+     #:name "Riley"
+     #:dialog (list "Oh hello there! I'm Riley."
+                    "Beautiful day today!")))
+  
+  (define (rude-npc)
+    (custom-npc
+     #:name "..."
+     #:dialog (list "Woah, who are you??"
+                    "Nevermind -- I'm too busy."
+                    "Move along, now!")))
+  
+  (adventure-game
+   #:avatar   (custom-avatar)
+   #:npc-list (list (polite-npc) (rude-npc)))
+  )
+
+;1 npc with multiple lines of dialog (dialog defined, npc in-line)
+(define-example-code adventure npc-3
+  (define player-dialog
+    (player-dialog-with "Jordan"
+                        #:dialog-list (list "Hello. What's your name?"
+                                            "Are you lost?"
+                                            "What's the meaning of life?")))
+  (define npc-response
+    (list (list "I'm Jordan,"
+                "but you can call me J.")
+          (list "Nope. Just exploring!")
+          (list "That's a strange question...")))
+
+  (adventure-game
+   #:avatar (custom-avatar #:components player-dialog)
+   #:npc-list (list (custom-npc #:name "Jordan"
+                                #:dialog npc-response)))
+  )
+
+;2 npc with different dialog
+(define-example-code adventure npc-4
+  
+  (adventure-game
+   #:avatar (custom-avatar #:components (random-player-dialog-with "Dakota")
+                                        (random-player-dialog-with "Alex"))
+   #:npc-list (list (custom-npc #:name "Dakota"
+                                #:dialog (random-npc-response))
+                    (custom-npc #:name "Alex"
+                                #:dialog (random-npc-response))))
+  )
+
+;fetch quest with quest finish dialog
+(define-example-code adventure npc-5
+  
+  (define player-dialog-with-charlie
+    (player-dialog-with "Charlie"
+                        #:dialog-list (list "Hi. Who are you?"
+                                            "Need help?")))
+
+  (define charlie-response
+    (list (list "Hello, I'm Charlie.")
+          (list "Yes! Can you find my spear?")))
+
+  (define spear-quest
+    (fetch-quest #:item (spear)
+                 #:quest-complete-dialog (list "YAY! MY SPEAR!")
+                 #:new-response-dialog (list (list "Um, still Charlie!")
+                                             (list "Nope! I'm good now."))))
+
+  (adventure-game
+   #:avatar (custom-avatar #:components player-dialog-with-charlie)
+   #:npc-list (list (custom-npc #:name "Charlie"
+                                #:dialog charlie-response
+                                #:quest-list (list spear-quest))))
+  )
 ; -----------
 
 (define-example-code adventure crafter-1
@@ -693,71 +785,6 @@
    #:food-list    (list (carrot))
    #:crafter-list (list (custom-crafter #:recipe-list (list my-carrot-stew-recipe))))
   
-  )
-
-; -----------------
-
-(define-example-code adventure npc-1
-  (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (custom-npc)))
-  )
-
-
-(define-example-code adventure npc-2
-  (define (my-npc)
-    (custom-npc
-     #:sprite witch-sprite
-     #:name   "Witch"))
-
-  (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (my-npc)))
-  )
-
-(define-example-code adventure npc-3
-  (define (my-npc)
-    (custom-npc
-     #:sprite witch-sprite
-     #:name   "Witch"
-     #:tile   3
-     #:mode   'follow))
-
-  (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (my-npc)))
-  )
-
-(define-example-code adventure npc-4
-  (define (my-npc)
-    (custom-npc
-     #:dialog (list "Woah, who are you??"
-                    "Nevermind -- I'm too busy."
-                    "Move along, now!")))
-  (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (my-npc)))
-  )
-
-(define-example-code adventure npc-5
-  (define (my-npc)
-    (custom-npc
-     #:name   "Francis"
-     #:tile   4
-     #:dialog (list "Greetings!"
-                    "You better find some food soon...")))
-
-  (define (another-npc)
-    (custom-npc
-     #:sprite witch-sprite
-     #:mode   'pace
-     #:dialog (list "Now where did I put it..."
-                    "Have you seen an eye of newt?"
-                    "Oh, I think I see it!")))
-
-  (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (my-npc) (another-npc)))
   )
 
 ; -----------------

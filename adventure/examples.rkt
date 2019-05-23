@@ -309,8 +309,7 @@
 (define-example-code adventure loot-quest-2
   (define stolen-cat
     (make-storable
-     (custom-npc #:name "Mylo"
-                 #:sprite cat-sprite
+     (custom-npc #:sprite cat-sprite
                  #:dialog (list "Meow!"))))
   
   (adventure-game
@@ -342,21 +341,18 @@
 (define-example-code adventure loot-quest-4
 
   (define stolen-cat
-    (make-storable (custom-npc #:name "Mylo"
-                               #:sprite cat-sprite
+    (make-storable (custom-npc #:sprite cat-sprite
                                #:dialog (list "Meow!"))))
   
   (define my-loot-quest
     (loot-quest #:item stolen-cat
-                #:quest-complete-dialog (list "Thank you for finding Mylo!")
+                #:quest-complete-dialog (list "Thank you for finding my cat!")
                 #:new-response-dialog   (list "Thanks again for your help.")
                 #:reward-amount 400 ))
 
   (adventure-game
    #:enemy-list (list (custom-enemy #:loot-list (list stolen-cat)))
-   #:npc-list   (list (custom-npc #:name "Erin"
-                                  #:sprite lightelf-sprite
-                                  #:dialog (list "Help! Someone stole my cat!")
+   #:npc-list   (list (custom-npc #:dialog (list "Help! Someone stole my cat!")
                                   #:quest-list (list my-loot-quest)))
    #:weapon-list (list (ice-magic)))
   )
@@ -368,16 +364,15 @@
   (define stolen-item
     (custom-item #:name "Empty Bowl"
                  #:sprite  bowl-sprite
-                 #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
-                                         "This must be Erin's stolen bowl."))
-                 #:on-drop  (spawn (page "Maybe I shouldn't leave it here."
-                                         "It might get taken again.")
+                 #:on-store (spawn (page (set-sprite-scale 2 bowl-sprite)
+                                         "This must be JOrdan's stolen bowl."))
+                 #:on-drop  (spawn (page "Maybe I shouldn't leave it here.")
                                    #:rule (not/r (entity-in-game? "Jordan")))))
 
   (adventure-game
    #:enemy-list  (list (custom-enemy #:loot-list (list stolen-item)))
    #:npc-list    (list (custom-npc #:name "Jordan"
-                                   #:dialog     (list "That theif took my only bowl!"
+                                   #:dialog     (list "That thief took my only bowl!"
                                                       "Please get it back!")
                                    #:quest-list (loot-quest #:item stolen-item)
                                    ))
@@ -829,7 +824,7 @@
 
 (define-example-code adventure weapon-3
   (define (my-weapon)
-    (custom-weapon #:name "Character Shooter"
+    (custom-weapon #:name "Hologram Shooter"
                    #:sprite (make-icon "?" 'red)
                    #:dart-sprite (random-character-sprite)
                    #:speed 5

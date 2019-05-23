@@ -207,12 +207,12 @@
   )
 
 (define-example-code battlearena background-2
-  (battlearena-game #:bg (custom-bg #:img LAVA-BG))
+  (battlearena-game #:bg (custom-bg #:image LAVA-BG))
   )
 
 (define-example-code battlearena background-3
   (define (my-bg)
-    (custom-bg #:img LAVA-BG
+    (custom-bg #:image LAVA-BG
                #:rows 2
                #:columns 2))
  
@@ -221,7 +221,7 @@
 
 (define-example-code battlearena background-4
   (define (my-bg)
-    (custom-bg #:img LAVA-BG
+    (custom-bg #:image LAVA-BG
                #:rows 2
                #:columns 2
                #:start-tile 3
@@ -1065,7 +1065,7 @@
 (define-example-code battlearena level-design-1
 
   (battlearena-game
-   #:bg (custom-bg #:img FOREST-BG)
+   #:bg (custom-bg #:image FOREST-BG)
    #:enable-world-objects? #t)
   
   )
@@ -1073,7 +1073,7 @@
 (define-example-code battlearena level-design-2
 
   (battlearena-game
-   #:bg             (custom-bg #:img FOREST-BG)
+   #:bg             (custom-bg #:image FOREST-BG)
    #:other-entities (make-world-objects round-tree
                                         pine-tree
                                         #:hd? #t))
@@ -1082,7 +1082,7 @@
 (define-example-code battlearena level-design-3
 
   (battlearena-game
-   #:bg             (custom-bg #:img PINK-BG)
+   #:bg             (custom-bg #:image PINK-BG)
    #:other-entities (make-world-objects candy-cane-tree
                                         snow-pine-tree
                                         #:hd? #t

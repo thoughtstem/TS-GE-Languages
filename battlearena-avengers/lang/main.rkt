@@ -201,7 +201,7 @@
 
 ;; ----- PLANET
 
-(define/contract/doc (custom-planet #:img        [bg (change-img-hue (random 360) (draw-plain-bg))]
+(define/contract/doc (custom-planet #:image        [bg (change-img-hue (random 360) (draw-plain-bg))]
                                     #:rows       [rows 3]
                                     #:columns    [cols 3]
                                     #:start-tile [t 0]
@@ -210,7 +210,7 @@
                                     . custom-components)
 
   (->i ()
-       (#:img [bg-img image?]
+       (#:image [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]

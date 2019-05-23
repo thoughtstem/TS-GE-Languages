@@ -65,6 +65,9 @@
 
          ensure-storable-with-id
          (rename-out (ensure-storable-with-id make-storable))
+
+         random-player-dialog-with
+         random-npc-response
          )
 
 (require scribble/srcdoc)
@@ -1596,10 +1599,10 @@
   
   (define dialog
     (if (not d)
-        (dialog->sprites (first (shuffle (list (list "It's dangerous out here!")
-                                               (list "You should find food to survive.")
+        (dialog->sprites (first (shuffle (list (list "I haven't seen you around here before...")
+                                               (list "Hey! I'm walkin' here!")
                                                (list "Sorry, I don't have time to talk now.")
-                                               (list "I'm hungry..."))))
+                                               (list "Be careful, I think I saw a dragon!"))))
                      #:game-width GAME-WIDTH
                      #:animated #t
                      #:speed 2)
@@ -2411,6 +2414,58 @@
                #:respawn? respawn?
                #:components (cons c custom-components)))
 
+(define/contract (random-player-dialog-with name)
+  (-> string? component-or-system?)
+  
+  ;@{Returns a collection of 3 random questions that the player will
+    ;output with interacting with the npc with @racket[name].}
+
+  (define options
+    (list "What's your name?"
+          "Where's the nearest town?"
+          "Are you lost?"
+          "Do you need help?"
+          "Do I know you?"
+          "Do you have some food?"
+          "Can I borrow a sword from you?"
+          "Do you have a quest for me?"
+          "What is the meaning of life?"
+          "Will you be my friend?"))
+
+  (player-dialog-with name
+                      #:dialog-list (take (shuffle options) 3)))
+
+
+(define/contract (random-npc-response #:num-of-responses [num 3])
+  (->* () (#:num-of-responses positive?) dialog-str?)
+
+  (define options
+    (list (list "WATCH OUT BEHIND YOU!!"
+                "-- Wait! Nevermind."
+                "Everything is fine.")
+          (list "..."
+                "Huh? Sorry, did you say something?")
+          (list "..."
+                "..."
+                "Oh, are you talking to me?")
+          (list "Huh..."
+                "That's an interesting question!")
+          (list "How DARE you ask me that!"
+                "I'm offended!")
+          (list "I -- I really don't know.")
+          (list "...Hmmmmm..."
+                "...HMMMMMM..."
+                "...HMMMMMMMMMM..."
+                "...what were we talking about?")
+          (list "Hahahaha!"
+                "You are too funny!")
+          (list "How should I know??")
+          (list "Ha ha..."
+                "...This is awkward...")))
+
+  (take (shuffle options) num))
+
+  
 (module test racket
   (displayln "TEST!!!")
   )

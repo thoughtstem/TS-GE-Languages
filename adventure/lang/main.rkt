@@ -516,8 +516,8 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
-       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
+        #:components [first-component (or/c component-or-system? #f (listof #f))])
+       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f)))]
        [returns entity?])
 
   @{Returns a custom avatar, which will be placed in to the world

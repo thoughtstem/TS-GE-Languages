@@ -1904,7 +1904,7 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
     ))
 
@@ -1947,7 +1947,7 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
 
     
@@ -1991,7 +1991,7 @@
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
 
     
@@ -2039,7 +2039,7 @@
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
   
     ))
@@ -2086,7 +2086,7 @@
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
   
     ))
@@ -2131,7 +2131,7 @@
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (add-component _ (if d (after-time d revert) #f)))
+            (add-components _ (if d (after-time d revert) #f)))
         )
   
     ))

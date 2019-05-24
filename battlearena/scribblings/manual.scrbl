@@ -10,6 +10,8 @@
 
 @defmodulelang[battlearena]
 
+@table-of-contents[]
+
 @section{Functions}
 
 @;@defproc[(builder-dart [ingredient sauerkraut?] ...

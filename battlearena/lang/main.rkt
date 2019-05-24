@@ -706,7 +706,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-bg #:img     [bg (draw-plain-bg)]
+(define (plain-bg #:image     [bg (draw-plain-bg)]
                   #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
                   #:columns    [cols 3]
@@ -721,7 +721,7 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:img        [bg (draw-plain-bg)]
+(define/contract/doc (custom-bg #:image        [bg (draw-plain-bg)]
                                 #:rows       [rows 3]
                                 #:columns    [cols 3]
                                 #:start-tile [t 0]
@@ -730,7 +730,7 @@
                                 . custom-components)
 
   (->i ()
-       (#:img [bg-img image?]
+       (#:image [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -1248,7 +1248,7 @@
 
 #;(module+ test
   (battlearena-game
-   #:bg              (custom-bg #:img FOREST-BG
+   #:bg              (custom-bg #:image FOREST-BG
                                 #:hd? #t)
    #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (curry custom-enemy

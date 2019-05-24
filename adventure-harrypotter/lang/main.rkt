@@ -11,17 +11,70 @@
 
 (language-mappings adventure       adventure-harrypotter
                    [#:avatar       #:wizard]
-                   [#:weapon-list  #:wand-list]
+                   [#:weapon-list  #:spell-list]
                    [#:crafter-list #:cauldron-list]
                    [#:enemy-list   #:deatheater-list]
                    [#:food-list    #:ingredient-list]
+                   [#:coin-list    #:currency-list]
                    [custom-avatar  custom-wizard]
-                   [custom-weapon  custom-wand]
+                   [custom-weapon  custom-spell]
                    [custom-crafter custom-cauldron]
                    [custom-enemy   custom-deatheater]
                    [custom-food    custom-ingredient]
+                   [custom-coin    custom-currency]
                    [adventure-game harrypotter-game]
                    )
+
+(provide wand
+         swinging-wand-sprite
+         colorize-potion
+         )
+
+; ----------- WEAPONS
+(define swinging-wand-sprite
+  (rotate 90 (beside (rectangle 40 40 "solid" "transparent")
+                     (rectangle 40 4 "solid" "sienna"))))
+
+(define (wand #:name              [n "Wand"]
+              #:sprite            [s swinging-wand-sprite]
+              #:icon              [i (list (set-sprite-angle -45 s)
+                                           (make-icon "" 'silver))]
+              #:damage            [dmg 25]
+              #:durability        [dur 20]
+              #:speed             [spd 0]
+              #:duration          [rng 10]
+              #:dart              [d (sword-dart #:sprite s
+                                                 #:damage dmg
+                                                 #:durability dur
+                                                 #:speed spd
+                                                 #:duration rng)]
+              #:fire-mode         [fm 'normal]
+              #:fire-rate         [fr 3]
+              #:fire-key          [key 'f]
+              #:fire-sound        [fire-sound random-slash-sound]
+              #:mouse-fire-button [button #f]
+              #:point-to-mouse?   [ptm? #f]
+              #:rapid-fire?       [rf? #f]
+              #:rarity            [rarity 'common]
+              #:on-store          [store-func (λ (g e) e)]
+              #:on-drop           [drop-func (λ (g e) e)])
+
+  (sword #:name              n
+         #:sprite            s
+         #:icon              i
+         #:dart              d 
+         #:fire-mode         fm
+         #:fire-rate         fr
+         #:fire-key          key
+         #:fire-sound        fire-sound
+         #:mouse-fire-button button
+         #:point-to-mouse?   ptm?
+         #:rapid-fire?       rf?
+         #:rarity            rarity
+         #:on-store          store-func
+         #:on-drop           drop-func))
+
+; ----------------
 
 (define/contract/doc (custom-wizard #:sprite           [sprite (first (shuffle (list harrypotter-sprite)))]
                                     #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
@@ -64,27 +117,29 @@
 
 ; -----------
 
-(define/contract/doc (custom-wand #:name              [n "Wand"]
-                                  #:sprite            [s chest-sprite]
-                                  #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
-                                  #:speed             [spd 10]
-                                  #:damage            [dmg 10]
-                                  #:range             [rng 1000]
-                                  #:dart              [b (custom-dart #:sprite ds
-                                                                      #:speed spd
-                                                                      #:damage dmg
-                                                                      #:range rng)]
-                                  #:fire-mode         [fm 'normal]
-                                  #:fire-rate         [fr 3]
-                                  #:fire-key          [key 'f]
-                                  #:fire-sound        [fire-sound LASER-SOUND]
-                                  #:mouse-fire-button [button #f]
-                                  #:point-to-mouse?   [ptm? #f]
-                                  #:rapid-fire?       [rf? #t]
-                                  #:rarity            [rarity 'common])
+(define/contract/doc (custom-spell #:name              [n "Spell"]
+                                   #:sprite            [s chest-sprite]
+                                   #:color             [c "green"]
+                                   #:dart-sprite       [ds (rectangle 10 2 "solid" c)]
+                                   #:speed             [spd 10]
+                                   #:damage            [dmg 10]
+                                   #:range             [rng 1000]
+                                   #:dart              [b (custom-dart #:sprite ds
+                                                                       #:speed spd
+                                                                       #:damage dmg
+                                                                       #:range rng)]
+                                   #:fire-mode         [fm 'normal]
+                                   #:fire-rate         [fr 3]
+                                   #:fire-key          [key 'f]
+                                   #:fire-sound        [fire-sound LASER-SOUND]
+                                   #:mouse-fire-button [button #f]
+                                   #:point-to-mouse?   [ptm? #f]
+                                   #:rapid-fire?       [rf? #t]
+                                   #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
         #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:color             [c image-color?]
         #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
@@ -100,9 +155,9 @@
         #:rarity            [rarity rarity-level?])
        [result entity?])
 
-  @{Returns a custom wand, which will be placed in to the world
+  @{Returns a custom spell, which will be placed in to the world
          automatically if it is passed into @racket[harrypotter-game]
-         via the @racket[#:wand-list] parameter.}
+         via the @racket[#:spell-list] parameter.}
 
   (custom-weapon #:name              n
                  #:sprite            s
@@ -218,7 +273,7 @@
                                          #:position          [pos (posn 0 0)]
                                          #:amount-in-world   [world-amt 1]
                                          #:storable?         [storable? #t]
-                                         #:consumable?       [consumable? #t]
+                                         #:consumable?       [consumable? #f]
                                          #:heals-by          [heals-by 10]    ;only used if consumable is #t
                                          #:respawn?          [respawn? #t]    ;only used if consumable is #t
                                          #:on-pickup         [pickup-func (λ (g e) e)]
@@ -262,9 +317,19 @@
                 #:components        (cons c custom-components)))
 
 ; -----------
+(define/contract (colorize-sprite color-name sprite)
+  (-> (or/c string? symbol?) animated-sprite? animated-sprite?)
+  (define c-hsb (name->color-hsb color-name))
+  (define h (color-hsb-hue c-hsb))
+  (apply-image-function (curry set-img-hue h)
+                        sprite))
+
+(define (colorize-potion c)
+  (colorize-sprite c potion-sprite))
 
 (define/contract/doc (custom-potion  #:name              [n "Potion"]
-                                     #:sprite            [s potion-sprite]
+                                     #:color             [col 'white]
+                                     #:sprite            [s (colorize-sprite col potion-sprite)]
                                      #:tile              [tile 0]
                                      #:position          [pos (posn 0 0)]
                                      #:amount-in-world   [world-amt 1]
@@ -279,6 +344,7 @@
                                      . custom-components)
   
   (->i () (#:name            [name string?]
+           #:color           [color image-color?]
            #:sprite          [sprite (or/c sprite? (listof sprite?))]
            #:tile            [tile (or/c number? #f)]
            #:position        [pos (or/c posn? #f)]
@@ -312,6 +378,57 @@
                 #:on-drop           drop-func 
                 #:components        (cons c custom-components)))
 
+;-------------------
+
+(define/contract/doc (custom-currency #:name            [n "Knut"]
+                                      #:sprite          [s copper-coin-sprite]
+                                      #:position        [p #f]
+                                      #:tile            [t #f]
+                                      #:amount-in-world [world-amt 10]
+                                      #:value           [val 10]
+                                      #:respawn?        [respawn? #t]
+                                      #:storable?       [storable? #t]
+                                      #:consumable?     [consumable? #t]
+                                      #:on-pickup       [pickup-func (λ (g e) e)]
+                                      #:on-store        [store-func (λ (g e) e)]
+                                      #:on-drop         [drop-func (λ (g e) e)]
+                                      #:components      [c #f]
+                                      . custom-components)
+
+   (->i () (#:name            [name (or/c string? #f)]
+            #:sprite          [sprite (or/c sprite? (listof sprite?) #f)]
+            #:position        [position (or/c posn? #f)]           
+            #:tile            [tile (or/c number? #f)]
+            #:amount-in-world [amount-in-world number?]
+            #:value           [value number?]
+            #:respawn?        [respawn boolean?]
+            #:storable?       [storable? boolean?]
+            #:consumable?     [consumable? boolean?]
+            #:on-pickup       [pickup-function procedure?]
+            #:on-store        [store-function procedure?]
+            #:on-drop         [drop-function procedure?]
+            #:components      [first-component component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+        [returns entity?])
+
+  @{Returns a custom currency, which will be placed into the world
+              automatically if it is passed into @racket[harrypotter-game]
+              via the @racket[#:currency-list] parameter.}
+
+    (custom-item  #:name              n
+                  #:sprite            s
+                  #:tile              t
+                  #:position          p
+                  #:amount-in-world   world-amt
+                  #:value             val
+                  #:storable?         storable?
+                  #:consumable?       consumable?
+                  #:respawn?          respawn? 
+                  #:on-pickup         pickup-func
+                  #:on-store          store-func 
+                  #:on-drop           drop-func 
+                  #:components        (cons c custom-components)))
+
 ;------------------- MAIN GAME
 
 (define/contract/doc (harrypotter-game
@@ -325,11 +442,12 @@
                       #:deatheater-list       [e-list    '()]
                       #:currency-list         [currency-list '()]
                       #:ingredient-list       [f-list    '()]
+                      #:potion-list           [p-list    '()]
                       #:cauldron-list         [c-list    '()]
-                      #:score-prefix          [prefix "???"]
+                      #:score-prefix          [prefix "Knuts"]
                       #:instructions          [instructions #f]
                       #:enable-world-objects? [world-objects? #f]
-                      #:wand-list             [wand-list '()]
+                      #:spell-list            [spell-list '()]
                       #:other-entities        [ent #f]
                       . custom-entities)
 
@@ -344,10 +462,11 @@
         #:deatheater-list       [deatheater-list   (listof (or/c entity? procedure?))]
         #:currency-list         [currency-list    (listof (or/c entity? procedure?))]
         #:ingredient-list       [ingredient-list    (listof (or/c entity? procedure?))]
+        #:potion-list           [potion-list    (listof (or/c entity? procedure?))]
         #:cauldron-list         [cauldron-list (listof (or/c entity? procedure?))]
         #:score-prefix          [prefix string?]
         #:enable-world-objects? [world-objects? boolean?]
-        #:wand-list             [wand-list (listof (or/c entity? procedure?))]
+        #:spell-list            [spell-list (listof (or/c entity? procedure?))]
         #:instructions          [instructions (or/c #f entity?)]
         #:other-entities        [other-entities (or/c #f entity? (listof false?) (listof entity?))])
        #:rest           [rest (listof entity?)]
@@ -365,10 +484,10 @@
                   #:npc-list              npc-list
                   #:enemy-list            e-list   
                   #:coin-list             currency-list
-                  #:food-list             f-list    
+                  #:food-list             (append f-list p-list)
                   #:crafter-list          c-list   
                   #:score-prefix          prefix
                   #:enable-world-objects? world-objects?
-                  #:weapon-list           wand-list 
+                  #:weapon-list           spell-list 
                   #:instructions          instructions
                   #:other-entities        (filter identity (flatten (cons ent custom-entities)))))

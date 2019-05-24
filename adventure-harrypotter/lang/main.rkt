@@ -116,10 +116,6 @@
                               #:components       c)
                  custom-components))
 
-(define list-of-stuff (list 1 2 3 4))
-
-(apply (curry custom-avatar #:keywords) list-of-components) ; (custom-avatar 1 2 3 4)
-
 ; -----------
 
 (define/contract/doc (custom-spell #:name              [n "Spell"]

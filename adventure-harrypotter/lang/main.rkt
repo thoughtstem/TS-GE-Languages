@@ -97,23 +97,28 @@
         #:mouse-aim?       [mouse-aim boolean?]
         #:health           [health     number?]
         #:max-health       [max-health number?]
-        #:components [first-component (or/c component-or-system? #f (listof #f) observe-change?)])
-       #:rest       [more-components (listof (or/c component-or-system? #f (listof #f) observe-change?))]
+        #:components [first-component  component-or-system?])
+       #:rest       [more-components (listof component-or-system?)]
        [returns entity?])
 
   @{Returns a custom wizard, which will be placed in to the world
          automatically if it is passed into @racket[harrypotter-game]
          via the @racket[#:wizard] parameter.}
 
-  (custom-avatar #:sprite           sprite
-                 #:damage-processor dp
-                 #:position         p
-                 #:speed            spd
-                 #:key-mode         key-mode
-                 #:mouse-aim?       mouse-aim?
-                 #:health           health
-                 #:max-health       max-health
-                 #:components       (cons c custom-components)))
+  (apply (curry custom-avatar #:sprite           sprite
+                              #:damage-processor dp
+                              #:position         p
+                              #:speed            spd
+                              #:key-mode         key-mode
+                              #:mouse-aim?       mouse-aim?
+                              #:health           health
+                              #:max-health       max-health
+                              #:components       c)
+                 custom-components))
+
+(define list-of-stuff (list 1 2 3 4))
+
+(apply (curry custom-avatar #:keywords) list-of-components) ; (custom-avatar 1 2 3 4)
 
 ; -----------
 
@@ -415,19 +420,20 @@
               automatically if it is passed into @racket[harrypotter-game]
               via the @racket[#:currency-list] parameter.}
 
-    (custom-item  #:name              n
-                  #:sprite            s
-                  #:tile              t
-                  #:position          p
-                  #:amount-in-world   world-amt
-                  #:value             val
-                  #:storable?         storable?
-                  #:consumable?       consumable?
-                  #:respawn?          respawn? 
-                  #:on-pickup         pickup-func
-                  #:on-store          store-func 
-                  #:on-drop           drop-func 
-                  #:components        (cons c custom-components)))
+    (apply (curry custom-item  #:name              n
+                                #:sprite            s
+                                #:tile              t
+                                #:position          p
+                                #:amount-in-world   world-amt
+                                #:value             val
+                                #:storable?         storable?
+                                #:consumable?       consumable?
+                                #:respawn?          respawn? 
+                                #:on-pickup         pickup-func
+                                #:on-store          store-func 
+                                #:on-drop           drop-func 
+                                #:components        c)
+           custom-components))
 
 ;------------------- MAIN GAME
 

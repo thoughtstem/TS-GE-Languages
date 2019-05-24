@@ -175,6 +175,30 @@
 
 ; --------------- NPC
 
+(define-example-code adventure-harrypotter alt/npc-5
+  
+  (define player-dialog-with-charlie
+    (player-dialog-with "Charlie"
+                        #:dialog-list (list "Hi. Who are you?"
+                                            "Need help?")))
+
+  (define charlie-response
+    (list (list "Hello, I'm Charlie.")
+          (list "Yes! Can you find my wand?")))
+
+  (define wand-quest
+    (fetch-quest #:item (wand)
+                 #:quest-complete-dialog (list "YAY! MY WAND!")
+                 #:new-response-dialog (list (list "Um, still Charlie!")
+                                             (list "Nope! I'm good now."))))
+
+  (harrypotter-game
+   #:wizard (custom-wizard #:components player-dialog-with-charlie)
+   #:npc-list (list (custom-npc #:name "Charlie"
+                                #:dialog charlie-response
+                                #:quest-list (list wand-quest))))
+  )
+
 ; --------------- SPELLS
 (define-example-code adventure-harrypotter alt/weapon-1
   (harrypotter-game

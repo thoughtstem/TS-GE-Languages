@@ -9,12 +9,12 @@
          potion-sprite
          flyingbook-sprite
          pumpkin-sprite
-         flyingwitch-sprite
          magiccauldron-sprite
          snape-sprite
          tentacula-sprite
          hagrid-sprite
          oldwizard-sprite
+
          )
 
 (define harrypotter-sprite
@@ -42,13 +42,6 @@
   (sheet->sprite pumpkin-sheet
                  #:rows 1
                  #:columns 8
-                 #:row-number 1
-                 #:delay 5))
-
-(define flyingwitch-sprite
-  (sheet->sprite flyingwitch-sheet
-                 #:rows 1
-                 #:columns 3
                  #:row-number 1
                  #:delay 5))
 

@@ -76,7 +76,10 @@
 
 ; ----------------
 
-(define/contract/doc (custom-wizard #:sprite           [sprite (first (shuffle (list harrypotter-sprite)))]
+(define/contract/doc (custom-wizard #:sprite           [sprite (first (shuffle (list harrypotter-sprite
+                                                                                     flyingwitch-sprite
+                                                                                     hagrid-sprite
+                                                                                     oldwizard-sprite)))]
                                     #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
                                                                                  #:show-damage? #t
                                                                                  #:hit-sound HIT-SOUND)]
@@ -181,7 +184,7 @@
 (define/contract/doc (custom-cauldron #:position   [p (posn 0 0)]
                                       #:tile       [t 0]
                                       #:name       [name "Cauldron"]
-                                      #:sprite     [sprite cauldron-sprite]
+                                      #:sprite     [sprite magiccauldron-sprite]
                                       #:open-key     [open-key 'space]
                                       #:open-sound   [open-sound OPEN-DIALOG-SOUND]
                                       #:select-sound [select-sound BLIP-SOUND]
@@ -221,7 +224,13 @@
 (define/contract/doc (custom-deatheater #:amount-in-world [amount-in-world 1]
                                         #:position        [pos #f]
                                         #:tile            [tile #f]
-                                        #:sprite          [s (first (shuffle (list harrypotter-sprite)))]
+                                        #:sprite          [s (first (shuffle (list snape-sprite
+                                                                                   pumpkin-sprite
+                                                                                   tentacula-sprite
+                                                                                   bat-sprite
+                                                                                   snake-sprite
+                                                                                   slime-sprite
+                                                                                   )))]
                                         #:ai              [ai-level 'medium]
                                         #:health          [health 100]
                                         #:weapon          [weapon (custom-weapon #:name "Spitter"

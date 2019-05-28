@@ -20,7 +20,7 @@
 (define harrypotter-sprite
   (sheet->sprite harrypotter-sheet
                  #:rows 1
-                 #:columns 9
+                 #:columns 18
                  #:row-number 1
                  #:delay 5))
 

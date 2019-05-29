@@ -190,7 +190,7 @@
   (define (my-sword)
     (sword #:name   "Sword"
            #:icon   (make-icon "LS" 'gold)
-           #:sprite (set-sprite-color 'gold swinging-sword-sprite)
+           #:color 'gold
            #:damage 100
            #:duration  100
            #:rarity 'legendary))
@@ -546,7 +546,7 @@
   (define (my-weapon)
     (paint-thrower #:name   "Paint Thrower"
                    #:icon   (make-icon "PT" 'blue)
-                   #:sprite (set-sprite-color 'green paint-sprite)
+                   #:color 'green
                    #:damage  20
                    #:speed   10
                    #:range   50
@@ -587,7 +587,7 @@
   (define (my-weapon)
     (fire-magic #:name   "Fire Magic"
                 #:icon   (make-icon "FM" 'red)
-                #:sprite (set-sprite-color 'green flame-sprite)
+                #:color  'green
                 #:damage  20
                 #:speed   10
                 #:range   50
@@ -628,7 +628,7 @@
   (define (my-weapon)
     (ice-magic #:name   "Ice Magic"
                #:icon   (make-icon "FM" 'red)
-               #:sprite (set-sprite-color 'green ice-sprite)
+               #:color  'green
                #:damage  20
                #:speed   10
                #:range   50
@@ -910,7 +910,7 @@
   (define (my-spear)
     (spear #:name   "Spear"
            #:icon   (make-icon "LS" 'blue)
-           #:sprite (set-sprite-color 'blue spear-sprite)
+           #:color 'blue
            #:damage 100
            #:speed 20
            #:range 10

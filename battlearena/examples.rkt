@@ -124,7 +124,7 @@
     (custom-enemy #:ai              'hard
                   #:sprite          pirategirl-sprite
                   #:amount-in-world 5
-                  #:weapon          (custom-weapon #:damage 50)))
+                  #:weapon          (repeater #:damage 50)))
  
   (battlearena-game
    #:avatar       (custom-avatar)
@@ -150,8 +150,8 @@
 (define-example-code battlearena enemy-weapon-3
 
   (define (my-weapon)
-    (custom-weapon
-     #:name      "Repeator"
+    (repeater
+     #:name  "Light Repeater"
      #:damage 5
      #:speed  1
      #:range  200))
@@ -269,30 +269,21 @@
 
 (define-example-code battlearena dagger-tower-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Dagger Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (dagger-tower-builder)))))
+   #:weapon-list (list (dagger-tower))))
 
 (define-example-code battlearena dagger-tower-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Dagger Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (dagger-tower-builder
-                                #:speed      10
-                                #:fire-mode  'spread)))))
+   #:weapon-list (list (dagger-tower
+                        #:speed      10
+                        #:fire-mode  'spread))))
 
 (define-example-code battlearena dagger-tower-3
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Dagger Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (dagger-tower-builder
-                                #:sprite     STUDENT-IMAGE-HERE
-                                #:damage     1000
-                                #:speed      10
-                                #:fire-mode  'spread)))))
+   #:weapon-list (list (dagger-tower
+                        #:fire-sound LASER-SOUND
+                        #:damage     200
+                        #:speed      10
+                        #:fire-mode  'spread))))
 
 ;-----------------
 
@@ -371,69 +362,62 @@
 
 (define-example-code battlearena homing-repeater-1
   (battlearena-game
-   #:weapon-list    (list (custom-weapon #:name "Homing Repeater"
-                                         #:sprite (make-icon "HR")
-                                         #:fire-mode 'homing))))
+   #:weapon-list    (list (repeater #:name "Homing Repeater"
+                                    #:icon (make-icon "HR")
+                                    #:fire-mode 'homing))))
 
 
 
 (define-example-code battlearena homing-repeater-2
 
 (battlearena-game
-   #:weapon-list (list (custom-weapon #:name      "Homing Repeater"
-                                      #:sprite    (make-icon "HR")
-                                      #:fire-mode 'homing
-                                      #:damage 15
-                                      #:speed  8
-                                      #:range  40))))
+   #:weapon-list (list (repeater #:name      "Homing Repeater"
+                                 #:icon      (make-icon "HR")
+                                 #:fire-mode 'homing
+                                 #:damage    15
+                                 #:speed     8
+                                 #:range     40))))
 
 
 
 (define-example-code battlearena homing-repeater-3
 
-  (define (homing-shot)
-    (custom-weapon #:name      "Homing Repeater"
-                   #:sprite    (make-icon "HR")
-                   #:fire-mode 'homing
-                   #:rarity    'rare
-                   #:dart-sprite (rectangle 10 2 'solid 'pink)
-                   #:damage 15
-                   #:speed  8
-                   #:range  40))
+  (define (homing-repeater)
+    (repeater #:name      "Homing Repeater"
+              #:icon      (make-icon "HR")
+              #:fire-mode 'homing
+              #:rarity    'rare
+              #:sprite    (rectangle 10 2 'solid 'pink)
+              #:damage    50
+              #:speed     8
+              #:range     40))
   
   (battlearena-game
-   #:weapon-list    (list (homing-shot))))
+   #:weapon-list    (list (homing-repeater))))
 
 
 
 (define-example-code battlearena lava-pit-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Lava Pit"
-                        #:sprite (make-icon "LP")
-                        #:dart (lava-builder)))))
+   #:weapon-list (list (lava-pit))))
 
 
 
 (define-example-code battlearena lava-pit-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Lava Pit"
-                        #:sprite (make-icon "LP" 'red)
-                        #:dart (lava-builder
-                                #:damage 25
-                                #:size   2)))))
+   #:weapon-list (list (lava-pit
+                        #:damage 25
+                        #:size   2))))
 
 
 
 (define-example-code battlearena lava-pit-3
   (define (my-lava-pit)
-    (custom-weapon #:name "Lava Pit"
-                   #:sprite (make-icon "LP" 'red 'white)
-                   #:dart (lava-builder #:damage  25
-                                        #:size    1
-                                        #:sprite  (square 10 'solid 'black)
-                                        #:range   10)))
+    (lava-pit #:damage  25
+              #:size    2
+              #:sprite  (circle 10 'solid 'black)
+              #:icon    (make-icon "LAVA" 'red 'white)))
+
   (battlearena-game
    #:weapon-list (list (my-lava-pit)))
   )
@@ -443,7 +427,7 @@
 (define-example-code battlearena magic-balance-1
   (battlearena-game
    #:weapon-list (list (ring-of-fire #:name "Light Magic"
-                                     #:sprite (make-icon "LM")
+                                     #:icon (make-icon "LM")
                                      #:damage 20
                                      #:rarity 'common))))
 
@@ -670,10 +654,9 @@
   
   (battlearena-game
    #:enemy-list (list (custom-enemy #:amount-in-world 10
-                                    #:weapon          (custom-weapon
-                                                       #:name "Repeater")))
+                                    #:weapon          (repeater)))
    #:item-list (list (custom-armor #:name          "Repeater Armor"
-                                   #:icon        (make-icon "RA")
+                                   #:icon          (make-icon "RA")
                                    #:protects-from "Repeater"
                                    #:change-damage (divide-by 2)
                                    #:rarity        'rare)))
@@ -685,114 +668,92 @@
 
 (define-example-code battlearena repeater-balance-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name "Light Repeater"
-                                      #:sprite paint-sprite
-                                      #:damage 20
-                                      #:durability 1
-                                      #:speed  30
-                                      #:range  50
-                                      #:rarity 'common))))
+   #:weapon-list (list (repeater #:name "Light Repeater"
+                                 #:sprite paint-sprite
+                                 #:damage 20
+                                 #:speed  30
+                                 #:range  50
+                                 #:rarity 'common))))
 
 (define-example-code battlearena repeater-balance-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name "Heavy Repeater"
-                                      #:sprite (scale 2 paint-sprite)
-                                      #:damage 500
-                                      #:durability 100
-                                      #:speed  10
-                                      #:range  50
-                                      #:rarity 'uncommon))))
+   #:weapon-list (list (repeater #:name "Heavy Repeater"
+                                 #:sprite (scale 2 paint-sprite)
+                                 #:damage 500
+                                 #:speed  10
+                                 #:range  50
+                                 #:rarity 'uncommon))))
 
 (define-example-code battlearena repeater-balance-3
   (define (heavy-weapon)
-    (custom-weapon #:name "Heavy Repeater"
-                   #:rarity 'uncommon
-                   #:sprite (scale 2 paint-sprite)
-                   #:damage 500
-                   #:durability 100
-                   #:speed  10
-                   #:range  50))
+    (repeater #:name "Heavy Repeater"
+              #:icon (make-icon "HR")
+              #:rarity 'rare
+              #:sprite (scale 2 paint-sprite)
+              #:damage 500
+              #:speed  10
+              #:range  50))
 
   (define (light-weapon)
-    (custom-weapon #:name "Light Repeater"
-                   #:rarity 'common
-                   #:sprite paint-sprite
-                   #:damage 20
-                   #:durability 1
-                   #:speed  30
-                   #:range  50))
+    (repeater #:name "Light Repeater"
+              #:icon (make-icon "LR")
+              #:rarity 'common
+              #:sprite paint-sprite
+              #:damage 20
+              #:speed  30
+              #:range  50))
   
   (battlearena-game
    #:weapon-list (list (heavy-weapon)
-                       (custom-weapon))))
+                       (light-weapon))))
 
 
 
 (define-example-code battlearena repeater-tower-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Repeater Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (repeater-tower-builder)))))
+   #:weapon-list (list (repeater-tower))))
 
 
 
 (define-example-code battlearena repeater-tower-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Repeater Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (repeater-tower-builder
-                                #:speed      2
-                                #:fire-rate  10)))))
+   #:weapon-list (list (repeater-tower
+                        #:speed      20
+                        #:fire-rate  10))))
 
 
 
 (define-example-code battlearena repeater-tower-3
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Repeater Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (repeater-tower-builder
-                                #:sprite     STUDENT-IMAGE-HERE
-                                #:speed      15
-                                #:damage     1000
-                                #:range      500
-                                #:fire-rate  0.1)))))
+   #:weapon-list (list (repeater-tower
+                        #:speed      15
+                        #:damage     1000
+                        #:range      500
+                        #:fire-rate  0.1))))
 
 
 
 (define-example-code battlearena rocket-tower-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Rocket Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (rocket-tower-builder)))))
+   #:weapon-list (list (rocket-tower))))
 
 
 
 (define-example-code battlearena rocket-tower-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Rocket Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (rocket-tower-builder
-                                #:speed      2
-                                #:fire-mode  'homing)))))
+   #:weapon-list (list (rocket-tower
+                        #:speed      2
+                        #:fire-mode  'homing))))
 
 
 
 (define-example-code battlearena rocket-tower-3
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Rocket Tower"
-                        #:sprite (make-icon "RT")
-                        #:dart (rocket-tower-builder
-                                #:sprite     STUDENT-IMAGE-HERE
-                                #:range      200
-                                #:damage     1000
-                                #:speed      2
-                                #:fire-mode  'homing)))))
+   #:weapon-list (list (rocket-tower
+                        #:range      200
+                        #:damage     1000
+                        #:speed      2
+                        #:fire-mode  'homing))))
 
 
 
@@ -843,24 +804,21 @@
 
 
 
-
-
-
 (define-example-code battlearena single-shot-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name        "Single Shot"
-                                      #:sprite      (make-icon "SS")
-                                      #:rapid-fire? #f))))
+   #:weapon-list (list (repeater #:name        "Single Shot"
+                                 #:icon        (make-icon "SS")
+                                 #:rapid-fire? #f))))
 
 (define-example-code battlearena single-shot-2
 
   (define (my-weapon)
-    (custom-weapon #:name        "Single Shot"
-                   #:sprite      (make-icon "SS")
-                   #:rapid-fire? #f
-                   #:damage      20
-                   #:speed       20
-                   #:range       50))
+    (repeater #:name        "Single Shot"
+              #:icon        (make-icon "SS")
+              #:rapid-fire? #f
+              #:damage      20
+              #:speed       20
+              #:range       50))
   
   (battlearena-game
    #:weapon-list (list (my-weapon))))
@@ -870,14 +828,14 @@
 (define-example-code battlearena single-shot-3
 
   (define (single-shot)
-    (custom-weapon #:name        "Single Shot"
-                   #:sprite      (make-icon "SS")
-                   #:dart-sprite (rectangle 10 2 'solid 'cyan)
-                   #:damage 40
-                   #:speed  20
-                   #:range  50
-                   #:rapid-fire? #f
-                   #:rarity      'rare))
+    (repeater #:name        "Single Shot"
+              #:icon        (make-icon "SS")
+              #:sprite      (rectangle 10 2 'solid 'cyan)
+              #:damage      40
+              #:speed       20
+              #:range       50
+              #:rapid-fire? #f
+              #:rarity      'rare))
   
   (battlearena-game
    #:weapon-list (list (single-shot))))
@@ -922,78 +880,58 @@
 
 (define-example-code battlearena spear-tower-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Spear Tower"
-                        #:sprite (make-icon "ST")
-                        #:dart (spear-tower-builder)))))
+   #:weapon-list (list (spear-tower))))
 
 (define-example-code battlearena spear-tower-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "ST"
-                        #:sprite (make-icon "ST" 'tan)
-                        #:dart (spear-tower-builder
-                                #:speed 10 
-                                #:range 50)))))
+   #:weapon-list (list (spear-tower
+                        #:speed 10 
+                        #:range 50))))
 
 (define-example-code battlearena spear-tower-3
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Spear Tower"
-                        #:sprite (make-icon "ST")
-                        #:dart (spear-tower-builder
-                                #:sprite (set-sprite-color 'gold spear-sprite)
-                                #:damage 100
-                                #:speed 10
-                                #:range 50)))))
+   #:weapon-list (list (spear-tower
+                        #:sprite (set-sprite-color 'gold spear-sprite)
+                        #:damage 100
+                        #:speed 10
+                        #:range 50))))
 
 (define-example-code battlearena spike-mine-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Spike Mine"
-                        #:sprite (make-icon "SM")
-                        #:dart (spike-mine-builder)))))
-
+   #:weapon-list (list (spike-mine))))
 
 
 (define-example-code battlearena spike-mine-2
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Spike Mine"
-                        #:sprite (make-icon "SM" 'gray)
-                        #:dart (spike-mine-builder
-                                #:speed 10 
-                                #:range 50)))))
-
+   #:weapon-list (list (spike-mine
+                        #:speed 10 
+                        #:range 50))))
 
 
 (define-example-code battlearena spike-mine-3
   (battlearena-game
-   #:weapon-list (list (custom-weapon
-                        #:name "Spike Mine"
-                        #:sprite (make-icon "SM")
-                        #:dart (spike-mine-builder
-                                #:sprite (set-sprite-color 'red spike-mine-sprite)
-                                #:damage 100)))))
+   #:weapon-list (list (spike-mine
+                        #:sprite (set-sprite-color 'red spike-mine-sprite)
+                        #:damage 100
+                        #:range  100))))
 
 
 (define-example-code battlearena spread-shot-1
   (battlearena-game
-   #:weapon-list (list (custom-weapon #:name      "Spread Shot"
-                                      #:sprite    (make-icon "SPR")
-                                      #:fire-mode 'spread))))
+   #:weapon-list (list (repeater #:name      "Spread Shot"
+                                 #:icon      (make-icon "SPR")
+                                 #:fire-mode 'spread))))
 
 
 
 (define-example-code battlearena spread-shot-2
 
   (define (my-weapon)
-    (custom-weapon #:name      "Spread Shot"
-                   #:sprite    (make-icon "SPR")
-                   #:fire-mode 'spread
-                   #:damage     20
-                   #:durability 20
-                   #:speed      15))
+    (repeater #:name      "Spread Shot"
+              #:icon      (make-icon "SPR")
+              #:fire-mode 'spread
+              #:damage     20
+              #:speed      15))
   
   (battlearena-game
    #:weapon-list    (list (my-weapon)))
@@ -1003,14 +941,13 @@
 (define-example-code battlearena spread-shot-3
 
   (define (spread-shot)
-    (custom-weapon #:name      "Spread Shot"
-                   #:sprite    (make-icon "SPR")
-                   #:fire-mode 'spread
-                   #:dart-sprite     (rectangle 10 2 'solid 'orange)
-                   #:rarity    'rare
-                   #:damage     20
-                   #:durability 20
-                   #:speed      15))
+    (repeater #:name        "Spread Shot"
+              #:icon        (make-icon "SPR")
+              #:fire-mode   'spread
+              #:sprite      (rectangle 10 2 'solid 'orange)
+              #:rarity      'rare
+              #:damage       20
+              #:speed        15))
   
   (battlearena-game
    #:weapon-list    (list (spread-shot))))

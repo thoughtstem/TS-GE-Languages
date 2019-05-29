@@ -19,26 +19,29 @@
            (prefix-in a: battlearena-avengers)
            (prefix-in p: pict))
 
-    (define health "Health")
-    (define grow "Grow")
-    (define shrink "Shrink")
-    (define speed "Speed")
-    (define forcefield "Force Field")
+  (define health "Health")
+  (define grow "Grow")
+  (define shrink "Shrink")
+  (define speed "Speed")
+  (define forcefield "Force Field")
+
+  (define (draw-head sprite)
+    (a:crop/align 'center 'top 32 32 (a:draw-sprite sprite)))
 
   (define-visual-language #:wrapper begin hero-lang
     "./hero-lang.rkt" 
     [start          w play-icon]
 
-    [blackwidow     b (a:scale-to-fit (a:draw-sprite a:blackwidow-sprite)     32)]
-    [captainamerica c (a:scale-to-fit (a:draw-sprite a:captainamerica-sprite) 32)]
-    [drax           d (a:scale-to-fit (a:draw-sprite a:drax-sprite)           32)]
-    [ironman        i (a:scale-to-fit (a:draw-sprite a:ironman-sprite)        32)]
-    [thor           t (a:scale-to-fit (a:draw-sprite a:thor-sprite)           32)]
+    [blackwidow     b (a:scale-to-fit (draw-head a:blackwidow-sprite)     32)]
+    [captainamerica c (a:scale-to-fit (draw-head a:captainamerica-sprite) 32)]
+    [drax           d (a:scale-to-fit (draw-head a:drax-sprite)           32)]
+    [ironman        i (a:scale-to-fit (draw-head a:ironman-sprite)        32)]
+    [thor           t (a:scale-to-fit (draw-head a:thor-sprite)           32)]
 
-    [loki           l (a:scale-to-fit (a:draw-sprite a:loki-sprite)           32)]
-    [malekith       k (a:scale-to-fit (a:draw-sprite a:malekith-sprite) 32)]
-    [mandarin       m (a:scale-to-fit (a:draw-sprite a:mandarin-sprite) 32)]
-    [nebula         n (a:scale-to-fit (a:draw-sprite a:nebula-sprite)   32)]
+    [loki           l (a:scale-to-fit (draw-head a:loki-sprite)           32)]
+    [malekith       k (a:scale-to-fit (draw-head a:malekith-sprite) 32)]
+    [mandarin       m (a:scale-to-fit (draw-head a:mandarin-sprite) 32)]
+    [nebula         n (a:scale-to-fit (draw-head a:nebula-sprite)   32)]
 
     [hammer         h (a:scale-to-fit (a:draw-sprite (a:hammer-sprite "black"))       32)]
     [magic-orb      x (a:scale-to-fit (a:draw-sprite a:flame-sprite)                  32)]

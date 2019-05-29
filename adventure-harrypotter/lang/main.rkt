@@ -77,7 +77,6 @@
 ; ----------------
 
 (define/contract/doc (custom-wizard #:sprite           [sprite (first (shuffle (list harrypotter-sprite
-                                                                                     flyingwitch-sprite
                                                                                      hagrid-sprite
                                                                                      oldwizard-sprite)))]
                                     #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)

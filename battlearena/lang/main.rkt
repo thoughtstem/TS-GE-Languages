@@ -20,6 +20,7 @@
 ;  the docs. 
 (provide plain-bg-entity
          (rename-out (spear-sprite SPEAR-IMG))
+         repeater
          ice-sprite
          spear
          sword
@@ -51,13 +52,14 @@
          lock-to-grid
          round-nearest-posn
          
-         spear-tower-builder
-         spike-mine-builder
-         lava-builder
+         spear-tower
+         spike-mine
+         lava-pit
 
-         rocket-tower-builder
-         repeater-tower-builder
-         dagger-tower-builder
+         rocket-tower
+         repeater-tower
+         dagger-tower
+         wall-builder
 
          rocket
          rocket-sprite
@@ -524,7 +526,7 @@
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
         #:fire-sound  [fire-sound (or/c rsound? procedure? #f '())]
-        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
@@ -1223,6 +1225,33 @@
                   (damager damage '(lava))
                   (after-time die-after die)))
 
+(define (wall-builder #:name              [n "Wall Builder"]
+                      #:sprite            [s (wall)]
+                      #:icon              [i (make-icon "WALL" 'turquoise )]
+                      #:speed             [spd 10]
+                      #:damage            [dmg 0]
+                      #:range             [rng 5]
+                      #:dart              [d (builder-dart #:entity   s
+                                                           #:distance rng)]
+                      #:fire-mode         [fm 'normal]
+                      #:fire-rate         [fr 3]
+                      #:fire-key          [key 'f]
+                      #:fire-sound        [fire-sound #f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #f]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (wall #:size (size 50) #:die-after (die-after 500))
   (sprite->entity (set-scale-xy size (new-sprite (square 1 'solid 'brown)))
                   #:name "wall"
@@ -1308,6 +1337,37 @@
 
 
 ; ==== PREBUILT WEAPONS & DARTS ====
+
+(define (repeater #:name              [n "Repeater"]
+                  #:sprite            [ds (rectangle 10 2 "solid" "green")]
+                  #:icon              [i (list (set-sprite-angle -45 ds)
+                                               (make-icon ""))]
+                  #:speed             [spd 10]
+                  #:damage            [dmg 10]
+                  #:range             [rng 1000]
+                  #:dart              [d (custom-dart #:sprite ds
+                                                      #:speed spd
+                                                      #:damage dmg
+                                                      #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-rate         [fr 3]
+                  #:fire-key          [key 'f]
+                  #:fire-sound        [fire-sound LASER-SOUND]
+                  #:mouse-fire-button [button 'left]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]
@@ -1706,13 +1766,46 @@
                (every-tick (do-many (scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
-(define (spear-tower-builder #:sprite     [s spear-sprite]
-                             #:damage     [dmg 50]
-                             #:durability [dur 20]
-                             #:speed      [spd 5]
-                             #:range      [rng 20]
-                             #:fire-rate  [fire-rate 0.5]
-                             #:fire-sound [fire-sound random-woosh-sound])
+(define (spear-tower #:name              [n "Spear Tower"]
+                     #:icon              [i (make-icon "ST" 'aqua)]
+                     #:sprite            [s spear-sprite]
+                     #:damage            [dmg 50]
+                     #:durability        [dur 20]
+                     #:speed             [spd 5]
+                     #:range             [rng 20]
+                     #:fire-rate         [fr 0.5]
+                     #:fire-sound        [fire-sound random-woosh-sound]
+                     #:dart              [d (spear-tower-builder-dart #:sprite     s
+                                                                      #:damage     dmg
+                                                                      #:durability dur
+                                                                      #:speed      spd
+                                                                      #:range      rng
+                                                                      #:fire-rate  fr
+                                                                      #:fire-sound fire-sound)]
+                     #:fire-mode         [fm 'normal]
+                     #:fire-key          [key 'f]
+                     #:mouse-fire-button [button 'left]
+                     #:point-to-mouse?   [ptm? #t]
+                     #:rapid-fire?       [rf? #f]
+                     #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all towers
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (spear-tower-builder-dart #:sprite     [s spear-sprite]
+                                  #:damage     [dmg 50]
+                                  #:durability [dur 20]
+                                  #:speed      [spd 5]
+                                  #:range      [rng 20]
+                                  #:fire-rate  [fire-rate 0.5]
+                                  #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-sound fire-sound
@@ -1732,13 +1825,46 @@
 (define spike-sprite
   (rotate 30 (triangle 10 'solid 'gray)))
 
-(define (spike-mine-builder #:sprite     [s spike-mine-sprite]
-                            #:damage     [dmg 2]
-                            #:durability [dur 10]
-                            #:speed      [spd 5]
-                            #:range      [rng 20]
-                            #:fire-rate  [fire-rate 20]
-                            #:fire-sound [fire-sound random-woosh-sound])
+(define (spike-mine #:name              [n "Spike Mine"]
+                    #:icon              [i (make-icon "SPM" 'coral)]
+                    #:sprite            [s spike-mine-sprite]
+                    #:damage            [dmg 2]
+                    #:durability        [dur 10]
+                    #:speed             [spd 5]
+                    #:range             [rng 20]
+                    #:fire-rate         [fr 20]
+                    #:fire-sound        [fire-sound random-woosh-sound]
+                    #:dart              [d (spike-mine-builder-dart #:sprite     s
+                                                                    #:damage     dmg
+                                                                    #:durability dur
+                                                                    #:speed      spd
+                                                                    #:range      rng
+                                                                    #:fire-rate  fr
+                                                                    #:fire-sound fire-sound)]
+                    #:fire-mode         [fm 'normal]
+                    #:fire-key          [key 'f]
+                    #:mouse-fire-button [button 'left]
+                    #:point-to-mouse?   [ptm? #t]
+                    #:rapid-fire?       [rf? #f]
+                    #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (spike-mine-builder-dart #:sprite     [s spike-mine-sprite]
+                                 #:damage     [dmg 2]
+                                 #:durability [dur 10]
+                                 #:speed      [spd 5]
+                                 #:range      [rng 20]
+                                 #:fire-rate  [fire-rate 20]
+                                 #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (mine #:sprite s
                       #:weapon (custom-weapon ;#:fire-mode 'spread
@@ -1753,11 +1879,41 @@
                                                                   #:components (on-start (random-direction 0 360)))
                                               ))))
 
+(define (lava-pit #:name              [n "Lava Pit"]
+                  #:icon              [i (make-icon "LP" 'crimson)]
+                  #:sprite            [s LAVA-SPRITE]
+                  #:size              [size 1]
+                  #:damage            [dmg 10]
+                  #:durability        [dur 10]
+                  #:speed             [spd 5]
+                  #:range             [rng 5]
+                  #:fire-rate         [fr 20]
+                  #:fire-sound        [fire-sound random-woosh-sound]
+                  #:dart              [d (lava-builder-dart #:damage dmg
+                                                            #:size   size
+                                                            #:sprite s
+                                                            #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-key          [key 'f]
+                  #:mouse-fire-button [button 'left]
+                  #:point-to-mouse?   [ptm? #t]
+                  #:rapid-fire?       [rf? #f]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (lava-builder #:damage (damage 10)
-                      #:size   (size 1)
-                      #:sprite (sprite LAVA-SPRITE)
-                      #:range (range 5))
+(define (lava-builder-dart #:damage (damage 10)
+                           #:size   (size 1)
+                           #:sprite (sprite LAVA-SPRITE)
+                           #:range (range 5))
   
   (builder-dart #:entity (lava #:damage damage
                                #:size size
@@ -1783,14 +1939,50 @@
                #:range rng
                ))
 
-(define (rocket-tower-builder #:sprite     [s rocket-sprite]
-                              #:damage     [dmg 200]
-                              #:durability [dur 10]
-                              #:speed      [spd 5]
-                              #:range      [rng 100]
-                              #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5]
-                              #:fire-sound [fire-sound FIRE-MAGIC-SOUND])
+(define (rocket-tower #:name              [n "Rocket Tower"]
+                      #:icon              [i (make-icon "RKT" 'chartreuse)]
+                      #:sprite            [s rocket-sprite]
+                      #:size              [size 1]
+                      #:damage            [dmg 100]
+                      #:durability        [dur 10]
+                      #:speed             [spd 5]
+                      #:range             [rng 100]
+                      #:fire-rate         [fr 0.5]
+                      #:fire-sound        [fire-sound FIRE-MAGIC-SOUND]
+                      #:fire-mode         [fm 'normal]
+                      #:dart              [d (rocket-tower-builder-dart #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:speed      spd
+                                                                        #:range      rng
+                                                                        #:fire-mode  fm
+                                                                        #:fire-rate  fr
+                                                                        #:fire-sound fire-sound)]
+                      
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (rocket-tower-builder-dart #:sprite     [s rocket-sprite]
+                                   #:damage     [dmg 200]
+                                   #:durability [dur 10]
+                                   #:speed      [spd 5]
+                                   #:range      [rng 100]
+                                   #:fire-mode  [fm 'normal]
+                                   #:fire-rate  [fire-rate 0.5]
+                                   #:fire-sound [fire-sound FIRE-MAGIC-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
@@ -1803,14 +1995,49 @@
                                                        #:speed      spd
                                                        #:range      rng)))))
 
-(define (repeater-tower-builder #:sprite     [s (rectangle 10 2 "solid" "green")]
-                                #:damage     [dmg 10]
-                                #:durability [dur 10]
-                                #:speed      [spd 10]
-                                #:range      [rng 100]
-                                #:fire-mode  [fm 'normal]
-                                #:fire-rate  [fire-rate 3]
-                                #:fire-sound [fire-sound LASER-SOUND])
+(define (repeater-tower #:name              [n "Repeater Tower"]
+                        #:icon              [i (make-icon "RPT" 'mediumorchid)]
+                        #:sprite            [s (rectangle 10 2 "solid" "green")]
+                        #:damage            [dmg 10]
+                        #:durability        [dur 10]
+                        #:speed             [spd 10]
+                        #:range             [rng 100]
+                        #:fire-rate         [fr 3]
+                        #:fire-sound        [fire-sound LASER-SOUND]
+                        #:fire-mode         [fm 'normal]
+                        #:dart              [d (repeater-tower-builder-dart #:sprite     s
+                                                                            #:damage     dmg
+                                                                            #:durability dur
+                                                                            #:speed      spd
+                                                                            #:range      rng
+                                                                            #:fire-mode  fm
+                                                                            #:fire-rate  fr
+                                                                            #:fire-sound fire-sound)]
+                      
+                        #:fire-key          [key 'f]
+                        #:mouse-fire-button [button 'left]
+                        #:point-to-mouse?   [ptm? #t]
+                        #:rapid-fire?       [rf? #f]
+                        #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (repeater-tower-builder-dart #:sprite     [s (rectangle 10 2 "solid" "green")]
+                                     #:damage     [dmg 10]
+                                     #:durability [dur 10]
+                                     #:speed      [spd 10]
+                                     #:range      [rng 100]
+                                     #:fire-mode  [fm 'normal]
+                                     #:fire-rate  [fire-rate 3]
+                                     #:fire-sound [fire-sound LASER-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
@@ -1824,14 +2051,49 @@
                                                        #:speed      spd
                                                        #:range      rng)))))
 
-(define (dagger-tower-builder #:sprite     [s (scale 0.5 flying-sword-sprite)]
-                              #:damage     [dmg 200]
-                              #:durability [dur 20]
-                              #:speed      [spd 5]
-                              #:range      [rng 200]
-                              #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5]
-                              #:fire-sound [fire-sound #f])
+(define (dagger-tower #:name              [n "Dagger Tower"]
+                      #:icon              [i (make-icon "DT" 'mediumorchid)]
+                      #:sprite            [s (scale 0.5 flying-sword-sprite)]
+                      #:damage            [dmg 50]
+                      #:durability        [dur 20]
+                      #:speed             [spd 5]
+                      #:range             [rng 200]
+                      #:fire-rate         [fr 0.5]
+                      #:fire-sound        [fire-sound #f]
+                      #:fire-mode         [fm 'normal]
+                      #:dart              [d (dagger-tower-builder-dart #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:speed      spd
+                                                                        #:range      rng
+                                                                        #:fire-mode  fm
+                                                                        #:fire-rate  fr
+                                                                        #:fire-sound fire-sound)]
+                      
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (dagger-tower-builder-dart #:sprite     [s (scale 0.5 flying-sword-sprite)]
+                                   #:damage     [dmg 200]
+                                   #:durability [dur 20]
+                                   #:speed      [spd 5]
+                                   #:range      [rng 200]
+                                   #:fire-mode  [fm 'normal]
+                                   #:fire-rate  [fire-rate 0.5]
+                                   #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm

@@ -244,7 +244,7 @@
                 #:components      (cons c custom-components)))
 
 ; ---------   Custom Stone
-(define/contract/doc (custom-stone #:type             [type (copper-coin-entity)]
+(define/contract/doc (custom-stone #:type             [type (copper-coin)]
                                    #:sprite           [s thunderstone-sprite]
                                    #:position         [p #f]
                                    #:name             [n "Thunder Stone"]

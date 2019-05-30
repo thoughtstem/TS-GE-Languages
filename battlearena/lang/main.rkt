@@ -33,7 +33,7 @@
          sword-magic
          
          ;spear-dart
-         ;sword-dart
+         sword-dart
          ;paint-dart
          ;flying-dagger-dart
          ;ring-of-fire-dart

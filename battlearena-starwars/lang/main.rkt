@@ -321,6 +321,7 @@
          #:speed      [spd  0]
          #:range      [rng 10])
 
+
   (sword-dart #:sprite        s
               #:damage        dmg
               #:durability    dur
@@ -341,14 +342,47 @@
                #:speed      spd
                #:range      rng))
 
+(define (lightsaber-droid #:name              [n "Lightsaber Droid"]
+                          #:icon              [i (make-icon "LSD" 'aquamarine)]
+                          #:color             [c "green"]
+                          #:sprite            [s (swinging-lightsaber-sprite c)]
+                          #:damage            [dmg 50]
+                          #:durability        [dur 20]
+                          #:speed             [spd 5]
+                          #:range             [rng 20]
+                          #:fire-rate         [fr 0.5]
+                          #:fire-sound        [fire-sound random-lightsaber-sound]
+                          #:dart              [d (lightsaber-droid-dart #:color      c
+                                                                        #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:speed      spd
+                                                                        #:range      rng
+                                                                        #:fire-rate  fr)]
+                          #:fire-mode         [fm 'normal]
+                          #:fire-key          [key 'f]
+                          #:mouse-fire-button [button 'left]
+                          #:point-to-mouse?   [ptm? #t]
+                          #:rapid-fire?       [rf? #f]
+                          #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all droids
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (lightsaber-droid #:color      [c "green"]
-                          #:sprite     [s (swinging-lightsaber-sprite c)]
-                          #:damage     [dmg 50]
-                          #:durability [dur 20]
-                          #:speed      [spd 5]
-                          #:range      [rng 20]
-                          #:fire-rate  [fire-rate 0.5])
+(define (lightsaber-droid-dart #:color      [c "green"]
+                               #:sprite     [s (swinging-lightsaber-sprite c)]
+                               #:damage     [dmg 50]
+                               #:durability [dur 20]
+                               #:speed      [spd 5]
+                               #:range      [rng 20]
+                               #:fire-rate  [fire-rate 0.5])
   
   (builder-dart #:entity (droid #:weapon (lightsaber #:fire-rate fire-rate
                                                      #:dart (lightsaber-dart #:color      c
@@ -357,15 +391,49 @@
                                                                              #:durability dur
                                                                              #:speed      spd
                                                                              #:range      rng)))))
+(define (blaster-droid #:name              [n "Blaster Droid"]
+                       #:icon              [i (make-icon "BLD" 'lime)]
+                       #:color             [c "green"]
+                       #:sprite            [s (blaster-dart-sprite c)]
+                       #:damage            [dmg 10]
+                       #:durability        [dur 20]
+                       #:speed             [spd 5]
+                       #:range             [rng 50]
+                       #:fire-rate         [fr 2]
+                       #:fire-sound        [fire-sound random-blaster-sound]
+                       #:fire-mode         [fm 'normal]
+                       #:dart              [d (blaster-droid-dart #:color      c
+                                                                  #:sprite     s
+                                                                  #:damage     dmg
+                                                                  #:durability dur
+                                                                  #:speed      spd
+                                                                  #:range      rng
+                                                                  #:fire-rate  fr
+                                                                  #:fire-mode  fm)] 
+                       #:fire-key          [key 'f]
+                       #:mouse-fire-button [button 'left]
+                       #:point-to-mouse?   [ptm? #t]
+                       #:rapid-fire?       [rf? #f]
+                       #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all droids
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (blaster-droid #:color      [c "green"]
-                       #:sprite     [s (blaster-dart-sprite c)]
-                       #:damage     [dmg 10]
-                       #:durability [dur 20]
-                       #:speed      [spd 5]
-                       #:range      [rng 50]
-                       #:fire-rate  [fire-rate 2]
-                       #:fire-mode  [fire-mode 'normal])
+(define (blaster-droid-dart #:color      [c "green"]
+                            #:sprite     [s (blaster-dart-sprite c)]
+                            #:damage     [dmg 10]
+                            #:durability [dur 20]
+                            #:speed      [spd 5]
+                            #:range      [rng 50]
+                            #:fire-rate  [fire-rate 2]
+                            #:fire-mode  [fire-mode 'normal])
   
   (builder-dart #:entity (droid #:weapon (blaster #:fire-rate fire-rate
                                                          #:fire-mode fire-mode

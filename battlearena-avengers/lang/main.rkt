@@ -26,7 +26,7 @@
          energy-blast-dart
          star-bit
          star-bit-dart
-         energy-droid
+         energy-drone
          hammer
          hammer-dart
          hammer-sprite
@@ -476,16 +476,51 @@
                #:components (on-start (set-size 0.5))
                (every-tick (scale-sprite 1.1))))
 
-(define (energy-droid #:color      [c "green"]
-                      #:sprite     [s (energy-blast-sprite c)]
-                      #:damage     [dmg 10]
-                      #:durability [dur 10]
-                      #:speed      [spd 10]
-                      #:range      [rng 30]
-                      #:fire-rate  [fire-rate 1]
-                      #:fire-mode  [fire-mode 'normal])
+(define (energy-drone #:name              [n "Energy Blast Drone"]
+                      #:icon              [i (make-icon "DRN" 'orange)]
+                      #:color             [c "green"]
+                      #:sprite            [s (energy-blast-sprite c)]
+                      #:damage            [dmg 10]
+                      #:durability        [dur 10]
+                      #:speed             [spd 10]
+                      #:range             [rng 30]
+                      #:fire-rate         [fr  1]
+                      #:fire-sound        [fire-sound random-woosh-sound]
+                      #:fire-mode         [fm 'normal]
+                      #:dart              [d (energy-drone-dart #:color      c
+                                                                #:sprite     s
+                                                                #:damage     dmg
+                                                                #:durability dur
+                                                                #:speed      spd
+                                                                #:range      rng
+                                                                #:fire-rate  fr
+                                                                #:fire-mode  fm)]
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all drones
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (energy-drone-dart #:color      [c "green"]
+                           #:sprite     [s (energy-blast-sprite c)]
+                           #:damage     [dmg 10]
+                           #:durability [dur 10]
+                           #:speed      [spd 10]
+                           #:range      [rng 30]
+                           #:fire-rate  [fire-rate 1]
+                           #:fire-mode  [fire-mode 'normal])
   
-  (builder-dart #:entity (droid #:weapon (custom-power #:fire-rate fire-rate
+  (builder-dart #:entity (drone #:weapon (custom-power #:fire-rate fire-rate
                                                        #:fire-mode fire-mode
                                                        #:dart (energy #:color      c
                                                                       #:sprite     s
@@ -494,7 +529,7 @@
                                                                       #:speed      spd
                                                                       #:range      rng)))))
 
-;; ----- DROIDS
+;; ----- DRONES
 
 (define (crop-sprite img row col x-idx y-idx)
   (define w (image-width  img))
@@ -503,35 +538,35 @@
   (define crop-h (/ h row))
   (crop (* crop-w x-idx) (* crop-h y-idx) crop-w crop-h img))
   
-(define (droid #:weapon (weapon (custom-weapon))
+(define (drone #:weapon (weapon (custom-weapon))
                #:die-after (die-after 500))
-  (define droid-id (random 100000))
-  (define droid-name (~a "droid" droid-id))
-  (displayln (~a "DROID NAME: " droid-name))
+  (define drone-id (random 100000))
+  (define drone-name (~a "drone" drone-id))
+  (displayln (~a "DRONE NAME: " drone-name))
 
-  (define droid-base (rectangle 20 1 'solid 'transparent))
+  (define drone-base (rectangle 20 1 'solid 'transparent))
   
-  (define droid-top (crop-sprite ironpatriot-sheet 4 4 2 2))
+  (define drone-top (crop-sprite ironpatriot-sheet 4 4 2 2))
 
-  (define droid-top-entity
-    (sprite->entity droid-top
-                    #:name "Droid Top"
+  (define drone-top-entity
+    (sprite->entity drone-top
+                    #:name "Drone Top"
                     #:position (posn 0 -20)
                     #:components
                     (layer "tops")
                     (after-time die-after die)
-                    (on-rule (λ (g e) (not (get-entity droid-name g))) die)
+                    (on-rule (λ (g e) (not (get-entity drone-name g))) die)
                     (active-on-bg)))
 
-  (precompile! droid-top
-               droid-base)
+  (precompile! drone-top
+               drone-base)
 
 
   (define weapon-system (get-storage-data "Weapon" weapon))
   
-  (sprite->entity droid-base
+  (sprite->entity drone-base
 
-                  #:name droid-name
+                  #:name drone-name
                   #:position (posn 0 0)
                   #:components
                   (direction 0)
@@ -541,9 +576,9 @@
                   (static)
                   (lock-to-grid 50)
                   (physical-collider)
-                  (on-collide droid-name die)
+                  (on-collide drone-name die)
                   (after-time die-after die)
-                  (on-start (spawn-on-current-tile droid-top-entity))))
+                  (on-start (spawn-on-current-tile drone-top-entity))))
 
 
 ;------------------- MAIN GAME

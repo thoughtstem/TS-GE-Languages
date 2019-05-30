@@ -157,35 +157,29 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers droid-1
+(define-example-code battlearena-avengers drone-1
   (avengers-game
-    #:power-list (list (custom-power #:name "Droid"
-                                     #:sprite (make-icon "D" 'yellow)
-                                     #:dart (energy-droid))))
+    #:power-list (list (energy-drone)))
   )
 
-(define-example-code battlearena-avengers droid-2
-  (define (my-droid)
-    (custom-power #:name "Droid"
-                  #:sprite (make-icon "D" 'yellow)
-                  #:dart (energy-droid #:color 'yellow
-                                       #:damage 25
-                                       #:fire-rate 2
-                                       #:fire-mode 'spread)))
+(define-example-code battlearena-avengers drone-2
+  (define (my-drone)
+    (energy-drone #:color     'yellow
+                  #:fire-mode 'spread))
     
   (avengers-game
-   #:power-list (list (my-droid)))
+   #:power-list (list (my-drone)))
   )
 
-(define-example-code battlearena-avengers droid-3
-  (define (my-droid)
-    (custom-power #:name "Droid"
-                  #:sprite (make-icon "D" 'yellow)
-                  #:dart (energy-droid #:color 'yellow
-                                       #:damage 25)))
+(define-example-code battlearena-avengers drone-3
+  (define (my-drone)
+    (energy-drone #:color     'red
+                  #:damage    50
+                  #:fire-rate 3
+                  #:fire-mode 'homing))
     
   (avengers-game
-   #:power-list (list (my-droid)))
+   #:power-list (list (my-drone)))
   )
 
 ; ---------------

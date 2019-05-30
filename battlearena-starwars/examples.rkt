@@ -215,21 +215,14 @@
 
 (define-example-code battlearena-starwars lightsaber-droid-1
   (starwars-game
-   #:weapon-list (list (custom-weapon 
-                        #:name   "Lightsaber Droid" 
-                        #:sprite (make-icon "LD")
-                        #:dart   (lightsaber-droid))))
+   #:weapon-list (list (lightsaber-droid)))
   )
 
 (define-example-code battlearena-starwars lightsaber-droid-2
   (define (ls-droid)
-    (custom-weapon 
-     #:name   "Lightsaber Droid" 
-     #:sprite (make-icon "LS")
-     #:rarity 'epic
-     #:dart   (lightsaber-droid #:color      "orange"
-                                #:damage     25 
-                                #:durability 30)))
+    (lightsaber-droid #:color      "orange"
+                      #:damage     75 
+                      #:durability 30))
 
   (starwars-game
    #:weapon-list (list (ls-droid)))
@@ -237,16 +230,12 @@
 
 (define-example-code battlearena-starwars lightsaber-droid-3
   (define (ls-droid)
-    (custom-weapon 
-     #:name   "Lightsaber Droid" 
-     #:sprite (make-icon "LS")
-     #:rarity 'epic
-     #:dart   (lightsaber-droid #:color      "orange"
-                                #:damage     25 
-                                #:speed      10
-                                #:durability 30
-                                #:range      20
-                                #:fire-rate  0.5)))
+    (lightsaber-droid #:color      "orange"
+                      #:damage     75 
+                      #:speed      10
+                      #:durability 30
+                      #:range      50
+                      #:fire-rate  2))
 
   (starwars-game
    #:weapon-list (list (ls-droid)))
@@ -256,20 +245,14 @@
 
 (define-example-code battlearena-starwars blaster-droid-1
   (starwars-game
-   #:weapon-list (list (custom-weapon 
-                        #:name   "Blaster Droid" 
-                        #:sprite (make-icon "BD")
-                        #:dart   (blaster-droid))))
+   #:weapon-list (list (blaster-droid)))
   )
 
 (define-example-code battlearena-starwars blaster-droid-2
   (define (b-droid)
-    (custom-weapon 
-     #:name   "Blaster Droid" 
-     #:sprite (make-icon "BD")
-     #:dart   (blaster-droid #:color     "yellow"
-                             #:damage    25
-                             #:fire-mode 'spread)))
+    (blaster-droid #:color     "yellow"
+                   #:damage    25
+                   #:fire-mode 'spread))
   
   (starwars-game
    #:weapon-list (list (b-droid)))
@@ -277,16 +260,12 @@
 
 (define-example-code battlearena-starwars blaster-droid-3
   (define (b-droid)
-    (custom-weapon 
-     #:name   "Blaster Droid" 
-     #:sprite (make-icon "BD")
-     #:dart   (blaster-droid #:color     "yellow"
-                             #:damage     15
-                             #:durability 25
-                             #:speed      10
-                             #:range      75
-                             #:fire-rate  5
-                             #:fire-mode  'homing)))
+    (blaster-droid #:color     "yellow"
+                   #:damage     15
+                   #:speed      10
+                   #:range      75
+                   #:fire-rate  5
+                   #:fire-mode  'homing))
   
   (starwars-game
    #:weapon-list (list (b-droid)))

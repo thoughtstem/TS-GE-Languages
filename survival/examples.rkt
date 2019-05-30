@@ -71,7 +71,7 @@
 
 (define-example-code survival coin-3
   (define (my-coin)
-    (custom-coin #:sprite          silver-coin-sprite
+    (custom-coin #:sprite          silvercoin-sprite
                  #:name            "Silver Coin"
                  #:value           500
                  #:amount-in-world 20))
@@ -83,11 +83,11 @@
 
 (define-example-code survival coin-4  
   (define (my-coin)
-    (custom-coin #:sprite silver-coin-sprite
+    (custom-coin #:sprite silvercoin-sprite
                  #:name   "Silver Coin"))
 
   (define (my-special-coin)
-    (custom-coin #:sprite          gold-coin-sprite
+    (custom-coin #:sprite          goldcoin-sprite
                  #:name            "Gold Coin"
                  #:value           1000
                  #:amount-in-world 1
@@ -101,13 +101,13 @@
 
 (define-example-code survival coin-5
   (define (silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
+    (custom-coin #:sprite silvercoin-sprite
                  #:name   "Silver Coin"
                  #:value  500
                  #:amount-in-world 5))
   
   (define (gold-coin)
-    (custom-coin #:sprite          gold-coin-sprite
+    (custom-coin #:sprite          goldcoin-sprite
                  #:name            "Gold Coin"
                  #:value           1000
                  #:amount-in-world 1
@@ -141,7 +141,7 @@
 (define-example-code survival crafter-3
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
-                 #:sprite fish-stew-sprite
+                 #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
 
@@ -157,7 +157,7 @@
 (define-example-code survival crafter-4  
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
-                 #:sprite fish-stew-sprite
+                 #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
 
@@ -183,7 +183,7 @@
   
   (survival-game
    #:crafter-list (list (custom-crafter
-                         #:sprite      wood-table-sprite
+                         #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
@@ -196,7 +196,7 @@
   (survival-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
-                         #:sprite      wood-table-sprite
+                         #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
@@ -212,7 +212,7 @@
    #:coin-list    (list (custom-coin #:value 20
                                      #:amount-in-world 10))
    #:crafter-list (list (custom-crafter
-                         #:sprite wood-table-sprite
+                         #:sprite woodtable-sprite
                          #:recipe-list (list my-fire-magic-recipe))))
   )
 
@@ -575,20 +575,20 @@
     (custom-avatar #:sprite wizard-sprite))
 
   (define (silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
+    (custom-coin #:sprite silvercoin-sprite
                  #:name "silver coin"
                  #:amount-in-world 6
                  #:value 20))
    
   (define (gold-coin)
-    (custom-coin #:sprite gold-coin-sprite
+    (custom-coin #:sprite goldcoin-sprite
                  #:name "gold coin"
                  #:amount-in-world 4
                  #:value 40))
 
 
   (define (toasted-marshmallow)
-    (custom-food #:sprite          toasted-marshmallow-sprite
+    (custom-food #:sprite          toastedmarshmallow-sprite
                  #:name            "toasted marshmallow"
                  #:heals-by        5
                  #:amount-in-world 5))
@@ -632,7 +632,7 @@
                  #:heals-by 50))
 
   (define (carrot-stew)
-    (custom-food #:sprite   carrot-stew-sprite
+    (custom-food #:sprite   carrotstew-sprite
                  #:name     "carrot-stew"
                  #:heals-by 60))
    

@@ -1895,7 +1895,7 @@
 
 (define (lava-pit #:name              [n "Lava Pit"]
                   #:icon              [i (make-icon "LP" 'crimson)]
-                  #:sprite            [s LAVA-SPRITE]
+                  #:sprite            [s lava-sprite]
                   #:size              [size 1]
                   #:damage            [dmg 10]
                   #:durability        [dur 10]
@@ -1926,7 +1926,7 @@
 
 (define (lava-builder-dart #:damage (damage 10)
                            #:size   (size 1)
-                           #:sprite (sprite LAVA-SPRITE)
+                           #:sprite (sprite lava-sprite)
                            #:range (range 5))
   
   (builder-dart #:entity (lava #:damage damage

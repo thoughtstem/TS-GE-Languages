@@ -40,11 +40,11 @@
 @defthing[cat-sprite animated-sprite?]
 @(sprite->sheet cat-sprite)
 
-@defthing[black-cat-sprite animated-sprite?]
-@(sprite->sheet black-cat-sprite)
+@defthing[blackcat-sprite animated-sprite?]
+@(sprite->sheet blackcat-sprite)
 
-@defthing[white-cat-sprite animated-sprite?]
-@(sprite->sheet white-cat-sprite)
+@defthing[whitecat-sprite animated-sprite?]
+@(sprite->sheet whitecat-sprite)
 
 @defthing[snake-sprite animated-sprite?]
 @(sprite->sheet snake-sprite)
@@ -60,11 +60,11 @@
 @defthing[carrot-sprite animated-sprite?]
 @(sprite->sheet carrot-sprite)
 
-@defthing[carrot-stew-sprite animated-sprite?]
-@(sprite->sheet carrot-stew-sprite)
+@defthing[carrotstew-sprite animated-sprite?]
+@(sprite->sheet carrotstew-sprite)
 
-@defthing[toasted-marshmallow-sprite animated-sprite?]
-@(sprite->sheet toasted-marshmallow-sprite)
+@defthing[toastedmarshmallow-sprite animated-sprite?]
+@(sprite->sheet toastedmarshmallow-sprite)
 
 @defthing[smores-sprite animated-sprite?]
 @(sprite->sheet smores-sprite)
@@ -72,11 +72,11 @@
 @defthing[fish-sprite animated-sprite?]
 @(sprite->sheet fish-sprite)
 
-@defthing[cooked-fish-sprite animated-sprite?]
-@(sprite->sheet cooked-fish-sprite)
+@defthing[cookedfish-sprite animated-sprite?]
+@(sprite->sheet cookedfish-sprite)
 
-@defthing[fish-stew-sprite animated-sprite?]
-@(sprite->sheet fish-stew-sprite)
+@defthing[fishstew-sprite animated-sprite?]
+@(sprite->sheet fishstew-sprite)
 
 @defthing[cherry-sprite animated-sprite?]
 @(sprite->sheet cherry-sprite)
@@ -84,14 +84,14 @@
 @defthing[steak-sprite animated-sprite?]
 @(sprite->sheet steak-sprite)
 
-@defthing[copper-coin-sprite animated-sprite?]
-@(sprite->sheet copper-coin-sprite)
+@defthing[coppercoin-sprite animated-sprite?]
+@(sprite->sheet coppercoin-sprite)
 
-@defthing[silver-coin-sprite animated-sprite?]
-@(sprite->sheet silver-coin-sprite)
+@defthing[silvercoin-sprite animated-sprite?]
+@(sprite->sheet silvercoin-sprite)
 
-@defthing[gold-coin-sprite animated-sprite?]
-@(sprite->sheet gold-coin-sprite)
+@defthing[goldcoin-sprite animated-sprite?]
+@(sprite->sheet goldcoin-sprite)
 
 @defthing[cauldron-sprite animated-sprite?]
 @(sprite->sheet cauldron-sprite)
@@ -99,8 +99,8 @@
 @defthing[campfire-sprite animated-sprite?]
 @(sprite->sheet campfire-sprite)
 
-@defthing[wood-table-sprite animated-sprite?]
-@(sprite->sheet wood-table-sprite)
+@defthing[woodtable-sprite animated-sprite?]
+@(sprite->sheet woodtable-sprite)
 
 @defthing[chest-sprite animated-sprite?]
 @(sprite->sheet chest-sprite)

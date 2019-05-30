@@ -53,7 +53,7 @@
 
 (define-example-code adventure coin-1
   (adventure-game
-   #:coin-list  (list (custom-coin #:sprite gold-coin-sprite
+   #:coin-list  (list (custom-coin #:sprite goldcoin-sprite
                                    #:value 100
                                    #:amount-in-world 20
                                    #:respawn? #f)))
@@ -61,17 +61,17 @@
 
 (define-example-code adventure coin-2
   (define (copper-coin)
-    (custom-coin #:sprite copper-coin-sprite
+    (custom-coin #:sprite coppercoin-sprite
                  #:name   "Copper Coin"
                  #:value  1))
 
   (define (silver-coin)
-    (custom-coin #:sprite silver-coin-sprite
+    (custom-coin #:sprite silvercoin-sprite
                  #:name   "Silver Coin"
                  #:value  25))
   
   (define (gold-coin)
-    (custom-coin #:sprite gold-coin-sprite
+    (custom-coin #:sprite goldcoin-sprite
                  #:name  "Gold Coin"
                  #:value  50))
 
@@ -84,7 +84,7 @@
 (define-example-code adventure coin-3
   (define (my-trick-coin)
     (custom-coin #:name "Gold Coin"
-                 #:sprite gold-coin-sprite
+                 #:sprite goldcoin-sprite
                  #:value -1000
                  #:amount-in-world 1
                  #:respawn? #f
@@ -98,11 +98,11 @@
 (define-example-code adventure coin-4
   (define (my-special-coin)
     (custom-coin #:name "Gold Coin"
-                 #:sprite gold-coin-sprite
+                 #:sprite goldcoin-sprite
                  #:value 1000
                  #:amount-in-world 1
                  #:respawn? #f
-                 #:on-pickup (spawn (page gold-coin-sprite
+                 #:on-pickup (spawn (page goldcoin-sprite
                                           "This looks valuable."))))
   
   (adventure-game
@@ -238,7 +238,7 @@
   
   (define fetch-quest-2
     (fetch-quest #:item (custom-item #:name "Buttons"
-                                     #:sprite white-cat-sprite)
+                                     #:sprite whitecat-sprite)
                  #:reward-amount 200))
 
   (adventure-game
@@ -417,7 +417,7 @@
 
 (define-example-code adventure enemy-3  
   (define (my-gold-coin)
-    (custom-coin #:sprite gold-coin-sprite
+    (custom-coin #:sprite goldcoin-sprite
                  #:value 20))
 
   (define (hard-enemy)
@@ -585,7 +585,7 @@
 (define-example-code adventure crafter-3
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
-                 #:sprite fish-stew-sprite
+                 #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
 
@@ -604,7 +604,7 @@
 (define-example-code adventure crafter-4  
   (define (fish-stew)
     (custom-food #:name "Fish Stew"
-                 #:sprite fish-stew-sprite
+                 #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
 
@@ -636,7 +636,7 @@
   (adventure-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
-                         #:sprite      wood-table-sprite
+                         #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
@@ -649,7 +649,7 @@
   (adventure-game
    #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
-                         #:sprite      wood-table-sprite
+                         #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
 
@@ -665,7 +665,7 @@
    #:coin-list    (list (custom-coin #:value 20
                                      #:amount-in-world 10))
    #:crafter-list (list (custom-crafter
-                         #:sprite wood-table-sprite
+                         #:sprite woodtable-sprite
                          #:recipe-list (list my-fire-magic-recipe))))
   )
 
@@ -754,7 +754,7 @@
 (define-example-code adventure food-4
   (define fish-stew
     (custom-food #:name "Fish Stew"
-                 #:sprite fish-stew-sprite
+                 #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
 
@@ -773,7 +773,7 @@
   
   (define carrot-stew
     (custom-food #:name "Carrot Stew"
-                 #:sprite carrot-stew-sprite))
+                 #:sprite carrotstew-sprite))
 
   (define my-carrot-stew-recipe
     (recipe #:product carrot-stew

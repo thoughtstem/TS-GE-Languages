@@ -1773,7 +1773,7 @@
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
 
-(define/contract/doc (custom-coin #:entity           [base-entity (copper-coin-entity)]
+(define/contract/doc (custom-coin #:entity           [base-entity (copper-coin)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
                                   #:name             [n #f]
@@ -2458,7 +2458,7 @@
                 #:respawn?         respawn?
                 #:components       (cons c custom-entities)))
 
-(define (carrot-stew #:sprite           [s carrot-stew-sprite]
+(define (carrot-stew #:sprite           [s carrotstew-sprite]
                      #:position         [p (posn 0 0)]
                      #:name             [n "Carrot Stew"]
                      #:tile             [t 0]
@@ -2491,7 +2491,7 @@
                      . custom-components)
   (define food-sets (list (list "Carrot" carrot-sprite 10)
                           (list "Fish"  fish-sprite 20)
-                          (list "Carrot Stew" carrot-stew-sprite 30)))
+                          (list "Carrot Stew" carrotstew-sprite 30)))
   (define choice (random (length food-sets)))
   (custom-food #:name     (first (list-ref food-sets choice))
                #:sprite   (second (list-ref food-sets choice))
@@ -2508,9 +2508,9 @@
                      #:respawn?        [respawn? #f]
                      #:components      [c #f]
                      . custom-components)
-  (define coin-sets (list (list "Copper Coin" copper-coin-sprite 1)
-                          (list "Silver Coin" silver-coin-sprite 10)
-                          (list "Gold Coin"   gold-coin-sprite   25)))
+  (define coin-sets (list (list "Copper Coin" coppercoin-sprite 1)
+                          (list "Silver Coin" silvercoin-sprite 10)
+                          (list "Gold Coin"   goldcoin-sprite   25)))
   (define choice (random (length coin-sets)))
   (custom-coin #:name     (first (list-ref coin-sets choice))
                #:sprite   (second (list-ref coin-sets choice))

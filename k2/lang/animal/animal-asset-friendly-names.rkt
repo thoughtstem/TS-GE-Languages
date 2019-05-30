@@ -76,7 +76,7 @@
   (define-assets-from "../../assets/animal")
   (define-assets-from "../../assets")
 
-  (provide blackcat-sprite
+  (provide ;blackcat-sprite
            blackdog-sprite
            blackhorse-sprite
            browncat-sprite
@@ -95,7 +95,7 @@
            rabbit-sprite
            sheep-sprite
            turkey-sprite
-           whitecat-sprite
+           ;whitecat-sprite
            whitedog-sprite
            whitehorse-sprite
            wolf-sprite
@@ -136,17 +136,18 @@
            strawberry-sprite
            tomato-sprite
 
-           coppercoin-sprite
-           silvercoin-sprite
-           goldcoin-sprite)
+           ;coppercoin-sprite
+           ;silvercoin-sprite
+           ;goldcoin-sprite
+           )
   
   ; == ANIMALS
-  (define blackcat-sprite
+#|  (define blackcat-sprite
     (sheet->sprite blackcat-sheet
                    #:rows 1
                    #:columns 3
                    #:row-number 1
-                   #:delay 5))
+                   #:delay 5)) |#
 
   (define blackdog-sprite
     (sheet->sprite blackdog-sheet
@@ -276,12 +277,12 @@
                    #:row-number 1
                    #:delay 5))
 
-  (define whitecat-sprite
+  #|(define whitecat-sprite
     (sheet->sprite whitecat-sheet
                    #:rows 1
                    #:columns 3
                    #:row-number 1
-                   #:delay 5))
+                   #:delay 5))|#
 
   (define whitedog-sprite
     (sheet->sprite whitedog-sheet
@@ -522,7 +523,7 @@
                    #:delay 5))
 
     ; == COINS
-  (define coppercoin-sprite
+#|  (define coppercoin-sprite
     (sheet->sprite coppercoin-sheet
                    #:rows 1
                    #:columns 8
@@ -541,6 +542,7 @@
                    #:rows 1
                    #:columns 8
                    #:row-number 1
-                   #:delay 2)))
+                   #:delay 2)) |#
+  )
 
 (require 'animal-sprites)

@@ -82,7 +82,7 @@
 (define-example-code battlearena-avengers alt/enemy-weapon-1
   (avengers-game
    #:villain-list (list (custom-villain
-                         #:power (custom-power
+                         #:power (energy-blast
                                    #:color 'yellow))))
   )
 
@@ -90,16 +90,15 @@
   (avengers-game
    #:villain-list (list (custom-villain
                          #:sprite mandarin-sprite
-                         #:power (custom-power
-                                   #:dart (ring-of-fire-dart)
+                         #:power (ring-of-fire
                                    #:color 'purple))))
   )
 
 (define-example-code battlearena-avengers alt/enemy-weapon-3
   (define (my-power)
-    (custom-power #:dart (ring-of-fire-dart #:damage 50
-                                            #:speed  10
-                                            #:duration  20)
+    (ring-of-fire #:damage 50
+                  #:speed  10
+                  #:duration  20
                   #:color 'purple))
   (avengers-game
    #:villain-list (list (custom-villain

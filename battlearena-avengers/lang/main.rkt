@@ -144,8 +144,8 @@
 
 (define/contract/doc (custom-power #:name              [n "Energy Blast"]
                                    #:sprite            [s chest-sprite]
-                                   #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
-                                   #:color             [c "blue"]
+                                   #:color             [c "green"]
+                                   #:dart-sprite       [ds (rectangle 10 2 "solid" c)]
                                    #:speed             [spd 10]
                                    #:damage            [dmg 10]
                                    #:range             [rng 10]

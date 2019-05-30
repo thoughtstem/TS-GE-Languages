@@ -13,6 +13,7 @@
                    [custom-avatar     custom-hero]
                    [custom-enemy      custom-villain]
                    [custom-weapon     custom-power]
+                   [repeater          energy-blast]
                    [custom-bg         custom-planet]
                    [#:avatar          #:hero]
                    [#:enemy-list      #:villain-list]
@@ -428,6 +429,7 @@
                (every-tick (scale-sprite 1.1))))
 
 (define (energy-blast
+         #:name              [n "Energy Blast"]
          #:color             [c "green"]
          #:sprite            [s (energy-blast-sprite c)]
          #:damage            [dmg 10]

@@ -22,17 +22,7 @@
   )
 
 (define-example-code battlearena-avengers alt/avatar-4
-  (define (my-hero)
-    (custom-hero #:sprite     starlord-sprite
-                 #:speed      20
-                 #:key-mode   'arrow-keys
-                 #:item-slots 5))
-  (avengers-game
-   #:hero (my-hero))
-  )
-
-(define-example-code battlearena-avengers alt/avatar-5
-  (define (my-hero)
+ (define (my-hero)
     (custom-hero #:sprite     drax-sprite
                  #:speed      25
                  #:item-slots 5

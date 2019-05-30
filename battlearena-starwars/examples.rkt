@@ -24,15 +24,6 @@
 
 (define-example-code battlearena-starwars alt/avatar-4
   (define (my-rebel)
-    (custom-rebel #:sprite     yoda-sprite
-                  #:speed      20
-                  #:item-slots 5))
-  (starwars-game
-   #:rebel (my-rebel))
-  )
-
-(define-example-code battlearena-starwars alt/avatar-5
-  (define (my-rebel)
     (custom-rebel #:sprite     obiwan-sprite
                   #:speed      20
                   #:item-slots 5

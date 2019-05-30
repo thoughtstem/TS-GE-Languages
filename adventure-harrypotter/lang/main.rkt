@@ -390,7 +390,7 @@
 ;-------------------
 
 (define/contract/doc (custom-currency #:name            [n "Knut"]
-                                      #:sprite          [s copper-coin-sprite]
+                                      #:sprite          [s coppercoin-sprite]
                                       #:position        [p #f]
                                       #:tile            [t #f]
                                       #:amount-in-world [world-amt 10]

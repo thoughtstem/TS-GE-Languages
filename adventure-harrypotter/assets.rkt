@@ -6,7 +6,7 @@
 (define-assets-from "assets")
 
 (provide harrypotter-sprite
-         potion-sprite
+         ;potion-sprite
          flyingbook-sprite
          pumpkin-sprite
          magiccauldron-sprite
@@ -24,12 +24,12 @@
                  #:row-number 1
                  #:delay 5))
 
-(define potion-sprite
+#|(define potion-sprite
   (sheet->sprite potion-sheet
                  #:rows 1
                  #:columns 1
                  #:row-number 1
-                 #:delay 5))
+                 #:delay 5))|#
 
 (define flyingbook-sprite
   (sheet->sprite flyingbook-sheet

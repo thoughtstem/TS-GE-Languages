@@ -223,9 +223,7 @@
   (define (ls-droid)
     (lightsaber-droid #:color      "orange"
                       #:damage     75 
-                      #:speed      10
                       #:durability 30
-                      #:range      50
                       #:fire-rate  2))
 
   (starwars-game

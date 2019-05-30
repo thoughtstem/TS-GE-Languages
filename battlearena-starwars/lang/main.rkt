@@ -132,8 +132,10 @@
 (define/contract/doc (lightsaber #:name              [n "Lightsaber"]
                                  #:icon              [i (make-icon "LS" "green")]
                                  #:color             [c "green"]
+                                 #:sprite            [s (lightsaber-sprite c)]
                                  #:damage            [dmg 25]
                                  #:durability        [dur 20]
+                                 #:duration          [rng 10]
                                  #:fire-mode         [fm 'normal]
                                  #:fire-rate         [fr 3]
                                  #:fire-key          [key 'f]
@@ -146,8 +148,10 @@
        (#:name        [name string?]
         #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
         #:damage      [dmg number?]
         #:durability  [dur number?]
+        #:duration    [rng number?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
@@ -163,8 +167,11 @@
          via the @racket[#:weapon-list] parameter.}
   
   (sword #:name              n
-         #:sprite            (lightsaber-sprite c)
+         #:sprite            s
          #:icon              i
+         #:damage            dmg
+         #:durability        dur
+         #:duration          rng
          #:fire-mode         fm
          #:fire-rate         fr
          #:fire-key          key
@@ -177,17 +184,19 @@
 ;; ----- BLASTER
 
 (define/contract/doc (blaster #:name              [n "Blaster"]
-                              #:icon              [s (make-icon "B" "red")]
+                              #:icon              [i (make-icon "B" "red")]
                               #:color             [c "green"]
+                              #:sprite            [s (blaster-dart-sprite c)]
                               #:damage            [dmg 10]
                               #:durability        [dur 20]
                               #:speed             [spd  5]
                               #:range             [rng 50]
-                              #:dart              [b (blaster-dart #:color      c
-                                                                   #:damage     dmg
-                                                                   #:durability dur
-                                                                   #:speed      spd
-                                                                   #:range      rng)]
+                              #:dart              [d (blaster-dart
+                                                      #:sprite    (blaster-dart-sprite c)
+                                                      #:damage     dmg
+                                                      #:durability dur
+                                                      #:speed      spd
+                                                      #:range      rng)]
                               #:fire-mode         [fm 'normal]
                               #:fire-rate         [fr 3]
                               #:fire-key          [key 'f]
@@ -198,8 +207,9 @@
                               #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite (or/c sprite? (listof sprite?))]
+        #:icon        [i (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:speed       [spd number?]
@@ -219,17 +229,17 @@
          automatically if it is passed into @racket[starwars-game]
          via the @racket[#:weapon-list] parameter.}
   
-  (custom-weapon #:name              n
-                 #:sprite            s
-                 #:dart              b
-                 #:fire-mode         fm
-                 #:fire-rate         fr
-                 #:fire-key          key
-                 #:fire-sound        fire-sound
-                 #:mouse-fire-button button
-                 #:point-to-mouse?   ptm?
-                 #:rapid-fire?       rf?
-                 #:rarity            rarity))
+  (repeater #:name              n
+            #:icon              i
+            #:sprite            s
+            #:fire-mode         fm
+            #:fire-rate         fr
+            #:fire-key          key
+            #:fire-sound        fire-sound
+            #:mouse-fire-button button
+            #:point-to-mouse?   ptm?
+            #:rapid-fire?       rf?
+            #:rarity            rarity))
 
 ;; ----- PLANET
 
@@ -332,16 +342,12 @@
                           #:sprite            [s (swinging-lightsaber-sprite c)]
                           #:damage            [dmg 50]
                           #:durability        [dur 20]
-                          #:speed             [spd 5]
-                          #:range             [rng 20]
                           #:fire-rate         [fr 0.5]
                           #:fire-sound        [fire-sound random-lightsaber-sound]
                           #:dart              [d (lightsaber-droid-dart #:color      c
                                                                         #:sprite     s
                                                                         #:damage     dmg
                                                                         #:durability dur
-                                                                        #:speed      spd
-                                                                        #:range      rng
                                                                         #:fire-rate  fr)]
                           #:fire-mode         [fm 'normal]
                           #:fire-key          [key 'f]
@@ -364,16 +370,12 @@
                                #:sprite     [s (swinging-lightsaber-sprite c)]
                                #:damage     [dmg 50]
                                #:durability [dur 20]
-                               #:speed      [spd 5]
-                               #:range      [rng 20]
                                #:fire-rate  [fire-rate 0.5])
   
   (builder-dart #:entity (droid #:weapon (lightsaber #:fire-rate fire-rate
                                                      #:color      c                       
                                                      #:damage     dmg
-                                                     #:durability dur
-                                                     #:speed      spd
-                                                     #:range      rng))))
+                                                     #:durability dur))))
 
 (define (blaster-droid #:name              [n "Blaster Droid"]
                        #:icon              [i (make-icon "BLD" 'lime)]

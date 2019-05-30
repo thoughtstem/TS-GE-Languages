@@ -244,10 +244,10 @@
                 #:components      (cons c custom-components)))
 
 ; ---------   Custom Stone
-(define/contract/doc (custom-stone #:type             [type (thunderstone)]
-                                   #:sprite           [s #f]
+(define/contract/doc (custom-stone #:type             [type (copper-coin-entity)]
+                                   #:sprite           [s thunderstone-sprite]
                                    #:position         [p #f]
-                                   #:name             [n #f]
+                                   #:name             [n "Thunder Stone"]
                                    #:tile             [t #f]
                                    #:amount-in-world  [world-amt 10]
                                    #:value            [val 1]

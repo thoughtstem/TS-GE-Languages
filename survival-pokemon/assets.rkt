@@ -27,18 +27,22 @@
          greenboy-sprite
          greengirl-sprite
 
-         dawnstone
-         duskstone
-         everstone
-         firestone
-         leafstone
-         moonstone
-         shinystone
-         sunstone
-         thunderstone
-         waterstone
-         
+         ;dawnstone
+         ;duskstone
+         ;everstone
+         ;firestone
+         ;leafstone
+         ;moonstone
+         ;shinystone
+         ;sunstone
+         ;thunderstone
+         ;waterstone
+
+         ;dawnstone-sprite
          )
+
+;(define dawnstone-sprite
+;  (new-sprite dawnstone-sheet))
 
 (define armoredmewtwo-sprite
   (sheet->sprite armoredmewtwo-sheet
@@ -168,7 +172,7 @@
                #:delay 5))
 
 ; ---- Stone Entities
-(define (dawnstone)
+#|(define (dawnstone)
   (sprite->entity (set-sprite-scale .5 (sheet->sprite dawnstone-sprite
                                                       #:columns 1))
                   #:position   (posn 0 0)
@@ -246,4 +250,4 @@
                   #:position   (posn 0 0)
                   #:name       "Water Stone"
                   #:components (active-on-bg (random 0 9))
-                               (physical-collider)))
+                               (physical-collider)))|#

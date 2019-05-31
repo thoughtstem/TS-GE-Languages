@@ -79,7 +79,8 @@
 
 (require ts-kata-util
          (only-in racket/draw make-font)
-         "../assets.rkt")
+         ;"../assets.rkt"
+         )
 
 (require game-engine
          game-engine-demos-common

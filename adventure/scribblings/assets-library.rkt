@@ -2,7 +2,8 @@
 
 @(require game-engine
           game-engine-demos-common
-          "../assets.rkt")
+          ;"../assets.rkt"
+          )
 
 @require[scribble/extract]
 
@@ -181,6 +182,3 @@
 @defthing[small-gray-rock entity?]
 @(draw-entity (small-gray-rock))
 
-
-@section{Sprite Sheets}
-@(include-extracted "../assets.rkt")

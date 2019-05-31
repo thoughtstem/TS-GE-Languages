@@ -148,8 +148,7 @@
 
 (define-example-code battlearena-starwars lightsaber-2
   (define (my-lightsaber)
-    (lightsaber #:name   "Flashy"
-                #:icon   (make-icon "F" "blue")
+    (lightsaber #:icon   (make-icon "F" "blue")
                 #:rarity 'rare))
   
   (starwars-game
@@ -179,7 +178,6 @@
 (define-example-code battlearena-starwars blaster-2
   (define (my-blaster)
     (blaster
-     #:name   "Blasty"
      #:icon   (make-icon "B" "orange")
      #:rarity 'legendary))
   
@@ -189,8 +187,7 @@
 
 (define-example-code battlearena-starwars blaster-3
   (define (my-blaster)
-    (blaster  #:name       "Blasty"
-              #:rarity     'legendary
+    (blaster  #:rarity     'legendary
               #:icon       (make-icon "B" "orange")
               #:color      "orange"
               #:damage     20

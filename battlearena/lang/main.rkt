@@ -31,9 +31,10 @@
          ring-of-blades
          paint-thrower
          sword-magic
-         
+
+         ;; DONT COMMENT IN -- ASK JASON WHY
          ;spear-dart
-         sword-dart
+         ;sword-dart
          ;paint-dart
          ;flying-dagger-dart
          ;ring-of-fire-dart

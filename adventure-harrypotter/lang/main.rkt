@@ -327,7 +327,7 @@
 
 ; -----------
 (define/contract (colorize-sprite color-name sprite)
-  (-> (or/c string? symbol?) animated-sprite? animated-sprite?)
+  (-> (or/c string? symbol?) (or/c image? animated-sprite?) animated-sprite?)
   (define c-hsb (name->color-hsb color-name))
   (define h (color-hsb-hue c-hsb))
   (apply-image-function (curry set-img-hue h)

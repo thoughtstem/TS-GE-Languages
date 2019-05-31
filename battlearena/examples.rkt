@@ -225,6 +225,7 @@
 
 (define-example-code battlearena boost-1
   (battlearena-game
+   #:weapon-list (list (repeater))
    #:item-list (list (custom-item #:name   "Damage Boost"
                                   #:icon (make-icon "DB" 'orangered)
                                   #:on-use (change-damage-by 1000 #:for 200))))
@@ -281,27 +282,27 @@
 (define-example-code battlearena size-1
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Grow Powerup"
+   #:item-list (list (custom-item #:name   "Grow Power-up"
                                   #:icon (make-icon "BIG" 'red 'white)
                                   #:on-use (scale-sprite 2 #:for 100)))))
 
 (define-example-code battlearena size-2
 
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Shrink Powerup"
+   #:item-list (list (custom-item #:name   "Shrink Power-up"
                                   #:icon (make-icon "SML" 'blue 'white)
                                   #:on-use (scale-sprite 0.5 #:for 100)))))
 
 (define-example-code battlearena size-3
 
   (define (grow-powerup)
-    (custom-item #:name   "Grow Powerup"
+    (custom-item #:name   "Grow Power-up"
                  #:icon (make-icon "BIG" 'red 'white)
                  #:on-use (scale-sprite 2 #:for 100)
                  #:rarity 'common))
 
   (define (shrink-powerup)
-    (custom-item #:name     "Shrink Powerup"
+    (custom-item #:name     "Shrink Power-up"
                  #:icon   (make-icon "SML" 'blue 'white)
                  #:on-use   (scale-sprite 0.5 #:for 100)
                  #:rarity   'rare))
@@ -315,7 +316,7 @@
 (define-example-code battlearena health-1
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Health Powerup"
+   #:item-list (list (custom-item #:name   "Health Power-up"
                                   #:icon (make-icon "HP" 'green 'white)
                                   #:on-use (change-health-by 50)
                                   #:respawn? #t))))
@@ -325,7 +326,7 @@
 (define-example-code battlearena health-2
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Max Health Powerup"
+   #:item-list (list (custom-item #:name   "Max Health Power-up"
                                   #:icon (make-icon "MHP" 'green 'white)
                                   #:on-use (set-health-to 100)
                                   #:rarity 'epic))))
@@ -335,12 +336,12 @@
 (define-example-code battlearena health-3
 
   (define (health-powerup)
-    (custom-item #:name     "Health Powerup"
+    (custom-item #:name     "Health Power-up"
                  #:icon   (make-icon "HP")
                  #:on-use   (change-health-by 50)))
   
   (define (max-health-powerup)
-    (custom-item #:name   "Max Health Powerup"
+    (custom-item #:name   "Max Health Power-up"
                  #:icon (make-icon "MHP")
                  #:on-use (set-health-to 100)))
   
@@ -750,7 +751,7 @@
 
 (define-example-code battlearena shield-1
   (battlearena-game
-   #:item-list (list (custom-item #:name     "Shield Powerup" 
+   #:item-list (list (custom-item #:name     "Shield Power-up" 
                                   #:icon   (make-icon "SP" 'blue 'white)
                                   #:on-use   (change-shield-by 50))))
   )
@@ -761,7 +762,7 @@
 
 (define-example-code battlearena shield-2
   (battlearena-game
-   #:item-list (list (custom-item #:name     "Max Shield Powerup"
+   #:item-list (list (custom-item #:name     "Max Shield Power-up"
                                   #:icon   (make-icon "MSP" 'blue 'white)
                                   #:on-use   (set-shield-to 100))))
   )
@@ -773,14 +774,14 @@
 (define-example-code battlearena shield-3
 
   (define (shield-powerup)
-    (custom-item #:name     "Shield Powerup" 
+    (custom-item #:name     "Shield Power-up" 
                  #:icon   (make-icon "SP" 'blue 'white)
                  #:on-use   (change-shield-by 50)
                  #:rarity   'uncommon
                  #:respawn? #t))
 
   (define (max-shield)
-    (custom-item #:name     "Max Shield Powerup"
+    (custom-item #:name     "Max Shield Power-up"
                  #:icon   (make-icon "MSP" 'blue 'white)
                  #:on-use   (set-shield-to 100)
                  #:rarity   'epic))

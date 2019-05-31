@@ -13,11 +13,8 @@
   )
                                        
 (define-example-code survival avatar-2
-  (define (my-avatar)
-    (custom-avatar #:sprite wizard-sprite))
-
   (survival-game
-   #:avatar (my-avatar))
+   #:avatar (custom-avatar #:sprite wizard-sprite))
   )
 
 (define-example-code survival avatar-3
@@ -56,7 +53,6 @@
 
 (define-example-code survival coin-1
   (survival-game
-   #:avatar     (custom-avatar)
    #:coin-list  (list (custom-coin)))
   )
 
@@ -65,7 +61,6 @@
     (custom-coin #:value 500))
  
   (survival-game
-   #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)))
   )
 
@@ -73,11 +68,10 @@
   (define (my-coin)
     (custom-coin #:sprite          silvercoin-sprite
                  #:name            "Silver Coin"
-                 #:value           500
+                 #:value           100
                  #:amount-in-world 20))
 
   (survival-game
-   #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)))
   )
 
@@ -94,7 +88,6 @@
                  #:respawn?        #f))
 
   (survival-game
-   #:avatar     (custom-avatar)
    #:coin-list  (list (my-coin)
                       (my-special-coin)))
   )
@@ -114,7 +107,6 @@
                  #:respawn?        #f))
 
   (survival-game
-   #:avatar     (custom-avatar)
    #:coin-list  (list (custom-coin)
                       (silver-coin)
                       (gold-coin)))
@@ -124,7 +116,6 @@
 
 (define-example-code survival crafter-1
   (survival-game
-   #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
                                         #:position    (posn 200 200)
                                         #:tile        2)))
@@ -150,7 +141,7 @@
             #:ingredients (list "Fish")))
 
   (survival-game
-   #:food-list    (list (fish #:amount-in-world 10))
+   #:food-list    (list (fish))
    #:crafter-list (list (custom-crafter #:recipe-list (list fish-stew-recipe))))
   )
 
@@ -191,10 +182,9 @@
   (define my-sword-recipe
     (recipe #:product (sword #:name "Heavy Sword"
                              #:damage 100)
-            #:build-time 40))
+            #:build-time 100))
   
   (survival-game
-   #:avatar       (custom-avatar)
    #:crafter-list (list (custom-crafter
                          #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
@@ -202,15 +192,12 @@
 
 (define-example-code survival weapon-crafter-3
   (define my-fire-magic-recipe
-    (recipe #:product (fire-magic  #:name "Fire Magic"
-                                   #:speed 5)
-            #:build-time 60
+    (recipe #:product (fire-magic #:speed 7)
+            #:build-time 40
             #:cost       100))
   
   (survival-game
-   #:avatar       (custom-avatar)
-   #:coin-list    (list (custom-coin #:value 20
-                                     #:amount-in-world 10))
+   #:coin-list    (list (custom-coin))
    #:crafter-list (list (custom-crafter
                          #:sprite woodtable-sprite
                          #:recipe-list (list my-fire-magic-recipe))))
@@ -220,20 +207,17 @@
 
 (define-example-code survival sky-1 
   (survival-game
-   #:avatar (custom-avatar)
    #:sky    (custom-sky #:length-of-day 5000))
   )
 
 (define-example-code survival sky-2 
   (survival-game
-   #:avatar (custom-avatar)
    #:sky    (custom-sky #:length-of-day 500
                         #:max-darkness  255))
   )
 
 (define-example-code survival sky-3 
   (survival-game
-   #:avatar (custom-avatar)
    #:sky (custom-sky #:night-sky-color  'darkmagenta
                      #:max-darkness     150))
   )
@@ -241,7 +225,6 @@
 (define-example-code survival sky-4 
 
   (survival-game
-   #:avatar       (custom-avatar)
    #:enemy-list   (list (custom-enemy #:amount-in-world 20
                                       #:night-only? #t))
    #:sky          (custom-sky #:length-of-day    2400
@@ -253,13 +236,11 @@
 
 (define-example-code survival enemy-1
   (survival-game
-   #:avatar     (custom-avatar)
    #:enemy-list (list (custom-enemy)))
   )
 
 (define-example-code survival enemy-2
   (survival-game
-   #:avatar     (custom-avatar)
    #:enemy-list (list (custom-enemy #:amount-in-world 10)))
   )
 
@@ -270,7 +251,6 @@
                   #:amount-in-world 5))
  
   (survival-game
-   #:avatar     (custom-avatar)
    #:enemy-list (list (my-enemy))))
 
 (define-example-code survival enemy-4
@@ -286,7 +266,6 @@
                   #:night-only? #t))
  
   (survival-game
-   #:avatar     (custom-avatar)
    #:enemy-list (list (easy-enemy)
                       (medium-enemy))))
 
@@ -298,7 +277,6 @@
                   #:weapon          (acid-spitter #:damage 50)))
  
   (survival-game
-   #:avatar       (custom-avatar)
    #:enemy-list   (list (hard-enemy)))
   )
 
@@ -322,7 +300,6 @@
                   #:weapon          (acid-spitter #:damage 50)))
  
   (survival-game
-   #:avatar       (custom-avatar)
    #:enemy-list   (list (easy-enemy)
                         (medium-enemy)
                         (hard-enemy)))
@@ -332,7 +309,6 @@
 
 (define-example-code survival food-1
   (survival-game
-   #:avatar     (custom-avatar)
    #:food-list  (list (custom-food #:amount-in-world 10)))
   )
 
@@ -342,7 +318,6 @@
                  #:heals-by        20))
  
   (survival-game
-   #:avatar     (custom-avatar)
    #:food-list  (list (my-food)))
   )
 
@@ -355,7 +330,6 @@
                  #:heals-by        20))
 
   (survival-game
-   #:avatar     (custom-avatar)
    #:food-list  (list (my-food)))
   )
 
@@ -364,8 +338,8 @@
   (define (my-food)
     (custom-food #:sprite          apples-sprite
                  #:name            "Apples"
-                 #:amount-in-world 2
-                 #:heals-by        20))
+                 #:amount-in-world 15
+                 #:heals-by        5))
 
   (define (special-food)
     (custom-food #:sprite          cherry-sprite
@@ -375,7 +349,6 @@
                  #:respawn?        #f))
 
   (survival-game
-   #:avatar     (custom-avatar)
    #:food-list  (list (my-food)
                       (special-food))))
 
@@ -387,7 +360,6 @@
                  #:heals-by        50))
   
   (survival-game
-   #:avatar          (custom-avatar)
    #:food-list       (list (my-food))
    #:starvation-rate 100)
   )
@@ -396,23 +368,22 @@
   (define (basic-cherry)
     (custom-food #:sprite          cherry-sprite
                  #:name            "Cherries"
-                 #:amount-in-world 10))
+                 #:amount-in-world 15))
 
   (define (basic-smores)
     (custom-food #:sprite          smores-sprite
-                 #:name            "Smore"
-                 #:heals-by        -10
-                 #:amount-in-world 5))
+                 #:name            "Smores"
+                 #:heals-by        -10))
 
   (define (special-carrot)
     (custom-food #:sprite   carrot-sprite
                  #:name     "Carrots"
                  #:tile     4
+                 #:amount-in-world 1
                  #:heals-by 50
                  #:respawn? #f))
   
   (survival-game
-   #:avatar          (custom-avatar)
    #:food-list       (list (basic-cherry)
                            (basic-smores)
                            (special-carrot)))
@@ -421,7 +392,6 @@
 
 (define-example-code survival npc-1
   (survival-game
-   #:avatar   (custom-avatar)
    #:npc-list (list (custom-npc)))
   )
 
@@ -433,11 +403,20 @@
      #:name   "Witch"))
 
   (survival-game
-   #:avatar   (custom-avatar)
    #:npc-list (list (my-npc)))
   )
 
 (define-example-code survival npc-3
+  (define (my-npc)
+    (custom-npc
+     #:dialog (list "Woah, who are you??"
+                    "Nevermind -- I'm too busy."
+                    "Move along, now!")))
+  (survival-game
+   #:npc-list (list (my-npc)))
+  )
+
+(define-example-code survival npc-4
   (define (my-npc)
     (custom-npc
      #:sprite witch-sprite
@@ -446,18 +425,6 @@
      #:mode   'follow))
 
   (survival-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (my-npc)))
-  )
-
-(define-example-code survival npc-4
-  (define (my-npc)
-    (custom-npc
-     #:dialog (list "Woah, who are you??"
-                    "Nevermind -- I'm too busy."
-                    "Move along, now!")))
-  (survival-game
-   #:avatar   (custom-avatar)
    #:npc-list (list (my-npc)))
   )
 
@@ -478,7 +445,6 @@
                     "Oh, I think I see it!")))
 
   (survival-game
-   #:avatar   (custom-avatar)
    #:npc-list (list (my-npc) (another-npc)))
   )
 
@@ -486,13 +452,11 @@
 
 (define-example-code survival bg-1
   (survival-game
-   #:avatar (custom-avatar)
    #:bg (custom-bg))
   )
 
 (define-example-code survival bg-2
   (survival-game
-   #:avatar (custom-avatar)
    #:bg (custom-bg #:image DESERT-BG))
   )
 
@@ -504,7 +468,6 @@
      #:columns 2))
 
   (survival-game
-   #:avatar (custom-avatar)
    #:bg (my-bg))
   )
 

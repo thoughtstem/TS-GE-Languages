@@ -10,11 +10,8 @@
 ;=================================
 
 (define-example-code survival-pokemon alt/avatar-2
-  (define (my-pokemon)
-    (custom-pokemon #:sprite bulbasaur-sprite))
-  
   (pokemon-game
-   #:pokemon (my-pokemon))
+   #:pokemon (custom-pokemon #:sprite bulbasaur-sprite))
   )
 
 (define-example-code survival-pokemon alt/avatar-3
@@ -55,19 +52,17 @@
     (custom-stone #:value 500))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:stone-list (list (my-stone)))
   )
 
 (define-example-code survival-pokemon alt/coin-3
   (define (my-stone)
-    (custom-stone #:sprite moonstone-sprite
-                  #:name   "Moon Stone"
-                  #:value  500
+    (custom-stone #:sprite leafstone-sprite
+                  #:name   "Leaf Stone"
+                  #:value  100
                   #:amount-in-world 20))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:stone-list (list (my-stone)))
 
   )
@@ -85,11 +80,31 @@
                   #:respawn? #f))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:stone-list (list (my-stone)
                       (my-special-stone)))
 
   )
+
+(define-example-code survival-pokemon alt/coin-5
+  (define (thunder-stone)
+    (custom-coin #:sprite thunderstone-sprite
+                 #:name   "Thunder Stone"
+                 #:value  500
+                 #:amount-in-world 5))
+  
+  (define (sun-stone)
+    (custom-coin #:sprite          sunstone-sprite
+                 #:name            "Sun Stone"
+                 #:value           1000
+                 #:amount-in-world 1
+                 #:respawn?        #f))
+
+  (survival-game
+   #:coin-list  (list (custom-stone)
+                      (thunder-stone)
+                      (sun-stone)))
+  )
+
 
 ;=================================
 
@@ -100,7 +115,6 @@
                     #:amount-in-world 5))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:trainer-list (list (my-trainer)))
   )
 
@@ -112,26 +126,24 @@
                     #:weapon (pokeball #:damage 50)))
   
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:trainer-list (list (hard-trainer)))
   )
 
 (define-example-code survival-pokemon alt/enemy-5
   (define (easy-trainer)
-    (custom-trainer #:ai 'easy
+    (custom-trainer #:ai 'medium
                     #:sprite greenboy-sprite
                     #:amount-in-world 5))
  
-  (define (medium-trainer)
-    (custom-trainer #:ai 'medium
-                    #:sprite greengirl-sprite
+  (define (hard-trainer)
+    (custom-trainer #:ai 'hard
+                    #:sprite jessie-sprite
                     #:amount-in-world 5
                     #:night-only? #t))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:trainer-list (list (easy-trainer)
-                        (medium-trainer)))
+                        (hard-trainer)))
   )
 
 (define-example-code survival-pokemon alt/enemy-6
@@ -153,7 +165,6 @@
                     #:weapon          (pokeball #:damage 50)))
   
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:trainer-list (list (easy-trainer)
                         (medium-trainer)
                         (hard-trainer)))
@@ -167,7 +178,6 @@
                    #:name "Torty"))
   
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:friend-list (list (my-friend)))
   )
 
@@ -179,7 +189,6 @@
                               "Move along, now!")))
   
 (pokemon-game
-  #:pokemon (custom-pokemon)
   #:friend-list (list (my-friend)))
   )
 
@@ -191,7 +200,6 @@
                    #:mode 'follow))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:friend-list (list (my-friend)))
   )
 
@@ -211,7 +219,6 @@
                              "Have you seen a leaf stone?")))
  
   (pokemon-game
-   #:pokemon (custom-pokemon)
    #:friend-list (list (my-friend)
                        (another-friend)))
   )
@@ -226,10 +233,24 @@
             #:build-time 20))
   
   (pokemon-game
-   #:pokemon      (custom-pokemon)
    #:crafter-list (list (custom-crafter
                          #:recipe-list (list my-attack-recipe))))
   )
+
+;======================================
+
+(define-example-code survival-pokemon alt/bg-3
+  (define (my-town)
+    (custom-town
+     #:image LAVA-BG
+     #:rows 2
+     #:columns 2))
+
+  (pokemon-game
+   #:town-bg (my-town))
+  )
+
+;====================================================
 
 
 

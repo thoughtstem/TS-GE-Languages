@@ -990,8 +990,8 @@
          
   (define total-enemies (get-total-by-amount-in-world e-list))
 
-  (define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
-  (define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+  (define score-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern))
+  (define bold-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern #:weight 'bold))
    
 
   (define (enemy-counter-entity prefix)

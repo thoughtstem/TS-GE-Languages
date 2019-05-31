@@ -448,8 +448,8 @@
                    (spawn (player-toast-entity (~a "+" heal-amount) #:color "green"))))
       #f))
 
-(define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
-(define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+(define score-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern))
+(define bold-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern #:weight 'bold))
 
 (register-fonts! bold-font)
 

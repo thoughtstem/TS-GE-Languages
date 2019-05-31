@@ -3,7 +3,7 @@
 (require ts-kata-util/assets/main
          game-engine)
 
-(define-assets-from "assets")
+;(define-assets-from "assets")
 
 #|(provide witch-sprite
          darkelf-sprite

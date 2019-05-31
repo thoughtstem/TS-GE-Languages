@@ -1,7 +1,7 @@
 #lang racket
 (provide
  (all-from-out "./lang/main.rkt")
- (all-from-out "./assets.rkt")
+ ;(all-from-out "./assets.rkt")
  (all-from-out game-engine)
  (all-from-out game-engine-demos-common)
  (all-from-out 2htdp/image)
@@ -9,7 +9,7 @@
  #%module-begin)
 
 (require "./lang/main.rkt"
-         "./assets.rkt"
+         ;"./assets.rkt"
          )
 (require game-engine)
 (require game-engine-demos-common)

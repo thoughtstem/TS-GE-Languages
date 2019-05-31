@@ -5,12 +5,12 @@
 
 (define-assets-from "assets")
 
-(provide witch-sprite
-         darkelf-sprite
-         lightelf-sprite
-         madscientist-sprite
-         monk-sprite
-         wizard-sprite
+(provide ;witch-sprite
+         ;darkelf-sprite
+         ;lightelf-sprite
+         ;madscientist-sprite
+         ;monk-sprite
+         ;wizard-sprite
          caitsith-sprite
          darkknight-sprite
          kavi-sprite
@@ -20,12 +20,12 @@
          pirategirl-sprite
          steampunkboy-sprite
          steampunkgirl-sprite
-         mystery-sprite
+         ;mystery-sprite
          )
 
 ;===== ASSETS ========
 
-(define witch-sprite
+#|(define witch-sprite
   (sheet->sprite witch-sheet
                  #:columns 4
                  #:rows 4
@@ -65,7 +65,7 @@
                  #:columns 4
                  #:rows 4
                  #:row-number 3
-                 #:delay 2))
+                 #:delay 2))|#
 
 (define caitsith-sprite
   (sheet->sprite caitsith-sheet
@@ -130,7 +130,7 @@
                  #:row-number 3
                  #:delay 2))
 
-(define mystery-sprite
+#|(define mystery-sprite
   (row->sprite mystery-sheet
                  #:columns 4
                  #:delay 2))
@@ -140,4 +140,4 @@
                  #:columns 4
                  #:rows 4
                  #:row-number 3
-                 #:delay 2))
+                 #:delay 2))|#

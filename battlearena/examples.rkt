@@ -102,7 +102,7 @@
     (custom-enemy #:ai              'medium
                   #:sprite          darkknight-sprite
                   #:health          200
-                  #:amount-in-world 5))
+                  #:amount-in-world 3))
  
   (battlearena-game
    #:enemy-list (list (easy-enemy)

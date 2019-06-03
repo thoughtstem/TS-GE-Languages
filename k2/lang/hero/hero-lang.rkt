@@ -99,19 +99,19 @@
 (define (make-item name)
   (cond
     [(eq? "Health" name) (a:custom-item #:name "Health Powerup"
-                                        #:sprite (a:make-icon "HP" 'green 'white)
+                                        #:icon (a:make-icon "HP" 'green 'white)
                                         #:on-use (a:change-health-by 50))]
     [(eq? "Grow" name) (a:custom-item #:name "Grow Powerup"
-                                      #:sprite (a:make-icon "BIG" 'red 'white)
+                                      #:icon (a:make-icon "BIG" 'red 'white)
                                       #:on-use (a:scale-sprite 2 #:for 100))]
     [(eq? "Shrink" name) (a:custom-item #:name "Shrink Powerup"
-                                        #:sprite (a:make-icon "SML" 'blue 'white)
+                                        #:icon (a:make-icon "SML" 'blue 'white)
                                         #:on-use (a:scale-sprite 0.5 #:for 100))]
     [(eq? "Speed" name) (a:custom-item #:name "Speed Boost"
-                                       #:sprite (a:make-icon "SB" 'yellow)
+                                       #:icon (a:make-icon "SB" 'yellow)
                                        #:on-use (a:multiply-speed-by 2 #:for 200))]
     [(eq? "Force Field" name) (a:custom-item #:name "Force Field"
-                                       #:sprite (a:make-icon "FF")
+                                       #:icon (a:make-icon "FF")
                                        #:on-use (a:spawn (a:force-field #:duration 1000)))]
     ))  
 
@@ -137,19 +137,18 @@
        (define p-ups
          (list (app make-item power-ups) ...))
        
-       (launch-for-ratchet
-        (a:avengers-game #:planet (a:custom-planet #:rows 2
-                                                   #:columns 2)
-                         #:hero hero 
-                         #:villain-list villains
-                         #:item-list p-ups))
+       (a:avengers-game #:planet (a:custom-planet #:rows 2
+                                                  #:columns 2)
+                        #:hero hero 
+                        #:villain-list villains
+                        #:item-list p-ups)
        )]
     [(start)                     (start a:mystery-sprite () ())]
     [(start hero)                (start hero () ())]
     [(start hero (villains ...)) (start hero (villains ...) ())]
-    
+
     ))
-    
-    
+
+
 
 

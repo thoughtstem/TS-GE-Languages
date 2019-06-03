@@ -550,7 +550,7 @@
                  #:new-response-dialog (list "Thanks again!")))
 
   (adventure-game
-   #:avatar (basic-avatar #:components player-dialog-with-charlie)
+   #:avatar (basic-avatar)
    #:npc-list (list (basic-npc  #:name "Charlie"
                                 #:dialog (list "Can you find my spear?")
                                 #:quest-list (list spear-quest))))

@@ -2,7 +2,7 @@
 
 (require ts-kata-util
          "./lang/main.rkt"
-         (except-in adventure-mario custom-npc custom-enemy))
+         (except-in adventure-mario basic-npc basic-enemy))
 
 (define-example-code/from* adventure/examples)
 
@@ -10,7 +10,7 @@
 
 (define-example-code adventure-mario alt/avatar-1
   (mario-game
-   #:character (custom-character
+   #:character (basic-character
                 #:sprite mario-sprite
                 #:speed  20))
   )
@@ -18,7 +18,7 @@
 
 (define-example-code adventure-mario alt/avatar-2
   (define (my-character)
-    (custom-character
+    (basic-character
      #:sprite luigi-sprite
      #:speed  20
      #:health 200
@@ -30,10 +30,10 @@
 
 (define-example-code adventure-mario alt/avatar-3
   (mario-game
-   #:character (custom-character
+   #:character (basic-character
                 #:sprite princesspeach-sprite
                 #:speed  20)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (basic-cutscene
                      (page princesspeach-sprite
                            "This is the story of"
                            "Princess Peach.")))
@@ -41,9 +41,9 @@
 
 (define-example-code adventure-mario alt/avatar-4
   (mario-game
-   #:character (custom-character
+   #:character (basic-character
                 #:sprite toad-sprite)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (basic-cutscene
                      (page "A long time ago,"
                            "In a magical place.")
                      (page toad-sprite
@@ -55,7 +55,7 @@
 
 (define-example-code adventure-mario alt/level-design-3
   (mario-game
-   #:level           (custom-level
+   #:level           (basic-level
                       #:image FOREST-BG
                       #:hd? #t)
    #:other-entities (make-world-objects fence
@@ -66,11 +66,11 @@
 (define-example-code adventure-mario alt/level-design-4
 
   (mario-game
-   #:character (custom-character
+   #:character (basic-character
                 #:sprite bigmario1-sprite)
-   #:level          (custom-level
+   #:level          (basic-level
                      #:image DESERT-BG)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (basic-cutscene
                      (page "Once upon a time"
                            "There was a lone plumber")
                      (page bigmario1-sprite
@@ -93,13 +93,13 @@
 
 (define-example-code adventure-mario alt/fetch-quest-1
   (define lost-yoshi
-    (custom-npc
+    (basic-npc
      #:name "Yoshi"
      #:sprite yoshi1-sprite))
   
   (mario-game
    #:npc-list (list
-               (custom-npc
+               (basic-npc
                 #:dialog (list
                           "Please help me find Yoshi!")
                 #:quest-list (list
@@ -109,18 +109,18 @@
 
 (define-example-code adventure-mario alt/fetch-quest-2
   (define lost-cheep
-    (custom-npc
+    (basic-npc
      #:sprite cheep3-sprite))
 
   (define my-cutscene
-    (custom-cutscene
+    (basic-cutscene
      (page
       cheep3-sprite
       "Happy to be home!")))
   
   (mario-game
    #:npc-list (list
-               (custom-npc
+               (basic-npc
                      #:dialog (list
                                "Please help me find my cheep!")
                      #:quest-list (list
@@ -132,20 +132,20 @@
 (define-example-code adventure-mario alt/fetch-quest-3  
   (define fetch-quest-1
     (fetch-quest
-     #:item (custom-item
+     #:item (basic-item
              #:name "Red Mushroom"
              #:sprite redmushroom-sprite)))
   
   (define fetch-quest-2
     (fetch-quest
-     #:item (custom-item
+     #:item (basic-item
              #:name "Green Mushroom"
              #:sprite greenmushroom-sprite)
      #:reward-amount 500))
 
   (mario-game
    #:npc-list (list
-               (custom-npc
+               (basic-npc
                 #:dialog (list "Can you help me?"
                                "I dropped my mushrooms?")
                 #:quest-list (list fetch-quest-1
@@ -154,14 +154,14 @@
 
 (define-example-code adventure-mario alt/fetch-quest-4  
   (define my-fetch-quest
-    (fetch-quest #:item (custom-item
+    (fetch-quest #:item (basic-item
                          #:sprite goomba1-sprite)
                  #:quest-complete-dialog (list "Thank you!")
                  #:new-response-dialog   (list "Thanks again!")
                  #:reward-amount 400 ))
 
   (mario-game
-   #:npc-list (list (custom-npc
+   #:npc-list (list (basic-npc
                      #:dialog (list "Can you help me?"
                                     "I can't find Goomba")
                      #:quest-list (list my-fetch-quest))))
@@ -169,7 +169,7 @@
 
 (define-example-code adventure-mario alt/fetch-quest-5  
   (define my-quest-item
-    (custom-item
+    (basic-item
      #:sprite  spiny3-sprite
      #:on-store (spawn
                  (page spiny3-sprite
@@ -182,7 +182,7 @@
 
   (mario-game
    #:npc-list (list
-               (custom-npc
+               (basic-npc
                 #:name       "Lakitu"
                 #:sprite     lakitu3-sprite
                 #:dialog     (list "Can you help me find my pet?")
@@ -195,17 +195,17 @@
 
 (define-example-code adventure-mario alt/enemy-2
   (define (easy-enemy)
-    (custom-enemy #:ai              'easy
+    (basic-enemy #:ai              'easy
                   #:sprite          goomba1-sprite
                   #:amount-in-world 4))
   
   (define (medium-enemy)
-    (custom-enemy #:ai              'medium
+    (basic-enemy #:ai              'medium
                   #:sprite          piranha2-sprite
                   #:amount-in-world 2))
 
   (define (hard-enemy)
-    (custom-enemy #:ai          'hard
+    (basic-enemy #:ai          'hard
                   #:sprite      bowser3-sprite
                   #:night-only? #t))
  
@@ -217,7 +217,7 @@
 
 (define-example-code adventure-mario alt/enemy-4
   (define (hard-enemy)
-    (custom-enemy #:amount-in-world 3
+    (basic-enemy #:amount-in-world 3
                   #:ai 'hard
                   #:weapon (fireball)))
 
@@ -227,9 +227,9 @@
      (render princesspeach-sprite)))
                                            
   (mario-game
-   #:character          (custom-character
+   #:character          (basic-character
                          #:sprite princesspeach-sprite)
-   #:game-over-cutscene (custom-cutscene (page game-over-sprite
+   #:game-over-cutscene (basic-cutscene (page game-over-sprite
                                                "You died!"))
    #:power-list (list (spear))
    #:enemy-list  (list (hard-enemy)))

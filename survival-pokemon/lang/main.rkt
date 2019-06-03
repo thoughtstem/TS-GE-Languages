@@ -1,27 +1,26 @@
  #lang at-exp racket
 
 (require scribble/srcdoc)
-(require (for-doc racket/base scribble/manual ))
+(require (for-doc racket/base scribble/manual))
 
 (require ts-kata-util
          "../assets.rkt"
          survival)
 
 (language-mappings survival          survival-pokemon
-                   [custom-bg        custom-town]
-                   [custom-avatar    custom-pokemon]
-                   [custom-npc       custom-friend]
-                   [custom-enemy     custom-trainer]
-                   [custom-coin      custom-stone]
-                   [custom-weapon    custom-attack]
+                   [basic-bg        basic-town]
+                   [basic-avatar    basic-pokemon]
+                   [basic-npc       basic-friend]
+                   [basic-enemy     basic-trainer]
+                   [basic-coin      basic-stone]
+                   [basic-weapon    basic-attack]
                    [survival-game    pokemon-game]
                    [#:bg             #:town-bg]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:friend-list]
                    [#:enemy-list     #:trainer-list]
                    [#:coin-list      #:stone-list]
-                   [#:weapon-list    #:attack-list]
-                   )
+                   [#:weapon-list    #:attack-list])
 
 (provide pokeball
          fire-blast
@@ -34,7 +33,15 @@
          aqua-jet-icon
          fire-spin-icon
          waterfall-icon
-         bubble-icon)
+         bubble-icon
+
+         (rename-out
+           (custom-town basic-town)
+           (custom-pokemon basic-pokemon)
+           (custom-friend basic-friend)
+           (custom-trainer basic-trainer)
+           (custom-stone basic-stone)
+           (custom-attack basic-attack)))
 
 
 (define bg-list

@@ -10,9 +10,10 @@
 
 
 (language-mappings battlearena       battlearena-starwars
-                   [custom-avatar     custom-rebel]
-                   [custom-enemy      custom-imperial]
-                   [custom-bg         custom-planet]
+                   [basic-avatar     basic-rebel]
+                   [basic-enemy      basic-imperial]
+                   [basic-bg         basic-planet]
+
                    [repeater          blaster]
                    [sword             lightsaber]
                    [#:avatar          #:rebel]
@@ -24,7 +25,10 @@
          blaster-droid
          double-lightsaber
          lightsaber-sprite
-         )
+         (rename-out 
+           (custom-rebel basic-rebel)
+           (custom-imperial basic-imperial)
+           (custom-planet basic-planet)))
 
 ;; ----- REBEL
 

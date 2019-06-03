@@ -188,10 +188,7 @@
                 #:dialog     (list "Can you help me find my pet?")
                 #:quest-list (fetch-quest
                               #:item my-quest-item
-                              #:reward-amount 500
-                              #:cutscene (page
-                                          spiny3-sprite
-                                          "Spiny, I've missed you!")))))
+                              #:reward-amount 500))))
   )
 
 ; -----------------

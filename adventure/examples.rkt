@@ -428,8 +428,7 @@
   
   (adventure-game
    #:weapon-list (list (spear))
-   #:enemy-list  (list (easy-enemy)
-                       (hard-enemy)))
+   #:enemy-list  (list (hard-enemy)))
   )
 
 ; Make a game with 10 enemies and an npc with a quest to kill 5

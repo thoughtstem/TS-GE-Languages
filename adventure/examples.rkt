@@ -114,13 +114,13 @@
 (define-example-code adventure coin-5
   
   (define (my-coin)
-    (basic-coin #:value 10
-                 #:amount-in-world 15
+    (basic-coin  #:amount-in-world 15
                  #:respawn? #f))
 
   (define (npc-with-coin-quest)
-    (basic-npc #:dialog     (list "I've lost 100 worth of coins."
-                                   "Can you find them for me?")
+    (basic-npc #:dialog     (list "I've lost my coins..."
+                                  "...100 points worth!"
+                                  "Can you find them for me?")
                 #:quest-list (list (collect-quest #:collect-amount 100
                                                   #:reward-amount 50))))
   

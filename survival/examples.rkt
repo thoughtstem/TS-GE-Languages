@@ -133,7 +133,6 @@
   (define (fish-stew)
     (basic-food #:name "Fish Stew"
                  #:sprite fishstew-sprite
-                 #:respawn? #f
                  #:heals-by 50))
 
   (define fish-stew-recipe
@@ -149,7 +148,6 @@
   (define (fish-stew)
     (basic-food #:name "Fish Stew"
                  #:sprite fishstew-sprite
-                 #:respawn? #f
                  #:heals-by 50))
 
   (define fish-stew-recipe
@@ -193,7 +191,6 @@
   (define my-fire-magic-recipe
     (recipe #:product (fire-magic #:name "Fast Flame"
                                   #:speed 7)
-            #:build-time 20
             #:cost       100))
   
   (survival-game
@@ -210,17 +207,18 @@
    #:sky    (basic-sky #:length-of-day 5000))
   )
 
-(define-example-code survival sky-2 
+(define-example-code survival sky-2
   (survival-game
-   #:sky    (basic-sky #:length-of-day 500
-                        #:max-darkness  255))
+   #:sky (custom-sky #:night-sky-color  'darkmagenta))
   )
+
 
 (define-example-code survival sky-3 
   (survival-game
-   #:sky (basic-sky #:night-sky-color  'darkmagenta
-                     #:max-darkness     150))
+   #:sky    (custom-sky #:length-of-day 500
+                        #:max-darkness  255))
   )
+
 
 (define-example-code survival sky-4 
 

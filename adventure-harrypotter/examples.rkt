@@ -81,8 +81,8 @@
 
 (define-example-code adventure-harrypotter alt/food-3
   (define special-potion
-    (basic-potion #:name      "Yellow Potion"
-                   #:sprite    (colorize-potion 'yellow)
+    (basic-potion  #:name      "Yellow Potion"
+                   #:color     'yellow
                    #:heals-by  100
                    #:on-pickup (spawn (page (colorize-potion 'yellow)
                                             "This tastes bad ..."
@@ -96,24 +96,25 @@
   )
 
 (define-example-code adventure-harrypotter alt/food-4
-  (define fish-potion
-    (basic-potion #:name "Fish Potion"
+  (define pumpkin-potion
+    (basic-potion  #:name "Pumpkin Potion"
+                   #:color 'orange
                    #:respawn? #f
                    #:heals-by 50))
 
-  (define fish-potion-recipe
-    (recipe #:product fish-potion
+  (define pumpkin-potion-recipe
+    (recipe #:product "Pumpkin Potion"
             #:build-time 40
-            #:ingredients (list "Fish")))
+            #:ingredients (list "Pumpkin")))
 
   (harrypotter-game
-   #:ingredient-list (list (fish #:amount-in-world 10))
-   #:cauldron-list   (list (basic-cauldron #:recipe-list (list fish-potion-recipe))))
+   #:ingredient-list (list (pumpkin #:amount-in-world 10))
+   #:cauldron-list   (list (basic-cauldron #:recipe-list (list pumpkin-potion-recipe))))
   )
 
 (define-example-code adventure-harrypotter alt/food-5
   
-  (define my-potion
+  (define carrot-potion
     (basic-potion))
 
   (define carrot-potion-recipe
@@ -139,13 +140,13 @@
    #:npc-list    (list (basic-npc #:dialog (list "Help! Someone stole my apples!")
                                    #:quest-list (list (loot-quest #:item stolen-food
                                                                   #:reward-amount 400))))
-   #:spell-list (list (repeater)))
+   #:spell-list (list (wand)))
   )
 
 (define-example-code adventure-harrypotter alt/loot-quest-4
 
   (define stolen-pumpkin
-    (basic-item #:sprite pumpkin-sprite))
+    (pumpkin))
   
   (define my-loot-quest
     (loot-quest #:item stolen-pumpkin
@@ -177,25 +178,15 @@
 
 (define-example-code adventure-harrypotter alt/npc-5
   
-  (define player-dialog-with-charlie
-    (player-dialog-with "Charlie"
-                        #:dialog-list (list "Hi. Who are you?"
-                                            "Need help?")))
-
-  (define charlie-response
-    (list (list "Hello, I'm Charlie.")
-          (list "Yes! Can you find my wand?")))
-
   (define wand-quest
     (fetch-quest #:item (wand)
                  #:quest-complete-dialog (list "YAY! MY WAND!")
-                 #:new-response-dialog (list (list "Um, still Charlie!")
-                                             (list "Nope! I'm good now."))))
+                 #:new-response-dialog (list "Thanks again!")))
 
-  (harrypotter-game
-   #:wizard (basic-wizard #:components player-dialog-with-charlie)
-   #:npc-list (list (basic-npc #:name "Charlie"
-                                #:dialog charlie-response
+  (adventure-game
+   #:avatar (basic-avatar #:components player-dialog-with-charlie)
+   #:npc-list (list (basic-npc  #:name "Charlie"
+                                #:dialog (list "Can you find my wand?")
                                 #:quest-list (list wand-quest))))
   )
 
@@ -203,18 +194,18 @@
 (define-example-code adventure-harrypotter alt/weapon-1
   (harrypotter-game
    #:spell-list (list (wand #:name "Phoenix Feather"
-                           #:speed 15
-                           #:damage 20
-                           #:rarity 'rare)))
+                            #:icon (make-icon "PHX")
+                            #:damage 40
+                            #:rarity 'rare)))
   )
 
 (define-example-code adventure-harrypotter alt/weapon-2
   (define (my-wand)
-    (wand #:damage 50
+    (wand  #:damage 50
            #:rarity 'legendary))
   
   (define (my-spell)
-    (basic-spell #:name "Fire Darts"
+    (basic-spell  #:name "Fire Darts"
                   #:color 'red
                   #:fire-mode 'spread))
   
@@ -226,9 +217,9 @@
 
 (define-example-code adventure-harrypotter alt/weapon-3
   (define (my-spell)
-    (basic-spell #:name "Hologram Shooter"
-                   #:sprite (make-icon "?" 'red)
-                   #:dart-sprite (random-character-sprite)
+    (basic-spell   #:name "Expecto Patronum"
+                   #:icon (make-icon "?" 'red)
+                   #:sprite (cat-sprite)
                    #:speed 5
                    #:damage 25
                    #:range 50
@@ -248,8 +239,8 @@
           #:on-drop (spawn (page "Oh no! Better put it back in my backpack."))))
 
   (define (my-baddy)
-    (basic-deatheater #:sprite pirateboy-sprite
-                  #:on-death (spawn (page (set-sprite-angle 90 (render pirateboy-sprite))
+    (basic-deatheater #:sprite snape-sprite
+                      #:on-death (spawn (page (set-sprite-angle 90 (render snape-sprite))
                                           "You won!"))))
   (harrypotter-game
    #:deatheater-list (list (my-baddy))

@@ -543,26 +543,16 @@
 
 ;fetch quest with quest finish dialog
 (define-example-code adventure npc-5
-  
-  (define player-dialog-with-charlie
-    (player-dialog-with "Charlie"
-                        #:dialog-list (list "Hi. Who are you?"
-                                            "Need help?")))
-
-  (define charlie-response
-    (list (list "Hello, I'm Charlie.")
-          (list "Yes! Can you find my spear?")))
-
+ 
   (define spear-quest
     (fetch-quest #:item (spear)
                  #:quest-complete-dialog (list "YAY! MY SPEAR!")
-                 #:new-response-dialog (list (list "Um, still Charlie!")
-                                             (list "Nope! I'm good now."))))
+                 #:new-response-dialog (list "Thanks again!")))
 
   (adventure-game
    #:avatar (basic-avatar #:components player-dialog-with-charlie)
-   #:npc-list (list (basic-npc #:name "Charlie"
-                                #:dialog charlie-response
+   #:npc-list (list (basic-npc  #:name "Charlie"
+                                #:dialog (list "Can you find my spear?")
                                 #:quest-list (list spear-quest))))
   )
 ; -----------
@@ -866,12 +856,10 @@
 
 (define-example-code adventure weapon-4
    (define (my-fire-magic)
-    (fire-magic #:damage 25
-                #:on-store (spawn (page "Ouch, this is hot!"))))
+    (fire-magic #:on-store (spawn (page "Ouch, this is hot!"))))
 
   (define (my-ice-magic)
-    (ice-magic #:damage 25
-               #:on-store (spawn (page "Woah, this is cold!"))))
+    (ice-magic #:on-store (spawn (page "Woah, this is cold!"))))
   
   (adventure-game
    #:avatar (basic-avatar)

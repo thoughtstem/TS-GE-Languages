@@ -32,6 +32,7 @@
                    )
 
 (provide wand
+         pumpkin
          swinging-wand-sprite
          colorize-potion
          (rename-out (custom-wizard basic-wizard)
@@ -515,3 +516,35 @@
                   #:weapon-list           spell-list 
                   #:instructions          instructions
                   #:other-entities        (filter identity (flatten (cons ent custom-entities)))))
+
+;---------- premade ingredients -----
+
+(define (pumpkin  #:name              [n "Pumpkin"]
+                  #:sprite            [s pumpkin-sprite]
+                  #:tile              [tile 0]
+                  #:position          [pos (posn 0 0)]
+                  #:amount-in-world   [world-amt 1]
+                  #:storable?         [storable? #t]
+                  #:consumable?       [consumable? #f]
+                  #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                  #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                  #:on-pickup         [pickup-func (λ (g e) e)]
+                  #:on-store          [store-func (λ (g e) e)]
+                  #:on-drop           [drop-func (λ (g e) e)]
+                  #:components        [c #f]
+                  . custom-components))
+(apply (curry
+        custom-item  #:name              n
+                     #:sprite            s
+                     #:tile              t
+                     #:position          p
+                     #:amount-in-world   world-amt
+                     #:value             val
+                     #:storable?         storable?
+                     #:consumable?       consumable?
+                     #:respawn?          respawn? 
+                     #:on-pickup         pickup-func
+                     #:on-store          store-func 
+                     #:on-drop           drop-func 
+                     #:components        c)
+                    custom-components))

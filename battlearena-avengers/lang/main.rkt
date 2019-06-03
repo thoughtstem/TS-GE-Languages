@@ -6,7 +6,8 @@
 (require ts-kata-util
          "../assets.rkt"
          battlearena
-         game-engine-demos-common)
+         ;game-engine-demos-common
+         )
 
 
 (language-mappings battlearena        battlearena-avengers

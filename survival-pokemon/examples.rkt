@@ -247,7 +247,7 @@
      #:columns 2))
 
   (pokemon-game
-   #:town-bg (my-town))
+   #:town (my-town))
   )
 
 ;====================================================

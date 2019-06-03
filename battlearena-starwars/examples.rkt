@@ -11,12 +11,12 @@
 
 (define-example-code battlearena-starwars alt/avatar-2
  (starwars-game
-   #:rebel (custom-rebel #:sprite yoda-sprite))
+   #:rebel (basic-rebel #:sprite yoda-sprite))
   )
 
 (define-example-code battlearena-starwars alt/avatar-3
   (define (my-rebel)
-    (custom-rebel #:sprite obiwan-sprite
+    (basic-rebel #:sprite obiwan-sprite
                   #:speed  15))
   (starwars-game
    #:rebel (my-rebel))
@@ -24,7 +24,7 @@
 
 (define-example-code battlearena-starwars alt/avatar-4
   (define (my-rebel)
-    (custom-rebel #:sprite     obiwan-sprite
+    (basic-rebel #:sprite     obiwan-sprite
                   #:speed      20
                   #:item-slots 5
                   #:health     200
@@ -38,7 +38,7 @@
 
 (define-example-code battlearena-starwars alt/enemy-3
   (define (my-enemy)
-    (custom-imperial #:sprite          darthmaul-sprite
+    (basic-imperial #:sprite          darthmaul-sprite
                      #:ai              'medium
                      #:health          200
                      #:shield          100
@@ -50,13 +50,13 @@
 
 (define-example-code battlearena-starwars alt/enemy-4
   (define (easy-enemy)
-    (custom-imperial #:ai 'easy
+    (basic-imperial #:ai 'easy
                      #:sprite stormtrooper-sprite
                      #:health 50
                      #:amount-in-world 5))
  
   (define (hard-enemy)
-    (custom-imperial #:ai 'hard
+    (basic-imperial #:ai 'hard
                      #:sprite bobafett-sprite
                      #:health 200))
  
@@ -66,7 +66,7 @@
 
 (define-example-code battlearena-starwars alt/enemy-5
   (define (hard-enemy)
-    (custom-imperial #:ai              'hard
+    (basic-imperial #:ai              'hard
                      #:sprite          darthvader-sprite
                      #:amount-in-world 5
                      #:weapon          (lightsaber #:damage 50)))
@@ -79,14 +79,14 @@
 
 (define-example-code battlearena-starwars alt/enemy-weapon-1
   (starwars-game 
-   #:imperial-list (list (custom-imperial
+   #:imperial-list (list (basic-imperial
                        #:weapon (blaster
                                  #:color "yellow"))))
   )
 
 (define-example-code battlearena-starwars alt/enemy-weapon-2
   (starwars-game 
-   #:imperial-list (list (custom-imperial
+   #:imperial-list (list (basic-imperial
                        #:sprite darthvader-sprite
                        #:weapon (lightsaber
                                  #:color "red"))))
@@ -94,7 +94,7 @@
 
 (define-example-code battlearena-starwars alt/enemy-weapon-3 
   (starwars-game 
-   #:imperial-list (list (custom-imperial
+   #:imperial-list (list (basic-imperial
                        #:sprite darthmaul-sprite
                        #:weapon (double-lightsaber))))
   )
@@ -103,14 +103,14 @@
 
 (define-example-code battlearena-starwars alt/sword-armor-1  
   (starwars-game
-   #:item-list (list (custom-armor #:name          "Lightsaber Armor"
+   #:item-list (list (basic-armor #:name          "Lightsaber Armor"
                                    #:protects-from "Lightsaber"
                                    #:icon        (make-icon "LA"))))
   )
 
 (define-example-code battlearena-starwars alt/sword-armor-2
   (define (l-armor)
-    (custom-armor #:name          "Lightsaber Armor"
+    (basic-armor #:name          "Lightsaber Armor"
                   #:protects-from "Lightsaber"
                   #:icon        (make-icon "LA")
                   #:change-damage (subtract-by 30)
@@ -122,14 +122,14 @@
 
 (define-example-code battlearena-starwars alt/sword-armor-3
   (define (l-armor)
-    (custom-armor #:name          "Lightsaber Armor"
+    (basic-armor #:name          "Lightsaber Armor"
                   #:protects-from "Lightsaber"
                   #:icon        (make-icon "LA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
   (starwars-game
-   #:imperial-list (list (custom-imperial #:sprite darthvader-sprite
+   #:imperial-list (list (basic-imperial #:sprite darthvader-sprite
                                         #:weapon (lightsaber #:color "red")))
    #:item-list    (list (l-armor)))
   )
@@ -261,14 +261,14 @@
    
 (define-example-code battlearena-starwars blaster-armor-1 
   (starwars-game
-   #:item-list (list (custom-armor #:name          "Blaster Armor"
+   #:item-list (list (basic-armor #:name          "Blaster Armor"
                                    #:protects-from "Blaster"
                                    #:icon        (make-icon "BA"))))
   )
 
 (define-example-code battlearena-starwars blaster-armor-2
   (define (b-armor)
-    (custom-armor #:name          "Blaster Armor"
+    (basic-armor #:name          "Blaster Armor"
                   #:protects-from "Blaster"
                   #:icon        (make-icon "BA")
                   #:change-damage (subtract-by 30)
@@ -280,14 +280,14 @@
 
 (define-example-code battlearena-starwars blaster-armor-3
   (define (b-armor)
-    (custom-armor #:name          "Blaster Armor"
+    (basic-armor #:name          "Blaster Armor"
                   #:protects-from "Blaster"
                   #:icon        (make-icon "BA")
                   #:change-damage (subtract-by 30)
                   #:rarity        'rare))
   
   (starwars-game
-   #:imperial-list (list (custom-imperial))
+   #:imperial-list (list (basic-imperial))
    #:item-list    (list (b-armor)))
   )
 

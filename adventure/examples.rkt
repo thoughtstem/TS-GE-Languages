@@ -12,14 +12,14 @@
 (define-example-code adventure avatar-1
 
   (adventure-game
-   #:avatar (custom-avatar #:sprite lightelf-sprite
+   #:avatar (basic-avatar #:sprite lightelf-sprite
                            #:speed  20))
   )
 
 
 (define-example-code adventure avatar-2
   (define (my-avatar)
-    (custom-avatar #:sprite darkknight-sprite
+    (basic-avatar #:sprite darkknight-sprite
                    #:speed  20
                    #:health 200
                    #:max-health 200))
@@ -30,18 +30,18 @@
 
 (define-example-code adventure avatar-3
   (adventure-game
-   #:avatar (custom-avatar #:sprite pirategirl-sprite
+   #:avatar (basic-avatar #:sprite pirategirl-sprite
                            #:speed  20)
-   #:intro-cutscene (custom-cutscene (page pirategirl-sprite
+   #:intro-cutscene (basic-cutscene (page pirategirl-sprite
                                            "This is the story of"
                                            "Jordan the Pirate.")))
   )
 
 (define-example-code adventure avatar-4
   (adventure-game
-   #:avatar (custom-avatar
+   #:avatar (basic-avatar
              #:sprite madscientist-sprite)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (basic-cutscene
                      (page "A long time ago,"
                            "In a place far, far, away...")
                      (page (set-sprite-scale 2 madscientist-sprite)
@@ -53,7 +53,7 @@
 
 (define-example-code adventure coin-1
   (adventure-game
-   #:coin-list  (list (custom-coin #:sprite goldcoin-sprite
+   #:coin-list  (list (basic-coin #:sprite goldcoin-sprite
                                    #:value 100
                                    #:amount-in-world 20
                                    #:respawn? #f)))
@@ -61,17 +61,17 @@
 
 (define-example-code adventure coin-2
   (define (copper-coin)
-    (custom-coin #:sprite coppercoin-sprite
+    (basic-coin #:sprite coppercoin-sprite
                  #:name   "Copper Coin"
                  #:value  1))
 
   (define (silver-coin)
-    (custom-coin #:sprite silvercoin-sprite
+    (basic-coin #:sprite silvercoin-sprite
                  #:name   "Silver Coin"
                  #:value  25))
   
   (define (gold-coin)
-    (custom-coin #:sprite goldcoin-sprite
+    (basic-coin #:sprite goldcoin-sprite
                  #:name  "Gold Coin"
                  #:value  50))
 
@@ -83,12 +83,12 @@
 
 (define-example-code adventure coin-3
   (define (my-trick-coin)
-    (custom-coin #:name "Gold Coin"
+    (basic-coin #:name "Gold Coin"
                  #:sprite goldcoin-sprite
                  #:value -1000
                  #:amount-in-world 1
                  #:respawn? #f
-                 #:on-pickup (spawn-on-current-tile (custom-enemy #:position (posn 0 0)
+                 #:on-pickup (spawn-on-current-tile (basic-enemy #:position (posn 0 0)
                                                                   #:tile 0))))
   
   (adventure-game
@@ -97,7 +97,7 @@
 
 (define-example-code adventure coin-4
   (define (my-special-coin)
-    (custom-coin #:name "Gold Coin"
+    (basic-coin #:name "Gold Coin"
                  #:sprite goldcoin-sprite
                  #:value 1000
                  #:amount-in-world 1
@@ -114,12 +114,12 @@
 (define-example-code adventure coin-5
   
   (define (my-coin)
-    (custom-coin #:value 10
+    (basic-coin #:value 10
                  #:amount-in-world 15
                  #:respawn? #f))
 
   (define (npc-with-coin-quest)
-    (custom-npc #:dialog     (list "I've lost 100 worth of coins."
+    (basic-npc #:dialog     (list "I've lost 100 worth of coins."
                                    "Can you find them for me?")
                 #:quest-list (list (collect-quest #:collect-amount 100
                                                   #:reward-amount 50))))
@@ -136,7 +136,7 @@
 (define-example-code adventure level-design-1
 
   (adventure-game
-   #:bg (custom-bg #:image FOREST-BG)
+   #:bg (basic-bg #:image FOREST-BG)
    #:enable-world-objects? #t)
   
   )
@@ -146,7 +146,7 @@
 (define-example-code adventure level-design-2
 
   (adventure-game
-   #:bg             (custom-bg #:image PINK-BG)
+   #:bg             (basic-bg #:image PINK-BG)
    #:other-entities (make-world-objects candy-cane-tree
                                         snow-pine-tree
                                         #:hd? #t
@@ -159,7 +159,7 @@
 (define-example-code adventure level-design-3
 
   (adventure-game
-   #:bg             (custom-bg #:image DESERT-BG
+   #:bg             (basic-bg #:image DESERT-BG
                                #:hd? #t)
    #:other-entities (make-world-objects random-brown-rock
                                         random-brown-rock
@@ -172,9 +172,9 @@
 (define-example-code adventure level-design-4
 
   (adventure-game
-   #:bg             (custom-bg #:image LAVA-BG
+   #:bg             (basic-bg #:image LAVA-BG
                                #:hd? #t)
-   #:intro-cutscene (custom-cutscene (page "Once upon a time"
+   #:intro-cutscene (basic-cutscene (page "Once upon a time"
                                            "on a volcanic moon"
                                            "of a distance world...")
                                      (page "There was a lone soldier"
@@ -188,12 +188,12 @@
   )
 
 ; Make a game with any background and
-; 3 world objects with customized position, tile, size, and/or hue
+; 3 world objects with basicized position, tile, size, and/or hue
 (define-example-code adventure level-design-5
   
   (adventure-game
-   #:bg             (custom-bg)
-   #:avatar         (custom-avatar)
+   #:bg             (basic-bg)
+   #:avatar         (basic-avatar)
    #:other-entities (reduce-quality-by 2 (barrels (posn 100 200) #:tile 0))
                     (large-gray-rock  (posn 100 200) #:tile 1 #:size 2)
                     (brick-house      (posn 200 200) #:tile 2 #:hue (random 360)))
@@ -204,11 +204,11 @@
  ;Make a game with a basic fetch quest
 (define-example-code adventure fetch-quest-1
   (define lost-cat
-    (custom-item #:name "Mylo"
+    (basic-item #:name "Mylo"
                  #:sprite cat-sprite))
   
   (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?"
+   #:npc-list (list (basic-npc #:dialog (list "Can you help me find my cat?"
                                                "I've looked everywhere!")
                                 #:quest-list (list (fetch-quest #:item lost-cat)))))
   )
@@ -216,15 +216,15 @@
  ;Make a game with a basic fetch quest with a cutscene
 (define-example-code adventure fetch-quest-2
   (define lost-cat
-    (custom-item #:name "Mylo"
+    (basic-item #:name "Mylo"
                  #:sprite cat-sprite))
 
   (define my-cutscene
-    (custom-cutscene (page (set-sprite-scale 2 cat-sprite)
+    (basic-cutscene (page (set-sprite-scale 2 cat-sprite)
                            "Mylo is happy to be home!")))
   
   (adventure-game
-   #:npc-list (list (custom-npc #:dialog (list "Can you help me find my cat?")
+   #:npc-list (list (basic-npc #:dialog (list "Can you help me find my cat?")
                                 #:quest-list (list (fetch-quest #:item lost-cat
                                                                 #:cutscene my-cutscene)))))
   )
@@ -232,17 +232,17 @@
 (define-example-code adventure fetch-quest-3
   
   (define fetch-quest-1
-    (fetch-quest #:item (custom-item #:name "Mylo"
+    (fetch-quest #:item (basic-item #:name "Mylo"
                                      #:sprite cat-sprite)
                  #:reward-amount 200))
   
   (define fetch-quest-2
-    (fetch-quest #:item (custom-item #:name "Buttons"
+    (fetch-quest #:item (basic-item #:name "Buttons"
                                      #:sprite whitecat-sprite)
                  #:reward-amount 200))
 
   (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
+   #:npc-list (list (basic-npc #:name "Erin"
                                 #:sprite lightelf-sprite
                                 #:dialog (list "Can you help me find my cats?"
                                                "I'll give you a reward for each cat.")
@@ -250,29 +250,29 @@
                                                    fetch-quest-2))))
   )
 
-;Make a game that has an npc with a fetch quest (with customized dialog and reward)
+;Make a game that has an npc with a fetch quest (with basicized dialog and reward)
 (define-example-code adventure fetch-quest-4
   
   (define my-fetch-quest
-    (fetch-quest #:item (custom-item #:name "Mylo"
+    (fetch-quest #:item (basic-item #:name "Mylo"
                                      #:sprite cat-sprite)
                  #:quest-complete-dialog (list "Thank you for finding Mylo!")
                  #:new-response-dialog   (list "Thanks again for your help.")
                  #:reward-amount 400 ))
 
   (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
+   #:npc-list (list (basic-npc #:name "Erin"
                                 #:sprite lightelf-sprite
                                 #:dialog (list "Can you help me find my cat?")
                                 #:quest-list (list my-fetch-quest))))
   )
 
-; Make a game that has a customized quest item with on-store and on-drop cutscenes
+; Make a game that has a basicized quest item with on-store and on-drop cutscenes
 ; and an npc with a fetch quest (with reward and cutscene)
 (define-example-code adventure fetch-quest-5
 
    (define my-quest-item
-    (custom-item #:name "Mylo"
+    (basic-item #:name "Mylo"
                  #:sprite  cat-sprite
                  #:on-store (spawn (page (set-sprite-scale 2 cat-sprite)
                                          "This must be Erin's lost cat"))
@@ -281,7 +281,7 @@
                                    #:rule (not/r (entity-in-game? "Erin")))))
 
    (adventure-game
-   #:npc-list (list (custom-npc #:name "Erin"
+   #:npc-list (list (basic-npc #:name "Erin"
                                 #:sprite     lightelf-sprite
                                 #:dialog     (list "Can you help my find my cat?")
                                 #:quest-list (fetch-quest #:item my-quest-item
@@ -296,11 +296,11 @@
 
 ;Make a game with a basic loot quest
 (define-example-code adventure loot-quest-1
-  (define stolen-chest (custom-item))
+  (define stolen-chest (basic-item))
   
   (adventure-game
-   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-chest)))
-   #:npc-list    (list (custom-npc #:dialog (list "Someone stole my chest!")
+   #:enemy-list  (list (basic-enemy #:loot-list (list stolen-chest)))
+   #:npc-list    (list (basic-npc #:dialog (list "Someone stole my chest!")
                                    #:quest-list (list (loot-quest #:item stolen-chest))))
    #:weapon-list (list (spear)))
   )
@@ -309,12 +309,12 @@
 (define-example-code adventure loot-quest-2
   (define stolen-cat
     (make-storable
-     (custom-npc #:sprite cat-sprite
+     (basic-npc #:sprite cat-sprite
                  #:dialog (list "Meow!"))))
   
   (adventure-game
-   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-cat)))
-   #:npc-list    (list (custom-npc #:dialog (list "Someone took my cat!")
+   #:enemy-list  (list (basic-enemy #:loot-list (list stolen-cat)))
+   #:npc-list    (list (basic-npc #:dialog (list "Someone took my cat!")
                                    #:quest-list (list (loot-quest #:item stolen-cat))))
    #:weapon-list (list (fireball #:damage 50)))
   )
@@ -322,26 +322,26 @@
  ;Make a game with a loot quest and a quest cutscene
 (define-example-code adventure loot-quest-3
   (define stolen-food
-    (custom-food #:name "Apples"
+    (basic-food #:name "Apples"
                  #:sprite apples-sprite))
 
   (define my-cutscene
-    (custom-cutscene (page (set-sprite-scale 2 apples-sprite)
+    (basic-cutscene (page (set-sprite-scale 2 apples-sprite)
                            "Now I can make Grandma's apple pie!")))
   
   (adventure-game
-   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-food)))
-   #:npc-list    (list (custom-npc #:dialog (list "Help! Someone stole my apples!")
+   #:enemy-list  (list (basic-enemy #:loot-list (list stolen-food)))
+   #:npc-list    (list (basic-npc #:dialog (list "Help! Someone stole my apples!")
                                    #:quest-list (list (loot-quest #:item stolen-food
                                                                   #:cutscene my-cutscene))))
    #:weapon-list (list (repeater #:damage 50)))
   )
 
-;Make a game that has an npc with a loot quest (with customized dialog and reward)
+;Make a game that has an npc with a loot quest (with basicized dialog and reward)
 (define-example-code adventure loot-quest-4
 
   (define stolen-cat
-    (make-storable (custom-npc #:sprite cat-sprite
+    (make-storable (basic-npc #:sprite cat-sprite
                                #:dialog (list "Meow!"))))
   
   (define my-loot-quest
@@ -351,18 +351,18 @@
                 #:reward-amount 400 ))
 
   (adventure-game
-   #:enemy-list (list (custom-enemy #:loot-list (list stolen-cat)))
-   #:npc-list   (list (custom-npc #:dialog (list "Help! Someone stole my cat!")
+   #:enemy-list (list (basic-enemy #:loot-list (list stolen-cat)))
+   #:npc-list   (list (basic-npc #:dialog (list "Help! Someone stole my cat!")
                                   #:quest-list (list my-loot-quest)))
    #:weapon-list (list (ice-magic)))
   )
 
-; Make a game that has a customized quest item with on-store and on-drop cutscenes
+; Make a game that has a basicized quest item with on-store and on-drop cutscenes
 ; and an npc with a loot quest
 (define-example-code adventure loot-quest-5
   
   (define stolen-item
-    (custom-item #:name "Empty Bowl"
+    (basic-item #:name "Empty Bowl"
                  #:sprite  bowl-sprite
                  #:on-store (spawn (page (set-sprite-scale 2 bowl-sprite)
                                          "This must be JOrdan's stolen bowl."))
@@ -370,8 +370,8 @@
                                    #:rule (not/r (entity-in-game? "Jordan")))))
 
   (adventure-game
-   #:enemy-list  (list (custom-enemy #:loot-list (list stolen-item)))
-   #:npc-list    (list (custom-npc #:name "Jordan"
+   #:enemy-list  (list (basic-enemy #:loot-list (list stolen-item)))
+   #:npc-list    (list (basic-npc #:name "Jordan"
                                    #:dialog     (list "That thief took my only bowl!"
                                                       "Please get it back!")
                                    #:quest-list (loot-quest #:item stolen-item)
@@ -383,7 +383,7 @@
 
 (define-example-code adventure enemy-1
   (adventure-game
-   #:enemy-list (list (curry custom-enemy
+   #:enemy-list (list (curry basic-enemy
                              #:ai              'medium
                              #:amount-in-world 10
                              #:night-only? #t
@@ -392,17 +392,17 @@
 
 (define-example-code adventure enemy-2
   (define (easy-enemy)
-    (custom-enemy #:ai           'easy
+    (basic-enemy #:ai           'easy
                   #:sprite       slime-sprite
                   #:amount-in-world 4))
   
   (define (medium-enemy)
-    (custom-enemy #:ai              'medium
+    (basic-enemy #:ai              'medium
                   #:sprite          bat-sprite
                   #:amount-in-world 2))
 
   (define (hard-enemy)
-    (custom-enemy #:ai              'hard
+    (basic-enemy #:ai              'hard
                   #:sprite          snake-sprite
                   #:night-only? #t))
  
@@ -417,11 +417,11 @@
 
 (define-example-code adventure enemy-3  
   (define (my-gold-coin)
-    (custom-coin #:sprite goldcoin-sprite
+    (basic-coin #:sprite goldcoin-sprite
                  #:value 20))
 
   (define (hard-enemy)
-    (custom-enemy #:amount-in-world 3
+    (basic-enemy #:amount-in-world 3
                   #:ai 'hard
                   #:loot-list (list (my-gold-coin)
                                     (my-gold-coin))))
@@ -438,16 +438,16 @@
 (define-example-code adventure enemy-4
   
   (define (easy-enemy)
-    (custom-enemy #:amount-in-world 5))
+    (basic-enemy #:amount-in-world 5))
 
   (define (hard-enemy)
-    (custom-enemy #:amount-in-world 3
+    (basic-enemy #:amount-in-world 3
                   #:ai 'hard
                   #:weapon (fireball)))
   
   (adventure-game
-   #:avatar         (custom-avatar #:sprite steampunkboy-sprite)
-   #:death-cutscene (custom-cutscene (page (set-sprite-angle 90 (render steampunkboy-sprite))
+   #:avatar         (basic-avatar #:sprite steampunkboy-sprite)
+   #:death-cutscene (basic-cutscene (page (set-sprite-angle 90 (render steampunkboy-sprite))
                                            "You died!")
                                      (page "Try harder!"))
    #:weapon-list (list (spear))
@@ -466,13 +466,13 @@
                 #:reward-item (sword)))
   
   (adventure-game
-   #:death-cutscene (custom-cutscene (page "You died!"
+   #:death-cutscene (basic-cutscene (page "You died!"
                                            "Try harder!"))
-   #:npc-list (list (custom-npc #:dialog (list "These monsters are annoying."
+   #:npc-list (list (basic-npc #:dialog (list "These monsters are annoying."
                                                "Can you get rid of 5?")
                                 #:quest-list (list my-hunt-quest)))
    #:weapon-list (list (fireball))
-   #:enemy-list  (list (curry custom-enemy #:amount-in-world 10)))
+   #:enemy-list  (list (curry basic-enemy #:amount-in-world 10)))
   )
 
 ;===== NPC KATAS =====
@@ -482,8 +482,8 @@
 (define-example-code adventure npc-1
   
   (adventure-game
-   #:avatar   (custom-avatar)
-   #:npc-list (list (custom-npc
+   #:avatar   (basic-avatar)
+   #:npc-list (list (basic-npc
                      #:sprite witch-sprite
                      #:name   "Witch"
                      #:mode   'follow
@@ -494,20 +494,20 @@
 (define-example-code adventure npc-2
 
   (define (polite-npc)
-    (custom-npc
+    (basic-npc
      #:name "Riley"
      #:dialog (list "Oh hello there! I'm Riley."
                     "Beautiful day today!")))
   
   (define (rude-npc)
-    (custom-npc
+    (basic-npc
      #:name "..."
      #:dialog (list "Woah, who are you??"
                     "Nevermind -- I'm too busy."
                     "Move along, now!")))
   
   (adventure-game
-   #:avatar   (custom-avatar)
+   #:avatar   (basic-avatar)
    #:npc-list (list (polite-npc) (rude-npc)))
   )
 
@@ -525,8 +525,8 @@
           (list "That's a strange question...")))
 
   (adventure-game
-   #:avatar (custom-avatar #:components player-dialog)
-   #:npc-list (list (custom-npc #:name "Jordan"
+   #:avatar (basic-avatar #:components player-dialog)
+   #:npc-list (list (basic-npc #:name "Jordan"
                                 #:dialog npc-response)))
   )
 
@@ -534,11 +534,11 @@
 (define-example-code adventure npc-4
   
   (adventure-game
-   #:avatar (custom-avatar #:components (random-player-dialog-with "Dakota")
+   #:avatar (basic-avatar #:components (random-player-dialog-with "Dakota")
                                         (random-player-dialog-with "Alex"))
-   #:npc-list (list (custom-npc #:name "Dakota"
+   #:npc-list (list (basic-npc #:name "Dakota"
                                 #:dialog (random-npc-response))
-                    (custom-npc #:name "Alex"
+                    (basic-npc #:name "Alex"
                                 #:dialog (random-npc-response))))
   )
 
@@ -561,8 +561,8 @@
                                              (list "Nope! I'm good now."))))
 
   (adventure-game
-   #:avatar (custom-avatar #:components player-dialog-with-charlie)
-   #:npc-list (list (custom-npc #:name "Charlie"
+   #:avatar (basic-avatar #:components player-dialog-with-charlie)
+   #:npc-list (list (basic-npc #:name "Charlie"
                                 #:dialog charlie-response
                                 #:quest-list (list spear-quest))))
   )
@@ -570,21 +570,21 @@
 
 (define-example-code adventure crafter-1
   (adventure-game
-   #:avatar       (custom-avatar)
-   #:crafter-list (list (custom-crafter)))
+   #:avatar       (basic-avatar)
+   #:crafter-list (list (basic-crafter)))
   )
 
 (define-example-code adventure crafter-2
   (adventure-game
-   #:avatar       (custom-avatar)
+   #:avatar       (basic-avatar)
    #:food-list    (list (carrot #:amount-in-world 10))
-   #:crafter-list (list (custom-crafter
+   #:crafter-list (list (basic-crafter
                          #:recipe-list (list carrot-stew-recipe))))
   )
  
 (define-example-code adventure crafter-3
   (define (fish-stew)
-    (custom-food #:name "Fish Stew"
+    (basic-food #:name "Fish Stew"
                  #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
@@ -595,15 +595,15 @@
             #:ingredients (list "Fish")))
 
   (adventure-game
-   #:avatar       (custom-avatar)
+   #:avatar       (basic-avatar)
    #:food-list    (list (fish #:amount-in-world 10))
-   #:crafter-list (list (custom-crafter #:sprite cauldron-sprite
+   #:crafter-list (list (basic-crafter #:sprite cauldron-sprite
                                         #:recipe-list (list fish-stew-recipe))))
   )
 
 (define-example-code adventure crafter-4  
   (define (fish-stew)
-    (custom-food #:name "Fish Stew"
+    (basic-food #:name "Fish Stew"
                  #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
@@ -614,14 +614,14 @@
             #:ingredients (list "Fish")))
 
   (define (my-cauldron)
-    (custom-crafter #:sprite      cauldron-sprite
+    (basic-crafter #:sprite      cauldron-sprite
                     #:position    (posn 200 200)
                     #:tile        2
                     #:recipe-list (list carrot-stew-recipe
                                         fish-stew-recipe)))
   
   (adventure-game
-   #:avatar       (custom-avatar)
+   #:avatar       (basic-avatar)
    #:food-list    (list (carrot #:amount-in-world 10)
                         (fish   #:amount-in-world 10))
    #:crafter-list (list (my-cauldron)))
@@ -634,8 +634,8 @@
             #:build-time 20))
   
   (adventure-game
-   #:avatar       (custom-avatar)
-   #:crafter-list (list (custom-crafter
+   #:avatar       (basic-avatar)
+   #:crafter-list (list (basic-crafter
                          #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
@@ -647,8 +647,8 @@
             #:build-time 40))
   
   (adventure-game
-   #:avatar       (custom-avatar)
-   #:crafter-list (list (custom-crafter
+   #:avatar       (basic-avatar)
+   #:crafter-list (list (basic-crafter
                          #:sprite      woodtable-sprite
                          #:recipe-list (list my-sword-recipe))))
   )
@@ -661,10 +661,10 @@
             #:cost       100))
   
   (adventure-game
-   #:avatar       (custom-avatar)
-   #:coin-list    (list (custom-coin #:value 20
+   #:avatar       (basic-avatar)
+   #:coin-list    (list (basic-coin #:value 20
                                      #:amount-in-world 10))
-   #:crafter-list (list (custom-crafter
+   #:crafter-list (list (basic-crafter
                          #:sprite woodtable-sprite
                          #:recipe-list (list my-fire-magic-recipe))))
   )
@@ -673,31 +673,31 @@
 
 (define-example-code adventure sky-1 
   (adventure-game
-   #:avatar (custom-avatar)
-   #:sky    (custom-sky #:length-of-day 5000))
+   #:avatar (basic-avatar)
+   #:sky    (basic-sky #:length-of-day 5000))
   )
 
 (define-example-code adventure sky-2 
   (adventure-game
-   #:avatar (custom-avatar)
-   #:sky    (custom-sky #:length-of-day 500
+   #:avatar (basic-avatar)
+   #:sky    (basic-sky #:length-of-day 500
                         #:max-darkness  255))
   )
 
 (define-example-code adventure sky-3 
   (adventure-game
-   #:avatar (custom-avatar)
-   #:sky (custom-sky #:night-sky-color  'darkmagenta
+   #:avatar (basic-avatar)
+   #:sky (basic-sky #:night-sky-color  'darkmagenta
                      #:max-darkness     150))
   )
 
 (define-example-code adventure sky-4 
 
   (adventure-game
-   #:avatar       (custom-avatar)
-   #:enemy-list   (list (custom-enemy #:amount-in-world 20
+   #:avatar       (basic-avatar)
+   #:enemy-list   (list (basic-enemy #:amount-in-world 20
                                       #:night-only? #t))
-   #:sky          (custom-sky #:length-of-day    2400
+   #:sky          (basic-sky #:length-of-day    2400
                               #:start-of-daytime 200
                               #:end-of-daytime   2200))
   )
@@ -707,7 +707,7 @@
 (define-example-code adventure food-1
  
   (adventure-game
-   #:food-list  (list (custom-food #:sprite          apples-sprite
+   #:food-list  (list (basic-food #:sprite          apples-sprite
                                    #:name            "Apples"
                                    #:amount-in-world 10
                                    #:heals-by        20)))
@@ -717,12 +717,12 @@
 (define-example-code adventure food-2
 
   (define my-food
-    (custom-food #:sprite          apples-sprite
+    (basic-food #:sprite          apples-sprite
                  #:name            "Apples"
                  #:amount-in-world 10))
 
   (define special-food
-    (custom-food #:sprite          cherry-sprite
+    (basic-food #:sprite          cherry-sprite
                  #:name            "Cherry"
                  #:heals-by        50
                  #:respawn?        #f))
@@ -736,7 +736,7 @@
 (define-example-code adventure food-3
 
   (define special-food
-    (custom-food #:sprite          steak-sprite
+    (basic-food #:sprite          steak-sprite
                  #:name            "Rare Steak"
                  #:heals-by        100
                  #:on-pickup (spawn (page (set-sprite-scale 2 steak-sprite)
@@ -744,7 +744,7 @@
                                           "maybe I should have cooked it."))))
                  
   (adventure-game
-   #:avatar (custom-avatar #:health 50
+   #:avatar (basic-avatar #:health 50
                            #:max-health 200)
    #:food-list  (list special-food))
   
@@ -753,7 +753,7 @@
 ;Make a game with a food and crafter
 (define-example-code adventure food-4
   (define fish-stew
-    (custom-food #:name "Fish Stew"
+    (basic-food #:name "Fish Stew"
                  #:sprite fishstew-sprite
                  #:respawn? #f
                  #:heals-by 50))
@@ -765,14 +765,14 @@
 
   (adventure-game
    #:food-list    (list (fish #:amount-in-world 10))
-   #:crafter-list (list (custom-crafter #:recipe-list (list fish-stew-recipe))))
+   #:crafter-list (list (basic-crafter #:recipe-list (list fish-stew-recipe))))
   )
 
 ; Make a game with a food, recipe, crafter, and npc with a craft quest
 (define-example-code adventure food-5
   
   (define carrot-stew
-    (custom-food #:name "Carrot Stew"
+    (basic-food #:name "Carrot Stew"
                  #:sprite carrotstew-sprite))
 
   (define my-carrot-stew-recipe
@@ -780,10 +780,10 @@
             #:ingredients (list "Carrot")))
 
   (adventure-game
-   #:npc-list     (list (custom-npc #:dialog (list "Can you make me some carrot stew?")
+   #:npc-list     (list (basic-npc #:dialog (list "Can you make me some carrot stew?")
                                     #:quest-list (list (craft-quest #:item carrot-stew))))
    #:food-list    (list (carrot))
-   #:crafter-list (list (custom-crafter #:recipe-list (list my-carrot-stew-recipe))))
+   #:crafter-list (list (basic-crafter #:recipe-list (list my-carrot-stew-recipe))))
   
   )
 
@@ -791,31 +791,31 @@
 
 (define-example-code adventure bg-1
   (adventure-game
-   #:avatar (custom-avatar)
-   #:bg (custom-bg))
+   #:avatar (basic-avatar)
+   #:bg (basic-bg))
   )
 
 (define-example-code adventure bg-2
   (adventure-game
-   #:avatar (custom-avatar)
-   #:bg (custom-bg #:image DESERT-BG))
+   #:avatar (basic-avatar)
+   #:bg (basic-bg #:image DESERT-BG))
   )
 
 (define-example-code adventure bg-3
   (define (my-bg)
-    (custom-bg
+    (basic-bg
      #:image LAVA-BG
      #:rows 2
      #:columns 2))
 
   (adventure-game
-   #:avatar (custom-avatar)
+   #:avatar (basic-avatar)
    #:bg (my-bg))
   )
 
 (define-example-code adventure bg-4
   (define (my-bg)
-    (custom-bg #:image LAVA-BG
+    (basic-bg #:image LAVA-BG
                #:rows 2
                #:columns 2
                #:start-tile 3
@@ -846,12 +846,12 @@
   (adventure-game
    #:weapon-list (list (my-sword)
                        (my-repater))
-   #:enemy-list (list (custom-enemy #:amount-in-world 5)))
+   #:enemy-list (list (basic-enemy #:amount-in-world 5)))
   )
 
 (define-example-code adventure weapon-3
   (define (my-weapon)
-    (custom-weapon #:name "Hologram Shooter"
+    (basic-weapon #:name "Hologram Shooter"
                    #:sprite (make-icon "?" 'red)
                    #:dart-sprite (random-character-sprite)
                    #:speed 5
@@ -860,8 +860,8 @@
                    ))
   
   (adventure-game
-   #:avatar (custom-avatar)
-   #:enemy-list (list (custom-enemy #:amount-in-world 5))
+   #:avatar (basic-avatar)
+   #:enemy-list (list (basic-enemy #:amount-in-world 5))
    #:weapon-list (list (my-weapon)))
   )
 
@@ -875,8 +875,8 @@
                #:on-store (spawn (page "Woah, this is cold!"))))
   
   (adventure-game
-   #:avatar (custom-avatar)
-   #:enemy-list (list (custom-enemy #:amount-in-world 10))
+   #:avatar (basic-avatar)
+   #:enemy-list (list (basic-enemy #:amount-in-world 10))
    #:weapon-list (list (my-fire-magic)
                        (my-ice-magic)))
   )
@@ -889,7 +889,7 @@
            #:on-drop (spawn (page "Oh no! Better put it back in my backpack."))))
 
   (define (my-enemy)
-    (custom-enemy #:sprite pirateboy-sprite
+    (basic-enemy #:sprite pirateboy-sprite
                   #:on-death (spawn (page (set-sprite-angle 90 (render pirateboy-sprite))
                                           "You won!"))))
   (adventure-game

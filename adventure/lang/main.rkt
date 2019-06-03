@@ -71,6 +71,19 @@
 
          random-player-dialog-with
          random-npc-response
+         (rename-out (custom-sky basic-sky)
+                     (custom-avatar basic-avatar)
+                     (custom-weapon basic-weapon)
+                     (custom-enemy basic-enemy)
+                     (custom-crafter basic-crafter)
+                     (custom-npc basic-npc)
+                     (custom-bg basic-bg)
+                     (custom-food basic-food)
+                     (custom-coin basic-coin)
+                     (custom-cutscene cutscene)
+                     (custom-cutscene basic-cutscene)
+                     (custom-item basic-item)
+                     )
          )
 
 (require scribble/srcdoc)
@@ -983,6 +996,10 @@
   ; for now, pages is a list of page entities
   ; maybe turn it into a scene/page struct?
   ;(apply precompile! pages) ; precompile! takes images or entities but NOT sprites?
+  (define pages-or-default
+    (if (empty? pages)
+        (list (page "Once upon a time..."))
+        pages))
   (define (set-first-page)
     (lambda (g e)
       (define cut-scenes (get-storage-data "cut-scenes" e))
@@ -994,7 +1011,7 @@
     (lambda (g e)
       (define (bake-page page)
         ((on-start-func (get-component page on-start?)) g page))
-      (define baked-pages (map bake-page pages))
+      (define baked-pages (map bake-page pages-or-default))
       (add-components e (storage "cut-scenes" baked-pages))))
   
   (sprite->entity empty-image ;(reverse (get-components (first pages) animated-sprite?))

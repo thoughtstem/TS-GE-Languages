@@ -6,11 +6,11 @@
 (require ts-kata-util
          "../assets.rkt"
          (except-in adventure
-                    custom-npc
-                    custom-enemy)
+                    basic-npc
+                    basic-enemy)
          (rename-in adventure
-                    [custom-npc   a:custom-npc]
-                    [custom-enemy a:custom-enemy])
+                    [basic-npc   a:custom-npc]
+                    [basic-enemy a:custom-enemy])
          game-engine-demos-common)
 
 (provide block
@@ -18,6 +18,11 @@
          fence
          pipe
          question-block
+         (rename-out (custom-npc       basic-npc)
+                     (custom-enemy     basic-enemy)
+                     (custom-character basic-character)
+                     (custom-level     basic-level)
+                     (custom-power     basic-power))
          )
 
 
@@ -27,9 +32,12 @@
                    [#:bg              #:level]
                    [#:weapon-list     #:power-list]
                    [#:death-cutscene  #:game-over-cutscene]
-                   [custom-avatar     custom-character]
-                   [custom-bg         custom-level]
-                   [custom-weapon     custom-power]
+                   ;[custom-avatar     custom-character]
+                   ;[custom-bg         custom-level]
+                   ;[custom-weapon     custom-power]
+                   [basic-avatar      basic-character]
+                   [basic-bg          basic-level]
+                   [basic-weapon      basic-power]
                    )
 
 (define/contract/doc (custom-character #:sprite           [sprite (first (shuffle (list mario-sprite

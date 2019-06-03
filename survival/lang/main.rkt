@@ -45,6 +45,16 @@
 
          acid-sprite
          ice-sprite
+         (rename-out (custom-sky basic-sky)
+                     (custom-avatar basic-avatar)
+                     (custom-weapon basic-weapon)
+                     (custom-enemy basic-enemy)
+                     (custom-crafter basic-crafter)
+                     (custom-npc basic-npc)
+                     (custom-bg basic-bg)
+                     (custom-food basic-food)
+                     (custom-coin basic-coin)
+                     )
          )
 
 (require scribble/srcdoc)

@@ -76,6 +76,13 @@
          plain-bg
 
          (rename-out (battlearena-game battle-arena-game))
+         (rename-out (custom-avatar basic-avatar)
+                     (custom-weapon basic-weapon)
+                     (custom-enemy basic-enemy)
+                     (custom-armor basic-armor)
+                     (custom-bg basic-bg)
+                     (custom-item basic-item)
+                     )
          )
 
 (define (force-field [width 80]

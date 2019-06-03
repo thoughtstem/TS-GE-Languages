@@ -180,8 +180,7 @@
 
 (define-example-code survival weapon-crafter-2
   (define my-sword-recipe
-    (recipe #:product (sword #:name "Heavy Sword"
-                             #:damage 100)
+    (recipe #:product (sword #:damage 100)
             #:build-time 100))
   
   (survival-game
@@ -192,8 +191,9 @@
 
 (define-example-code survival weapon-crafter-3
   (define my-fire-magic-recipe
-    (recipe #:product (fire-magic #:speed 7)
-            #:build-time 40
+    (recipe #:product (fire-magic #:name "Fast Flame"
+                                  #:speed 7)
+            #:build-time 20
             #:cost       100))
   
   (survival-game

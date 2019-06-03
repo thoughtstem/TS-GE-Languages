@@ -187,16 +187,14 @@
 
 (define-example-code battlearena-starwars blaster-3
   (define (my-blaster)
-    (blaster  #:rarity     'legendary
-              #:icon       (make-icon "B" "orange")
-              #:color      "orange"
-              #:damage     20
-              #:durability 25
-              #:speed      10
-              #:range      70))
+    (blaster #:damage     20
+             #:durability 30
+             #:speed      10
+             #:range      70))
 
   (starwars-game
-   #:weapon-list (list (my-blaster)))
+   #:weapon-list (list (my-blaster))
+   #:imperial-list (list (basic-imperial #:amount-in-world 5)))
   )
 
 ; ---------------
@@ -219,8 +217,7 @@
 (define-example-code battlearena-starwars lightsaber-droid-3
   (define (ls-droid)
     (lightsaber-droid #:color      "orange"
-                      #:damage     75 
-                      #:durability 30
+                      #:damage     75
                       #:fire-rate  2))
 
   (starwars-game

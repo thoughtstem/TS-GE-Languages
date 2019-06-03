@@ -9,12 +9,12 @@
 
 (define-example-code battlearena-avengers alt/avatar-2
  (avengers-game
-   #:hero (custom-hero #:sprite thor-sprite))
+   #:hero (basic-hero #:sprite thor-sprite))
   )
 
 (define-example-code battlearena-avengers alt/avatar-3
   (define (my-hero)
-    (custom-hero #:sprite     hulk-sprite
+    (basic-hero #:sprite     hulk-sprite
                  #:speed      15))
   
   (avengers-game
@@ -23,7 +23,7 @@
 
 (define-example-code battlearena-avengers alt/avatar-4
  (define (my-hero)
-    (custom-hero #:sprite     drax-sprite
+    (basic-hero #:sprite     drax-sprite
                  #:speed      25
                  #:item-slots 5
                  #:health     200
@@ -39,7 +39,7 @@
 
 (define-example-code battlearena-avengers alt/enemy-3
   (define (my-villain)
-    (custom-villain #:sprite          loki-sprite
+    (basic-villain #:sprite          loki-sprite
                     #:ai              'medium
                     #:health          200
                     #:shield          100
@@ -51,13 +51,13 @@
 
 (define-example-code battlearena-avengers alt/enemy-4
   (define (easy-villain)
-    (custom-villain #:sprite          wintersoldier-sprite
+    (basic-villain #:sprite          wintersoldier-sprite
                     #:ai              'easy
                     #:health          50
                     #:amount-in-world 5))
 
   (define (hard-villain)
-    (custom-villain #:sprite          redskull-sprite
+    (basic-villain #:sprite          redskull-sprite
                     #:ai              'hard
                     #:health          200
                     #:amount-in-world 3))
@@ -71,14 +71,14 @@
 
 (define-example-code battlearena-avengers alt/enemy-weapon-1
   (avengers-game
-   #:villain-list (list (custom-villain
+   #:villain-list (list (basic-villain
                          #:power (energy-blast
                                    #:color 'yellow))))
   )
 
 (define-example-code battlearena-avengers alt/enemy-weapon-2
   (avengers-game
-   #:villain-list (list (custom-villain
+   #:villain-list (list (basic-villain
                          #:sprite mandarin-sprite
                          #:power (ring-of-fire
                                    #:color 'purple))))
@@ -91,7 +91,7 @@
                   #:duration  20
                   #:color 'purple))
   (avengers-game
-   #:villain-list (list (custom-villain
+   #:villain-list (list (basic-villain
                          #:sprite mandarin-sprite
                          #:power (my-power))))
   )
@@ -177,14 +177,14 @@
 
 (define-example-code battlearena-avengers armor-1
   (avengers-game
-   #:item-list (list (custom-armor #:name "Energy Armor"
+   #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
                                    #:icon (make-icon "EA"))))
   )
 
 (define-example-code battlearena-avengers armor-2
   (avengers-game
-   #:item-list (list (custom-armor #:name "Energy Armor"
+   #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
                                    #:icon (make-icon "EA")
                                    #:change-damage (subtract-by 10))))
@@ -192,7 +192,7 @@
 
 (define-example-code battlearena-avengers armor-3
   (define (energy-armor)
-    (custom-armor #:name "Energy Armor"
+    (basic-armor #:name "Energy Armor"
                   #:protects-from "Energy Blast"
                   #:icon (make-icon "LA")
                   #:change-damage (subtract-by 10)

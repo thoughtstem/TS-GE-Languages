@@ -10,7 +10,7 @@
 
 (define-example-code adventure-harrypotter alt/avatar-1
   (harrypotter-game
-   #:wizard (custom-wizard
+   #:wizard (basic-wizard
                 #:sprite harrypotter-sprite
                 #:speed  20))
   )
@@ -18,7 +18,7 @@
 
 (define-example-code adventure-harrypotter alt/avatar-2
   (define (my-wizard)
-    (custom-wizard
+    (basic-wizard
      #:sprite harrypotter-sprite
      #:speed  20
      #:health 200
@@ -30,10 +30,10 @@
 
 (define-example-code adventure-harrypotter alt/avatar-3
   (harrypotter-game
-   #:wizard (custom-wizard
+   #:wizard (basic-wizard
                 #:sprite harrypotter-sprite
                 #:speed  20)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (cutscene
                      (page harrypotter-sprite
                            "This is the story of"
                            "Harry Potter.")))
@@ -41,9 +41,9 @@
 
 (define-example-code adventure-harrypotter alt/avatar-4
   (harrypotter-game
-   #:wizard (custom-wizard
+   #:wizard (basic-wizard
                 #:sprite harrypotter-sprite)
-   #:intro-cutscene (custom-cutscene
+   #:intro-cutscene (basic-cutscene
                      (page "A long time ago,"
                            "In a magical place.")
                      (page harrypotter-sprite
@@ -56,7 +56,7 @@
 (define-example-code adventure-harrypotter alt/food-1
  
   (harrypotter-game
-   #:potion-list  (list (custom-potion #:name            "Heal Potion"
+   #:potion-list  (list (basic-potion #:name            "Heal Potion"
                                        #:amount-in-world 10
                                        #:heals-by        20)))
   )
@@ -64,12 +64,12 @@
 (define-example-code adventure-harrypotter alt/food-2
 
   (define my-potion
-    (custom-potion #:name            "Heal"
+    (basic-potion #:name            "Heal"
                    #:color           'green          
                    #:amount-in-world 10))
 
   (define special-potion
-    (custom-potion #:name     "Ultra Heal"
+    (basic-potion #:name     "Ultra Heal"
                    #:color    'orange
                    #:heals-by 50
                    #:respawn? #f))
@@ -81,7 +81,7 @@
 
 (define-example-code adventure-harrypotter alt/food-3
   (define special-potion
-    (custom-potion #:name      "Yellow Potion"
+    (basic-potion #:name      "Yellow Potion"
                    #:sprite    (colorize-potion 'yellow)
                    #:heals-by  100
                    #:on-pickup (spawn (page (colorize-potion 'yellow)
@@ -89,7 +89,7 @@
                                             "Wow, I'm completely healed!"))))
                  
   (harrypotter-game
-   #:wizard (custom-wizard #:health 100
+   #:wizard (basic-wizard #:health 100
                            #:max-health 200)
    #:potion-list  (list special-potion))
   
@@ -97,7 +97,7 @@
 
 (define-example-code adventure-harrypotter alt/food-4
   (define fish-potion
-    (custom-potion #:name "Fish Potion"
+    (basic-potion #:name "Fish Potion"
                    #:respawn? #f
                    #:heals-by 50))
 
@@ -108,23 +108,23 @@
 
   (harrypotter-game
    #:ingredient-list (list (fish #:amount-in-world 10))
-   #:cauldron-list   (list (custom-cauldron #:recipe-list (list fish-potion-recipe))))
+   #:cauldron-list   (list (basic-cauldron #:recipe-list (list fish-potion-recipe))))
   )
 
 (define-example-code adventure-harrypotter alt/food-5
   
   (define my-potion
-    (custom-potion))
+    (basic-potion))
 
   (define carrot-potion-recipe
     (recipe #:product my-potion
             #:ingredients (list "Carrot")))
 
   (harrypotter-game
-   #:npc-list     (list (custom-npc #:dialog (list "Can you make me a potion?")
+   #:npc-list     (list (basic-npc #:dialog (list "Can you make me a potion?")
                                     #:quest-list (list (craft-quest #:item my-potion))))
    #:ingredient-list    (list (carrot))
-   #:cauldron-list (list (custom-cauldron #:recipe-list (list carrot-potion-recipe))))
+   #:cauldron-list (list (basic-cauldron #:recipe-list (list carrot-potion-recipe))))
   
   )
 
@@ -132,11 +132,11 @@
 
 (define-example-code adventure-harrypotter alt/loot-quest-3
   (define stolen-food
-    (custom-food #:sprite apples-sprite))
+    (basic-food #:sprite apples-sprite))
 
   (harrypotter-game
-   #:deatheater-list  (list (custom-deatheater #:loot-list (list stolen-food)))
-   #:npc-list    (list (custom-npc #:dialog (list "Help! Someone stole my apples!")
+   #:deatheater-list  (list (basic-deatheater #:loot-list (list stolen-food)))
+   #:npc-list    (list (basic-npc #:dialog (list "Help! Someone stole my apples!")
                                    #:quest-list (list (loot-quest #:item stolen-food
                                                                   #:reward-amount 400))))
    #:spell-list (list (repeater)))
@@ -145,15 +145,15 @@
 (define-example-code adventure-harrypotter alt/loot-quest-4
 
   (define stolen-pumpkin
-    (custom-item #:sprite pumpkin-sprite))
+    (basic-item #:sprite pumpkin-sprite))
   
   (define my-loot-quest
     (loot-quest #:item stolen-pumpkin
                 #:quest-complete-dialog (list "Thank you for finding my pumpkin!")))
 
   (harrypotter-game
-   #:deatheater-list (list (custom-deatheater #:loot-list (list stolen-pumpkin)))
-   #:npc-list   (list (custom-npc #:dialog (list "Help! Someone stole my pumpkin!")
+   #:deatheater-list (list (basic-deatheater #:loot-list (list stolen-pumpkin)))
+   #:npc-list   (list (basic-npc #:dialog (list "Help! Someone stole my pumpkin!")
                                   #:quest-list (list my-loot-quest)))
    #:spell-list (list (ice-magic)))
   )
@@ -161,13 +161,13 @@
 (define-example-code adventure-harrypotter alt/loot-quest-5
   
   (define stolen-item
-    (custom-item #:sprite  flyingbook-sprite
+    (basic-item #:sprite  flyingbook-sprite
                  #:on-store (spawn (page flyingbook-sprite
                                          "This must be the stolen book."))))
 
   (harrypotter-game
-   #:deatheater-list  (list (custom-deatheater #:loot-list (list stolen-item)))
-   #:npc-list    (list (custom-npc #:dialog     (list "That thief took my book!")
+   #:deatheater-list  (list (basic-deatheater #:loot-list (list stolen-item)))
+   #:npc-list    (list (basic-npc #:dialog     (list "That thief took my book!")
                                    #:quest-list (loot-quest #:item stolen-item)
                                    ))
    #:spell-list (list (fire-magic)))
@@ -193,8 +193,8 @@
                                              (list "Nope! I'm good now."))))
 
   (harrypotter-game
-   #:wizard (custom-wizard #:components player-dialog-with-charlie)
-   #:npc-list (list (custom-npc #:name "Charlie"
+   #:wizard (basic-wizard #:components player-dialog-with-charlie)
+   #:npc-list (list (basic-npc #:name "Charlie"
                                 #:dialog charlie-response
                                 #:quest-list (list wand-quest))))
   )
@@ -214,19 +214,19 @@
            #:rarity 'legendary))
   
   (define (my-spell)
-    (custom-spell #:name "Fire Darts"
+    (basic-spell #:name "Fire Darts"
                   #:color 'red
                   #:fire-mode 'spread))
   
   (harrypotter-game
    #:spell-list (list (my-wand)
                       (my-spell))
-   #:deatheater-list (list (custom-deatheater #:amount-in-world 5)))
+   #:deatheater-list (list (basic-deatheater #:amount-in-world 5)))
   )
 
 (define-example-code adventure-harrypotter alt/weapon-3
   (define (my-spell)
-    (custom-spell #:name "Hologram Shooter"
+    (basic-spell #:name "Hologram Shooter"
                    #:sprite (make-icon "?" 'red)
                    #:dart-sprite (random-character-sprite)
                    #:speed 5
@@ -235,8 +235,8 @@
                    ))
   
   (harrypotter-game
-   #:wizard (custom-wizard)
-   #:deatheater-list (list (custom-deatheater #:amount-in-world 5))
+   #:wizard (basic-wizard)
+   #:deatheater-list (list (basic-deatheater #:amount-in-world 5))
    #:spell-list (list (my-spell)))
   )
 
@@ -248,7 +248,7 @@
           #:on-drop (spawn (page "Oh no! Better put it back in my backpack."))))
 
   (define (my-baddy)
-    (custom-deatheater #:sprite pirateboy-sprite
+    (basic-deatheater #:sprite pirateboy-sprite
                   #:on-death (spawn (page (set-sprite-angle 90 (render pirateboy-sprite))
                                           "You won!"))))
   (harrypotter-game

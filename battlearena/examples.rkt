@@ -11,20 +11,20 @@
 
 (define-example-code battlearena force-field-1
   (battlearena-game
-   #:item-list (list (custom-item #:name "Force Field"
+   #:item-list (list (basic-item #:name "Force Field"
                                   #:on-use (spawn (force-field)))))
   )
 
 (define-example-code battlearena force-field-2
   (battlearena-game
-   #:item-list (list (custom-item #:name "Force Field"
+   #:item-list (list (basic-item #:name "Force Field"
                                   #:icon (make-icon "FF")
                                   #:on-use (spawn (force-field #:duration 1000)))))
   )
 
 (define-example-code battlearena force-field-3
   (define (force-field-item)
-    (custom-item #:name "Force Field"
+    (basic-item #:name "Force Field"
                  #:icon (make-icon "FF")
                  #:on-use (spawn (force-field #:allow-friendly-dart? #t
                                               #:duration 1000))))
@@ -37,17 +37,17 @@
 
 (define-example-code battlearena avatar-1
   (battlearena-game
-   #:avatar (custom-avatar))
+   #:avatar (basic-avatar))
   )
 
 (define-example-code battlearena avatar-2
   (battlearena-game
-   #:avatar (custom-avatar #:sprite pirateboy-sprite))
+   #:avatar (basic-avatar #:sprite pirateboy-sprite))
   )
 
 (define-example-code battlearena avatar-3
   (define (my-avatar)
-    (custom-avatar #:sprite pirategirl-sprite
+    (basic-avatar #:sprite pirategirl-sprite
                    #:speed 20))
   
   (battlearena-game
@@ -56,7 +56,7 @@
 
 (define-example-code battlearena avatar-4
   (define (my-avatar)
-    (custom-avatar #:sprite pirateboy-sprite
+    (basic-avatar #:sprite pirateboy-sprite
                    #:speed 20
                    #:item-slots 5
                    #:health     200
@@ -72,17 +72,17 @@
 
 (define-example-code battlearena enemy-1
   (battlearena-game
-   #:enemy-list (list (custom-enemy)))
+   #:enemy-list (list (basic-enemy)))
   )
 
 (define-example-code battlearena enemy-2
   (battlearena-game
-   #:enemy-list (list (curry custom-enemy #:amount-in-world 10)))
+   #:enemy-list (list (curry basic-enemy #:amount-in-world 10)))
   )
 
 (define-example-code battlearena enemy-3
   (define (my-enemy)
-    (custom-enemy #:sprite          darkknight-sprite
+    (basic-enemy #:sprite          darkknight-sprite
                   #:ai              'medium
                   #:amount-in-world 5))
 
@@ -93,13 +93,13 @@
 ;Tip: you can also change shield instead of health
 (define-example-code battlearena enemy-4
   (define (easy-enemy)
-    (custom-enemy #:ai              'easy
+    (basic-enemy #:ai              'easy
                   #:sprite          wizard-sprite
                   #:health          50
                   #:amount-in-world 5))
   
   (define (medium-enemy)
-    (custom-enemy #:ai              'medium
+    (basic-enemy #:ai              'medium
                   #:sprite          darkknight-sprite
                   #:health          200
                   #:amount-in-world 3))
@@ -111,20 +111,20 @@
 (define-example-code battlearena enemy-5
  
   (define (hard-enemy)
-    (custom-enemy #:ai              'hard
+    (basic-enemy #:ai              'hard
                   #:sprite          pirategirl-sprite
                   #:amount-in-world 5
                   #:weapon          (repeater #:damage 50)))
  
   (battlearena-game
-   #:avatar       (custom-avatar)
+   #:avatar       (basic-avatar)
    #:enemy-list   (list (hard-enemy))))
 
 ;-----------------
 
 (define-example-code battlearena enemy-weapon-1
   (battlearena-game
-   #:enemy-list (list (custom-enemy
+   #:enemy-list (list (basic-enemy
                        #:weapon (sword))))
   )
 
@@ -133,7 +133,7 @@
     (sword #:damage 40))
 
   (battlearena-game
-   #:enemy-list (list (custom-enemy
+   #:enemy-list (list (basic-enemy
                        #:weapon (my-weapon))))
   )
 
@@ -147,7 +147,7 @@
      #:range  200))
 
   (battlearena-game
-   #:enemy-list (list (custom-enemy
+   #:enemy-list (list (basic-enemy
                        #:weapon (my-weapon))))
   )
 
@@ -193,16 +193,16 @@
 
 (define-example-code battlearena background-1  
   (battlearena-game
-   #:bg (custom-bg))
+   #:bg (basic-bg))
   )
 
 (define-example-code battlearena background-2
-  (battlearena-game #:bg (custom-bg #:image LAVA-BG))
+  (battlearena-game #:bg (basic-bg #:image LAVA-BG))
   )
 
 (define-example-code battlearena background-3
   (define (my-bg)
-    (custom-bg #:image LAVA-BG
+    (basic-bg #:image LAVA-BG
                #:rows 2
                #:columns 2))
  
@@ -211,7 +211,7 @@
 
 (define-example-code battlearena background-4
   (define (my-bg)
-    (custom-bg #:image LAVA-BG
+    (basic-bg #:image LAVA-BG
                #:rows 2
                #:columns 2
                #:start-tile 3
@@ -226,27 +226,27 @@
 (define-example-code battlearena boost-1
   (battlearena-game
    #:weapon-list (list (repeater))
-   #:item-list (list (custom-item #:name   "Damage Boost"
+   #:item-list (list (basic-item #:name   "Damage Boost"
                                   #:icon (make-icon "DB" 'orangered)
                                   #:on-use (change-damage-by 1000 #:for 200))))
   )
 
 (define-example-code battlearena boost-2
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Speed Boost"
+   #:item-list (list (basic-item #:name   "Speed Boost"
                                   #:icon (make-icon "SB" 'yellow)
                                   #:on-use (multiply-speed-by 2 #:for 200))))
   )
 
 (define-example-code battlearena boost-3
   (define (damage-boost)
-    (custom-item #:name   "Damage Boost"
+    (basic-item #:name   "Damage Boost"
                  #:icon (make-icon "DB" 'orangered)
                  #:on-use (change-damage-by 1000 #:for 200)
                  #:rarity 'epic))
 
   (define (speed-boost)
-    (custom-item #:name   "Speed Boost"
+    (basic-item #:name   "Speed Boost"
                  #:icon (make-icon "SB" 'yellow)
                  #:on-use (multiply-speed-by 2 #:for 200)
                  #:rarity 'uncommon))
@@ -282,27 +282,27 @@
 (define-example-code battlearena size-1
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Grow Power-up"
+   #:item-list (list (basic-item #:name   "Grow Power-up"
                                   #:icon (make-icon "BIG" 'red 'white)
                                   #:on-use (scale-sprite 2 #:for 100)))))
 
 (define-example-code battlearena size-2
 
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Shrink Power-up"
+   #:item-list (list (basic-item #:name   "Shrink Power-up"
                                   #:icon (make-icon "SML" 'blue 'white)
                                   #:on-use (scale-sprite 0.5 #:for 100)))))
 
 (define-example-code battlearena size-3
 
   (define (grow-powerup)
-    (custom-item #:name   "Grow Power-up"
+    (basic-item #:name   "Grow Power-up"
                  #:icon (make-icon "BIG" 'red 'white)
                  #:on-use (scale-sprite 2 #:for 100)
                  #:rarity 'common))
 
   (define (shrink-powerup)
-    (custom-item #:name     "Shrink Power-up"
+    (basic-item #:name     "Shrink Power-up"
                  #:icon   (make-icon "SML" 'blue 'white)
                  #:on-use   (scale-sprite 0.5 #:for 100)
                  #:rarity   'rare))
@@ -316,7 +316,7 @@
 (define-example-code battlearena health-1
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Health Power-up"
+   #:item-list (list (basic-item #:name   "Health Power-up"
                                   #:icon (make-icon "HP" 'green 'white)
                                   #:on-use (change-health-by 50)
                                   #:respawn? #t))))
@@ -326,7 +326,7 @@
 (define-example-code battlearena health-2
   
   (battlearena-game
-   #:item-list (list (custom-item #:name   "Max Health Power-up"
+   #:item-list (list (basic-item #:name   "Max Health Power-up"
                                   #:icon (make-icon "MHP" 'green 'white)
                                   #:on-use (set-health-to 100)
                                   #:rarity 'epic))))
@@ -336,12 +336,12 @@
 (define-example-code battlearena health-3
 
   (define (health-powerup)
-    (custom-item #:name     "Health Power-up"
+    (basic-item #:name     "Health Power-up"
                  #:icon   (make-icon "HP")
                  #:on-use   (change-health-by 50)))
   
   (define (max-health-powerup)
-    (custom-item #:name   "Max Health Power-up"
+    (basic-item #:name   "Max Health Power-up"
                  #:icon (make-icon "MHP")
                  #:on-use (set-health-to 100)))
   
@@ -616,7 +616,7 @@
 (define-example-code battlearena repeater-armor-1
   
   (battlearena-game
-   #:item-list (list (custom-armor #:name   "Repeater Armor"
+   #:item-list (list (basic-armor #:name   "Repeater Armor"
                                    #:icon (make-icon "RA"))))
 
   
@@ -628,7 +628,7 @@
 (define-example-code battlearena repeater-armor-2
   
   (battlearena-game
-   #:item-list (list (custom-armor #:name          "Repeater Armor"
+   #:item-list (list (basic-armor #:name          "Repeater Armor"
                                    #:icon        (make-icon "RA")
                                    #:protects-from "Repeater"
                                    #:change-damage (divide-by 2)
@@ -644,9 +644,9 @@
 (define-example-code battlearena repeater-armor-3
   
   (battlearena-game
-   #:enemy-list (list (custom-enemy #:amount-in-world 10
+   #:enemy-list (list (basic-enemy #:amount-in-world 10
                                     #:weapon          (repeater)))
-   #:item-list (list (custom-armor #:name          "Repeater Armor"
+   #:item-list (list (basic-armor #:name          "Repeater Armor"
                                    #:icon          (make-icon "RA")
                                    #:protects-from "Repeater"
                                    #:change-damage (divide-by 2)
@@ -751,7 +751,7 @@
 
 (define-example-code battlearena shield-1
   (battlearena-game
-   #:item-list (list (custom-item #:name     "Shield Power-up" 
+   #:item-list (list (basic-item #:name     "Shield Power-up" 
                                   #:icon   (make-icon "SP" 'blue 'white)
                                   #:on-use   (change-shield-by 50))))
   )
@@ -762,7 +762,7 @@
 
 (define-example-code battlearena shield-2
   (battlearena-game
-   #:item-list (list (custom-item #:name     "Max Shield Power-up"
+   #:item-list (list (basic-item #:name     "Max Shield Power-up"
                                   #:icon   (make-icon "MSP" 'blue 'white)
                                   #:on-use   (set-shield-to 100))))
   )
@@ -774,14 +774,14 @@
 (define-example-code battlearena shield-3
 
   (define (shield-powerup)
-    (custom-item #:name     "Shield Power-up" 
+    (basic-item #:name     "Shield Power-up" 
                  #:icon   (make-icon "SP" 'blue 'white)
                  #:on-use   (change-shield-by 50)
                  #:rarity   'uncommon
                  #:respawn? #t))
 
   (define (max-shield)
-    (custom-item #:name     "Max Shield Power-up"
+    (basic-item #:name     "Max Shield Power-up"
                  #:icon   (make-icon "MSP" 'blue 'white)
                  #:on-use   (set-shield-to 100)
                  #:rarity   'epic))
@@ -948,7 +948,7 @@
 (define-example-code battlearena sword-armor-1
   
   (battlearena-game
-   #:item-list (list (custom-armor #:name   "Sword Armor"
+   #:item-list (list (basic-armor #:name   "Sword Armor"
                                    #:icon (make-icon "SA"))))
 
   
@@ -957,7 +957,7 @@
 (define-example-code battlearena sword-armor-2
   
   (battlearena-game
-   #:item-list (list (custom-armor #:name   "Sword Armor"
+   #:item-list (list (basic-armor #:name   "Sword Armor"
                                    #:icon (make-icon "SA")
                                    #:protects-from "Sword"
                                    #:change-damage (subtract-by 30)
@@ -969,9 +969,9 @@
 (define-example-code battlearena sword-armor-3
   
   (battlearena-game
-   #:enemy-list (list (custom-enemy #:amount-in-world 10
+   #:enemy-list (list (basic-enemy #:amount-in-world 10
                                     #:weapon       (sword)))
-   #:item-list (list (custom-armor #:name          "Sword Armor"
+   #:item-list (list (basic-armor #:name          "Sword Armor"
                                    #:icon        (make-icon "RA")
                                    #:protects-from "Sword"
                                    #:change-damage (divide-by 2)
@@ -984,8 +984,8 @@
 
 (define-example-code battlearena wall-builder
   (battlearena-game
-   #:enemy-list (list (custom-enemy #:amount-in-world 20))
-   #:weapon-list (list (custom-weapon
+   #:enemy-list (list (basic-enemy #:amount-in-world 20))
+   #:weapon-list (list (basic-weapon
                         #:dart (builder-dart #:entity
                                              (wall))))))
 
@@ -993,7 +993,7 @@
 (define-example-code battlearena level-design-1
 
   (battlearena-game
-   #:bg (custom-bg #:image FOREST-BG)
+   #:bg (basic-bg #:image FOREST-BG)
    #:enable-world-objects? #t)
   
   )
@@ -1001,7 +1001,7 @@
 (define-example-code battlearena level-design-2
 
   (battlearena-game
-   #:bg             (custom-bg #:image FOREST-BG)
+   #:bg             (basic-bg #:image FOREST-BG)
    #:other-entities (make-world-objects round-tree
                                         pine-tree
                                         #:hd? #t))
@@ -1010,7 +1010,7 @@
 (define-example-code battlearena level-design-3
 
   (battlearena-game
-   #:bg             (custom-bg #:image PINK-BG)
+   #:bg             (basic-bg #:image PINK-BG)
    #:other-entities (make-world-objects candy-cane-tree
                                         snow-pine-tree
                                         #:hd? #t

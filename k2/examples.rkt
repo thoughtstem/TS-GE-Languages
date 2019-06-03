@@ -1,4 +1,4 @@
-#lang racket
+ƒ#lang racket
 
 (require ts-kata-util
          ;k2/lang/ocean/fish
@@ -1203,8 +1203,8 @@
 (define-example-code k2/lang/zoo/coins
   zoo-011
   (start penguin
-         (fish)
-         (copper)))
+         ((fish green 3)
+          (fish red 5)))
 
 (define-example-code k2/lang/zoo/coins
   zoo-012

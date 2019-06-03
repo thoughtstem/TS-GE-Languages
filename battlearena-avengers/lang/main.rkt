@@ -10,11 +10,11 @@
 
 
 (language-mappings battlearena        battlearena-avengers
-                   [custom-avatar     custom-hero]
-                   [custom-enemy      custom-villain]
-                   [custom-weapon     custom-power]
+                   [basic-avatar      basic-hero]
+                   [basic-enemy       basic-villain]
+                   [basic-weapon      basic-power]
                    [repeater          energy-blast]
-                   [custom-bg         custom-planet]
+                   [basic-bg          basic-planet]
                    [#:avatar          #:hero]
                    [#:enemy-list      #:villain-list]
                    [#:bg              #:planet]
@@ -35,7 +35,12 @@
          energy-blast-sprite
          magic-orb
          magic-orb-dart
-         flame-sprite)
+         flame-sprite
+         (rename-out (custom-hero    basic-hero)
+                     (custom-villain basic-villain)
+                     (custom-power   basic-power)
+                     (custom-planet  basic-planet)
+                     ))
 
 ;; ----- HERO
 

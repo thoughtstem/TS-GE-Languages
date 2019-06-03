@@ -16,18 +16,32 @@
                    [#:enemy-list   #:deatheater-list]
                    [#:food-list    #:ingredient-list]
                    [#:coin-list    #:currency-list]
-                   [custom-avatar  custom-wizard]
-                   [custom-weapon  custom-spell]
-                   [custom-crafter custom-cauldron]
-                   [custom-enemy   custom-deatheater]
-                   [custom-food    custom-ingredient]
+                   ;[custom-avatar  custom-wizard]
+                   ;[custom-weapon  custom-spell]
+                   ;[custom-crafter custom-cauldron]
+                   ;[custom-enemy   custom-deatheater]
+                   ;[custom-food    custom-ingredient]
                    [custom-coin    custom-currency]
+                   [basic-avatar  basic-wizard]
+                   [basic-weapon  basic-spell]
+                   [basic-crafter basic-cauldron]
+                   [basic-enemy   basic-deatheater]
+                   [basic-food    basic-ingredient]
+                   [basic-coin    basic-currency]
                    [adventure-game harrypotter-game]
                    )
 
 (provide wand
          swinging-wand-sprite
          colorize-potion
+         (rename-out (custom-wizard basic-wizard)
+                     (custom-spell basic-spell)
+                     (custom-cauldron basic-cauldron)
+                     (custom-deatheater basic-deatheater)
+                     (custom-ingredient basic-ingredient)
+                     (custom-potion basic-potion)
+                     (custom-currency basic-currency)
+                     )
          )
 
 ; ----------- WEAPONS

@@ -12,6 +12,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "./hero-lang.rkt")
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"

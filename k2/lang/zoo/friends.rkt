@@ -21,6 +21,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
                       [start-npc start])
            "../icons.rkt"

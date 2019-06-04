@@ -15,7 +15,7 @@
                    [basic-coin      basic-stone]
                    [basic-weapon    basic-attack]
                    [survival-game    pokemon-game]
-                   [#:bg             #:town-bg]
+                   [#:bg             #:town]
                    [#:avatar         #:pokemon]
                    [#:npc-list       #:friend-list]
                    [#:enemy-list     #:trainer-list]
@@ -68,7 +68,7 @@
 
   @{Returns a custom town, which will be used
          automatically if it is passed into @racket[pokemon-game]
-         via the @racket[#:town-bg] parameter.}
+         via the @racket[#:town] parameter.}
   
   (custom-bg #:image      img
              #:rows       rows
@@ -355,7 +355,7 @@
 
 (define/contract/doc
   (pokemon-game #:headless        [headless #f]
-                #:town-bg         [town-ent (plain-forest-bg #:image (random-forest))]
+                #:town            [town-ent (plain-forest-bg #:image (random-forest))]
                 #:pokemon         [pokemon (custom-pokemon #:sprite (circle 10 'solid 'red))]
                 #:starvation-rate [sr 50]
                 #:sky             [sky (custom-sky)]
@@ -372,7 +372,7 @@
                 . custom-entities)
   (->i ()
        (#:headless        [headless boolean?]
-        #:town-bg         [town-ent entity?]
+        #:town            [town-ent entity?]
         #:pokemon         [pokemon (or/c entity? #f)]
         #:starvation-rate [starvation-rate (or/c number? #f)]
         #:sky             [sky sky?]

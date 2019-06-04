@@ -303,7 +303,7 @@
                       #:coin-list             [coin-list '()]
                       #:food-list             [f-list    '()]
                       #:crafter-list          [c-list    '()]
-                      #:score-prefix          [prefix "Coins"]
+                      #:score-prefix          [prefix "Points"]
                       #:instructions          [instructions #f]
                       #:enable-world-objects? [world-objects? #f]
                       #:power-list            [power-list '()]

@@ -114,13 +114,13 @@
 (define-example-code adventure coin-5
   
   (define (my-coin)
-    (basic-coin #:value 10
-                 #:amount-in-world 15
+    (basic-coin  #:amount-in-world 15
                  #:respawn? #f))
 
   (define (npc-with-coin-quest)
-    (basic-npc #:dialog     (list "I've lost 100 worth of coins."
-                                   "Can you find them for me?")
+    (basic-npc #:dialog     (list "I've lost my coins..."
+                                  "...100 points worth!"
+                                  "Can you find them for me?")
                 #:quest-list (list (collect-quest #:collect-amount 100
                                                   #:reward-amount 50))))
   
@@ -428,8 +428,7 @@
   
   (adventure-game
    #:weapon-list (list (spear))
-   #:enemy-list  (list (easy-enemy)
-                       (hard-enemy)))
+   #:enemy-list  (list (hard-enemy)))
   )
 
 ; Make a game with 10 enemies and an npc with a quest to kill 5
@@ -544,26 +543,16 @@
 
 ;fetch quest with quest finish dialog
 (define-example-code adventure npc-5
-  
-  (define player-dialog-with-charlie
-    (player-dialog-with "Charlie"
-                        #:dialog-list (list "Hi. Who are you?"
-                                            "Need help?")))
-
-  (define charlie-response
-    (list (list "Hello, I'm Charlie.")
-          (list "Yes! Can you find my spear?")))
-
+ 
   (define spear-quest
     (fetch-quest #:item (spear)
                  #:quest-complete-dialog (list "YAY! MY SPEAR!")
-                 #:new-response-dialog (list (list "Um, still Charlie!")
-                                             (list "Nope! I'm good now."))))
+                 #:new-response-dialog (list "Thanks again!")))
 
   (adventure-game
-   #:avatar (basic-avatar #:components player-dialog-with-charlie)
-   #:npc-list (list (basic-npc #:name "Charlie"
-                                #:dialog charlie-response
+   #:avatar (basic-avatar)
+   #:npc-list (list (basic-npc  #:name "Charlie"
+                                #:dialog (list "Can you find my spear?")
                                 #:quest-list (list spear-quest))))
   )
 ; -----------
@@ -851,13 +840,13 @@
 
 (define-example-code adventure weapon-3
   (define (my-weapon)
-    (basic-weapon #:name "Hologram Shooter"
-                   #:sprite (make-icon "?" 'red)
-                   #:dart-sprite (random-character-sprite)
-                   #:speed 5
-                   #:damage 25
-                   #:range 50
-                   ))
+    (repeater #:name "Hologram Shooter"
+              #:icon (make-icon "?" 'red)
+              #:sprite (random-character-sprite)
+              #:speed 5
+              #:damage 25
+              #:range 50
+              ))
   
   (adventure-game
    #:avatar (basic-avatar)
@@ -867,12 +856,10 @@
 
 (define-example-code adventure weapon-4
    (define (my-fire-magic)
-    (fire-magic #:damage 25
-                #:on-store (spawn (page "Ouch, this is hot!"))))
+    (fire-magic #:on-store (spawn (page "Ouch, this is hot!"))))
 
   (define (my-ice-magic)
-    (ice-magic #:damage 25
-               #:on-store (spawn (page "Woah, this is cold!"))))
+    (ice-magic #:on-store (spawn (page "Woah, this is cold!"))))
   
   (adventure-game
    #:avatar (basic-avatar)

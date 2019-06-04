@@ -77,7 +77,7 @@
 (define randc
     (lambda () (first (shuffle (list "red" "orange" "yellow" "green" "blue" "purple")))))
 
-(define (make-hero sprite (dart-f #f) (color "green"))
+#|(define (make-hero sprite (dart-f #f) (color "green"))
   (define real-color (call-if-proc color))
   (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
@@ -86,15 +86,39 @@
                    (a:custom-weapon-system #:dart real-dart
                                            #:mouse-fire-button 'left
                                            ))
-    (a:custom-hero #:sprite sprite)) )
+    (a:custom-hero #:sprite sprite)) )|#
 
-(define (make-villain sprite (dart-f #f) (color "red") )
+(define (make-hero sprite . options)
+  (define (evaluates-to-entity? proc)
+    (a:entity? (call-if-proc proc)))
+  (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
+  (define dart-f (findf evaluates-to-entity? options))
+  (define real-dart (if dart-f (dart-f real-color) #f))
+  (if real-dart
+      (a:custom-hero #:sprite sprite
+                     #:components
+                     (a:custom-weapon-system #:dart real-dart
+                                             #:mouse-fire-button 'left))
+      (a:custom-hero #:sprite sprite)))
+
+#|(define (make-villain sprite (dart-f #f) (color "red") )
   (define real-color (call-if-proc color))
   (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
     (a:custom-villain #:sprite sprite
                       #:power (a:custom-power #:dart real-dart))
-    (a:custom-villain #:sprite sprite)))
+    (a:custom-villain #:sprite sprite)))|#
+
+(define (make-villain sprite . options)
+  (define (evaluates-to-entity? proc)
+    (a:entity? (call-if-proc proc)))
+  (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
+  (define dart-f (findf evaluates-to-entity? options))
+  (define real-dart (if dart-f (dart-f real-color) #f))
+  (if real-dart
+      (a:custom-villain #:sprite sprite
+                        #:power (a:custom-power #:dart real-dart))
+      (a:custom-villain #:sprite sprite)))
 
 (define (make-item name)
   (cond

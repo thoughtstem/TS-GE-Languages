@@ -5,22 +5,30 @@
          arrow-dart
          fireball
          fireball-sprite
-         fireball-dart)
+         fireball-dart
+         (rename-out (custom-biome  basic-biome)
+                     (custom-skin   basic-skin)
+                     (custom-entity basic-entity)
+                     (custom-mob    basic-mob)
+                     (custom-ore    basic-ore)
+                     (custom-tool   basic-tool)
+                     ))
 
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
          "../assets.rkt"
-         survival)
+         (except-in survival basic-entity)
+         )
 
 (language-mappings survival          survival-minecraft
-                   [custom-bg        custom-biome]
-                   [custom-avatar    custom-skin]
-                   [custom-npc       custom-entity]
-                   [custom-enemy     custom-mob]
-                   [custom-coin      custom-ore]
-                   [custom-weapon    custom-tool]
+                   [basic-bg        basic-biome]
+                   [basic-avatar    basic-skin]
+                   [basic-npc       basic-entity]
+                   [basic-enemy     basic-mob]
+                   [basic-coin      basic-ore]
+                   [basic-weapon    basic-tool]
                    [survival-game    minecraft-game]
                    [#:avatar         #:skin]
                    [#:bg             #:biome]

@@ -13,6 +13,9 @@
          redyoshi-sprite
          redmushroom-sprite
          greenmushroom-sprite
+
+         define-sprite
+         define-sprites
          )
 
 (define (easy-sprite sheet r c n)
@@ -22,115 +25,54 @@
                  #:row-number n
                  #:delay 5))
 
-(define-syntax-rule (define-sprite sheet r c row1 row2 row3 row4)
+(define-syntax-rule (define-sprites sheet r c start sprite-name ...)
   (begin
-    (provide row1 row2 row3 row4)
-    (define row1 (easy-sprite sheet r c 1))
-    (define row2 (easy-sprite sheet r c 2))
-    (define row3 (easy-sprite sheet r c 3))
-    (define row4 (easy-sprite sheet r c 4))))
+    (define row-num (sub1 start))
+    (define (next-row-num)
+      (begin
+        (set! row-num (add1 row-num))
+        row-num))
+    (provide sprite-name ...)
+    (define sprite-name (easy-sprite sheet r c (next-row-num))) ...))
 
-(define-sprite bigmario-sheet 4 4
-  bigmario-sprite
-  bluebigmario-sprite
-  orangebigmario-sprite
-  greybigmario-sprite)
+(define-syntax-rule (define-sprite sheet r c n sprite-name)
+  (begin
+    (provide sprite-name)
+    (define sprite-name (easy-sprite sheet r c n))))
 
-(define-sprite block-sheet 4 1
-  pinkblock-sprite
-  blueblock-sprite
-  orangeblock-sprite
-  greyblock-sprite)
+(define-sprite bigmario-sheet 4 4 1 bigmario-sprite)
 
-(define-sprite blooper-sheet 4 2
-  blooper-sprite
-  blueblooper-sprite
-  orangeblooper-sprite
-  greyblooper-sprite)
+(define-sprite block-sheet 4 1 1 pinkblock-sprite)
 
-(define-sprite bowser-sheet 4 4
-  bowser-sprite
-  bluebowser-sprite
-  orangebowser-sprite
-  greybowser-sprite)
+(define-sprite blooper-sheet 4 2 1 blooper-sprite)
 
-(define-sprite brick-sheet 4 1
-  pinkbrick-sprite
-  bluebrick-sprite
-  orangebrick-sprite
-  greybrick-sprite)
+(define-sprite bowser-sheet 4 4 1 bowser-sprite)
 
-(define-sprite buzzy-sheet 4 2
-  buzzy-sprite
-  bluebuzzy-sprite
-  orangebuzzy-sprite
-  greybuzzy-sprite)
+(define-sprite brick-sheet 4 1 1 pinkbrick-sprite)
 
-(define-sprite cheep-sheet 4 2
-  cheep-sprite
-  bluecheep-sprite
-  orangecheep-sprite
-  greycheep-sprite)
+(define-sprite buzzy-sheet 4 2 1 buzzy-sprite)
 
-(define-sprite fence-sheet 4 1
-  pinkfence-sprite
-  bluefence-sprite
-  orangefence-sprite
-  greyfence-sprite)
+(define-sprite cheep-sheet 4 2 1 cheep-sprite)
 
-(define-sprite goomba-sheet 4 2
-  goomba-sprite
-  bluegoomba-sprite
-  orangegoomba-sprite
-  greygoomba-sprite)
+(define-sprite fence-sheet 4 1 1 pinkfence-sprite)
 
-(define-sprite lakitu-sheet 4 2
-  lakitu-sprite
-  bluelakitu-sprite
-  orangelakitu-sprite
-  greylakitu-sprite)
+(define-sprite goomba-sheet 4 2 1 goomba-sprite)
 
-(define-sprite paratroopa-sheet 4 2
-  paratroopa-sprite
-  blueparatroopa-sprite
-  orangeparatroopa-sprite
-  greyparatroopa-sprite)
+(define-sprite lakitu-sheet 4 2 1 lakitu-sprite)
 
-(define-sprite pipe-sheet 4 1
-  pinkpipe-sprite
-  bluepipe-sprite
-  orangepipe-sprite
-  greypipe-sprite)
+(define-sprite paratroopa-sheet 4 2 1 paratroopa-sprite)
 
-(define-sprite piranha-sheet 4 5
-  piranha-sprite
-  bluepiranha-sprite
-  orangepiranha-sprite
-  greypiranha-sprite)
+(define-sprite pipe-sheet 4 1 1 pinkpipe-sprite)
 
-(define-sprite question-sheet 4 1
-  pinkquestion-sprite
-  bluequestion-sprite
-  orangequestion-sprite
-  greyquestion-sprite)
+(define-sprite piranha-sheet 4 5 1 piranha-sprite)
 
-(define-sprite smallmario-sheet 4 4
-  smallmario-sprite
-  bluesmallmario-sprite
-  orangesmallmario-sprite
-  greysmallmario-sprite)
+(define-sprite question-sheet 4 1 1 pinkquestion-sprite)
 
-(define-sprite spiny-sheet 4 2
-  spiny-sprite
-  bluespiny-sprite
-  orangespiny-sprite
-  greyspiny-sprite)
+(define-sprite smallmario-sheet 4 4 1 smallmario-sprite)
 
-(define-sprite troopa-sheet 4 2
-  troopa-sprite
-  bluetroopa-sprite
-  orangetroopa-sprite
-  greytroopa-sprite)
+(define-sprite spiny-sheet 4 2 1 spiny-sprite)
+
+(define-sprite troopa-sheet 4 2 1 troopa-sprite)
 
 (define princesspeach-sprite
   (easy-sprite princesspeach-sheet 1 2 1))

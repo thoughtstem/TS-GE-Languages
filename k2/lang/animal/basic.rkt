@@ -17,10 +17,11 @@
   (define (crop i)
     (h:crop 0 0 32 32 i))
 
-  (define-visual-language animal-lang
-    "./animal-lang.rkt"
-    [cat     c (crop s:CAT-SHEET)]
+  (define-visual-language #:wrapper launch-for-ratchet
+                          animal-lang
+                          "./animal-lang.rkt"
+                          [cat     c (crop s:CAT-SHEET)]
 
-    [start-animal   s play-icon]))
+                          [start-animal   s play-icon]))
 
 

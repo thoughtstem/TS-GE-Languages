@@ -72,12 +72,12 @@
 (define (randp (color #f))
     (define w (first (shuffle (list hammer magic-orb star-bit energy-blast))))
   (define real-color (call-if-proc color))
-    (if color (w real-color) (w)))
+    (if real-color (w real-color) (w)))
       
 (define randc
     (lambda () (first (shuffle (list "red" "orange" "yellow" "green" "blue" "purple")))))
 
-(define (make-hero sprite (dart-f #f) (color "green"))
+#|(define (make-hero sprite (dart-f #f) (color "green"))
   (define real-color (call-if-proc color))
   (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
@@ -86,32 +86,56 @@
                    (a:custom-weapon-system #:dart real-dart
                                            #:mouse-fire-button 'left
                                            ))
-    (a:custom-hero #:sprite sprite)) )
+    (a:custom-hero #:sprite sprite)) )|#
 
-(define (make-villain sprite (dart-f #f) (color "red") )
+(define (make-hero sprite . options)
+  (define (evaluates-to-entity? proc)
+    (a:entity? (call-if-proc proc)))
+  (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
+  (define dart-f (findf evaluates-to-entity? options))
+  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
+  (if real-dart
+      (a:custom-hero #:sprite sprite
+                     #:components
+                     (a:custom-weapon-system #:dart real-dart
+                                             #:mouse-fire-button 'left))
+      (a:custom-hero #:sprite sprite)))
+
+#|(define (make-villain sprite (dart-f #f) (color "red") )
   (define real-color (call-if-proc color))
   (define real-dart (if dart-f (dart-f real-color) #f))
   (if real-dart
     (a:custom-villain #:sprite sprite
                       #:power (a:custom-power #:dart real-dart))
-    (a:custom-villain #:sprite sprite)))
+    (a:custom-villain #:sprite sprite)))|#
+
+(define (make-villain sprite . options)
+  (define (evaluates-to-entity? proc)
+    (a:entity? (call-if-proc proc)))
+  (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
+  (define dart-f (findf evaluates-to-entity? options))
+  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
+  (if real-dart
+      (a:custom-villain #:sprite sprite
+                        #:power (a:custom-power #:dart real-dart))
+      (a:custom-villain #:sprite sprite)))
 
 (define (make-item name)
   (cond
     [(eq? "Health" name) (a:custom-item #:name "Health Powerup"
-                                        #:sprite (a:make-icon "HP" 'green 'white)
+                                        #:icon (a:make-icon "HP" 'green 'white)
                                         #:on-use (a:change-health-by 50))]
     [(eq? "Grow" name) (a:custom-item #:name "Grow Powerup"
-                                      #:sprite (a:make-icon "BIG" 'red 'white)
+                                      #:icon (a:make-icon "BIG" 'red 'white)
                                       #:on-use (a:scale-sprite 2 #:for 100))]
     [(eq? "Shrink" name) (a:custom-item #:name "Shrink Powerup"
-                                        #:sprite (a:make-icon "SML" 'blue 'white)
+                                        #:icon (a:make-icon "SML" 'blue 'white)
                                         #:on-use (a:scale-sprite 0.5 #:for 100))]
     [(eq? "Speed" name) (a:custom-item #:name "Speed Boost"
-                                       #:sprite (a:make-icon "SB" 'yellow)
+                                       #:icon (a:make-icon "SB" 'yellow)
                                        #:on-use (a:multiply-speed-by 2 #:for 200))]
     [(eq? "Force Field" name) (a:custom-item #:name "Force Field"
-                                       #:sprite (a:make-icon "FF")
+                                       #:icon (a:make-icon "FF")
                                        #:on-use (a:spawn (a:force-field #:duration 1000)))]
     ))  
 
@@ -137,19 +161,18 @@
        (define p-ups
          (list (app make-item power-ups) ...))
        
-       (launch-for-ratchet
-        (a:avengers-game #:planet (a:custom-planet #:rows 2
-                                                   #:columns 2)
-                         #:hero hero 
-                         #:villain-list villains
-                         #:item-list p-ups))
+       (a:avengers-game #:planet (a:custom-planet #:rows 2
+                                                  #:columns 2)
+                        #:hero hero 
+                        #:villain-list villains
+                        #:item-list p-ups)
        )]
     [(start)                     (start a:mystery-sprite () ())]
     [(start hero)                (start hero () ())]
     [(start hero (villains ...)) (start hero (villains ...) ())]
-    
+
     ))
-    
-    
+
+
 
 

@@ -41,7 +41,8 @@
     (define h (h:image-height i))
     (h:crop (- w 32) 0 w 32 i))
   
-  (define-visual-language zoo-lang
+  (define-visual-language #:wrapper launch-for-ratchet
+                          zoo-lang
     "../animal/animal-lang.rkt" 
     [start  s play-icon]
     

@@ -22,25 +22,26 @@
                    ;[custom-enemy   custom-deatheater]
                    ;[custom-food    custom-ingredient]
                    [custom-coin    custom-currency]
-                   [basic-avatar  basic-wizard]
-                   [basic-weapon  basic-spell]
-                   [basic-crafter basic-cauldron]
-                   [basic-enemy   basic-deatheater]
-                   [basic-food    basic-ingredient]
-                   [basic-coin    basic-currency]
+                   [basic-avatar   basic-wizard]
+                   [basic-weapon   basic-spell]
+                   [basic-crafter  basic-cauldron]
+                   [basic-enemy    basic-deatheater]
+                   [basic-food     basic-ingredient]
+                   [basic-coin     basic-currency]
                    [adventure-game harrypotter-game]
                    )
 
 (provide wand
+         pumpkin
          swinging-wand-sprite
          colorize-potion
-         (rename-out (custom-wizard basic-wizard)
-                     (custom-spell basic-spell)
-                     (custom-cauldron basic-cauldron)
+         (rename-out (custom-wizard     basic-wizard)
+                     (custom-spell      basic-spell)
+                     (custom-cauldron   basic-cauldron)
                      (custom-deatheater basic-deatheater)
                      (custom-ingredient basic-ingredient)
-                     (custom-potion basic-potion)
-                     (custom-currency basic-currency)
+                     (custom-potion     basic-potion)
+                     (custom-currency   basic-currency)
                      )
          )
 
@@ -87,6 +88,8 @@
          #:rarity            rarity
          #:on-store          store-func
          #:on-drop           drop-func))
+
+
 
 ; ----------------
 
@@ -135,9 +138,9 @@
 ; -----------
 
 (define/contract/doc (custom-spell #:name              [n "Spell"]
-                                   #:icon            [s chest-sprite]
+                                   #:icon              [s chest-sprite]
                                    #:color             [c "green"]
-                                   #:sprite       [ds (rectangle 10 2 "solid" c)]
+                                   #:sprite            [ds (rectangle 10 2 "solid" c)]
                                    #:speed             [spd 10]
                                    #:damage            [dmg 10]
                                    #:range             [rng 1000]
@@ -155,9 +158,9 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:icon            [sprite (or/c sprite? (listof sprite?))]
+        #:icon              [sprite (or/c sprite? (listof sprite?))]
         #:color             [c image-color?]
-        #:sprite       [dart-sprite (or/c sprite? (listof sprite?))]
+        #:sprite            [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]
@@ -515,3 +518,35 @@
                   #:weapon-list           spell-list 
                   #:instructions          instructions
                   #:other-entities        (filter identity (flatten (cons ent custom-entities)))))
+
+;---------- premade ingredients -----
+
+(define (pumpkin  #:name              [n "Pumpkin"]
+                  #:sprite            [s pumpkin-sprite]
+                  #:tile              [t 0]
+                  #:position          [p (posn 0 0)]
+                  #:amount-in-world   [world-amt 1]
+                  #:storable?         [storable? #t]
+                  #:consumable?       [consumable? #f]
+                  #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                  #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                  #:on-pickup         [pickup-func (λ (g e) e)]
+                  #:on-store          [store-func (λ (g e) e)]
+                  #:on-drop           [drop-func (λ (g e) e)]
+                  #:components        [c #f]
+                  . custom-components)
+(apply (curry
+        custom-item  #:name              n
+                     #:sprite            s
+                     #:tile              t
+                     #:position          p
+                     #:amount-in-world   world-amt
+                     #:storable?         storable?
+                     #:consumable?       consumable?
+                     #:heals-by          heals-by  
+                     #:respawn?          respawn? 
+                     #:on-pickup         pickup-func
+                     #:on-store          store-func 
+                     #:on-drop           drop-func 
+                     #:components        c)
+                    custom-components))

@@ -65,6 +65,11 @@
   )
 
 (define-example-code battlearena-starwars alt/enemy-5
+  (define (easy-enemy)
+    (basic-imperial #:ai 'easy
+                     #:sprite stormtrooper-sprite
+                     #:health 50
+                     #:amount-in-world 5))
   (define (hard-enemy)
     (basic-imperial #:ai              'hard
                      #:sprite          darthvader-sprite

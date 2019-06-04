@@ -535,6 +535,7 @@
   (define (my-avatar)
     (basic-avatar #:sprite wizard-sprite))
 
+  #;
   (define (silver-coin)
     (basic-coin #:sprite silvercoin-sprite
                  #:name "silver coin"
@@ -630,7 +631,9 @@
   
   (survival-game
    #:avatar       (my-avatar)
-   #:coin-list    (list (silver-coin)
+   #:coin-list    (list 
+                    #;
+                    (silver-coin)
                         (gold-coin))
    #:food-list    (list (toasted-marshmallow)
                         (cherry)

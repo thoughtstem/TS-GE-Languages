@@ -521,8 +521,8 @@
 
 (define (pumpkin  #:name              [n "Pumpkin"]
                   #:sprite            [s pumpkin-sprite]
-                  #:tile              [tile 0]
-                  #:position          [pos (posn 0 0)]
+                  #:tile              [t 0]
+                  #:position          [p (posn 0 0)]
                   #:amount-in-world   [world-amt 1]
                   #:storable?         [storable? #t]
                   #:consumable?       [consumable? #f]
@@ -539,9 +539,9 @@
                      #:tile              t
                      #:position          p
                      #:amount-in-world   world-amt
-                     #:value             val
                      #:storable?         storable?
                      #:consumable?       consumable?
+                     #:heals-by          heals-by  
                      #:respawn?          respawn? 
                      #:on-pickup         pickup-func
                      #:on-store          store-func 

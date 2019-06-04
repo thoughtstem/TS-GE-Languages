@@ -33,7 +33,7 @@
    #:wizard (basic-wizard
                 #:sprite harrypotter-sprite
                 #:speed  20)
-   #:intro-cutscene (cutscene
+   #:intro-cutscene (basic-cutscene
                      (page harrypotter-sprite
                            "This is the story of"
                            "Harry Potter.")))
@@ -103,7 +103,7 @@
                    #:heals-by 50))
 
   (define pumpkin-potion-recipe
-    (recipe #:product "Pumpkin Potion"
+    (recipe #:product pumpkin-potion
             #:build-time 40
             #:ingredients (list "Pumpkin")))
 

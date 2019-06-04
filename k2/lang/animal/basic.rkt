@@ -8,6 +8,7 @@
 
 (module ratchet racket 
   (require ratchet
+           ratchet/util
            "./animal-lang.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            "../icons.rkt"

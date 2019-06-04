@@ -135,9 +135,9 @@
 ; -----------
 
 (define/contract/doc (custom-spell #:name              [n "Spell"]
-                                   #:sprite            [s chest-sprite]
+                                   #:icon            [s chest-sprite]
                                    #:color             [c "green"]
-                                   #:dart-sprite       [ds (rectangle 10 2 "solid" c)]
+                                   #:sprite       [ds (rectangle 10 2 "solid" c)]
                                    #:speed             [spd 10]
                                    #:damage            [dmg 10]
                                    #:range             [rng 1000]
@@ -155,9 +155,9 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:icon            [sprite (or/c sprite? (listof sprite?))]
         #:color             [c image-color?]
-        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
+        #:sprite       [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]

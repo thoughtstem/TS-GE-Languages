@@ -7,7 +7,7 @@
 
 
 (module foods racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/sea/foods)
 
   ; ==== SEA/FOODS
   ;day 1 start
@@ -55,7 +55,7 @@
   )
 
 (module friends racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/sea/enemies)
   ; ==== SEA/ENEMIES
   ;Day 2
 
@@ -152,7 +152,7 @@
   )
 
 (module enemies racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/sea/friends)
   ;==== SEA/FRIENDS ====
   ;Day 4
 

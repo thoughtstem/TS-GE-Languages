@@ -270,7 +270,8 @@
                  #:columns 3
                  #:row-number 1))
 
-(define (hammer-sprite c)
+(define/contract (hammer-sprite c)
+  (-> (or/c string? symbol?) image?)
   (beside
    (rectangle 8 4 "solid" c)
    (rectangle 8 12 "solid" "gray")))

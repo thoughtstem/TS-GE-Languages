@@ -8,7 +8,7 @@
   (require (submod ".." enemies test)))
 
 (module foods racket
-  (require ts-kata-util) 
+  (require ts-kata-util k2/lang/farm/foods) 
 
   ; ==== FARM/FOODS -- day 1
   (define-example-code 
@@ -60,7 +60,7 @@
   )
 
 (module coins racket
-  (require ts-kata-util) 
+  (require ts-kata-util k2/lang/farm/coins) 
   ; ==== FARM/COINS -- day 2
 
   (define-example-code #:with-test (test game-test)
@@ -150,7 +150,7 @@
   )
 
 (module enemies racket
-  (require ts-kata-util) 
+  (require ts-kata-util k2/lang/farm/enemies) 
   ; ==== FARM/ENEMIES -- day 4
 
   (define-example-code #:with-test (test game-test)

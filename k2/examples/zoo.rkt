@@ -6,7 +6,7 @@
   (require (submod ".." friends test)))
 
 (module foods racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/zoo/foods)
   ; ==== ZOO/FOODS
   (define-example-code #:with-test (test game-test)
                        k2/lang/zoo/foods
@@ -52,7 +52,7 @@
   )
 
 (module coins racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/zoo/coins)
 
   ; ==== ZOO/FOOD+COINS DAY 2
 
@@ -148,7 +148,7 @@
   )
 
 (module friends racket
-  (require ts-kata-util)
+  (require ts-kata-util k2/lang/zoo/friends)
 
   ;==== ZOO/FRIENDS DAY 4
 

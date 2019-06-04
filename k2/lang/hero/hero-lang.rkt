@@ -72,7 +72,7 @@
 (define (randp (color #f))
     (define w (first (shuffle (list hammer magic-orb star-bit energy-blast))))
   (define real-color (call-if-proc color))
-    (if color (w real-color) (w)))
+    (if real-color (w real-color) (w)))
       
 (define randc
     (lambda () (first (shuffle (list "red" "orange" "yellow" "green" "blue" "purple")))))
@@ -93,7 +93,7 @@
     (a:entity? (call-if-proc proc)))
   (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
   (define dart-f (findf evaluates-to-entity? options))
-  (define real-dart (if dart-f (dart-f real-color) #f))
+  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
   (if real-dart
       (a:custom-hero #:sprite sprite
                      #:components
@@ -114,7 +114,7 @@
     (a:entity? (call-if-proc proc)))
   (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
   (define dart-f (findf evaluates-to-entity? options))
-  (define real-dart (if dart-f (dart-f real-color) #f))
+  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
   (if real-dart
       (a:custom-villain #:sprite sprite
                         #:power (a:custom-power #:dart real-dart))

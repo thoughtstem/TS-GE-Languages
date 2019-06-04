@@ -532,7 +532,7 @@
                   #:on-store          [store-func (λ (g e) e)]
                   #:on-drop           [drop-func (λ (g e) e)]
                   #:components        [c #f]
-                  . custom-components))
+                  . custom-components)
 (apply (curry
         custom-item  #:name              n
                      #:sprite            s

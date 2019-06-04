@@ -88,18 +88,35 @@
                                            ))
     (a:custom-hero #:sprite sprite)) )|#
 
+; Color a sprite by setting hue and saturation but not brightness
+; UPDATE: Commenting out saturation for now.
+;         Settting both sat and hue seems to result in scary red eyes.
+(define/contract (colorize-sprite color-name sprite)
+  (-> (or/c string? symbol?) a:animated-sprite? a:animated-sprite?)
+  (define c-hsb (a:name->color-hsb color-name))
+  (define h (a:color-hsb-hue c-hsb))
+  ;(define s (color-hsb-sat c-hsb))
+  (a:apply-image-function ;(compose (curry set-img-sat s)
+                        ;         (curry set-img-hue h))
+                        (curry a:set-img-hue h)
+                        sprite))
+
 (define (make-hero sprite . options)
   (define (evaluates-to-entity? proc)
     (a:entity? (call-if-proc proc)))
   (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
   (define dart-f (findf evaluates-to-entity? options))
-  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
+  (define real-dart (cond [(and dart-f real-color) (dart-f real-color)]
+                          [dart-f                  (dart-f)]
+                          [else                    #f]))
   (if real-dart
       (a:custom-hero #:sprite sprite
                      #:components
                      (a:custom-weapon-system #:dart real-dart
                                              #:mouse-fire-button 'left))
-      (a:custom-hero #:sprite sprite)))
+      (if real-color
+          (a:custom-hero #:sprite (colorize-sprite real-color sprite))
+          (a:custom-hero #:sprite sprite))))
 
 #|(define (make-villain sprite (dart-f #f) (color "red") )
   (define real-color (call-if-proc color))
@@ -114,11 +131,15 @@
     (a:entity? (call-if-proc proc)))
   (define real-color (findf (or/c string? symbol?) (map call-if-proc options)))
   (define dart-f (findf evaluates-to-entity? options))
-  (define real-dart (if (and dart-f real-color) (dart-f real-color) #f))
+  (define real-dart (cond [(and dart-f real-color) (dart-f real-color)]
+                          [dart-f                  (dart-f)]
+                          [else                    #f]))
   (if real-dart
       (a:custom-villain #:sprite sprite
                         #:power (a:custom-power #:dart real-dart))
-      (a:custom-villain #:sprite sprite)))
+      (if real-color
+          (a:custom-villain #:sprite (colorize-sprite real-color sprite))
+          (a:custom-villain #:sprite sprite))))
 
 (define (make-item name)
   (cond

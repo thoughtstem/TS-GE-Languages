@@ -33,7 +33,7 @@
                #:range      rng
                #:components (on-start (random-size 0.5 1))))
 
-; Color a sprite using setting hue and saturation but not brightness
+; Color a sprite by setting hue and saturation but not brightness
 ; UPDATE: Commenting out saturation for now.
 ;         Settting both sat and hue seems to result in scary red eyes.
 (define/contract (colorize-sprite color-name sprite)

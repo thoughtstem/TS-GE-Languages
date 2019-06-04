@@ -1943,8 +1943,8 @@
                                   . custom-components)
   (->i () (#:name            [name string?]
            #:sprite          [sprite (or/c sprite? (listof sprite?))]
-           #:tile            [tile number?]
-           #:position        [position posn?]
+           #:tile            [tile (or/c number? #f)]
+           #:position        [position (or/c posn? #f)]
            #:amount-in-world [amount-in-world number?]
            #:storable?       [storable? boolean?]
            #:consumable?     [consumable? boolean?]

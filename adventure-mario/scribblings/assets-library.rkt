@@ -2,7 +2,8 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"]
+         "../assets.rkt"
+         "../extra-assets.rkt"]
 
 @title{Assets Library}
 

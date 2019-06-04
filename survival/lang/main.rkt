@@ -54,6 +54,8 @@
                      (custom-bg basic-bg)
                      (custom-food basic-food)
                      (custom-coin basic-coin)
+                     (custom-item basic-item)
+                     (custom-product basic-product)
                      )
          )
 
@@ -69,6 +71,12 @@
          game-engine-demos-common
          (only-in lang/posn make-posn)
          )
+
+(define STORABLE-ITEM-ID-COUNTER 0)
+
+(define (next-storable-item-id)
+  (set! STORABLE-ITEM-ID-COUNTER (add1 STORABLE-ITEM-ID-COUNTER))
+  STORABLE-ITEM-ID-COUNTER)
 
 (define-syntax-rule (define/log l head body ...)
   (define head
@@ -1244,7 +1252,58 @@
       (update-entity e component-pred f)
       e))
 
-(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
+(define/contract/doc (custom-food  #:name              [n "Carrot"]
+                                   #:sprite            [s carrot-sprite]
+                                   #:tile              [tile 0]
+                                   #:position          [pos (posn 0 0)]
+                                   #:amount-in-world   [world-amt 1]
+                                   #:storable?         [storable? #t]
+                                   #:consumable?       [consumable? #t]
+                                   #:value             [val    #f]
+                                   #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                   #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                                   #:on-pickup         [pickup-func (λ (g e) e)]
+                                   #:on-store          [store-func (λ (g e) e)]
+                                   #:on-drop           [drop-func (λ (g e) e)]
+                                   #:components        [c #f]
+                                   . custom-components)
+  (->i () (#:name       [name string?]
+           #:sprite     [sprite (or/c sprite? (listof sprite?))]
+           #:tile       [tile number?]
+           #:position   [position posn?]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?  [storable? boolean?]
+           #:consumable? [consumable? boolean?]
+           #:value       [value (or/c number? #f)]
+           #:heals-by    [heals-by (or/c number? #f)]
+           #:respawn?    [respawn? boolean?]  
+           #:on-pickup   [pickup-func procedure?]
+           #:on-store    [store-func procedure?]
+           #:on-drop     [drop-func procedure?]
+           #:components  [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom food, which will be placed into the world
+              automatically if it is passed into @racket[adventure-game]
+              via the @racket[#:food-list] parameter.}
+  
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:value             val
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
+
+#;(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
                                   #:name             [n #f]
@@ -1293,6 +1352,58 @@
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
+
+(define/contract/doc (custom-product  #:name              [n "Carrot Stew"]
+                                      #:sprite            [s carrotstew-sprite]
+                                      #:tile              [tile 0]
+                                      #:position          [pos (posn 0 0)]
+                                      #:amount-in-world   [world-amt 1]
+                                      #:storable?         [storable? #t]
+                                      #:consumable?       [consumable? #t]
+                                      #:value             [val    #f]
+                                      #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                      #:respawn?          [respawn? #f]    ;only used if consumable is #t
+                                      #:on-pickup         [pickup-func (λ (g e) e)]
+                                      #:on-store          [store-func (λ (g e) e)]
+                                      #:on-drop           [drop-func (λ (g e) e)]
+                                      #:components        [c #f]
+                                      . custom-components)
+  (->i () (#:name       [name string?]
+           #:sprite     [sprite (or/c sprite? (listof sprite?))]
+           #:tile       [tile number?]
+           #:position   [position posn?]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?  [storable? boolean?]
+           #:consumable? [consumable? boolean?]
+           #:value       [value (or/c number? #f)]
+           #:heals-by    [heals-by (or/c number? #f)]
+           #:respawn?    [respawn? boolean?]  
+           #:on-pickup   [pickup-func procedure?]
+           #:on-store    [store-func procedure?]
+           #:on-drop     [drop-func procedure?]
+           #:components  [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom product, which can be used to create a 
+              recipe product if it is passed into @racket[recipe]
+              via the @racket[#:product] parameter.}
+  
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:value             val
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
+
 
 (define/contract/doc (custom-coin #:entity           [base-entity (copper-coin)]
                                   #:sprite           [s #f]
@@ -1345,6 +1456,76 @@
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
                                                               (nearest-to-player? #:filter (has-component? on-key?)))
                                          die))))
+; ==== CUSTOM ITEM DEFINITION ====
+(define/contract/doc (custom-item #:name              [n "Chest"]
+                                  #:sprite            [s chest-sprite]
+                                  #:tile              [tile #f]
+                                  #:position          [pos #f]
+                                  #:amount-in-world   [world-amt 1]
+                                  #:storable?         [storable? #t]
+                                  #:consumable?       [consumable? #f]
+                                  #:value             [val 10]      ;only used if consumable is #t
+                                  #:heals-by          [heals-by #f]
+                                  #:respawn?          [respawn? #t] ;only used if consumable is #t
+                                  #:on-pickup         [pickup-func (λ (g e) e)]
+                                  #:on-store          [store-func (λ (g e) e)]
+                                  #:on-drop           [drop-func (λ (g e) e)]
+                                  #:components        [c #f]
+                                  . custom-components)
+  (->i () (#:name            [name string?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:tile            [tile number?]
+           #:position        [position posn?]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?       [storable? boolean?]
+           #:consumable?     [consumable? boolean?]
+           #:value           [value (or/c number? #f)]
+           #:heals-by        [heals-by (or/c number? #f)]
+           #:respawn?        [respawn? boolean?]  
+           #:on-pickup       [pickup-func procedure?]
+           #:on-store        [store-func procedure?]
+           #:on-drop         [drop-func procedure?]
+           #:components      [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom item, which has a unique item id and can be
+              used in npc quests.}
+  
+  (define (pickup-component)
+    (on-key 'space #:rule (and/r near-player?
+                                 (nearest-to-player? #:filter (has-component? on-key?)))
+            (do-many pickup-func
+                     (if respawn?
+                         (do-after-time 1 (do-many (respawn 'anywhere)
+                                                   (active-on-random)))
+                         (do-after-time 1 die) ; 1 tick delay in case function is spawn
+                         ))))
+  
+  (define item-id (next-storable-item-id))
+  
+  (sprite->entity s
+                  #:name n
+                  #:position    (or pos (posn 0 0))
+                  #:components  (active-on-bg (or tile 0))
+                                (physical-collider)
+                                (hidden)
+                                (storage "amount-in-world" world-amt)
+                                (if val (storage "value" val) #f)
+                                (if heals-by (storage "heals-by" heals-by) #f)
+                                (on-start (do-many ;(if pos  (do-nothing) (respawn 'anywhere))
+                                                   ;(if tile (do-nothing) (active-on-random))
+                                                   show))
+                                (if storable? (storable) #f)
+                                (if consumable? (pickup-component) #f)
+                                (storage "item-id" item-id)
+                                (storage "backpack-observer"
+                                         (observe-change (in-backpack-by-id? item-id)
+                                                         (if/r (in-backpack-by-id? item-id)
+                                                               store-func
+                                                               drop-func)))
+                                (cons c custom-components)
+                                ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (repeater #:name              [n "Repeater"]

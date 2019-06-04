@@ -131,9 +131,9 @@
  
 (define-example-code survival crafter-3
   (define (fish-stew)
-    (basic-food #:name "Fish Stew"
-                 #:sprite fishstew-sprite
-                 #:heals-by 50))
+    (basic-product #:name "Fish Stew"
+                   #:sprite fishstew-sprite
+                   #:heals-by 50))
 
   (define fish-stew-recipe
     (recipe #:product (fish-stew)
@@ -146,9 +146,9 @@
 
 (define-example-code survival crafter-4  
   (define (fish-stew)
-    (basic-food #:name "Fish Stew"
-                 #:sprite fishstew-sprite
-                 #:heals-by 50))
+    (basic-product #:name "Fish Stew"
+                   #:sprite fishstew-sprite
+                   #:heals-by 50))
 
   (define fish-stew-recipe
     (recipe #:product (fish-stew)

@@ -840,13 +840,13 @@
 
 (define-example-code adventure weapon-3
   (define (my-weapon)
-    (basic-weapon #:name "Hologram Shooter"
-                   #:sprite (make-icon "?" 'red)
-                   #:dart-sprite (random-character-sprite)
-                   #:speed 5
-                   #:damage 25
-                   #:range 50
-                   ))
+    (repeater #:name "Hologram Shooter"
+              #:icon (make-icon "?" 'red)
+              #:sprite (random-character-sprite)
+              #:speed 5
+              #:damage 25
+              #:range 50
+              ))
   
   (adventure-game
    #:avatar (basic-avatar)

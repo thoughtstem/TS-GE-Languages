@@ -183,8 +183,7 @@
                  #:quest-complete-dialog (list "YAY! MY WAND!")
                  #:new-response-dialog (list "Thanks again!")))
 
-  (adventure-game
-   #:avatar (basic-avatar)
+  (harrypotter-game
    #:npc-list (list (basic-npc  #:name "Charlie"
                                 #:dialog (list "Can you find my wand?")
                                 #:quest-list (list wand-quest))))
@@ -226,7 +225,6 @@
                    ))
   
   (harrypotter-game
-   #:wizard (basic-wizard)
    #:deatheater-list (list (basic-deatheater #:amount-in-world 5))
    #:spell-list (list (my-spell)))
   )

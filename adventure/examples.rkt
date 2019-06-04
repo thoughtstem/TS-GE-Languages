@@ -310,7 +310,7 @@
   (define stolen-cat
     (make-storable
      (basic-npc #:sprite cat-sprite
-                 #:dialog (list "Meow!"))))
+                 #:dialog (list "Help me!"))))
   
   (adventure-game
    #:enemy-list  (list (basic-enemy #:loot-list (list stolen-cat)))
@@ -481,7 +481,6 @@
 (define-example-code adventure npc-1
   
   (adventure-game
-   #:avatar   (basic-avatar)
    #:npc-list (list (basic-npc
                      #:sprite witch-sprite
                      #:name   "Witch"
@@ -506,7 +505,6 @@
                     "Move along, now!")))
   
   (adventure-game
-   #:avatar   (basic-avatar)
    #:npc-list (list (polite-npc) (rude-npc)))
   )
 
@@ -550,7 +548,6 @@
                  #:new-response-dialog (list "Thanks again!")))
 
   (adventure-game
-   #:avatar (basic-avatar)
    #:npc-list (list (basic-npc  #:name "Charlie"
                                 #:dialog (list "Can you find my spear?")
                                 #:quest-list (list spear-quest))))
@@ -849,7 +846,6 @@
               ))
   
   (adventure-game
-   #:avatar (basic-avatar)
    #:enemy-list (list (basic-enemy #:amount-in-world 5))
    #:weapon-list (list (my-weapon)))
   )
@@ -862,7 +858,6 @@
     (ice-magic #:on-store (spawn (page "Woah, this is cold!"))))
   
   (adventure-game
-   #:avatar (basic-avatar)
    #:enemy-list (list (basic-enemy #:amount-in-world 10))
    #:weapon-list (list (my-fire-magic)
                        (my-ice-magic)))

@@ -11,6 +11,16 @@
                  #:row-number n
                  #:delay 5))
 
+(define-syntax-rule (define-sprites sheet r c start sprite-name ...)
+  (begin
+    (define row-num (sub1 start))
+    (define (next-row-num)
+      (begin
+        (set! row-num (add1 row-num))
+        row-num))
+    (provide sprite-name ...)
+    (define sprite-name (easy-sprite sheet r c (next-row-num))) ...))
+
 (define-sprites bigmario-sheet 4 4 2
   bluebigmario-sprite
   orangebigmario-sprite

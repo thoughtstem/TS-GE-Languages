@@ -14,8 +14,8 @@
          redmushroom-sprite
          greenmushroom-sprite
 
-         define-sprite
-         define-sprites
+         ;define-sprite
+         ;define-sprites
          )
 
 (define (easy-sprite sheet r c n)

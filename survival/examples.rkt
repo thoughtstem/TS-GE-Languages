@@ -209,13 +209,13 @@
 
 (define-example-code survival sky-2
   (survival-game
-   #:sky (custom-sky #:night-sky-color  'darkmagenta))
+   #:sky (basic-sky #:night-sky-color  'darkmagenta))
   )
 
 
 (define-example-code survival sky-3 
   (survival-game
-   #:sky    (custom-sky #:length-of-day 500
+   #:sky    (basic-sky #:length-of-day 500
                         #:max-darkness  255))
   )
 

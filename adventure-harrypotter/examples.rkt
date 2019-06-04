@@ -118,12 +118,12 @@
     (basic-potion))
 
   (define carrot-potion-recipe
-    (recipe #:product my-potion
+    (recipe #:product carrot-potion
             #:ingredients (list "Carrot")))
 
   (harrypotter-game
    #:npc-list     (list (basic-npc #:dialog (list "Can you make me a potion?")
-                                    #:quest-list (list (craft-quest #:item my-potion))))
+                                    #:quest-list (list (craft-quest #:item carrot-potion))))
    #:ingredient-list    (list (carrot))
    #:cauldron-list (list (basic-cauldron #:recipe-list (list carrot-potion-recipe))))
   

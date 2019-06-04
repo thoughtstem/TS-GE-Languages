@@ -184,7 +184,7 @@
                  #:new-response-dialog (list "Thanks again!")))
 
   (adventure-game
-   #:avatar (basic-avatar #:components player-dialog-with-charlie)
+   #:avatar (basic-avatar)
    #:npc-list (list (basic-npc  #:name "Charlie"
                                 #:dialog (list "Can you find my wand?")
                                 #:quest-list (list wand-quest))))
@@ -219,7 +219,7 @@
   (define (my-spell)
     (basic-spell   #:name "Expecto Patronum"
                    #:icon (make-icon "?" 'red)
-                   #:sprite (cat-sprite)
+                   #:sprite cat-sprite
                    #:speed 5
                    #:damage 25
                    #:range 50

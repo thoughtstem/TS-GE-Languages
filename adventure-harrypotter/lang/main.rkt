@@ -22,12 +22,12 @@
                    ;[custom-enemy   custom-deatheater]
                    ;[custom-food    custom-ingredient]
                    [custom-coin    custom-currency]
-                   [basic-avatar  basic-wizard]
-                   [basic-weapon  basic-spell]
-                   [basic-crafter basic-cauldron]
-                   [basic-enemy   basic-deatheater]
-                   [basic-food    basic-ingredient]
-                   [basic-coin    basic-currency]
+                   [basic-avatar   basic-wizard]
+                   [basic-weapon   basic-spell]
+                   [basic-crafter  basic-cauldron]
+                   [basic-enemy    basic-deatheater]
+                   [basic-food     basic-ingredient]
+                   [basic-coin     basic-currency]
                    [adventure-game harrypotter-game]
                    )
 
@@ -35,13 +35,13 @@
          pumpkin
          swinging-wand-sprite
          colorize-potion
-         (rename-out (custom-wizard basic-wizard)
-                     (custom-spell basic-spell)
-                     (custom-cauldron basic-cauldron)
+         (rename-out (custom-wizard     basic-wizard)
+                     (custom-spell      basic-spell)
+                     (custom-cauldron   basic-cauldron)
                      (custom-deatheater basic-deatheater)
                      (custom-ingredient basic-ingredient)
-                     (custom-potion basic-potion)
-                     (custom-currency basic-currency)
+                     (custom-potion     basic-potion)
+                     (custom-currency   basic-currency)
                      )
          )
 
@@ -88,6 +88,8 @@
          #:rarity            rarity
          #:on-store          store-func
          #:on-drop           drop-func))
+
+
 
 ; ----------------
 
@@ -136,9 +138,9 @@
 ; -----------
 
 (define/contract/doc (custom-spell #:name              [n "Spell"]
-                                   #:sprite            [s chest-sprite]
+                                   #:icon              [s chest-sprite]
                                    #:color             [c "green"]
-                                   #:dart-sprite       [ds (rectangle 10 2 "solid" c)]
+                                   #:sprite            [ds (rectangle 10 2 "solid" c)]
                                    #:speed             [spd 10]
                                    #:damage            [dmg 10]
                                    #:range             [rng 1000]
@@ -156,9 +158,9 @@
                                    #:rarity            [rarity 'common])
   (->i ()
        (#:name              [name string?]
-        #:sprite            [sprite (or/c sprite? (listof sprite?))]
+        #:icon              [sprite (or/c sprite? (listof sprite?))]
         #:color             [c image-color?]
-        #:dart-sprite       [dart-sprite (or/c sprite? (listof sprite?))]
+        #:sprite            [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed             [speed  number?]
         #:damage            [damage number?]
         #:range             [range  number?]

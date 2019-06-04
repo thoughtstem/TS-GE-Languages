@@ -27,7 +27,7 @@
     (basic-item #:name "Force Field"
                  #:icon (make-icon "FF")
                  #:on-use (spawn (force-field #:allow-friendly-dart? #t
-                                              #:duration 1000))))
+                                              #:duration 3000))))
  
   (battlearena-game
     #:item-list (list (force-field-item)))

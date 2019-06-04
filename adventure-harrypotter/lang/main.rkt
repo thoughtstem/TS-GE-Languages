@@ -426,7 +426,7 @@
             #:position        [position (or/c posn? #f)]           
             #:tile            [tile (or/c number? #f)]
             #:amount-in-world [amount-in-world number?]
-            #:value           [value number?]
+            #:value           [value (or/c number? #f)]
             #:respawn?        [respawn boolean?]
             #:storable?       [storable? boolean?]
             #:consumable?     [consumable? boolean?]

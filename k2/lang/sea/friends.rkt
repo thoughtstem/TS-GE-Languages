@@ -20,6 +20,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
 	              [start-sea-npc start])
            "../icons.rkt"

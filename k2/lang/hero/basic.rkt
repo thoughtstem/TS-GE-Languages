@@ -16,6 +16,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            "./hero-lang.rkt"
            "../icons.rkt"
            (prefix-in a: battlearena-avengers))

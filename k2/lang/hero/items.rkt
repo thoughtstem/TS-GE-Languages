@@ -13,6 +13,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            "./hero-lang.rkt"
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"

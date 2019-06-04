@@ -57,42 +57,42 @@
   ; ==== ZOO/FOOD+COINS DAY 2
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-007
                        (start hippo
                               ((apple 5) (banana 5))))
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-008
                        (start hippo
                               ((apple 3) (rand 5))))
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-009
                        (start monkey
                               ((banana red) (banana green) (banana blue))))
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-010
                        (start hippo
                               ((rand purple 5))))
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-011
                        (start penguin
                               ((fish green 3)
                                (fish red 5))))
 
   (define-example-code #:with-test (test game-test)
-                       k2/lang/zoo/coins
+                       k2/lang/zoo/foods
                        zoo-012
                        (start rand
-                              (rand)
-                              ((gold green 5))))
+                              ((rand blue 5)
+                               (rand green 5))))
 
   ; ==== ZOO/FARM+COINS DAY 3
 
@@ -174,13 +174,13 @@
                        k2/lang/zoo/friends
                        zoo-022
                        (start zookeeper
-                              (penguin penguin penguin)))
+                              ((penguin 3))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/zoo/friends
                        zoo-023
                        (start zookeeper
-                              (monkey monkey elephant elephant)))
+                              ((monkey 2) (elephant 2))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/zoo/friends

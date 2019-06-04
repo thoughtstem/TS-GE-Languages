@@ -9,8 +9,8 @@
          toad-sprite
          luigi-sprite
          mario-sprite
-         yoshi1-sprite
-         yoshi2-sprite
+         yoshi-sprite
+         redyoshi-sprite
          redmushroom-sprite
          greenmushroom-sprite
          )
@@ -31,106 +31,106 @@
     (define row4 (easy-sprite sheet r c 4))))
 
 (define-sprite bigmario-sheet 4 4
-  bigmario1-sprite
-  bigmario2-sprite
-  bigmario3-sprite
-  bigmario4-sprite)
+  bigmario-sprite
+  bluebigmario-sprite
+  orangebigmario-sprite
+  greybigmario-sprite)
 
 (define-sprite block-sheet 4 1
-  block1-sprite
-  block2-sprite
-  block3-sprite
-  block4-sprite)
+  pinkblock-sprite
+  blueblock-sprite
+  orangeblock-sprite
+  greyblock-sprite)
 
 (define-sprite blooper-sheet 4 2
-  blooper1-sprite
-  blooper2-sprite
-  blooper3-sprite
-  blooper4-sprite)
+  blooper-sprite
+  blueblooper-sprite
+  orangeblooper-sprite
+  greyblooper-sprite)
 
 (define-sprite bowser-sheet 4 4
-  bowser1-sprite
-  bowser2-sprite
-  bowser3-sprite
-  bowser4-sprite)
+  bowser-sprite
+  bluebowser-sprite
+  orangebowser-sprite
+  greybowser-sprite)
 
 (define-sprite brick-sheet 4 1
-  brick1-sprite
-  brick2-sprite
-  brick3-sprite
-  brick4-sprite)
+  pinkbrick-sprite
+  bluebrick-sprite
+  orangebrick-sprite
+  greybrick-sprite)
 
 (define-sprite buzzy-sheet 4 2
-  buzzy1-sprite
-  buzzy2-sprite
-  buzzy3-sprite
-  buzzy4-sprite)
+  buzzy-sprite
+  bluebuzzy-sprite
+  orangebuzzy-sprite
+  greybuzzy-sprite)
 
 (define-sprite cheep-sheet 4 2
-  cheep1-sprite
-  cheep2-sprite
-  cheep3-sprite
-  cheep4-sprite)
+  cheep-sprite
+  bluecheep-sprite
+  orangecheep-sprite
+  greycheep-sprite)
 
 (define-sprite fence-sheet 4 1
-  fence1-sprite
-  fence2-sprite
-  fence3-sprite
-  fence4-sprite)
+  pinkfence-sprite
+  bluefence-sprite
+  orangefence-sprite
+  greyfence-sprite)
 
 (define-sprite goomba-sheet 4 2
-  goomba1-sprite
-  goomba2-sprite
-  goomba3-sprite
-  goomba4-sprite)
+  goomba-sprite
+  bluegoomba-sprite
+  orangegoomba-sprite
+  greygoomba-sprite)
 
 (define-sprite lakitu-sheet 4 2
-  lakitu1-sprite
-  lakitu2-sprite
-  lakitu3-sprite
-  lakitu4-sprite)
+  lakitu-sprite
+  bluelakitu-sprite
+  orangelakitu-sprite
+  greylakitu-sprite)
 
 (define-sprite paratroopa-sheet 4 2
-  paratroopa1-sprite
-  paratroopa2-sprite
-  paratroopa3-sprite
-  paratroopa4-sprite)
+  paratroopa-sprite
+  blueparatroopa-sprite
+  orangeparatroopa-sprite
+  greyparatroopa-sprite)
 
 (define-sprite pipe-sheet 4 1
-  pipe1-sprite
-  pipe2-sprite
-  pipe3-sprite
-  pipe4-sprite)
+  pinkpipe-sprite
+  bluepipe-sprite
+  orangepipe-sprite
+  greypipe-sprite)
 
 (define-sprite piranha-sheet 4 5
-  piranha1-sprite
-  piranha2-sprite
-  piranha3-sprite
-  piranha4-sprite)
+  piranha-sprite
+  bluepiranha-sprite
+  orangepiranha-sprite
+  greypiranha-sprite)
 
 (define-sprite question-sheet 4 1
-  question1-sprite
-  question2-sprite
-  question3-sprite
-  question4-sprite)
+  pinkquestion-sprite
+  bluequestion-sprite
+  orangequestion-sprite
+  greyquestion-sprite)
 
 (define-sprite smallmario-sheet 4 4
-  smallmario1-sprite
-  smallmario2-sprite
-  smallmario3-sprite
-  smallmario4-sprite)
+  smallmario-sprite
+  bluesmallmario-sprite
+  orangesmallmario-sprite
+  greysmallmario-sprite)
 
 (define-sprite spiny-sheet 4 2
-  spiny1-sprite
-  spiny2-sprite
-  spiny3-sprite
-  spiny4-sprite)
+  spiny-sprite
+  bluespiny-sprite
+  orangespiny-sprite
+  greyspiny-sprite)
 
 (define-sprite troopa-sheet 4 2
-  troopa1-sprite
-  troopa2-sprite
-  troopa3-sprite
-  troopa4-sprite)
+  troopa-sprite
+  bluetroopa-sprite
+  orangetroopa-sprite
+  greytroopa-sprite)
 
 (define princesspeach-sprite
   (easy-sprite princesspeach-sheet 1 2 1))
@@ -144,10 +144,10 @@
 (define mario-sprite
   (easy-sprite mario-sheet 1 2 1))
 
-(define yoshi1-sprite
+(define yoshi-sprite
   (easy-sprite yoshi-sheet 2 2 1))
 
-(define yoshi2-sprite
+(define redyoshi-sprite
   (easy-sprite yoshi-sheet 2 2 2))
 
 (define redmushroom-sprite

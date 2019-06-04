@@ -41,7 +41,7 @@
     (basic-imperial #:sprite          darthmaul-sprite
                      #:ai              'medium
                      #:health          200
-                     #:shield          100
+                     #:shield          200
                      #:amount-in-world 5))
   
   (starwars-game 
@@ -86,7 +86,7 @@
   (starwars-game 
    #:imperial-list (list (basic-imperial
                        #:weapon (blaster
-                                 #:color "yellow"))))
+                                 #:color 'yellow))))
   )
 
 (define-example-code battlearena-starwars alt/enemy-weapon-2
@@ -94,7 +94,7 @@
    #:imperial-list (list (basic-imperial
                        #:sprite darthvader-sprite
                        #:weapon (lightsaber
-                                 #:color "red"))))
+                                 #:color 'red))))
   )
 
 (define-example-code battlearena-starwars alt/enemy-weapon-3 
@@ -135,7 +135,7 @@
   
   (starwars-game
    #:imperial-list (list (basic-imperial #:sprite darthvader-sprite
-                                        #:weapon (lightsaber #:color "red")))
+                                        #:weapon (lightsaber #:color 'red)))
    #:item-list    (list (l-armor)))
   )
 
@@ -153,8 +153,12 @@
 
 (define-example-code battlearena-starwars lightsaber-2
   (define (my-lightsaber)
-    (lightsaber #:icon   (make-icon "F" "blue")
+    (lightsaber #:icon   (make-icon "LOL" 'blue)
                 #:rarity 'rare))
+
+
+
+
   
   (starwars-game
    #:weapon-list (list (my-lightsaber)))
@@ -164,9 +168,9 @@
 (define-example-code battlearena-starwars lightsaber-3
   (define (my-lightsaber)
     (lightsaber #:name       "Flashy"
-                #:icon       (make-icon "F" "blue")
+                #:icon       (make-icon "F" 'blue)
                 #:rarity     'rare
-                #:color      "blue"
+                #:color      'blue
                 #:damage     50))
   
   (starwars-game
@@ -183,7 +187,7 @@
 (define-example-code battlearena-starwars blaster-2
   (define (my-blaster)
     (blaster
-     #:icon   (make-icon "B" "orange")
+     #:icon   (make-icon "BL" 'orange)
      #:rarity 'legendary))
   
   (starwars-game
@@ -194,8 +198,7 @@
   (define (my-blaster)
     (blaster #:damage     20
              #:durability 30
-             #:speed      10
-             #:range      70))
+             #:speed      10))
 
   (starwars-game
    #:weapon-list (list (my-blaster))
@@ -211,7 +214,7 @@
 
 (define-example-code battlearena-starwars lightsaber-droid-2
   (define (ls-droid)
-    (lightsaber-droid #:color      "orange"
+    (lightsaber-droid #:color      'orange
                       #:damage     75 
                       #:durability 30))
 
@@ -221,7 +224,7 @@
 
 (define-example-code battlearena-starwars lightsaber-droid-3
   (define (ls-droid)
-    (lightsaber-droid #:color      "orange"
+    (lightsaber-droid #:color      'orange
                       #:damage     75
                       #:fire-rate  2))
 
@@ -238,7 +241,7 @@
 
 (define-example-code battlearena-starwars blaster-droid-2
   (define (b-droid)
-    (blaster-droid #:color     "yellow"
+    (blaster-droid #:color     'yellow
                    #:damage    25
                    #:fire-mode 'spread))
   
@@ -248,7 +251,7 @@
 
 (define-example-code battlearena-starwars blaster-droid-3
   (define (b-droid)
-    (blaster-droid #:color     "yellow"
+    (blaster-droid #:color     'yellow
                    #:damage     15
                    #:speed      10
                    #:range      75

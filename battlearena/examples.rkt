@@ -27,7 +27,7 @@
     (basic-item #:name "Force Field"
                  #:icon (make-icon "FF")
                  #:on-use (spawn (force-field #:allow-friendly-dart? #t
-                                              #:duration 1000))))
+                                              #:duration 3000))))
  
   (battlearena-game
     #:item-list (list (force-field-item)))
@@ -365,9 +365,8 @@
    #:weapon-list (list (repeater #:name      "Homing Repeater"
                                  #:icon      (make-icon "HR")
                                  #:fire-mode 'homing
-                                 #:damage    15
-                                 #:speed     8
-                                 #:range     40))))
+                                 #:damage    50
+                                 #:speed     5))))
 
 
 
@@ -548,9 +547,7 @@
 
 (define-example-code battlearena fire-magic-3
   (define (my-weapon)
-    (fire-magic #:name   "Fire Magic"
-                #:sprite (make-icon "FM" 'red)
-                #:damage 20
+    (fire-magic #:damage 20
                 #:speed  10
                 #:rarity 'epic))
   
@@ -809,7 +806,7 @@
               #:rapid-fire? #f
               #:damage      20
               #:speed       20
-              #:range       50))
+              #:range       5))
   
   (battlearena-game
    #:weapon-list (list (my-weapon))))

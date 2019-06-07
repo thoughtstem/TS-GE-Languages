@@ -585,7 +585,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))|#
 
-  (combatant
+  (player-combatant
    #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  ;(make-stat-config 'shield 100 sheild-bar)
                  )
@@ -792,7 +792,7 @@
                   (combatant
                    #:stats (list (make-stat-config 'health
                                                    health
-                                                   (stat-progress-bar 'red #:max health #:offset (posn 0 -30))
+                                                   (stat-progress-bar-system 'red #:max health #:offset (posn 0 -30))
                                                    #:max-value health)) ;(default-health+shields-stats health shield)
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
                                                             #:hit-sound HIT-SOUND)

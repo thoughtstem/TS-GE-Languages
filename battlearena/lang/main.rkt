@@ -866,7 +866,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))
 
-  (combatant
+  (player-combatant
    #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  (make-stat-config 'shield shield sheild-bar #:max-value max-shield))
    #:damage-processor dp         

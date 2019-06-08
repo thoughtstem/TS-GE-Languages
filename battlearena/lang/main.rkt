@@ -1381,8 +1381,10 @@
 
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
-               #:color             [c 'brown]
-               #:sprite            [s (set-sprite-color c spear-sprite)]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) spear-sprite)
+                                          spear-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1427,8 +1429,10 @@
 
 (define (sword #:name              [n "Sword"]
                #:icon              [i [make-icon "SW" 'silver]]
-               #:color             [c 'gray]
-               #:sprite            [s (set-sprite-color c swinging-sword-sprite)]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) swinging-sword-sprite)
+                                          swinging-sword-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1472,8 +1476,10 @@
 
 (define (paint-thrower #:name              [n "Paint Thrower"]
                        #:icon              [i [make-icon "PT"]]
-                       #:color             [c 'blue]
-                       #:sprite            [s (set-sprite-color c paint-sprite)]
+                       #:color             [c #f]
+                       #:sprite            [s (if c
+                                                  (apply-image-function (curry set-img-hue (name->hue c)) paint-sprite)
+                                                  paint-sprite)]
                        #:damage            [dmg 5]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -1517,8 +1523,10 @@
 
 (define (fire-magic #:name              [n "Fire Magic"]
                     #:icon              [i [make-icon "FM" 'red]]
-                    #:color             [c 'yellow]
-                    #:sprite            [s (set-sprite-color c flame-sprite)]
+                    #:color             [c #f]
+                    #:sprite            [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -1547,8 +1555,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (fire-dart #:color      [c 'yellow]
-                   #:sprite     [s  (set-sprite-color c flame-sprite)]
+(define (fire-dart #:color      [c #f]
+                   #:sprite     [s  (if c
+                                        (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                        flame-sprite)]
                    #:damage     [dmg 5]
                    #:durability [dur 5]
                    #:speed      [spd 3]
@@ -1564,8 +1574,10 @@
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:icon              [i [make-icon "IM" 'lightcyan]]
-                   #:color             [c 'blue]
-                   #:sprite            [s (set-sprite-color c ice-sprite)]
+                   #:color             [c #f]
+                   #:sprite            [s (if c
+                                              (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                              ice-sprite)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -1615,8 +1627,10 @@
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:icon              [i [make-icon "SM" 'silver]]
-                     #:color             [c 'gray]
-                     #:sprite            [s (set-sprite-color c flying-sword-sprite)]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                flying-sword-sprite)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -1662,8 +1676,10 @@
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
                         #:icon              [i (make-icon "RoB" 'silver)]
-                        #:color             [c 'gray]
-                        #:sprite            [s (set-sprite-color c flying-sword-sprite)]
+                        #:color             [c #f]
+                        #:sprite            [s (if c
+                                                   (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                   flying-sword-sprite)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -1710,8 +1726,10 @@
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
                       #:icon              [i (make-icon "RoF" 'red)]
-                      #:color             [c 'yellow] 
-                      #:sprite            [s (set-sprite-color c flame-sprite)]
+                      #:color             [c #f] 
+                      #:sprite            [s (if c
+                                                 (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                                 flame-sprite)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -1743,8 +1761,10 @@
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
                      #:icon              [i (make-icon "RoI" 'lightcyan)]
-                     #:color             [c 'blue]
-                     #:sprite            [s (set-sprite-color c ice-sprite)]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                                ice-sprite)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
@@ -1773,8 +1793,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (ring-of-fire-dart #:color      [c 'red]
-                           #:sprite     [s (set-sprite-color c flame-sprite)]
+(define (ring-of-fire-dart #:color      [c #f]
+                           #:sprite     [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                            #:damage     [dmg 5]
                            #:durability [dur 20]
                            #:speed      [spd 10]

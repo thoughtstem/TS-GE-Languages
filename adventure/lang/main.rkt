@@ -1764,6 +1764,7 @@
                 #:on-drop           drop-func 
                 #:components        (cons c custom-components)))
 
+
 #;(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
                                   #:sprite           [s #f]
                                   #:position         [p #f]
@@ -1806,12 +1807,15 @@
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          die))))
+
 
 (define/contract/doc (custom-product  #:name              [n "Carrot Stew"]
                                       #:sprite            [s carrotstew-sprite]
@@ -1912,11 +1916,13 @@
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many pickup-function
                                                   (if cutscene
                                                       (spawn cutscene #:relative? #f)
@@ -1963,7 +1969,8 @@
   
   (define (pickup-component)
     (on-key 'space #:rule (and/r near-player?
-                                 (nearest-to-player? #:filter (has-component? on-key?)))
+                                 (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                     (not/c bg?))))
             (do-many pickup-func
                      (if respawn?
                          (do-after-time 1 (do-many (respawn 'anywhere)

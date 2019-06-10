@@ -2,12 +2,12 @@
 (require ts-kata-util 2htdp/image)
 
 (define-example-code racket hello-world
-  (require 2htdp/image)
+  (local-require 2htdp/image)
 
   (circle 40 'solid 'red))
 
 (define-example-code racket target
-  (require 2htdp/image)
+  (local-require 2htdp/image)
 
   (overlay
    (circle 10 'solid 'red)

@@ -20,6 +20,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
 	              [start-sea-npc start])
            "../icons.rkt"
@@ -33,37 +34,38 @@
                                      apple broccoli kiwi mushroom pineapple)))))
 
 
-  (define-visual-language sea-lang
-    "../animal/animal-lang.rkt"
+  (define-visual-language #:wrapper launch-for-ratchet
+                          sea-lang
+                          "../animal/animal-lang.rkt"
 
-    [start       x play-icon]
+                          [start       x play-icon]
 
-    [shark       s (s:scale-to-fit (s:draw-sprite shark)       32)]
-    [ghost-fish  g (s:scale-to-fit (s:draw-sprite ghost-fish)  32)]
-    [red-fish    r (s:scale-to-fit (s:draw-sprite red-fish)    32)]
-    [orange-fish f (s:scale-to-fit (s:draw-sprite orange-fish) 32)]
-    [jellyfish   j (s:scale-to-fit (s:draw-sprite jellyfish)   32)]
-    [octopus     o (s:scale-to-fit (s:draw-sprite octopus)     32)]
-    [crab        c (s:scale-to-fit (s:draw-sprite crab)        32)]
-    [green-fish  n (s:scale-to-fit (s:draw-sprite green-fish)  32)]
-    [yellow-fish y (s:scale-to-fit (s:draw-sprite yellow-fish) 32)]
-    [starfish    h (s:scale-to-fit (s:draw-sprite starfish)    32)]
-    
-    [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
-    [broccoli    b (s:scale-to-fit (s:draw-sprite broccoli)    32)]
-    [kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
-    [mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
-    [pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
+                          [shark       s (s:scale-to-fit (s:draw-sprite shark)       32)]
+                          [ghost-fish  g (s:scale-to-fit (s:draw-sprite ghost-fish)  32)]
+                          [red-fish    r (s:scale-to-fit (s:draw-sprite red-fish)    32)]
+                          [orange-fish f (s:scale-to-fit (s:draw-sprite orange-fish) 32)]
+                          [jellyfish   j (s:scale-to-fit (s:draw-sprite jellyfish)   32)]
+                          [octopus     o (s:scale-to-fit (s:draw-sprite octopus)     32)]
+                          [crab        c (s:scale-to-fit (s:draw-sprite crab)        32)]
+                          [green-fish  n (s:scale-to-fit (s:draw-sprite green-fish)  32)]
+                          [yellow-fish y (s:scale-to-fit (s:draw-sprite yellow-fish) 32)]
+                          [starfish    h (s:scale-to-fit (s:draw-sprite starfish)    32)]
 
-    [red    R (h:square 32 'solid 'red)]
-    [orange O (h:square 32 'solid 'orange)]
-    [yellow Y (h:square 32 'solid 'yellow)]
-    [green  G (h:square 32 'solid 'green)]
-    [blue   B (h:square 32 'solid 'blue)]
-    [purple P (h:square 32 'solid 'purple)]
+                          [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
+                          [broccoli    b (s:scale-to-fit (s:draw-sprite broccoli)    32)]
+                          [kiwi        k (s:scale-to-fit (s:draw-sprite kiwi)        32)]
+                          [mushroom    m (s:scale-to-fit (s:draw-sprite mushroom)    32)]
+                          [pineapple   p (s:scale-to-fit (s:draw-sprite pineapple)   32)]
 
-    [rand     ? question-icon]
-    ))
+                          [red    R (h:square 32 'solid 'red)]
+                          [orange O (h:square 32 'solid 'orange)]
+                          [yellow Y (h:square 32 'solid 'yellow)]
+                          [green  G (h:square 32 'solid 'green)]
+                          [blue   B (h:square 32 'solid 'blue)]
+                          [purple P (h:square 32 'solid 'purple)]
+
+                          [rand     ? question-icon]
+                          ))
 
 
 

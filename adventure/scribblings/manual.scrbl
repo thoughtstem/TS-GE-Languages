@@ -9,6 +9,10 @@
 
 @defmodulelang[adventure]
 
+@table-of-contents[]
+
+@section{Functions}
+
 @(include-extracted "../lang/main.rkt")
 
 @(include-section "assets-library.rkt")

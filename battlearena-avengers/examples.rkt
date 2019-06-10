@@ -9,12 +9,12 @@
 
 (define-example-code battlearena-avengers alt/avatar-2
  (avengers-game
-   #:hero (custom-hero #:sprite thor-sprite))
+   #:hero (basic-hero #:sprite thor-sprite))
   )
 
 (define-example-code battlearena-avengers alt/avatar-3
   (define (my-hero)
-    (custom-hero #:sprite     hulk-sprite
+    (basic-hero #:sprite     hulk-sprite
                  #:speed      15))
   
   (avengers-game
@@ -22,18 +22,8 @@
   )
 
 (define-example-code battlearena-avengers alt/avatar-4
-  (define (my-hero)
-    (custom-hero #:sprite     starlord-sprite
-                 #:speed      20
-                 #:key-mode   'arrow-keys
-                 #:item-slots 5))
-  (avengers-game
-   #:hero (my-hero))
-  )
-
-(define-example-code battlearena-avengers alt/avatar-5
-  (define (my-hero)
-    (custom-hero #:sprite     drax-sprite
+ (define (my-hero)
+    (basic-hero #:sprite     drax-sprite
                  #:speed      25
                  #:item-slots 5
                  #:health     200
@@ -49,7 +39,7 @@
 
 (define-example-code battlearena-avengers alt/enemy-3
   (define (my-villain)
-    (custom-villain #:sprite          loki-sprite
+    (basic-villain #:sprite          loki-sprite
                     #:ai              'medium
                     #:health          200
                     #:shield          100
@@ -61,13 +51,13 @@
 
 (define-example-code battlearena-avengers alt/enemy-4
   (define (easy-villain)
-    (custom-villain #:sprite          wintersoldier-sprite
+    (basic-villain #:sprite          wintersoldier-sprite
                     #:ai              'easy
                     #:health          50
                     #:amount-in-world 5))
 
   (define (hard-villain)
-    (custom-villain #:sprite          redskull-sprite
+    (basic-villain #:sprite          redskull-sprite
                     #:ai              'hard
                     #:health          200
                     #:amount-in-world 3))
@@ -81,28 +71,27 @@
 
 (define-example-code battlearena-avengers alt/enemy-weapon-1
   (avengers-game
-   #:villain-list (list (custom-villain
-                         #:power (custom-power
+   #:villain-list (list (basic-villain
+                         #:power (energy-blast
                                    #:color 'yellow))))
   )
 
 (define-example-code battlearena-avengers alt/enemy-weapon-2
   (avengers-game
-   #:villain-list (list (custom-villain
+   #:villain-list (list (basic-villain
                          #:sprite mandarin-sprite
-                         #:power (custom-power
-                                   #:dart (ring-of-fire-dart)
+                         #:power (ring-of-fire
                                    #:color 'purple))))
   )
 
 (define-example-code battlearena-avengers alt/enemy-weapon-3
   (define (my-power)
-    (custom-power #:dart (ring-of-fire-dart #:damage 50
-                                            #:speed  10
-                                            #:duration  20)
+    (ring-of-fire #:damage 50
+                  #:speed  10
+                  #:duration  20
                   #:color 'purple))
   (avengers-game
-   #:villain-list (list (custom-villain
+   #:villain-list (list (basic-villain
                          #:sprite mandarin-sprite
                          #:power (my-power))))
   )
@@ -158,35 +147,29 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers droid-1
+(define-example-code battlearena-avengers drone-1
   (avengers-game
-    #:power-list (list (custom-power #:name "Droid"
-                                     #:icon (make-icon "D" 'yellow)
-                                     #:dart (energy-droid))))
+    #:power-list (list (energy-drone)))
   )
 
-(define-example-code battlearena-avengers droid-2
-  (define (my-droid)
-    (custom-power #:name "Droid"
-                  #:icon (make-icon "D" 'yellow)
-                  #:dart (energy-droid #:color 'yellow
-                                       #:damage 25
-                                       #:fire-rate 2
-                                       #:fire-mode 'spread)))
+(define-example-code battlearena-avengers drone-2
+  (define (my-drone)
+    (energy-drone #:color     'yellow
+                  #:fire-mode 'spread))
     
   (avengers-game
-   #:power-list (list (my-droid)))
+   #:power-list (list (my-drone)))
   )
 
-(define-example-code battlearena-avengers droid-3
-  (define (my-droid)
-    (custom-power #:name "Droid"
-                  #:icon (make-icon "D" 'yellow)
-                  #:dart (energy-droid #:color 'yellow
-                                       #:damage 25)))
+(define-example-code battlearena-avengers drone-3
+  (define (my-drone)
+    (energy-drone #:color     'red
+                  #:damage    50
+                  #:fire-rate 3
+                  #:fire-mode 'homing))
     
   (avengers-game
-   #:power-list (list (my-droid)))
+   #:power-list (list (my-drone)))
   )
 
 ; ---------------
@@ -194,28 +177,40 @@
 
 (define-example-code battlearena-avengers armor-1
   (avengers-game
-   #:item-list (list (custom-armor #:name "Energy Armor"
+   #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
-                                   #:sprite (make-icon "EA"))))
+                                   #:icon (make-icon "EA"))))
   )
 
 (define-example-code battlearena-avengers armor-2
   (avengers-game
-   #:item-list (list (custom-armor #:name "Energy Armor"
+   #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
-                                   #:sprite (make-icon "EA")
+                                   #:icon (make-icon "EA")
                                    #:change-damage (subtract-by 10))))
   )
 
 (define-example-code battlearena-avengers armor-3
   (define (energy-armor)
-    (custom-armor #:name "Energy Armor"
+    (basic-armor #:name "Energy Armor"
                   #:protects-from "Energy Blast"
-                  #:sprite (make-icon "LA")
+                  #:icon (make-icon "LA")
                   #:change-damage (subtract-by 10)
                   #:rarity 'rare))
   (avengers-game
     #:item-list (list (energy-armor)))
+  )
+; ---------------
+
+(define-example-code battlearena-avengers alt/background-4
+  (define (my-planet)
+    (basic-planet #:image LAVA-BG
+                  #:rows 2
+                  #:columns 2
+                  #:start-tile 3
+                  #:hd? #t))
+ 
+  (avengers-game #:planet (my-planet))
   )
 
 ; ---------------

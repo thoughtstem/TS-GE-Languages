@@ -3,7 +3,8 @@
 @require[scribble/extract]
 @require[game-engine
          game-engine-demos-common
-         "../assets.rkt"]
+         ;"../assets.rkt"
+         ]
 
 @title{Battle Arena Assets}
 
@@ -76,7 +77,3 @@
 
 @defthing[PINK-BG image?]
 @(scale .25 PINK-BG)
-
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

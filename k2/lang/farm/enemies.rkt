@@ -17,6 +17,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
                       [start-animal start])
            "../icons.rkt"
@@ -27,7 +28,8 @@
   (define rand
     (lambda () (first (shuffle (list llama horse cow rabbit sheep dog wolf)))))
 
-  (define-visual-language farm-lang "../animal/animal-lang.rkt" 
+  (define-visual-language #:wrapper launch-for-ratchet
+    farm-lang "../animal/animal-lang.rkt" 
     [start    = play-icon]
     
     [llama    l (s:scale-to-fit (s:draw-sprite llama)  32)]

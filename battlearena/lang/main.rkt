@@ -1,6 +1,5 @@
 #lang at-exp racket
 
-
 (require scribble/srcdoc)
 (require (for-doc racket/base scribble/manual ))
 
@@ -11,7 +10,8 @@
 
 (require ts-kata-util
          (only-in racket/draw make-font)
-         "../assets.rkt")
+         ;"../assets.rkt"
+         )
 
 ;Instead of using provide,
 ;  use define/contract/doc on your functions.
@@ -21,6 +21,7 @@
 ;  the docs. 
 (provide plain-bg-entity
          (rename-out (spear-sprite SPEAR-IMG))
+         repeater
          ice-sprite
          spear
          sword
@@ -31,12 +32,13 @@
          ring-of-blades
          paint-thrower
          sword-magic
-         
-         spear-dart
-         sword-dart
-         paint-dart
-         flying-dagger-dart
-         ring-of-fire-dart
+
+         ;; DONT COMMENT IN -- ASK JASON WHY
+         ;spear-dart
+         ;sword-dart
+         ;paint-dart
+         ;flying-dagger-dart
+         ;ring-of-fire-dart
 
          move-in-ring
 
@@ -52,13 +54,14 @@
          lock-to-grid
          round-nearest-posn
          
-         spear-tower-builder
-         spike-mine-builder
-         lava-builder
+         spear-tower
+         spike-mine
+         lava-pit
 
-         rocket-tower-builder
-         repeater-tower-builder
-         dagger-tower-builder
+         rocket-tower
+         repeater-tower
+         dagger-tower
+         wall-builder
 
          rocket
          rocket-sprite
@@ -73,6 +76,13 @@
          plain-bg
 
          (rename-out (battlearena-game battle-arena-game))
+         (rename-out (custom-avatar basic-avatar)
+                     (custom-weapon basic-weapon)
+                     (custom-enemy basic-enemy)
+                     (custom-armor basic-armor)
+                     (custom-bg basic-bg)
+                     (custom-item basic-item)
+                     )
          )
 
 (define (force-field [width 80]
@@ -202,9 +212,9 @@
    (on-edge 'top    (set-direction 90))
    (on-edge 'bottom (set-direction 270))))
 
-(define (stand-and-shoot target w #:ticks-between-shots (ticks-between-shots 50))
+(define (stand-and-shoot target wc #:ticks-between-shots (ticks-between-shots 50))
   (list (speed 0)
-        (use-weapon-against-player w #:ticks-between-shots ticks-between-shots)
+        (use-weapon-against-player wc #:ticks-between-shots ticks-between-shots)
         (every-tick (point-to target))))
 
 
@@ -446,13 +456,13 @@
 
 
 (define/contract/doc (custom-armor        #:name          [n "Armor"]
-                                          #:sprite        [s chest-sprite]
+                                          #:icon          [i chest-sprite]
                                           #:protects-from [pf "Bullet"]
                                           #:change-damage [cd identity]
                                           #:rarity      [rarity 'common])
   (->i ()
        ( #:name          [name string?]
-         #:sprite        [sprite (or/c sprite? (listof sprite?))]
+         #:icon          [sprite (or/c sprite? (listof sprite?))]
          #:protects-from [protects-from string?]
          #:change-damage [change-damage procedure?]
          #:rarity        [rarity rarity-level?])
@@ -474,7 +484,7 @@
                                                                                     #:hit-sound HIT-SOUND)
                                                          #:default-processor (divert-damage #:filter-out '(friendly-team passive)
                                                                                             #:hit-sound HIT-SOUND)))
-  (sprite->entity s
+  (sprite->entity i
                   #:name updated-name
                   #:position    (posn 0 0)
                   #:components  (active-on-bg 0)
@@ -493,15 +503,18 @@
 
 
 (define/contract/doc (custom-weapon #:name              [n "Repeater"]
-                                    #:sprite            [s chest-sprite]
-                                    #:dart-sprite       [ds (rectangle 10 2 "solid" "green")]
+                                    #:sprite            [i chest-sprite]
+                                    #:color             [c 'green]
+                                    #:dart-sprite       [s (rectangle 10 2 "solid" c)]
                                     #:speed             [spd 10]
                                     #:damage            [dmg 10]
-                                    #:range             [rng 1000]
-                                    #:dart              [b (custom-dart #:sprite ds
+                                    #:range             [rng 10]
+                                    #:durability        [dur 10]
+                                    #:dart              [b (custom-dart #:sprite s
                                                                         #:speed spd
                                                                         #:damage dmg
-                                                                        #:range rng)]
+                                                                        #:range rng
+                                                                        #:durability dur)]
                                     #:fire-mode         [fm 'normal]
                                     #:fire-rate         [fr 3]
                                     #:fire-key          [key 'f]
@@ -513,16 +526,18 @@
   (->i ()
        (#:name        [name string?]
         #:sprite      [sprite (or/c sprite? (listof sprite?))]
+        #:color       [c image-color?]
         #:dart-sprite [dart-sprite (or/c sprite? (listof sprite?))]
         #:speed       [speed  number?]
         #:damage      [damage number?]
         #:range       [range  number?]
+        #:durability  [dur    number?]
         #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
         #:fire-sound  [fire-sound (or/c rsound? procedure? #f '())]
-        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:mouse-fire-button [button (or/c 'left 'right false?)]
         #:point-to-mouse?   [ptm? boolean?]
         #:rapid-fire?       [rf? boolean?]
         #:rarity      [rarity rarity-level?])
@@ -551,7 +566,7 @@
                                                  #:rapid-fire? rf?
                                                  #:rule (and/r (weapon-is? updated-name)
                                                                (in-backpack? updated-name))))
-  (sprite->entity s
+  (sprite->entity i
                   #:name updated-name
                   #:position    (posn 0 0)
                   #:components  (active-on-bg 0)
@@ -568,7 +583,7 @@
                                 (storable)))
 
 (define/contract/doc (custom-item #:name         [n "Item"]
-                                  #:sprite       [s chest-sprite]
+                                  #:icon         [i chest-sprite]
                                   #:on-use       [f #f]
                                   #:rarity       [r 'common]
                                   #:respawn?     [respawn? #t]
@@ -576,7 +591,7 @@
                                   . custom-entities)
 
   (->i () (#:name [name string?]
-           #:sprite [sprite (or/c sprite? (listof sprite?))]
+           #:icon [sprite (or/c sprite? (listof sprite?))]
            #:on-use [on-use any/c]
            #:rarity [rarity rarity-level?]
            #:respawn? [respawn boolean?]
@@ -589,7 +604,7 @@
          via the @racket[#:item-list] parameter.}
   
   (define new-entity
-    (sprite->entity s
+    (sprite->entity i
                   #:name n
                   #:position (posn 0 0)
                   #:components (physical-collider)
@@ -605,11 +620,13 @@
                                (cons c custom-entities)))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          die))))
 
 (define (player-toast-entity message #:color [color "yellow"])
@@ -704,7 +721,7 @@
                (ellipse (random 5 10) (random 5 10) 'solid (color 190 143 82 120))
                )))
 
-(define (plain-bg #:img     [bg (draw-plain-bg)]
+(define (plain-bg #:image     [bg (draw-plain-bg)]
                   #:scale      [scale 60] ; should scale to 3x 480 by 360 or 1440 by 1080
                   #:rows       [rows 3]
                   #:columns    [cols 3]
@@ -719,7 +736,7 @@
                   (cons c custom-components)))
 
 
-(define/contract/doc (custom-bg #:img        [bg (draw-plain-bg)]
+(define/contract/doc (custom-bg #:image        [bg (draw-plain-bg)]
                                 #:rows       [rows 3]
                                 #:columns    [cols 3]
                                 #:start-tile [t 0]
@@ -728,7 +745,7 @@
                                 . custom-components)
 
   (->i ()
-       (#:img [bg-img image?]
+       (#:image [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -851,7 +868,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))
 
-  (combatant
+  (player-combatant
    #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  (make-stat-config 'shield shield sheild-bar #:max-value max-shield))
    #:damage-processor dp         
@@ -982,8 +999,8 @@
          
   (define total-enemies (get-total-by-amount-in-world e-list))
 
-  (define score-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern))
-  (define bold-font (make-font #:size 13 #:face "DejaVu Sans Mono" #:family 'modern #:weight 'bold))
+  (define score-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern))
+  (define bold-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern #:weight 'bold))
    
 
   (define (enemy-counter-entity prefix)
@@ -1221,6 +1238,33 @@
                   (damager damage '(lava))
                   (after-time die-after die)))
 
+(define (wall-builder #:name              [n "Wall Builder"]
+                      #:sprite            [s (wall)]
+                      #:icon              [i (make-icon "WALL" 'turquoise )]
+                      #:speed             [spd 10]
+                      #:damage            [dmg 0]
+                      #:range             [rng 5]
+                      #:dart              [d (builder-dart #:entity   s
+                                                           #:distance rng)]
+                      #:fire-mode         [fm 'normal]
+                      #:fire-rate         [fr 3]
+                      #:fire-key          [key 'f]
+                      #:fire-sound        [fire-sound #f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #f]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (wall #:size (size 50) #:die-after (die-after 500))
   (sprite->entity (set-scale-xy size (new-sprite (square 1 'solid 'brown)))
                   #:name "wall"
@@ -1246,7 +1290,7 @@
 
 #;(module+ test
   (battlearena-game
-   #:bg              (custom-bg #:img FOREST-BG
+   #:bg              (custom-bg #:image FOREST-BG
                                 #:hd? #t)
    #:avatar          (custom-avatar #:sprite pirateboy-sprite)
    #:enemy-list      (list (curry custom-enemy
@@ -1306,9 +1350,43 @@
 
 
 ; ==== PREBUILT WEAPONS & DARTS ====
+
+(define (repeater #:name              [n "Repeater"]
+                  #:sprite            [ds (rectangle 10 2 "solid" "green")]
+                  #:icon              [i (list (set-sprite-angle -45 ds)
+                                               (make-icon ""))]
+                  #:speed             [spd 10]
+                  #:damage            [dmg 10]
+                  #:range             [rng 1000]
+                  #:dart              [d (custom-dart #:sprite ds
+                                                      #:speed spd
+                                                      #:damage dmg
+                                                      #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-rate         [fr 3]
+                  #:fire-key          [key 'f]
+                  #:fire-sound        [fire-sound LASER-SOUND]
+                  #:mouse-fire-button [button 'left]
+                  #:point-to-mouse?   [ptm? #f]
+                  #:rapid-fire?       [rf? #t]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode fm
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
-               #:sprite            [s spear-sprite]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) spear-sprite)
+                                          spear-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1353,7 +1431,10 @@
 
 (define (sword #:name              [n "Sword"]
                #:icon              [i [make-icon "SW" 'silver]]
-               #:sprite            [s swinging-sword-sprite]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) swinging-sword-sprite)
+                                          swinging-sword-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1397,7 +1478,10 @@
 
 (define (paint-thrower #:name              [n "Paint Thrower"]
                        #:icon              [i [make-icon "PT"]]
-                       #:sprite            [s paint-sprite]
+                       #:color             [c #f]
+                       #:sprite            [s (if c
+                                                  (apply-image-function (curry set-img-hue (name->hue c)) paint-sprite)
+                                                  paint-sprite)]
                        #:damage            [dmg 5]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -1441,7 +1525,10 @@
 
 (define (fire-magic #:name              [n "Fire Magic"]
                     #:icon              [i [make-icon "FM" 'red]]
-                    #:sprite            [s flame-sprite]
+                    #:color             [c #f]
+                    #:sprite            [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -1470,7 +1557,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (fire-dart #:sprite     [s   flame-sprite]
+(define (fire-dart #:color      [c #f]
+                   #:sprite     [s  (if c
+                                        (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                        flame-sprite)]
                    #:damage     [dmg 5]
                    #:durability [dur 5]
                    #:speed      [spd 3]
@@ -1486,7 +1576,10 @@
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:icon              [i [make-icon "IM" 'lightcyan]]
-                   #:sprite            [s ice-sprite]
+                   #:color             [c #f]
+                   #:sprite            [s (if c
+                                              (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                              ice-sprite)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -1536,7 +1629,10 @@
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:icon              [i [make-icon "SM" 'silver]]
-                     #:sprite            [s flying-sword-sprite]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                flying-sword-sprite)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -1582,7 +1678,10 @@
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
                         #:icon              [i (make-icon "RoB" 'silver)]
-                        #:sprite            [s flying-sword-sprite]
+                        #:color             [c #f]
+                        #:sprite            [s (if c
+                                                   (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                   flying-sword-sprite)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -1629,12 +1728,16 @@
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
                       #:icon              [i (make-icon "RoF" 'red)]
-                      #:sprite            [s flame-sprite]
+                      #:color             [c #f] 
+                      #:sprite            [s (if c
+                                                 (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                                 flame-sprite)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
                       #:duration          [rng 36]
-                      #:dart              [d (ring-of-fire-dart #:sprite s
+                      #:dart              [d (ring-of-fire-dart #:color c
+                                                                #:sprite s
                                                                 #:damage dmg
                                                                 #:durability dur
                                                                 #:speed spd
@@ -1660,7 +1763,10 @@
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
                      #:icon              [i (make-icon "RoI" 'lightcyan)]
-                     #:sprite            [s ice-sprite]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                                ice-sprite)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
@@ -1689,7 +1795,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (ring-of-fire-dart #:sprite     [s   flame-sprite]
+(define (ring-of-fire-dart #:color      [c #f]
+                           #:sprite     [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                            #:damage     [dmg 5]
                            #:durability [dur 20]
                            #:speed      [spd 10]
@@ -1704,13 +1813,46 @@
                (every-tick (do-many (scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
-(define (spear-tower-builder #:sprite     [s spear-sprite]
-                             #:damage     [dmg 50]
-                             #:durability [dur 20]
-                             #:speed      [spd 5]
-                             #:range      [rng 20]
-                             #:fire-rate  [fire-rate 0.5]
-                             #:fire-sound [fire-sound random-woosh-sound])
+(define (spear-tower #:name              [n "Spear Tower"]
+                     #:icon              [i (make-icon "ST" 'aqua)]
+                     #:sprite            [s spear-sprite]
+                     #:damage            [dmg 50]
+                     #:durability        [dur 20]
+                     #:speed             [spd 5]
+                     #:range             [rng 20]
+                     #:fire-rate         [fr 0.5]
+                     #:fire-sound        [fire-sound random-woosh-sound]
+                     #:dart              [d (spear-tower-builder-dart #:sprite     s
+                                                                      #:damage     dmg
+                                                                      #:durability dur
+                                                                      #:speed      spd
+                                                                      #:range      rng
+                                                                      #:fire-rate  fr
+                                                                      #:fire-sound fire-sound)]
+                     #:fire-mode         [fm 'normal]
+                     #:fire-key          [key 'f]
+                     #:mouse-fire-button [button 'left]
+                     #:point-to-mouse?   [ptm? #t]
+                     #:rapid-fire?       [rf? #f]
+                     #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all towers
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (spear-tower-builder-dart #:sprite     [s spear-sprite]
+                                  #:damage     [dmg 50]
+                                  #:durability [dur 20]
+                                  #:speed      [spd 5]
+                                  #:range      [rng 20]
+                                  #:fire-rate  [fire-rate 0.5]
+                                  #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-sound fire-sound
@@ -1730,13 +1872,46 @@
 (define spike-sprite
   (rotate 30 (triangle 10 'solid 'gray)))
 
-(define (spike-mine-builder #:sprite     [s spike-mine-sprite]
-                            #:damage     [dmg 2]
-                            #:durability [dur 10]
-                            #:speed      [spd 5]
-                            #:range      [rng 20]
-                            #:fire-rate  [fire-rate 20]
-                            #:fire-sound [fire-sound random-woosh-sound])
+(define (spike-mine #:name              [n "Spike Mine"]
+                    #:icon              [i (make-icon "SPM" 'coral)]
+                    #:sprite            [s spike-mine-sprite]
+                    #:damage            [dmg 2]
+                    #:durability        [dur 10]
+                    #:speed             [spd 5]
+                    #:range             [rng 20]
+                    #:fire-rate         [fr 20]
+                    #:fire-sound        [fire-sound random-woosh-sound]
+                    #:dart              [d (spike-mine-builder-dart #:sprite     s
+                                                                    #:damage     dmg
+                                                                    #:durability dur
+                                                                    #:speed      spd
+                                                                    #:range      rng
+                                                                    #:fire-rate  fr
+                                                                    #:fire-sound fire-sound)]
+                    #:fire-mode         [fm 'normal]
+                    #:fire-key          [key 'f]
+                    #:mouse-fire-button [button 'left]
+                    #:point-to-mouse?   [ptm? #t]
+                    #:rapid-fire?       [rf? #f]
+                    #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (spike-mine-builder-dart #:sprite     [s spike-mine-sprite]
+                                 #:damage     [dmg 2]
+                                 #:durability [dur 10]
+                                 #:speed      [spd 5]
+                                 #:range      [rng 20]
+                                 #:fire-rate  [fire-rate 20]
+                                 #:fire-sound [fire-sound random-woosh-sound])
   (builder-dart #:entity
                 (mine #:sprite s
                       #:weapon (custom-weapon ;#:fire-mode 'spread
@@ -1751,11 +1926,41 @@
                                                                   #:components (on-start (random-direction 0 360)))
                                               ))))
 
+(define (lava-pit #:name              [n "Lava Pit"]
+                  #:icon              [i (make-icon "LP" 'crimson)]
+                  #:sprite            [s lava-sprite]
+                  #:size              [size 1]
+                  #:damage            [dmg 10]
+                  #:durability        [dur 10]
+                  #:speed             [spd 5]
+                  #:range             [rng 5]
+                  #:fire-rate         [fr 20]
+                  #:fire-sound        [fire-sound random-woosh-sound]
+                  #:dart              [d (lava-builder-dart #:damage dmg
+                                                            #:size   size
+                                                            #:sprite s
+                                                            #:range rng)]
+                  #:fire-mode         [fm 'normal]
+                  #:fire-key          [key 'f]
+                  #:mouse-fire-button [button 'left]
+                  #:point-to-mouse?   [ptm? #t]
+                  #:rapid-fire?       [rf? #f]
+                  #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (lava-builder #:damage (damage 10)
-                      #:size   (size 1)
-                      #:sprite (sprite LAVA-SPRITE)
-                      #:range (range 5))
+(define (lava-builder-dart #:damage (damage 10)
+                           #:size   (size 1)
+                           #:sprite (sprite lava-sprite)
+                           #:range (range 5))
   
   (builder-dart #:entity (lava #:damage damage
                                #:size size
@@ -1781,14 +1986,50 @@
                #:range rng
                ))
 
-(define (rocket-tower-builder #:sprite     [s rocket-sprite]
-                              #:damage     [dmg 200]
-                              #:durability [dur 10]
-                              #:speed      [spd 5]
-                              #:range      [rng 100]
-                              #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5]
-                              #:fire-sound [fire-sound FIRE-MAGIC-SOUND])
+(define (rocket-tower #:name              [n "Rocket Tower"]
+                      #:icon              [i (make-icon "RKT" 'chartreuse)]
+                      #:sprite            [s rocket-sprite]
+                      #:size              [size 1]
+                      #:damage            [dmg 100]
+                      #:durability        [dur 10]
+                      #:speed             [spd 5]
+                      #:range             [rng 100]
+                      #:fire-rate         [fr 0.5]
+                      #:fire-sound        [fire-sound FIRE-MAGIC-SOUND]
+                      #:fire-mode         [fm 'normal]
+                      #:dart              [d (rocket-tower-builder-dart #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:speed      spd
+                                                                        #:range      rng
+                                                                        #:fire-mode  fm
+                                                                        #:fire-rate  fr
+                                                                        #:fire-sound fire-sound)]
+                      
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (rocket-tower-builder-dart #:sprite     [s rocket-sprite]
+                                   #:damage     [dmg 200]
+                                   #:durability [dur 10]
+                                   #:speed      [spd 5]
+                                   #:range      [rng 100]
+                                   #:fire-mode  [fm 'normal]
+                                   #:fire-rate  [fire-rate 0.5]
+                                   #:fire-sound [fire-sound FIRE-MAGIC-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
@@ -1801,14 +2042,49 @@
                                                        #:speed      spd
                                                        #:range      rng)))))
 
-(define (repeater-tower-builder #:sprite     [s (rectangle 10 2 "solid" "green")]
-                                #:damage     [dmg 10]
-                                #:durability [dur 10]
-                                #:speed      [spd 10]
-                                #:range      [rng 100]
-                                #:fire-mode  [fm 'normal]
-                                #:fire-rate  [fire-rate 3]
-                                #:fire-sound [fire-sound LASER-SOUND])
+(define (repeater-tower #:name              [n "Repeater Tower"]
+                        #:icon              [i (make-icon "RPT" 'mediumorchid)]
+                        #:sprite            [s (rectangle 10 2 "solid" "green")]
+                        #:damage            [dmg 10]
+                        #:durability        [dur 10]
+                        #:speed             [spd 10]
+                        #:range             [rng 100]
+                        #:fire-rate         [fr 3]
+                        #:fire-sound        [fire-sound LASER-SOUND]
+                        #:fire-mode         [fm 'normal]
+                        #:dart              [d (repeater-tower-builder-dart #:sprite     s
+                                                                            #:damage     dmg
+                                                                            #:durability dur
+                                                                            #:speed      spd
+                                                                            #:range      rng
+                                                                            #:fire-mode  fm
+                                                                            #:fire-rate  fr
+                                                                            #:fire-sound fire-sound)]
+                      
+                        #:fire-key          [key 'f]
+                        #:mouse-fire-button [button 'left]
+                        #:point-to-mouse?   [ptm? #t]
+                        #:rapid-fire?       [rf? #f]
+                        #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (repeater-tower-builder-dart #:sprite     [s (rectangle 10 2 "solid" "green")]
+                                     #:damage     [dmg 10]
+                                     #:durability [dur 10]
+                                     #:speed      [spd 10]
+                                     #:range      [rng 100]
+                                     #:fire-mode  [fm 'normal]
+                                     #:fire-rate  [fire-rate 3]
+                                     #:fire-sound [fire-sound LASER-SOUND])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
@@ -1822,14 +2098,49 @@
                                                        #:speed      spd
                                                        #:range      rng)))))
 
-(define (dagger-tower-builder #:sprite     [s (scale 0.5 flying-sword-sprite)]
-                              #:damage     [dmg 200]
-                              #:durability [dur 20]
-                              #:speed      [spd 5]
-                              #:range      [rng 200]
-                              #:fire-mode  [fm 'normal]
-                              #:fire-rate  [fire-rate 0.5]
-                              #:fire-sound [fire-sound #f])
+(define (dagger-tower #:name              [n "Dagger Tower"]
+                      #:icon              [i (make-icon "DT" 'mediumorchid)]
+                      #:sprite            [s (scale 0.5 flying-sword-sprite)]
+                      #:damage            [dmg 50]
+                      #:durability        [dur 20]
+                      #:speed             [spd 5]
+                      #:range             [rng 200]
+                      #:fire-rate         [fr 0.5]
+                      #:fire-sound        [fire-sound #f]
+                      #:fire-mode         [fm 'normal]
+                      #:dart              [d (dagger-tower-builder-dart #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:speed      spd
+                                                                        #:range      rng
+                                                                        #:fire-mode  fm
+                                                                        #:fire-rate  fr
+                                                                        #:fire-sound fire-sound)]
+                      
+                      #:fire-key          [key 'f]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #f]
+                      #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (dagger-tower-builder-dart #:sprite     [s (scale 0.5 flying-sword-sprite)]
+                                   #:damage     [dmg 200]
+                                   #:durability [dur 20]
+                                   #:speed      [spd 5]
+                                   #:range      [rng 200]
+                                   #:fire-mode  [fm 'normal]
+                                   #:fire-rate  [fire-rate 0.5]
+                                   #:fire-sound [fire-sound #f])
   (builder-dart #:entity
                 (tower #:weapon (custom-weapon #:fire-rate fire-rate
                                                #:fire-mode fm
@@ -1853,9 +2164,15 @@
 
 (provide change-damage-by
          multiply-damage-by
-         set-damage-to)
+         set-damage-to
+         change-fire-rate-by
+         multiply-fire-rate-by
+         set-fire-rate-to)
 
-;Holy crap, why is this so hard.  WE need better tools for
+(define (not-after-time-die? c)
+  (not (eq? (after-time-func c) die)))
+
+;  Holy crap, why is this so hard.  WE need better tools for
 ;  applying a function to all things spawned from some entity
 (define (change-damage-by n #:for [d #f])
   (λ(g e)
@@ -1864,8 +2181,8 @@
       (define old-amount (damager-amount a-damager))
       (update-entity e damager? (set-damager-amount a-damager (+ old-amount n))))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1877,12 +2194,27 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
-
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
     
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+
+            ;this will break any non power up after-time component
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
     ))
 
 (define (multiply-damage-by n #:for [d #f])
@@ -1892,8 +2224,8 @@
       (define old-amount (damager-amount a-damager))
       (update-entity e damager? (set-damager-amount a-damager (* old-amount n))))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1905,10 +2237,27 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            
+            ;this will break any non power up after-time component
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
 
     
     ))
@@ -1919,8 +2268,8 @@
       (define a-damager (get-component e damager?))
       (update-entity e damager? (set-damager-amount a-damager n)))
     
-    (define (upgrade-weapon w)
-      (add-weapon-filter w
+    (define (upgrade-weapon wc)
+      (add-weapon-filter wc
                          upgrade-bullet))
 
     (define old-weapons (get-components e weapon?))
@@ -1932,17 +2281,169 @@
           (remove-components _ weapon?)
           (add-components _ old-weapons)))
 
-    (~> e
-        (remove-components _ weapon?)
-        (add-components new-weapons)
-        (add-component _ (after-time d revert)))
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            
+            ;this will break any non power up after-time component
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ weapon?)
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
 
     
     ))
 
 ;change-fire-rate-by
+(define (change-fire-rate-by n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define fire-interval (do-every-speed wc))
+      (define fire-rate (/ 30 fire-interval))
+      (define new-fire-rate (+ fire-rate n))
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+    
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
+
 ;multiply-fire-rate-by
+(define (multiply-fire-rate-by n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define fire-interval (do-every-speed wc))
+      (define fire-rate (/ 30 fire-interval))
+      (define new-fire-rate (* fire-rate n))
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
+
 ;set-fire-rate-to
+(define (set-fire-rate-to n #:for [d #f])
+  (λ(g e)
+    
+    (define (upgrade-weapon wc) ;assume w is a do-every
+      (define new-fire-rate n)
+      (define new-fire-interval (max 1 (/ 30 new-fire-rate)))
+      (set-do-every-speed wc new-fire-interval)
+      )
+
+    (define old-weapons (get-components e (and/c weapon?
+                                                 do-every?)))
+
+    (define new-weapons (map upgrade-weapon old-weapons))
+
+    (define (revert g e)
+      (~> e
+          (remove-components _ (and/c weapon?
+                                      do-every?))
+          (add-components _ old-weapons)))
+
+    (define (update-revert dur)
+      (define old-func (after-time-func (get-component e after-time?)))
+      (if dur
+          (λ (c)
+            (after-time dur (do-many revert
+                                     old-func)))
+          #f))
+    
+    ;if there is an after-time, update it or remove it, else add it or add #f
+    (if (get-component e after-time?) 
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (update-entity _ after-time? (update-revert d)))
+        (~> e
+            (remove-components _ (and/c weapon?
+                                    do-every?))
+            (add-components _ new-weapons)
+            (add-components _ (if d (after-time d revert) #f)))
+        )
+  
+    ))
 
 
 #;(module test racket

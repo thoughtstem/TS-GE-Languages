@@ -16,6 +16,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (submod "./ocean-lang.rkt" ocean-stuff)
            "../icons.rkt"
            (prefix-in p: pict)

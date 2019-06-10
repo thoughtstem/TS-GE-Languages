@@ -10,9 +10,12 @@
 
 
 (language-mappings battlearena       battlearena-starwars
-                   [custom-avatar     custom-rebel]
-                   [custom-enemy      custom-imperial]
-                   [custom-bg         custom-planet]
+                   [basic-avatar     basic-rebel]
+                   [basic-enemy      basic-imperial]
+                   [basic-bg         basic-planet]
+
+                   [repeater          blaster]
+                   [sword             lightsaber]
                    [#:avatar          #:rebel]
                    [#:enemy-list      #:imperial-list]
                    [#:bg              #:planet]
@@ -22,7 +25,10 @@
          blaster-droid
          double-lightsaber
          lightsaber-sprite
-         )
+         (rename-out 
+           (custom-rebel basic-rebel)
+           (custom-imperial basic-imperial)
+           (custom-planet basic-planet)))
 
 ;; ----- REBEL
 
@@ -128,12 +134,12 @@
 ;; ----- LIGHTSABER
 
 (define/contract/doc (lightsaber #:name              [n "Lightsaber"]
-                                 #:icon              [s (make-icon "LS" "green")]
+                                 #:icon              [i (make-icon "LS" "green")]
                                  #:color             [c "green"]
+                                 #:sprite            [s (lightsaber-sprite c)]
                                  #:damage            [dmg 25]
                                  #:durability        [dur 20]
-                                 #:dart              [b (lightsaber-dart #:color      c
-                                                                         #:damage     dmg)]
+                                 #:duration          [rng 10]
                                  #:fire-mode         [fm 'normal]
                                  #:fire-rate         [fr 3]
                                  #:fire-key          [key 'f]
@@ -146,9 +152,10 @@
        (#:name        [name string?]
         #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
         #:damage      [dmg number?]
         #:durability  [dur number?]
-        #:dart        [dart entity?]
+        #:duration    [rng number?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
@@ -163,32 +170,37 @@
          automatically if it is passed into @racket[starwars-game]
          via the @racket[#:weapon-list] parameter.}
   
-  (custom-weapon #:name              n
-                 #:sprite            s
-                 #:dart              b
-                 #:fire-mode         fm
-                 #:fire-rate         fr
-                 #:fire-key          key
-                 #:fire-sound        fire-sound
-                 #:mouse-fire-button button
-                 #:point-to-mouse?   ptm?
-                 #:rapid-fire?       rf?
-                 #:rarity            rarity))
+  (sword #:name              n
+         #:sprite            s
+         #:icon              i
+         #:damage            dmg
+         #:durability        dur
+         #:duration          rng
+         #:fire-mode         fm
+         #:fire-rate         fr
+         #:fire-key          key
+         #:fire-sound        fire-sound
+         #:mouse-fire-button button
+         #:point-to-mouse?   ptm?
+         #:rapid-fire?       rf?
+         #:rarity            rarity))
 
 ;; ----- BLASTER
 
 (define/contract/doc (blaster #:name              [n "Blaster"]
-                              #:icon              [s (make-icon "B" "red")]
+                              #:icon              [i (make-icon "B" "red")]
                               #:color             [c "green"]
+                              #:sprite            [s (blaster-dart-sprite c)]
                               #:damage            [dmg 10]
                               #:durability        [dur 20]
                               #:speed             [spd  5]
                               #:range             [rng 50]
-                              #:dart              [b (blaster-dart #:color      c
-                                                                   #:damage     dmg
-                                                                   #:durability dur
-                                                                   #:speed      spd
-                                                                   #:range      rng)]
+                              #:dart              [d (blaster-dart
+                                                      #:sprite    (blaster-dart-sprite c)
+                                                      #:damage     dmg
+                                                      #:durability dur
+                                                      #:speed      spd
+                                                      #:range      rng)]
                               #:fire-mode         [fm 'normal]
                               #:fire-rate         [fr 3]
                               #:fire-key          [key 'f]
@@ -199,8 +211,9 @@
                               #:rarity            [rarity 'common])
   (->i ()
        (#:name        [name string?]
-        #:icon        [sprite (or/c sprite? (listof sprite?))]
+        #:icon        [i (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:speed       [spd number?]
@@ -220,21 +233,21 @@
          automatically if it is passed into @racket[starwars-game]
          via the @racket[#:weapon-list] parameter.}
   
-  (custom-weapon #:name              n
-                 #:sprite            s
-                 #:dart              b
-                 #:fire-mode         fm
-                 #:fire-rate         fr
-                 #:fire-key          key
-                 #:fire-sound        fire-sound
-                 #:mouse-fire-button button
-                 #:point-to-mouse?   ptm?
-                 #:rapid-fire?       rf?
-                 #:rarity            rarity))
+  (repeater #:name              n
+            #:icon              i
+            #:sprite            s
+            #:fire-mode         fm
+            #:fire-rate         fr
+            #:fire-key          key
+            #:fire-sound        fire-sound
+            #:mouse-fire-button button
+            #:point-to-mouse?   ptm?
+            #:rapid-fire?       rf?
+            #:rarity            rarity))
 
 ;; ----- PLANET
 
-(define/contract/doc (custom-planet #:img        [bg (change-img-hue (random 360) (draw-plain-bg))]
+(define/contract/doc (custom-planet #:image        [bg (change-img-hue (random 360) (draw-plain-bg))]
                                     #:rows       [rows 3]
                                     #:columns    [cols 3]
                                     #:start-tile [t 0]
@@ -243,7 +256,7 @@
                                     . custom-components)
 
   (->i ()
-       (#:img [bg-img image?]
+       (#:image [bg-img image?]
         #:rows   [rows number?]
         #:columns [columns number?]
         #:start-tile [start-tile number?]
@@ -313,20 +326,6 @@
          #:speed         spd
          #:duration      rng))
 
-(define (lightsaber-dart
-         #:color      [c "green"]
-         #:sprite     [s (swinging-lightsaber-sprite c)]
-         #:damage     [dmg 25]
-         #:durability [dur 20]
-         #:speed      [spd  0]
-         #:range      [rng 10])
-
-  (sword-dart #:sprite        s
-              #:damage        dmg
-              #:durability    dur
-              #:speed         spd
-              #:duration      rng))
-
 (define (blaster-dart
          #:color      [c "green"]
          #:sprite     [s (blaster-dart-sprite c)]
@@ -341,31 +340,90 @@
                #:speed      spd
                #:range      rng))
 
+(define (lightsaber-droid #:name              [n "Lightsaber Droid"]
+                          #:icon              [i (make-icon "LSD" 'aquamarine)]
+                          #:color             [c "green"]
+                          #:sprite            [s (swinging-lightsaber-sprite c)]
+                          #:damage            [dmg 50]
+                          #:durability        [dur 20]
+                          #:fire-rate         [fr 0.5]
+                          #:fire-sound        [fire-sound random-lightsaber-sound]
+                          #:dart              [d (lightsaber-droid-dart #:color      c
+                                                                        #:sprite     s
+                                                                        #:damage     dmg
+                                                                        #:durability dur
+                                                                        #:fire-rate  fr)]
+                          #:fire-mode         [fm 'normal]
+                          #:fire-key          [key 'f]
+                          #:mouse-fire-button [button 'left]
+                          #:point-to-mouse?   [ptm? #t]
+                          #:rapid-fire?       [rf? #f]
+                          #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all droids
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
 
-(define (lightsaber-droid #:color      [c "green"]
-                          #:sprite     [s (swinging-lightsaber-sprite c)]
-                          #:damage     [dmg 50]
-                          #:durability [dur 20]
-                          #:speed      [spd 5]
-                          #:range      [rng 20]
-                          #:fire-rate  [fire-rate 0.5])
+(define (lightsaber-droid-dart #:color      [c "green"]
+                               #:sprite     [s (swinging-lightsaber-sprite c)]
+                               #:damage     [dmg 50]
+                               #:durability [dur 20]
+                               #:fire-rate  [fire-rate 0.5])
   
   (builder-dart #:entity (droid #:weapon (lightsaber #:fire-rate fire-rate
-                                                     #:dart (lightsaber-dart #:color      c
-                                                                             #:sprite     s
-                                                                             #:damage     dmg
-                                                                             #:durability dur
-                                                                             #:speed      spd
-                                                                             #:range      rng)))))
+                                                     #:color      c                       
+                                                     #:damage     dmg
+                                                     #:durability dur))))
 
-(define (blaster-droid #:color      [c "green"]
-                       #:sprite     [s (blaster-dart-sprite c)]
-                       #:damage     [dmg 10]
-                       #:durability [dur 20]
-                       #:speed      [spd 5]
-                       #:range      [rng 50]
-                       #:fire-rate  [fire-rate 2]
-                       #:fire-mode  [fire-mode 'normal])
+(define (blaster-droid #:name              [n "Blaster Droid"]
+                       #:icon              [i (make-icon "BLD" 'lime)]
+                       #:color             [c "green"]
+                       #:sprite            [s (blaster-dart-sprite c)]
+                       #:damage            [dmg 10]
+                       #:durability        [dur 20]
+                       #:speed             [spd 5]
+                       #:range             [rng 50]
+                       #:fire-rate         [fr 2]
+                       #:fire-sound        [fire-sound random-blaster-sound]
+                       #:fire-mode         [fm 'normal]
+                       #:dart              [d (blaster-droid-dart #:color      c
+                                                                  #:sprite     s
+                                                                  #:damage     dmg
+                                                                  #:durability dur
+                                                                  #:speed      spd
+                                                                  #:range      rng
+                                                                  #:fire-rate  fr
+                                                                  #:fire-mode  fm)] 
+                       #:fire-key          [key 'f]
+                       #:mouse-fire-button [button 'left]
+                       #:point-to-mouse?   [ptm? #t]
+                       #:rapid-fire?       [rf? #f]
+                       #:rarity            [rarity 'common])
+  (custom-weapon #:name n
+                 #:sprite i
+                 #:dart d
+                 #:fire-mode 'normal ;hard coded into all droids
+                 #:fire-rate fr
+                 #:fire-sound fire-sound
+                 #:mouse-fire-button button
+                 #:point-to-mouse? ptm?
+                 #:rapid-fire? rf?
+                 #:rarity rarity))
+
+(define (blaster-droid-dart #:color      [c "green"]
+                            #:sprite     [s (blaster-dart-sprite c)]
+                            #:damage     [dmg 10]
+                            #:durability [dur 20]
+                            #:speed      [spd 5]
+                            #:range      [rng 50]
+                            #:fire-rate  [fire-rate 2]
+                            #:fire-mode  [fire-mode 'normal])
   
   (builder-dart #:entity (droid #:weapon (blaster #:fire-rate fire-rate
                                                          #:fire-mode fire-mode

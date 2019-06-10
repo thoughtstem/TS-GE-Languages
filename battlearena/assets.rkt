@@ -3,29 +3,11 @@
 (require ts-kata-util/assets/main
          game-engine)
 
-(define-assets-from "assets")
-
-(provide witch-sprite
-         darkelf-sprite
-         lightelf-sprite
-         madscientist-sprite
-         monk-sprite
-         wizard-sprite
-         caitsith-sprite
-         darkknight-sprite
-         kavi-sprite
-         moderngirl-sprite
-         moogle-sprite
-         pirateboy-sprite
-         pirategirl-sprite
-         steampunkboy-sprite
-         steampunkgirl-sprite
-         mystery-sprite
-         )
+;(define-assets-from "assets")
 
 ;===== ASSETS ========
 
-(define witch-sprite
+#|(define witch-sprite
   (sheet->sprite witch-sheet
                  #:columns 4
                  #:rows 4
@@ -140,4 +122,4 @@
                  #:columns 4
                  #:rows 4
                  #:row-number 3
-                 #:delay 2))
+                 #:delay 2))|#

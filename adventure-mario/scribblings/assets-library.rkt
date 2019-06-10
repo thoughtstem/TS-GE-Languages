@@ -2,80 +2,241 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"]
+         "../assets.rkt"
+         "../extra-assets.rkt"]
 
 @title{Assets Library}
 
 @section{Characters}
 
+@defthing[mario-sprite animated-sprite?]
+@(sprite->sheet mario-sprite)
+
+@defthing[luigi-sprite animated-sprite?]
+@(sprite->sheet luigi-sprite)
+
+@defthing[princesspeach-sprite animated-sprite?]
+@(sprite->sheet princesspeach-sprite)
+
+@defthing[toad-sprite animated-sprite?]
+@(sprite->sheet toad-sprite)
+
+@defthing[yoshi-sprite animated-sprite?]
+@(sprite->sheet yoshi-sprite)
+
+@defthing[redyoshi-sprite animated-sprite?]
+@(sprite->sheet redyoshi-sprite)
+
 @; Big Marios
-@defthing[bigmario01-sprite animated-sprite?]
-@(sprite->sheet bigmario01-sprite)
+@defthing[bigmario-sprite animated-sprite?]
+@(sprite->sheet bigmario-sprite)
 
-@defthing[bigmario02-sprite animated-sprite?]
-@(sprite->sheet bigmario02-sprite)
+@defthing[orangebigmario-sprite animated-sprite?]
+@(sprite->sheet orangebigmario-sprite)
 
-@defthing[bigmario03-sprite animated-sprite?]
-@(sprite->sheet bigmario03-sprite)
+@defthing[bluebigmario-sprite animated-sprite?]
+@(sprite->sheet bluebigmario-sprite)
 
-@defthing[bigmario04-sprite animated-sprite?]
-@(sprite->sheet bigmario04-sprite)
-
-@defthing[bigmario05-sprite animated-sprite?]
-@(sprite->sheet bigmario05-sprite)
-
-@defthing[bigmario06-sprite animated-sprite?]
-@(sprite->sheet bigmario06-sprite)
-
-@defthing[bigmario07-sprite animated-sprite?]
-@(sprite->sheet bigmario07-sprite)
-
-@defthing[bigmario08-sprite animated-sprite?]
-@(sprite->sheet bigmario08-sprite)
-
-@defthing[bigmario09-sprite animated-sprite?]
-@(sprite->sheet bigmario09-sprite)
-
-@defthing[bigmario10-sprite animated-sprite?]
-@(sprite->sheet bigmario10-sprite)
-
-@defthing[bigmario11-sprite animated-sprite?]
-@(sprite->sheet bigmario11-sprite)
+@defthing[greybigmario-sprite animated-sprite?]
+@(sprite->sheet greybigmario-sprite)
 
 @; Small Marios
-@defthing[smallmario01-sprite animated-sprite?]
-@(sprite->sheet smallmario01-sprite)
+@defthing[smallmario-sprite animated-sprite?]
+@(sprite->sheet smallmario-sprite)
 
-@defthing[smallmario02-sprite animated-sprite?]
-@(sprite->sheet smallmario02-sprite)
+@defthing[orangesmallmario-sprite animated-sprite?]
+@(sprite->sheet orangesmallmario-sprite)
 
-@defthing[smallmario03-sprite animated-sprite?]
-@(sprite->sheet smallmario03-sprite)
+@defthing[bluesmallmario-sprite animated-sprite?]
+@(sprite->sheet bluesmallmario-sprite)
 
-@defthing[smallmario04-sprite animated-sprite?]
-@(sprite->sheet smallmario04-sprite)
+@defthing[greysmallmario-sprite animated-sprite?]
+@(sprite->sheet greysmallmario-sprite)
 
-@defthing[smallmario05-sprite animated-sprite?]
-@(sprite->sheet smallmario05-sprite)
+@section{Enemies}
 
-@defthing[smallmario06-sprite animated-sprite?]
-@(sprite->sheet smallmario06-sprite)
+@defthing[blooper-sprite animated-sprite?]
+@(sprite->sheet blooper-sprite)
 
-@defthing[smallmario07-sprite animated-sprite?]
-@(sprite->sheet smallmario07-sprite)
+@defthing[blueblooper-sprite animated-sprite?]
+@(sprite->sheet blueblooper-sprite)
 
-@defthing[smallmario08-sprite animated-sprite?]
-@(sprite->sheet smallmario08-sprite)
+@defthing[orangeblooper-sprite animated-sprite?]
+@(sprite->sheet orangeblooper-sprite)
 
-@defthing[smallmario09-sprite animated-sprite?]
-@(sprite->sheet smallmario09-sprite)
+@defthing[greyblooper-sprite animated-sprite?]
+@(sprite->sheet greyblooper-sprite)
 
-@defthing[smallmario10-sprite animated-sprite?]
-@(sprite->sheet smallmario10-sprite)
+@defthing[bowser-sprite animated-sprite?]
+@(sprite->sheet bowser-sprite)
 
-@defthing[smallmario11-sprite animated-sprite?]
-@(sprite->sheet smallmario11-sprite)
+@defthing[bluebowser-sprite animated-sprite?]
+@(sprite->sheet bluebowser-sprite)
 
+@defthing[orangebowser-sprite animated-sprite?]
+@(sprite->sheet orangebowser-sprite)
+
+@defthing[greybowser-sprite animated-sprite?]
+@(sprite->sheet greybowser-sprite)
+
+@defthing[buzzy-sprite animated-sprite?]
+@(sprite->sheet buzzy-sprite)
+
+@defthing[bluebuzzy-sprite animated-sprite?]
+@(sprite->sheet bluebuzzy-sprite)
+
+@defthing[orangebuzzy-sprite animated-sprite?]
+@(sprite->sheet orangebuzzy-sprite)
+
+@defthing[greybuzzy-sprite animated-sprite?]
+@(sprite->sheet greybuzzy-sprite)
+
+@defthing[cheep-sprite animated-sprite?]
+@(sprite->sheet cheep-sprite)
+
+@defthing[bluecheep-sprite animated-sprite?]
+@(sprite->sheet bluecheep-sprite)
+
+@defthing[orangecheep-sprite animated-sprite?]
+@(sprite->sheet orangecheep-sprite)
+
+@defthing[greycheep-sprite animated-sprite?]
+@(sprite->sheet greycheep-sprite)
+
+@defthing[goomba-sprite animated-sprite?]
+@(sprite->sheet goomba-sprite)
+
+@defthing[bluegoomba-sprite animated-sprite?]
+@(sprite->sheet bluegoomba-sprite)
+
+@defthing[orangegoomba-sprite animated-sprite?]
+@(sprite->sheet orangegoomba-sprite)
+
+@defthing[greygoomba-sprite animated-sprite?]
+@(sprite->sheet greygoomba-sprite)
+
+@defthing[lakitu-sprite animated-sprite?]
+@(sprite->sheet lakitu-sprite)
+
+@defthing[bluelakitu-sprite animated-sprite?]
+@(sprite->sheet bluelakitu-sprite)
+
+@defthing[orangelakitu-sprite animated-sprite?]
+@(sprite->sheet orangelakitu-sprite)
+
+@defthing[greylakitu-sprite animated-sprite?]
+@(sprite->sheet greylakitu-sprite)
+
+@defthing[paratroopa-sprite animated-sprite?]
+@(sprite->sheet paratroopa-sprite)
+
+@defthing[blueparatroopa-sprite animated-sprite?]
+@(sprite->sheet blueparatroopa-sprite)
+
+@defthing[orangeparatroopa-sprite animated-sprite?]
+@(sprite->sheet orangeparatroopa-sprite)
+
+@defthing[greyparatroopa-sprite animated-sprite?]
+@(sprite->sheet greyparatroopa-sprite)
+
+@defthing[piranha-sprite animated-sprite?]
+@(sprite->sheet piranha-sprite)
+
+@defthing[bluepiranha-sprite animated-sprite?]
+@(sprite->sheet bluepiranha-sprite)
+
+@defthing[orangepiranha-sprite animated-sprite?]
+@(sprite->sheet orangepiranha-sprite)
+
+@defthing[greypiranha-sprite animated-sprite?]
+@(sprite->sheet greypiranha-sprite)
+
+@defthing[spiny-sprite animated-sprite?]
+@(sprite->sheet spiny-sprite)
+
+@defthing[bluespiny-sprite animated-sprite?]
+@(sprite->sheet bluespiny-sprite)
+
+@defthing[orangespiny-sprite animated-sprite?]
+@(sprite->sheet orangespiny-sprite)
+
+@defthing[greyspiny-sprite animated-sprite?]
+@(sprite->sheet greyspiny-sprite)
+
+@defthing[troopa-sprite animated-sprite?]
+@(sprite->sheet troopa-sprite)
+
+@defthing[bluetroopa-sprite animated-sprite?]
+@(sprite->sheet bluetroopa-sprite)
+
+@defthing[orangetroopa-sprite animated-sprite?]
+@(sprite->sheet orangetroopa-sprite)
+
+@defthing[greytroopa-sprite animated-sprite?]
+@(sprite->sheet greytroopa-sprite)
+
+
+@section{Items}
+
+@defthing[pinkblock-sprite animated-sprite?]
+@(sprite->sheet pinkblock-sprite)
+
+@defthing[blueblock-sprite animated-sprite?]
+@(sprite->sheet blueblock-sprite)
+
+@defthing[orangeblock-sprite animated-sprite?]
+@(sprite->sheet orangeblock-sprite)
+
+@defthing[greyblock-sprite animated-sprite?]
+@(sprite->sheet greyblock-sprite)
+
+@defthing[pinkbrick-sprite animated-sprite?]
+@(sprite->sheet pinkbrick-sprite)
+
+@defthing[bluebrick-sprite animated-sprite?]
+@(sprite->sheet bluebrick-sprite)
+
+@defthing[orangebrick-sprite animated-sprite?]
+@(sprite->sheet orangebrick-sprite)
+
+@defthing[greybrick-sprite animated-sprite?]
+@(sprite->sheet greybrick-sprite)
+
+@defthing[pinkfence-sprite animated-sprite?]
+@(sprite->sheet pinkfence-sprite)
+
+@defthing[bluefence-sprite animated-sprite?]
+@(sprite->sheet bluefence-sprite)
+
+@defthing[orangefence-sprite animated-sprite?]
+@(sprite->sheet orangefence-sprite)
+
+@defthing[greyfence-sprite animated-sprite?]
+@(sprite->sheet greyfence-sprite)
+
+@defthing[pinkpipe-sprite animated-sprite?]
+@(sprite->sheet pinkpipe-sprite)
+
+@defthing[bluepipe-sprite animated-sprite?]
+@(sprite->sheet bluepipe-sprite)
+
+@defthing[orangepipe-sprite animated-sprite?]
+@(sprite->sheet orangepipe-sprite)
+
+@defthing[greypipe-sprite animated-sprite?]
+@(sprite->sheet greypipe-sprite)
+
+@defthing[pinkquestion-sprite animated-sprite?]
+@(sprite->sheet pinkquestion-sprite)
+
+@defthing[bluequestion-sprite animated-sprite?]
+@(sprite->sheet bluequestion-sprite)
+
+@defthing[orangequestion-sprite animated-sprite?]
+@(sprite->sheet orangequestion-sprite)
+
+@defthing[greyquestion-sprite animated-sprite?]
+@(sprite->sheet greyquestion-sprite)
 
 @;----
 @(include-section adventure/scribblings/assets-library)

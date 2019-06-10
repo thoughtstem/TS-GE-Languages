@@ -3,16 +3,17 @@
 (require ts-kata-util/assets/main
          game-engine)
 
-(define-assets-from "assets")
+;(define-assets-from "assets")
 
-(provide witch-sprite
+#|(provide witch-sprite
          darkelf-sprite
          lightelf-sprite
          madscientist-sprite
          monk-sprite
          pirate-sprite
          wizard-sprite
-         mystery-sprite)
+         mystery-sprite
+         )
 
 
 (define witch-sprite
@@ -69,3 +70,4 @@
                  #:columns 4
                  #:delay 2))
 
+|#

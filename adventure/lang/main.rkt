@@ -1474,11 +1474,11 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 50))
+                           (do-many (spawn (game-toast-entity "NIGHTTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5))
                                     (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 50)))
+                           (spawn (game-toast-entity "DAYTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5)))
                   (if intro-cutscene
                       (after-time 1 (spawn intro-cutscene #:relative? #f))
                       #f)

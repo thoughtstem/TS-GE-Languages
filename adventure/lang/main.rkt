@@ -973,7 +973,8 @@
                                                   show))               
                                (on-key 'space die)
                                (on-key 'enter die)
-                               (storable)))
+                               ;(storable)   ;DON'T LEAVE THIS IN!
+                               ))
 
 ; ===== END OF CUT-SCENE =====
 

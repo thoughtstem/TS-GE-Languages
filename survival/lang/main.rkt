@@ -1039,6 +1039,15 @@
                            (spawn (game-toast-entity "DAYTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5)))
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
+
+  (define bg-component (get-component bg-ent backdrop?))
+  
+  (define columns-from-bg
+    (backdrop-columns bg-component))
+  
+  (define rows-from-bg
+    (/ (length (backdrop-tiles bg-component))
+       columns-from-bg))
   
   (define es (filter identity
                      (flatten
@@ -1074,7 +1083,9 @@
                        (cons ent custom-entities)
 
                        (if world-objects?
-                           (make-world-objects round-tree pine-tree)
+                           (make-world-objects round-tree pine-tree
+                                               #:rows    rows-from-bg
+                                               #:columns columns-from-bg)
                            #f)
               
                        bg-with-instructions))))

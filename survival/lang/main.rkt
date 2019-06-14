@@ -1032,13 +1032,22 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 50))
+                           (do-many (spawn (game-toast-entity "NIGHTTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5))
                                     (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 50)))
+                           (spawn (game-toast-entity "DAYTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5)))
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
+
+  (define bg-component (get-component bg-ent backdrop?))
+  
+  (define columns-from-bg
+    (backdrop-columns bg-component))
+  
+  (define rows-from-bg
+    (/ (length (backdrop-tiles bg-component))
+       columns-from-bg))
   
   (define es (filter identity
                      (flatten
@@ -1074,7 +1083,9 @@
                        (cons ent custom-entities)
 
                        (if world-objects?
-                           (make-world-objects round-tree pine-tree)
+                           (make-world-objects round-tree pine-tree
+                                               #:rows    rows-from-bg
+                                               #:columns columns-from-bg)
                            #f)
               
                        bg-with-instructions))))

@@ -1056,6 +1056,15 @@
         (instructions-entity #:move-keys move-keys
                              #:mouse-aim? mouse-aim?
                              #:shoot-key shoot-key)))
+
+  (define bg-component (get-component bg-ent backdrop?))
+  
+  (define columns-from-bg
+    (backdrop-columns bg-component))
+  
+  (define rows-from-bg
+    (/ (length (backdrop-tiles bg-component))
+       columns-from-bg))
   
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
@@ -1083,7 +1092,9 @@
                        (cons ent custom-entities)
 
                        (if world-objects?
-                           (make-world-objects round-tree pine-tree)
+                           (make-world-objects round-tree pine-tree
+                                               #:rows    rows-from-bg
+                                               #:columns columns-from-bg)
                            #f)
 
                        ;For precompilation...

@@ -399,12 +399,11 @@
 
 (define (kill-player-v2)
   (lambda (g e1 e2)
-    ;(define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
     
     (if (lost? g e2)
-        ((do-many remove-on-key
-                  (stop-animation)
-                  ;(change-sprite (new-sprite dead-player-image))
+        ((do-many (stop-all-animations)
+                  remove-all-but-basics
+                  (stop-movement)
                   (rotate-sprite 90)
                   ) g e2)
         e2)))

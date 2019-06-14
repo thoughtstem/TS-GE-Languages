@@ -394,9 +394,10 @@
 (define (kill-player-v2)
   (lambda (g e1 e2)
     (if (lost? g e2)
-        ((do-many remove-on-key
-                  (stop-animation)
-                  (rotate-sprite 90)
+        ((do-many (stop-all-animations)
+                  remove-all-but-basics
+                  (stop-movement)
+                  (rotate-sprite 90) ;rotates all sprites including particles?
                   ) g e2)
         e2)))
 
@@ -508,7 +509,7 @@
                                     #:dart-sprite       [s (rectangle 10 2 "solid" c)]
                                     #:speed             [spd 10]
                                     #:damage            [dmg 10]
-                                    #:range             [rng 10]
+                                    #:range             [rng 1000]
                                     #:durability        [dur 10]
                                     #:dart              [b (custom-dart #:sprite s
                                                                         #:speed spd

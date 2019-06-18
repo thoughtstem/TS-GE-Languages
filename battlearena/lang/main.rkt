@@ -1295,7 +1295,8 @@
                (every-tick (move))
                ;(after-time 6 die)
                (after-time die-after
-                           (spawn-on-current-tile to-build))))
+                           (do-many (spawn-on-current-tile to-build)
+                                    (do-after-time 1 die)))))
 
        
 
@@ -1370,10 +1371,12 @@
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
+                  #:durability        [dur 10]
                   #:dart              [d (custom-dart #:sprite ds
                                                       #:speed spd
                                                       #:damage dmg
-                                                      #:range rng)]
+                                                      #:range rng
+                                                      #:durability dur)]
                   #:fire-mode         [fm 'normal]
                   #:fire-rate         [fr 3]
                   #:fire-key          [key 'f]
@@ -1387,6 +1390,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-key  key
                  #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?

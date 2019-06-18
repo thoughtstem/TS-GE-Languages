@@ -615,7 +615,7 @@
                                (on-start (do-many (active-on-random)
                                                   (respawn 'anywhere)
                                                   show))
-                               (storage "rarity" r)
+                               (storage "Rarity" r)
                                (storage "on-use" f)
                                (storable)
                                (cons c custom-entities)))

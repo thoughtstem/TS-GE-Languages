@@ -615,7 +615,7 @@
                                (on-start (do-many (active-on-random)
                                                   (respawn 'anywhere)
                                                   show))
-                               (storage "rarity" r)
+                               (storage "Rarity" r)
                                (storage "on-use" f)
                                (storable)
                                (cons c custom-entities)))
@@ -1295,7 +1295,8 @@
                (every-tick (move))
                ;(after-time 6 die)
                (after-time die-after
-                           (spawn-on-current-tile to-build))))
+                           (do-many (spawn-on-current-tile to-build)
+                                    (do-after-time 1 die)))))
 
        
 
@@ -1370,10 +1371,12 @@
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
+                  #:durability        [dur 10]
                   #:dart              [d (custom-dart #:sprite ds
                                                       #:speed spd
                                                       #:damage dmg
-                                                      #:range rng)]
+                                                      #:range rng
+                                                      #:durability dur)]
                   #:fire-mode         [fm 'normal]
                   #:fire-rate         [fr 3]
                   #:fire-key          [key 'f]
@@ -1387,6 +1390,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-key  key
                  #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
@@ -2207,7 +2211,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2215,13 +2223,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
 
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e))   (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2250,7 +2265,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2258,13 +2277,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
             
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e))  (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2294,7 +2320,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2302,13 +2332,21 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
             
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2342,7 +2380,11 @@
           (add-components _ old-weapons)))
     
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2350,12 +2392,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
@@ -2389,7 +2439,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2397,12 +2451,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
@@ -2434,7 +2496,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2442,12 +2508,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))

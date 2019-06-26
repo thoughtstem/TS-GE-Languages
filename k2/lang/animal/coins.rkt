@@ -19,7 +19,7 @@
     (h:crop 0 0 32 32 i))
 
   (define rand
-    (lambda () (first (shuffle (list dog horse rabbit apple grapes mushroom onion potato strawberry)))))
+    (lambda () (first (shuffle (list dog apple grapes mushroom onion potato strawberry gold silver copper)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
                           animal-lang
@@ -39,10 +39,18 @@
                           [potato   p (s:scale-to-fit (s:draw-sprite potato)   32)]
 
                           ;Coins
-                          ;[gold     g (s:scale-to-fit (s:draw-sprite gold)     32)]
-                          ;[silver   s (s:scale-to-fit (s:draw-sprite silver)   32)]
-                          ;[copper   c (s:scale-to-fit (s:draw-sprite copper)   32)]
+                          [gold     1 (s:scale-to-fit (s:draw-sprite gold)     32)]
+                          [silver   2 (s:scale-to-fit (s:draw-sprite silver)   32)]
+                          [copper   3 (s:scale-to-fit (s:draw-sprite copper)   32)]
 
+                          ;Colors
+                          [red            R (h:square 32 'solid 'red)]
+                          [orange         O (h:square 32 'solid 'orange)]
+                          [yellow         Y (h:square 32 'solid 'yellow)]
+                          [green          G (h:square 32 'solid 'green)]
+                          [blue           B (h:square 32 'solid 'blue)]
+                          [purple         P (h:square 32 'solid 'purple)]
+    
                           ;Other
                           [rand     ? question-icon]
                           [start-animal   = play-icon]))

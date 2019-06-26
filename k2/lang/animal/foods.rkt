@@ -19,7 +19,7 @@
     (h:crop 0 0 32 32 i))
 
   (define rand
-    (lambda () (first (shuffle (list dog horse rabbit apple grapes mushroom onion potato strawberry)))))
+    (lambda () (first (shuffle (list cat dog apple grapes mushroom onion potato strawberry)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
                           animal-lang

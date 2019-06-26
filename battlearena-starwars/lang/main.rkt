@@ -25,6 +25,9 @@
          blaster-droid
          double-lightsaber
          lightsaber-sprite
+         (rename-out (swinging-lightsaber-sprite swinginglightsaber-sprite))
+         (rename-out (double-lightsaber-sprite doublelightsaber-sprite))
+         (rename-out (blaster-dart-sprite bolt-sprite))
          (rename-out 
            (custom-rebel basic-rebel)
            (custom-imperial basic-imperial)
@@ -101,7 +104,8 @@
                                      #:ai (ai-level 'easy)
                                      #:health (health 100)
                                      #:shield (shield 100)
-                                     #:weapon (weapon (blaster #:color "red"))
+                                     #:weapon (weapon (blaster #:color "red"
+                                                               #:fire-mode 'random))
                                      #:death-particles (death-particles (custom-particles))
                                      #:components (c #f)
                                      . custom-components
@@ -136,7 +140,8 @@
 (define/contract/doc (lightsaber #:name              [n "Lightsaber"]
                                  #:icon              [i (make-icon "LS" "green")]
                                  #:color             [c "green"]
-                                 #:sprite            [s (lightsaber-sprite c)]
+                                 #:sprite            [s (swinging-lightsaber-sprite c)]
+                                 #:speed             [spd 0]
                                  #:damage            [dmg 25]
                                  #:durability        [dur 20]
                                  #:duration          [rng 10]
@@ -153,6 +158,7 @@
         #:icon        [sprite (or/c sprite? (listof sprite?))]
         #:color       [color image-color?]
         #:sprite      [s (or/c sprite? (listof sprite?))]
+        #:speed       [spd number?]
         #:damage      [dmg number?]
         #:durability  [dur number?]
         #:duration    [rng number?]
@@ -173,6 +179,7 @@
   (sword #:name              n
          #:sprite            s
          #:icon              i
+         #:speed             spd
          #:damage            dmg
          #:durability        dur
          #:duration          rng
@@ -194,7 +201,7 @@
                               #:damage            [dmg 10]
                               #:durability        [dur 20]
                               #:speed             [spd  5]
-                              #:range             [rng 50]
+                              #:range             [rng 1000]
                               #:dart              [d (blaster-dart
                                                       #:sprite    (blaster-dart-sprite c)
                                                       #:damage     dmg
@@ -236,6 +243,7 @@
   (repeater #:name              n
             #:icon              i
             #:sprite            s
+            #:dart              d
             #:fire-mode         fm
             #:fire-rate         fr
             #:fire-key          key
@@ -332,7 +340,7 @@
          #:damage     [dmg 10]
          #:durability [dur 20]
          #:speed      [spd  5]
-         #:range      [rng 50])
+         #:range      [rng 1000])
 
   (custom-dart #:sprite     s
                #:damage     dmg
@@ -388,7 +396,7 @@
                        #:damage            [dmg 10]
                        #:durability        [dur 20]
                        #:speed             [spd 5]
-                       #:range             [rng 50]
+                       #:range             [rng 1000]
                        #:fire-rate         [fr 2]
                        #:fire-sound        [fire-sound random-blaster-sound]
                        #:fire-mode         [fm 'normal]

@@ -91,7 +91,7 @@
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/coins
                        animal-014
-                       (start silver ((dog red 5)) (mushroom 10)))
+                       (start silver ((dog red 5)) ((mushroom 10))))
   
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/coins
@@ -111,8 +111,8 @@
                        k2/lang/animal/coins
                        animal-017
                        (start rand
-                              (potato purple)
-                              (gold green 5)))
+                              ((potato purple))
+                              ((gold green 5))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/coins
@@ -143,23 +143,23 @@
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-021
-                       (start cat (rand green 3) (gold 4)))
+                       (start cat ((rand green 3)) ((gold 4))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-022
                        (start horse
-                              (apple 8)
-                              (copper 10)
+                              ((apple 8))
+                              ((copper 10))
                               (wolf)))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-023
                        (start rabbit
-                              (wolf green 4)
-                              (wolf yellow 3)
-                              (wolf red 5)))
+                              ((wolf green 4))
+                              ((wolf yellow 3))
+                              ((wolf red 5))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/enemies
@@ -177,9 +177,9 @@
                               (copper gold)
                               (turkey))
                        (start cat
-                              (rabbit 3)
-                              (silver 3)
-                              (dog 3)))
+                              ((rabbit 3))
+                              ((silver 3))
+                              ((dog 3))))
 
   (define-example-code #:with-test (test game-test)
                        k2/lang/animal/enemies

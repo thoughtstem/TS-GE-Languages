@@ -52,6 +52,78 @@
              (four-circles)))
 
 
+(define-example-code 
+  #:with-test (test identity)
+  
+  data-sci
+  data-sci-003
+  
+  (plot-pict (discrete-histogram
+               (list '(apples 100) '(bananas 200)))))
+
+(define-example-code 
+  #:with-test (test identity)
+  
+  data-sci
+  data-sci-004
+  
+  (define apples-bananas
+    (plot-pict (discrete-histogram
+                 (list '(apples 100) '(bananas 200)))))
+  
+
+  (cc-superimpose
+    apples-bananas
+    (circle 200 #:border-color "red" #:border-width 10)))
+
+(define-example-code 
+  #:with-test (test identity)
+  
+  data-sci
+  data-sci-005
+  
+  (define apples-bananas
+    (plot-pict (discrete-histogram
+                 (list '(apples 100) '(bananas 200)))))
+  
+
+  (define small-apples-bananas 
+    (scale apples-bananas 0.5))
+
+  
+  (hc-append
+    small-apples-bananas 
+    apples-bananas 
+    small-apples-bananas))
+
+
+(define-example-code 
+  #:with-test (test identity)
+  
+  data-sci
+  data-sci-006
+  
+  (define apples-bananas
+    (plot-pict (discrete-histogram
+                 (list '(apples 100) '(bananas 200)))))
+  
+
+  (define macs-pcs
+    (plot-pict (discrete-histogram
+                 (list '(macs 1000) '(pcs 1000)))))
+  
+
+  
+  (hc-append 
+    (rotate apples-bananas (/ pi 5))
+    (rotate macs-pcs (- (/ pi 5)))))
+
+
+;More random image assembly here...
+;  Maybe 20 total?
+
+
+
 ;Data manipulation
 
 (define-example-code 
@@ -174,6 +246,11 @@
      (corpus->words
       (data-science-wiki))))
 
-  (plot-sentiment-polarity data-science-sentiment)
-  )
+  (plot-sentiment-polarity data-science-sentiment))
+
+
+
+
+
+
 

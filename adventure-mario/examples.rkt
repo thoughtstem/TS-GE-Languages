@@ -250,5 +250,3 @@
    #:enemy-list  (list (hard-enemy)))
   )
 
-;We'll test that the examples all run as games for 10 ticks
-(test-all-examples-as-games 'adventure-mario)

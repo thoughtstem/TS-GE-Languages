@@ -5,17 +5,16 @@
 ;Procedural Pictures
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   data-sci
   data-sci-000
 
   (hc-append (circle 10) 
              (circle 10)))
 
-#;(
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-001
@@ -30,7 +29,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-002
@@ -50,7 +49,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-003
@@ -59,7 +58,7 @@
                (list '(apples 100) '(bananas 200)))))
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-004
@@ -74,7 +73,7 @@
     (circle 200 #:border-color "red" #:border-width 10)))
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-005
@@ -95,7 +94,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-006
@@ -124,7 +123,7 @@
 ;Data manipulation
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-100
@@ -137,7 +136,7 @@
 ;Histograms
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-200
@@ -150,7 +149,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-201
@@ -170,7 +169,7 @@
 
 
 (define-example-code
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-300 
@@ -183,7 +182,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-400
@@ -202,7 +201,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-401
@@ -233,7 +232,7 @@
 
 
 (define-example-code 
-  #:with-test (test identity)
+  #:with-test (test begin)
   
   data-sci
   data-sci-500
@@ -247,7 +246,7 @@
 
 
 
-)
+
 
 
 

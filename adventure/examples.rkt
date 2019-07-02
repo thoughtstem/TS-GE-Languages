@@ -543,11 +543,12 @@
   adventure npc-1
 
   (adventure-game
-    #:npc-list (list (basic-npc
-                       #:sprite witch-sprite
-                       #:name   "Witch"
-                       #:mode   'follow
-                       #:tile   3)))
+   #:npc-list (list (basic-npc
+                     #:sprite   witch-sprite
+                     #:name     "Witch"
+                     #:mode     'follow
+                     #:position (posn 200 200)
+                     #:tile     3)))
   )
 
 ;define 2 npc with simple dialog (inline with def)

@@ -3,12 +3,12 @@
 (require ts-kata-util)
 
 
-(define-example-code #:with-test (test identity)
+(define-example-code #:with-test (test begin)
   fundamentals hello-world 
 
   (circle 40 'solid 'red))
 
-(define-example-code #:with-test (test identity)
+(define-example-code #:with-test (test begin)
   fundamentals target 
 
   (overlay
@@ -21,7 +21,7 @@
 
 ;Function defs
 
-(define-example-code #:with-test (test identity)
+(define-example-code #:with-test (test begin)
   fundamentals func-defs-000 
 
   (define (foo)

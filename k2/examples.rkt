@@ -24,3 +24,24 @@
     (submod "./examples/sea.rkt" test)    
     (submod "./examples/farm.rkt" test)
     (submod "./examples/animal.rkt" test)))
+
+(module+ syntaxes
+  (provide
+    (all-from-out 
+      (submod "./examples/hero.rkt" syntaxes)
+
+      (submod "./examples/zoo.rkt" syntaxes)
+
+      (submod "./examples/sea.rkt" syntaxes)    
+      (submod "./examples/farm.rkt" syntaxes)
+      (submod "./examples/animal.rkt" syntaxes)))
+
+  (require 
+    (submod "./examples/hero.rkt" syntaxes)
+
+    (submod "./examples/zoo.rkt" syntaxes)
+
+    (submod "./examples/sea.rkt" syntaxes)    
+    (submod "./examples/farm.rkt" syntaxes)
+    (submod "./examples/animal.rkt" syntaxes))
+  )

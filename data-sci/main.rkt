@@ -1,7 +1,7 @@
 #lang at-exp racket
 
 (module reader syntax/module-reader
-   data-science)
+   data-sci)
 
 (provide (all-from-out "./lang.rkt"))
 

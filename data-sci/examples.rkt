@@ -1,21 +1,18 @@
 #lang racket
 
-(require ts-kata-util
-  data-sci)
-
+(require ts-kata-util)
 
 ;Procedural Pictures
 
-
 (define-example-code 
   #:with-test (test identity)
-  
   data-sci
   data-sci-000
+
   (hc-append (circle 10) 
              (circle 10)))
 
-
+#;(
 
 (define-example-code 
   #:with-test (test identity)
@@ -250,7 +247,7 @@
 
 
 
-
+)
 
 
 

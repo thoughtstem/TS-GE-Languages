@@ -67,13 +67,13 @@
 
   (mario-game
    #:character (basic-character
-                #:sprite bigmario1-sprite)
+                #:sprite bigmario-sprite)
    #:level          (basic-level
                      #:image DESERT-BG)
    #:intro-cutscene (basic-cutscene
                      (page "Once upon a time"
-                           "There was a lone plumber")
-                     (page bigmario1-sprite
+                           "there was a lone plumber.")
+                     (page bigmario-sprite
                            "This is his story."))
    #:other-entities (make-world-objects block
                                         pipe
@@ -95,7 +95,7 @@
   (define lost-yoshi
     (basic-npc
      #:name "Yoshi"
-     #:sprite yoshi1-sprite))
+     #:sprite yoshi-sprite))
   
   (mario-game
    #:npc-list (list
@@ -110,12 +110,12 @@
 (define-example-code adventure-mario alt/fetch-quest-2
   (define lost-cheep
     (basic-npc
-     #:sprite cheep3-sprite))
+     #:sprite orangecheep-sprite))
 
   (define my-cutscene
     (basic-cutscene
      (page
-      cheep3-sprite
+      orangecheep-sprite
       "Happy to be home!")))
   
   (mario-game
@@ -155,9 +155,9 @@
 (define-example-code adventure-mario alt/fetch-quest-4  
   (define my-fetch-quest
     (fetch-quest #:item (basic-item
-                         #:sprite goomba1-sprite)
+                         #:sprite goomba-sprite)
                  #:quest-complete-dialog (list "Thank you!")
-                 #:new-response-dialog   (list "Thanks again!")
+                 #:new-response-dialog   (list "I <3 Goomba!")
                  #:reward-amount 400 ))
 
   (mario-game
@@ -170,9 +170,9 @@
 (define-example-code adventure-mario alt/fetch-quest-5  
   (define my-quest-item
     (basic-item
-     #:sprite  spiny3-sprite
+     #:sprite  bluespiny-sprite
      #:on-store (spawn
-                 (page spiny3-sprite
+                 (page bluespiny-sprite
                        "This must be Lakitu's pet."))
      #:on-drop  (spawn
                  (page "Maybe I shouldn't drop it.")
@@ -184,7 +184,7 @@
    #:npc-list (list
                (basic-npc
                 #:name       "Lakitu"
-                #:sprite     lakitu3-sprite
+                #:sprite     greylakitu-sprite
                 #:dialog     (list "Can you help me find my pet?")
                 #:quest-list (fetch-quest
                               #:item my-quest-item
@@ -196,17 +196,17 @@
 (define-example-code adventure-mario alt/enemy-2
   (define (easy-enemy)
     (basic-enemy #:ai              'easy
-                  #:sprite          goomba1-sprite
+                  #:sprite          goomba-sprite
                   #:amount-in-world 4))
   
   (define (medium-enemy)
     (basic-enemy #:ai              'medium
-                  #:sprite          piranha2-sprite
+                  #:sprite          bluepiranha-sprite
                   #:amount-in-world 2))
 
   (define (hard-enemy)
     (basic-enemy #:ai          'hard
-                  #:sprite      bowser3-sprite
+                  #:sprite      orangebowser-sprite
                   #:night-only? #t))
  
   (mario-game
@@ -217,7 +217,7 @@
 
 (define-example-code adventure-mario alt/enemy-4
   (define (hard-enemy)
-    (basic-enemy #:amount-in-world 3
+    (basic-enemy  #:amount-in-world 3
                   #:ai 'hard
                   #:weapon (fireball)))
 

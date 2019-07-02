@@ -394,9 +394,10 @@
 (define (kill-player-v2)
   (lambda (g e1 e2)
     (if (lost? g e2)
-        ((do-many remove-on-key
-                  (stop-animation)
-                  (rotate-sprite 90)
+        ((do-many (stop-all-animations)
+                  remove-all-but-basics
+                  (stop-movement)
+                  (rotate-sprite 90) ;rotates all sprites including particles?
                   ) g e2)
         e2)))
 
@@ -508,7 +509,7 @@
                                     #:dart-sprite       [s (rectangle 10 2 "solid" c)]
                                     #:speed             [spd 10]
                                     #:damage            [dmg 10]
-                                    #:range             [rng 10]
+                                    #:range             [rng 1000]
                                     #:durability        [dur 10]
                                     #:dart              [b (custom-dart #:sprite s
                                                                         #:speed spd
@@ -614,17 +615,19 @@
                                (on-start (do-many (active-on-random)
                                                   (respawn 'anywhere)
                                                   show))
-                               (storage "rarity" r)
+                               (storage "Rarity" r)
                                (storage "on-use" f)
                                (storable)
                                (cons c custom-entities)))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          die))))
 
 (define (player-toast-entity message #:color [color "yellow"])
@@ -866,7 +869,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))
 
-  (combatant
+  (player-combatant
    #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  (make-stat-config 'shield shield sheild-bar #:max-value max-shield))
    #:damage-processor dp         
@@ -1054,6 +1057,15 @@
         (instructions-entity #:move-keys move-keys
                              #:mouse-aim? mouse-aim?
                              #:shoot-key shoot-key)))
+
+  (define bg-component (get-component bg-ent backdrop?))
+  
+  (define columns-from-bg
+    (backdrop-columns bg-component))
+  
+  (define rows-from-bg
+    (/ (length (backdrop-tiles bg-component))
+       columns-from-bg))
   
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
@@ -1081,7 +1093,9 @@
                        (cons ent custom-entities)
 
                        (if world-objects?
-                           (make-world-objects round-tree pine-tree)
+                           (make-world-objects round-tree pine-tree
+                                               #:rows    rows-from-bg
+                                               #:columns columns-from-bg)
                            #f)
 
                        ;For precompilation...
@@ -1281,7 +1295,8 @@
                (every-tick (move))
                ;(after-time 6 die)
                (after-time die-after
-                           (spawn-on-current-tile to-build))))
+                           (do-many (spawn-on-current-tile to-build)
+                                    (do-after-time 1 die)))))
 
        
 
@@ -1356,10 +1371,12 @@
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
+                  #:durability        [dur 10]
                   #:dart              [d (custom-dart #:sprite ds
                                                       #:speed spd
                                                       #:damage dmg
-                                                      #:range rng)]
+                                                      #:range rng
+                                                      #:durability dur)]
                   #:fire-mode         [fm 'normal]
                   #:fire-rate         [fr 3]
                   #:fire-key          [key 'f]
@@ -1373,6 +1390,7 @@
                  #:dart d
                  #:fire-mode fm
                  #:fire-rate fr
+                 #:fire-key  key
                  #:fire-sound fire-sound
                  #:mouse-fire-button button
                  #:point-to-mouse? ptm?
@@ -1381,8 +1399,10 @@
 
 (define (spear #:name              [n "Spear"]
                #:icon              [i [make-icon "SP" 'brown]]
-               #:color             [c 'brown]
-               #:sprite            [s (set-sprite-color c spear-sprite)]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) spear-sprite)
+                                          spear-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1427,8 +1447,10 @@
 
 (define (sword #:name              [n "Sword"]
                #:icon              [i [make-icon "SW" 'silver]]
-               #:color             [c 'gray]
-               #:sprite            [s (set-sprite-color c swinging-sword-sprite)]
+               #:color             [c #f]
+               #:sprite            [s (if c
+                                          (apply-image-function (curry set-img-hue (name->hue c)) swinging-sword-sprite)
+                                          swinging-sword-sprite)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1472,8 +1494,10 @@
 
 (define (paint-thrower #:name              [n "Paint Thrower"]
                        #:icon              [i [make-icon "PT"]]
-                       #:color             [c 'blue]
-                       #:sprite            [s (set-sprite-color c paint-sprite)]
+                       #:color             [c #f]
+                       #:sprite            [s (if c
+                                                  (apply-image-function (curry set-img-hue (name->hue c)) paint-sprite)
+                                                  paint-sprite)]
                        #:damage            [dmg 5]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -1517,8 +1541,10 @@
 
 (define (fire-magic #:name              [n "Fire Magic"]
                     #:icon              [i [make-icon "FM" 'red]]
-                    #:color             [c 'yellow]
-                    #:sprite            [s (set-sprite-color c flame-sprite)]
+                    #:color             [c #f]
+                    #:sprite            [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -1547,8 +1573,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (fire-dart #:color      [c 'yellow]
-                   #:sprite     [s  (set-sprite-color c flame-sprite)]
+(define (fire-dart #:color      [c #f]
+                   #:sprite     [s  (if c
+                                        (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                        flame-sprite)]
                    #:damage     [dmg 5]
                    #:durability [dur 5]
                    #:speed      [spd 3]
@@ -1564,8 +1592,10 @@
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:icon              [i [make-icon "IM" 'lightcyan]]
-                   #:color             [c 'blue]
-                   #:sprite            [s (set-sprite-color c ice-sprite)]
+                   #:color             [c #f]
+                   #:sprite            [s (if c
+                                              (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                              ice-sprite)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -1615,8 +1645,10 @@
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:icon              [i [make-icon "SM" 'silver]]
-                     #:color             [c 'gray]
-                     #:sprite            [s (set-sprite-color c flying-sword-sprite)]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                flying-sword-sprite)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -1662,8 +1694,10 @@
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
                         #:icon              [i (make-icon "RoB" 'silver)]
-                        #:color             [c 'gray]
-                        #:sprite            [s (set-sprite-color c flying-sword-sprite)]
+                        #:color             [c #f]
+                        #:sprite            [s (if c
+                                                   (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
+                                                   flying-sword-sprite)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -1710,8 +1744,10 @@
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
                       #:icon              [i (make-icon "RoF" 'red)]
-                      #:color             [c 'yellow] 
-                      #:sprite            [s (set-sprite-color c flame-sprite)]
+                      #:color             [c #f] 
+                      #:sprite            [s (if c
+                                                 (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                                 flame-sprite)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -1743,8 +1779,10 @@
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
                      #:icon              [i (make-icon "RoI" 'lightcyan)]
-                     #:color             [c 'blue]
-                     #:sprite            [s (set-sprite-color c ice-sprite)]
+                     #:color             [c #f]
+                     #:sprite            [s (if c
+                                                (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
+                                                ice-sprite)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
@@ -1773,8 +1811,10 @@
                  #:rapid-fire? rf?
                  #:rarity rarity))
 
-(define (ring-of-fire-dart #:color      [c 'red]
-                           #:sprite     [s (set-sprite-color c flame-sprite)]
+(define (ring-of-fire-dart #:color      [c #f]
+                           #:sprite     [s (if c
+                                               (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
+                                               flame-sprite)]
                            #:damage     [dmg 5]
                            #:durability [dur 20]
                            #:speed      [spd 10]
@@ -2171,7 +2211,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2179,13 +2223,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
 
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e))   (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2214,7 +2265,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2222,13 +2277,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
             
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e))  (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2258,7 +2320,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2266,13 +2332,21 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
             
             ;this will break any non power up after-time component
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ weapon?)
             (add-components _ new-weapons)
@@ -2306,7 +2380,11 @@
           (add-components _ old-weapons)))
     
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2314,12 +2392,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
@@ -2353,7 +2439,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2361,12 +2451,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
@@ -2398,7 +2496,11 @@
           (add-components _ old-weapons)))
 
     (define (update-revert dur)
-      (define old-func (after-time-func (get-component e after-time?)))
+      (define old-func (after-time-func (get-component e (and/c after-time?
+                                                                not-after-time-die?
+                                                                (not-particle-remove? e)
+                                                                (not-toast-remove? e)
+                                                                ))))
       (if dur
           (λ (c)
             (after-time dur (do-many revert
@@ -2406,12 +2508,20 @@
           #f))
     
     ;if there is an after-time, update it or remove it, else add it or add #f
-    (if (get-component e after-time?) 
+    (if (get-component e (and/c after-time?
+                                not-after-time-die?
+                                (not-particle-remove? e)
+                                (not-toast-remove? e)
+                                )) 
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))
             (add-components _ new-weapons)
-            (update-entity _ after-time? (update-revert d)))
+            (update-entity _ (and/c after-time?
+                                    not-after-time-die?
+                                    (not-particle-remove? e)
+                                    (not-toast-remove? e)
+                                    ) (update-revert d)))
         (~> e
             (remove-components _ (and/c weapon?
                                     do-every?))

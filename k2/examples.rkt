@@ -5,13 +5,15 @@
     "./examples/hero.rkt"
     "./examples/zoo.rkt"
     "./examples/sea.rkt"
-    "./examples/farm.rkt"))
+    "./examples/farm.rkt"
+    "./examples/animal.rkt"))
 
 (require 
   "./examples/hero.rkt"
   "./examples/zoo.rkt"
   "./examples/sea.rkt"
-  "./examples/farm.rkt")
+  "./examples/farm.rkt"
+  "./examples/animal.rkt")
 
 (module+ test
   (require 
@@ -20,4 +22,5 @@
     (submod "./examples/zoo.rkt" test)
 
     (submod "./examples/sea.rkt" test)    
-    (submod"./examples/farm.rkt" test)))
+    (submod "./examples/farm.rkt" test)
+    (submod "./examples/animal.rkt" test)))

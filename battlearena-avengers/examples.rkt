@@ -200,6 +200,18 @@
   (avengers-game
     #:item-list (list (energy-armor)))
   )
+; ---------------
+
+(define-example-code battlearena-avengers alt/background-4
+  (define (my-planet)
+    (basic-planet #:image LAVA-BG
+                  #:rows 2
+                  #:columns 2
+                  #:start-tile 3
+                  #:hd? #t))
+ 
+  (avengers-game #:planet (my-planet))
+  )
 
 ; ---------------
 ;We'll test that the examples all run as games for 10 ticks

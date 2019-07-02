@@ -5,6 +5,7 @@
 
 (require ts-kata-util
          "../assets.rkt"
+         "../extra-assets.rkt"
          (except-in adventure
                     basic-npc
                     basic-enemy)
@@ -44,7 +45,7 @@
                                                                                         luigi-sprite
                                                                                         princesspeach-sprite
                                                                                         toad-sprite
-                                                                                        yoshi1-sprite)))]
+                                                                                        yoshi-sprite)))]
                                        #:damage-processor [dp (filter-damage-by-tag #:filter-out '(friendly-team passive)
                                                                                     #:show-damage? #t
                                                                                     #:hit-sound HIT-SOUND)]
@@ -177,7 +178,7 @@
                                                                        luigi-sprite
                                                                        princesspeach-sprite
                                                                        toad-sprite
-                                                                       yoshi1-sprite)))]
+                                                                       yoshi-sprite)))]
                                  #:position   [p (posn 0 0)]
                                  #:name       [name (first (shuffle (list "Adrian" "Alex" "Riley"
                                                                           "Sydney" "Charlie" "Andy")))]
@@ -235,16 +236,16 @@
 (define/contract/doc (custom-enemy #:amount-in-world [amount-in-world 1]
                                    #:position        [pos #f]
                                    #:tile            [tile #f]
-                                   #:sprite          [s (first (shuffle (list blooper3-sprite
-                                                                              bowser3-sprite
-                                                                              buzzy3-sprite
-                                                                              cheep3-sprite
-                                                                              goomba3-sprite
-                                                                              lakitu3-sprite
-                                                                              paratroopa3-sprite
-                                                                              piranha3-sprite
-                                                                              spiny3-sprite
-                                                                              troopa3-sprite)))]
+                                   #:sprite          [s (first (shuffle (list orangeblooper-sprite
+                                                                              orangebowser-sprite
+                                                                              orangebuzzy-sprite
+                                                                              orangecheep-sprite
+                                                                              orangegoomba-sprite
+                                                                              orangelakitu-sprite
+                                                                              orangeparatroopa-sprite
+                                                                              orangepiranha-sprite
+                                                                              orangespiny-sprite
+                                                                              orangetroopa-sprite)))]
                                    #:ai              [ai-level 'medium]
                                    #:health          [health 100]
                                    #:weapon          [weapon (custom-weapon #:name "Spitter"
@@ -352,7 +353,7 @@
 
 ; ==== WORLD OBJECTS
 (define (block [p (posn 0 0)] #:tile [tile 0] #:hue [hue 0] #:size [size 1] #:components (c #f) . custom-components )
-  (generic-entity block1-sprite
+  (generic-entity pinkblock-sprite
                   p
                   #:name "Block"
                   #:tile tile
@@ -361,7 +362,7 @@
                   #:components (cons c custom-components)))
 
 (define (brick [p (posn 0 0)] #:tile [tile 0] #:hue [hue 0] #:size [size 1] #:components (c #f) . custom-components )
-  (generic-entity brick1-sprite
+  (generic-entity pinkbrick-sprite
                   p
                   #:name "Brick"
                   #:tile tile
@@ -370,7 +371,7 @@
                   #:components (cons c custom-components)))
 
 (define (fence [p (posn 0 0)] #:tile [tile 0] #:hue [hue 0] #:size [size 1] #:components (c #f) . custom-components )
-  (generic-entity fence1-sprite
+  (generic-entity pinkfence-sprite
                   p
                   #:name "Fence"
                   #:tile tile
@@ -379,7 +380,7 @@
                   #:components (cons c custom-components)))
 
 (define (pipe [p (posn 0 0)] #:tile [tile 0] #:hue [hue 0] #:size [size 1] #:components (c #f) . custom-components )
-  (generic-entity pipe1-sprite
+  (generic-entity pinkpipe-sprite
                   p
                   #:name "Pipe"
                   #:tile tile
@@ -388,7 +389,7 @@
                   #:components (cons c custom-components)))
 
 (define (question-block [p (posn 0 0)] #:tile [tile 0] #:hue [hue 0] #:size [size 1] #:components (c #f) . custom-components )
-  (generic-entity question1-sprite
+  (generic-entity pinkquestion-sprite
                   p
                   #:name "Question Block"
                   #:tile tile

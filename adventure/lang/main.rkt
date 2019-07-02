@@ -53,10 +53,10 @@
          custom-cutscene
          page
 
-         custom-food ;TODO: write contract and autoprovide
-
+         ;custom-food ;TODO: write contract and autoprovide
+         ;custom-item
          ;if/r
-         custom-item
+         
          in-backpack-by-id?
          in-game-by-id?
 
@@ -83,6 +83,7 @@
                      (custom-cutscene cutscene)
                      (custom-cutscene basic-cutscene)
                      (custom-item basic-item)
+                     (custom-product basic-product)
                      )
          )
 
@@ -432,12 +433,10 @@
 
 (define (kill-player-v2)
   (lambda (g e1 e2)
-    ;(define dead-player-image (rotate -90 (pick-frame-original (get-component e2 animated-sprite?) 0)))
-    
     (if (lost? g e2)
-        ((do-many remove-on-key
-                  (stop-animation)
-                  ;(change-sprite (new-sprite dead-player-image))
+        ((do-many (stop-all-animations)
+                  remove-all-but-basics
+                  (stop-movement)
                   (rotate-sprite 90)
                   ) g e2)
         e2)))
@@ -584,7 +583,7 @@
                                                                           (go-to-pos-inside 'top-left
                                                                                             #:posn-offset (posn 10 10))))))))|#
 
-  (combatant
+  (player-combatant
    #:stats (list (make-stat-config 'health health health-bar #:max-value max-health)
                  ;(make-stat-config 'shield 100 sheild-bar)
                  )
@@ -791,7 +790,7 @@
                   (combatant
                    #:stats (list (make-stat-config 'health
                                                    health
-                                                   (stat-progress-bar 'red #:max health #:offset (posn 0 -30))
+                                                   (stat-progress-bar-system 'red #:max health #:offset (posn 0 -30))
                                                    #:max-value health)) ;(default-health+shields-stats health shield)
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
                                                             #:hit-sound HIT-SOUND)
@@ -972,7 +971,8 @@
                                                   show))               
                                (on-key 'space die)
                                (on-key 'enter die)
-                               (storable)))
+                               ;(storable)   ;DON'T LEAVE THIS IN!
+                               ))
 
 ; ===== END OF CUT-SCENE =====
 
@@ -1473,11 +1473,11 @@
     (time-manager-entity
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
-                           (do-many (spawn (toast-entity "NIGHTTIME HAS BEGUN" #:speed 0 #:duration 30))
-                                    (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
+                           (do-many (spawn (game-toast-entity "NIGHTTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5))
+                                    (spawn-many-on-current-tile (map add-random-start-pos (filter night-only? enemies-with-night-code)))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
-                           (spawn (toast-entity "DAYTIME HAS BEGUN" #:speed 0 #:duration 30)))
+                           (spawn (game-toast-entity "DAYTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5)))
                   (if intro-cutscene
                       (after-time 1 (spawn intro-cutscene #:relative? #f))
                       #f)
@@ -1487,6 +1487,15 @@
                       #f)
                   ;(on-key 't (start-stop-game-counter)) ; !!!!! for testing only remove this later !!!!!!
      ))
+  
+  (define bg-component (get-component bg-ent backdrop?))
+  
+  (define columns-from-bg
+    (backdrop-columns bg-component))
+  
+  (define rows-from-bg
+    (/ (length (backdrop-tiles bg-component))
+       columns-from-bg))
   
   (define es (filter identity
                      (flatten
@@ -1518,12 +1527,14 @@
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
-                       (map add-random-start-pos enemies-with-night-code)
+                       (map add-random-start-pos (filter-not night-only? enemies-with-night-code))
                        
                        (cons ent custom-entities)
 
                        (if world-objects?
-                           (make-world-objects round-tree pine-tree)
+                           (make-world-objects round-tree pine-tree
+                                               #:rows    rows-from-bg
+                                               #:columns columns-from-bg)
                            #f)
               
                        bg-with-instructions))))
@@ -1712,21 +1723,42 @@
       (update-entity e component-pred f)
       e))
 
-(define (custom-food  #:name              [n "Carrot"]
-                      #:sprite            [s carrot-sprite]
-                      #:tile              [tile 0]
-                      #:position          [pos (posn 0 0)]
-                      #:amount-in-world   [world-amt 1]
-                      #:storable?         [storable? #t]
-                      #:consumable?       [consumable? #t]
-                      #:value             [val    #f]
-                      #:heals-by          [heals-by 10]    ;only used if consumable is #t
-                      #:respawn?          [respawn? #t]    ;only used if consumable is #t
-                      #:on-pickup         [pickup-func (λ (g e) e)]
-                      #:on-store          [store-func (λ (g e) e)]
-                      #:on-drop           [drop-func (λ (g e) e)]
-                      #:components        [c #f]
-                      . custom-components)
+(define/contract/doc (custom-food  #:name              [n "Carrot"]
+                                   #:sprite            [s carrot-sprite]
+                                   #:tile              [tile 0]
+                                   #:position          [pos (posn 0 0)]
+                                   #:amount-in-world   [world-amt 1]
+                                   #:storable?         [storable? #t]
+                                   #:consumable?       [consumable? #t]
+                                   #:value             [val    #f]
+                                   #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                   #:respawn?          [respawn? #t]    ;only used if consumable is #t
+                                   #:on-pickup         [pickup-func (λ (g e) e)]
+                                   #:on-store          [store-func (λ (g e) e)]
+                                   #:on-drop           [drop-func (λ (g e) e)]
+                                   #:components        [c #f]
+                                   . custom-components)
+  (->i () (#:name       [name string?]
+           #:sprite     [sprite (or/c sprite? (listof sprite?))]
+           #:tile       [tile number?]
+           #:position   [position posn?]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?  [storable? boolean?]
+           #:consumable? [consumable? boolean?]
+           #:value       [value (or/c number? #f)]
+           #:heals-by    [heals-by (or/c number? #f)]
+           #:respawn?    [respawn? boolean?]  
+           #:on-pickup   [pickup-func procedure?]
+           #:on-store    [store-func procedure?]
+           #:on-drop     [drop-func procedure?]
+           #:components  [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom food, which will be placed into the world
+              automatically if it is passed into @racket[adventure-game]
+              via the @racket[#:food-list] parameter.}
+  
   (custom-item  #:name              n
                 #:sprite            s
                 #:tile              tile
@@ -1741,6 +1773,7 @@
                 #:on-store          store-func 
                 #:on-drop           drop-func 
                 #:components        (cons c custom-components)))
+
 
 #;(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
                                   #:sprite           [s #f]
@@ -1784,12 +1817,66 @@
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          die))))
+
+
+(define/contract/doc (custom-product  #:name              [n "Carrot Stew"]
+                                      #:sprite            [s carrotstew-sprite]
+                                      #:tile              [tile 0]
+                                      #:position          [pos (posn 0 0)]
+                                      #:amount-in-world   [world-amt 1]
+                                      #:storable?         [storable? #t]
+                                      #:consumable?       [consumable? #t]
+                                      #:value             [val    #f]
+                                      #:heals-by          [heals-by 10]    ;only used if consumable is #t
+                                      #:respawn?          [respawn? #f]    ;only used if consumable is #t
+                                      #:on-pickup         [pickup-func (λ (g e) e)]
+                                      #:on-store          [store-func (λ (g e) e)]
+                                      #:on-drop           [drop-func (λ (g e) e)]
+                                      #:components        [c #f]
+                                      . custom-components)
+  (->i () (#:name       [name string?]
+           #:sprite     [sprite (or/c sprite? (listof sprite?))]
+           #:tile       [tile number?]
+           #:position   [position posn?]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?  [storable? boolean?]
+           #:consumable? [consumable? boolean?]
+           #:value       [value (or/c number? #f)]
+           #:heals-by    [heals-by (or/c number? #f)]
+           #:respawn?    [respawn? boolean?]  
+           #:on-pickup   [pickup-func procedure?]
+           #:on-store    [store-func procedure?]
+           #:on-drop     [drop-func procedure?]
+           #:components  [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom product, which can be used to create a 
+              recipe product if it is passed into @racket[recipe]
+              via the @racket[#:product] parameter.}
+  
+  (custom-item  #:name              n
+                #:sprite            s
+                #:tile              tile
+                #:position          pos
+                #:amount-in-world   world-amt
+                #:storable?         storable?
+                #:consumable?       consumable?
+                #:value             val
+                #:heals-by          heals-by    
+                #:respawn?          respawn? 
+                #:on-pickup         pickup-func
+                #:on-store          store-func 
+                #:on-drop           drop-func 
+                #:components        (cons c custom-components)))
 
 (define/contract/doc (custom-coin #:entity           [base-entity (copper-coin)]
                                   #:sprite           [s #f]
@@ -1839,11 +1926,13 @@
                                            (cons c custom-entities))))
   (if respawn?
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many (respawn 'anywhere)
                                                   (active-on-random))))
       (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (has-component? on-key?)))
+                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                                                  (not/c bg?))))
                                          (do-many pickup-function
                                                   (if cutscene
                                                       (spawn cutscene #:relative? #f)
@@ -1853,25 +1942,45 @@
                                                   )))))
 
 ; ==== CUSTOM ITEM DEFINITION ====
-(define (custom-item #:name              [n "Chest"]
-                     #:sprite            [s chest-sprite]
-                     #:tile              [tile #f]
-                     #:position          [pos #f]
-                     #:amount-in-world   [world-amt 1]
-                     #:storable?         [storable? #t]
-                     #:consumable?       [consumable? #f]
-                     #:value             [val 10]      ;only used if consumable is #t
-                     #:heals-by          [heals-by #f]
-                     #:respawn?          [respawn? #t] ;only used if consumable is #t
-                     #:on-pickup         [pickup-func (λ (g e) e)]
-                     #:on-store          [store-func (λ (g e) e)]
-                     #:on-drop           [drop-func (λ (g e) e)]
-                     #:components        [c #f]
-                     . custom-components)
+(define/contract/doc (custom-item #:name              [n "Chest"]
+                                  #:sprite            [s chest-sprite]
+                                  #:tile              [tile #f]
+                                  #:position          [pos #f]
+                                  #:amount-in-world   [world-amt 1]
+                                  #:storable?         [storable? #t]
+                                  #:consumable?       [consumable? #f]
+                                  #:value             [val 10]      ;only used if consumable is #t
+                                  #:heals-by          [heals-by #f]
+                                  #:respawn?          [respawn? #t] ;only used if consumable is #t
+                                  #:on-pickup         [pickup-func (λ (g e) e)]
+                                  #:on-store          [store-func (λ (g e) e)]
+                                  #:on-drop           [drop-func (λ (g e) e)]
+                                  #:components        [c #f]
+                                  . custom-components)
+  (->i () (#:name            [name string?]
+           #:sprite          [sprite (or/c sprite? (listof sprite?))]
+           #:tile            [tile (or/c number? #f)]
+           #:position        [position (or/c posn? #f)]
+           #:amount-in-world [amount-in-world number?]
+           #:storable?       [storable? boolean?]
+           #:consumable?     [consumable? boolean?]
+           #:value           [value (or/c number? #f)]
+           #:heals-by        [heals-by (or/c number? #f)]
+           #:respawn?        [respawn? boolean?]  
+           #:on-pickup       [pickup-func procedure?]
+           #:on-store        [store-func procedure?]
+           #:on-drop         [drop-func procedure?]
+           #:components      [first-component  component-or-system?])
+       #:rest [more-components (listof component-or-system?)]
+       [returns entity?])
+
+  @{Returns a custom item, which has a unique item id and can be
+              used in npc quests.}
   
   (define (pickup-component)
     (on-key 'space #:rule (and/r near-player?
-                                 (nearest-to-player? #:filter (has-component? on-key?)))
+                                 (nearest-to-player? #:filter (and/c (has-component? on-key?)
+                                                                     (not/c bg?))))
             (do-many pickup-func
                      (if respawn?
                          (do-after-time 1 (do-many (respawn 'anywhere)

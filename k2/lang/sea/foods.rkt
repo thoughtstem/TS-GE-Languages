@@ -19,6 +19,7 @@
 (module ratchet racket
   
   (require ratchet
+           ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
 	              [start-sea start])
            "../icons.rkt"

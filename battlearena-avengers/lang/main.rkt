@@ -155,7 +155,7 @@
                                    #:dart-sprite       [ds (rectangle 10 2 "solid" c)]
                                    #:speed             [spd 10]
                                    #:damage            [dmg 10]
-                                   #:range             [rng 10]
+                                   #:range             [rng 1000]
                                    #:durability        [dur 10]
                                    #:dart              [b (custom-dart #:sprite ds
                                                                        #:speed spd

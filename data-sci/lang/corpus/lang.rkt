@@ -1,5 +1,6 @@
 #lang racket
 
+#;
 (provide fetch-corpus
          plot-sentiment-polarity
          plot-sentiment-curve
@@ -13,25 +14,30 @@
            plot
            math)) 
 
+#;
 (require net/url data-science plot math)
 
+#;
 (define (safe-take l n)
   (if (< n (length l))
     l
     (take l n)))
 
+#;
 (define (safe-drop l n)
   (if (< n (length l))
     l
     (drop l n)))
 
 
+#;
 (define (chapterize c #:break (break "chapter"))
   (string-split c break))
 
 
 
 ;Too slow for large texts...
+#;
 (define (paginate c #:words-per-page (wpp 500))
   (define giant-list (string-split c " "))  
 
@@ -47,6 +53,7 @@
         " "))
     (range num-pages)))
 
+#;
 (define (fetch-corpus url-string)
   (define url 
     (if (string? url-string) 
@@ -57,22 +64,27 @@
     (if (path? url)
       (open-input-file url)
       (get-pure-port url #:redirections 5)))
+
+#;
 (define text (string-normalize-spaces
                  (remove-punctuation
                    (string-downcase (port->string in)) #:websafe? #t)))
   (close-input-port in)
   text)
 
+#;
 (define (corpus->words corpus)
   (define words 
     (document->tokens corpus #:sort? #t))
 
   words)
 
+#;
 (define (words->sentiment words)
   (define sentiment (list->sentiment words #:lexicon 'bing))
   sentiment)
 
+#;
 (define (plot-corpus-size . corpuses)
   (parameterize ([plot-height 200])
     (define i 0)
@@ -87,6 +99,7 @@
           #:x-label "Corpuses"
           #:y-label "Number of Words")))
 
+#;
 (define (plot-sentiment-polarity sentiment)
   (parameterize ([plot-height 200])
     (plot (discrete-histogram
@@ -99,6 +112,7 @@
           #:x-label "Frequency"
           #:y-label "Sentiment Polarity")))
 
+#;
 (define (plot-sentiment-curve sentiment)
 
   (define negative-tokens

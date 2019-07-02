@@ -1,17 +1,23 @@
 #lang racket
 
+#;
 (require plot data-science math "./corpus/main.rkt")
 
+#;
 (plot-new-window? #t)
 
+#;
 (define data-science-sentiment
   (words->sentiment
     (corpus->words 
       (data-science-wiki))))
 
+#;
 (plot-sentiment-polarity data-science-sentiment)
+#;
 (plot-sentiment-curve    data-science-sentiment)
 
+#;
 (define moby-sentiment
   (words->sentiment
     (corpus->words (moby-dick))))

@@ -4,9 +4,10 @@
 
 ;Procedural Pictures
 
+
 (define-example-code 
   #:with-test (test begin)
-  data-sci
+  data-sci/no-gui
   data-sci-000
 
   (hc-append (circle 10) 
@@ -16,7 +17,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-001
   
   (define (two-circles)
@@ -31,7 +32,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-002
   
   (define (two-circles)
@@ -51,7 +52,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-003
   
   (plot-pict (discrete-histogram
@@ -60,7 +61,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-004
   
   (define apples-bananas
@@ -75,7 +76,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-005
   
   (define apples-bananas
@@ -96,7 +97,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-006
   
   (define apples-bananas
@@ -125,7 +126,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-100
 
   (map add1 (list 1 2 3 4 5)))
@@ -138,7 +139,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-200
 
   (define the-data
@@ -151,7 +152,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-201
 
   (define the-data
@@ -171,7 +172,7 @@
 (define-example-code
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-300 
 
   (plot3d (discrete-histogram3d '(#(a a 1) #(a b 2) #(b b 3))
@@ -184,7 +185,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-400
 
   (define the-data
@@ -203,7 +204,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-401
 
   (define the-data
@@ -234,7 +235,7 @@
 (define-example-code 
   #:with-test (test begin)
   
-  data-sci
+  data-sci/no-gui
   data-sci-500
 
   (define data-science-sentiment

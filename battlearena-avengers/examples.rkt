@@ -7,12 +7,16 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers alt/avatar-2
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/avatar-2
  (avengers-game
    #:hero (basic-hero #:sprite thor-sprite))
   )
 
-(define-example-code battlearena-avengers alt/avatar-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/avatar-3
   (define (my-hero)
     (basic-hero #:sprite     hulk-sprite
                  #:speed      15))
@@ -21,7 +25,9 @@
    #:hero (my-hero))
   )
 
-(define-example-code battlearena-avengers alt/avatar-4
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/avatar-4
  (define (my-hero)
     (basic-hero #:sprite     drax-sprite
                  #:speed      25
@@ -37,7 +43,9 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers alt/enemy-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/enemy-3
   (define (my-villain)
     (basic-villain #:sprite          loki-sprite
                     #:ai              'medium
@@ -49,7 +57,9 @@
    #:villain-list (list (my-villain)))
   )
 
-(define-example-code battlearena-avengers alt/enemy-4
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/enemy-4
   (define (easy-villain)
     (basic-villain #:sprite          wintersoldier-sprite
                     #:ai              'easy
@@ -69,14 +79,18 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers alt/enemy-weapon-1
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/enemy-weapon-1
   (avengers-game
    #:villain-list (list (basic-villain
                          #:power (energy-blast
                                    #:color 'yellow))))
   )
 
-(define-example-code battlearena-avengers alt/enemy-weapon-2
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/enemy-weapon-2
   (avengers-game
    #:villain-list (list (basic-villain
                          #:sprite mandarin-sprite
@@ -84,7 +98,9 @@
                                    #:color 'purple))))
   )
 
-(define-example-code battlearena-avengers alt/enemy-weapon-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/enemy-weapon-3
   (define (my-power)
     (ring-of-fire #:damage 50
                   #:speed  10
@@ -105,18 +121,24 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers power-1
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers power-1
   (avengers-game
    #:power-list (list (energy-blast)))
   )
 
-(define-example-code battlearena-avengers power-2
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers power-2
   (avengers-game
    #:power-list (list (energy-blast #:color 'orange
                                     #:damage 20)))
   )
 
-(define-example-code battlearena-avengers power-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers power-3
   (define (my-power)
     (star-bit #:color 'orange
               #:damage 10
@@ -127,7 +149,9 @@
    #:power-list (list (my-power)))
   )
 
-(define-example-code battlearena-avengers power-4
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers power-4
   (define (my-power-1)
     (magic-orb #:damage      10
                #:speed       15
@@ -147,12 +171,16 @@
 
 ; ---------------
 
-(define-example-code battlearena-avengers drone-1
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers drone-1
   (avengers-game
     #:power-list (list (energy-drone)))
   )
 
-(define-example-code battlearena-avengers drone-2
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers drone-2
   (define (my-drone)
     (energy-drone #:color     'yellow
                   #:fire-mode 'spread))
@@ -161,7 +189,9 @@
    #:power-list (list (my-drone)))
   )
 
-(define-example-code battlearena-avengers drone-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers drone-3
   (define (my-drone)
     (energy-drone #:color     'red
                   #:damage    50
@@ -175,14 +205,18 @@
 ; ---------------
 
 
-(define-example-code battlearena-avengers armor-1
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers armor-1
   (avengers-game
    #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
                                    #:icon (make-icon "EA"))))
   )
 
-(define-example-code battlearena-avengers armor-2
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers armor-2
   (avengers-game
    #:item-list (list (basic-armor #:name "Energy Armor"
                                    #:protects-from "Energy Blast"
@@ -190,7 +224,9 @@
                                    #:change-damage (subtract-by 10))))
   )
 
-(define-example-code battlearena-avengers armor-3
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers armor-3
   (define (energy-armor)
     (basic-armor #:name "Energy Armor"
                   #:protects-from "Energy Blast"
@@ -202,7 +238,9 @@
   )
 ; ---------------
 
-(define-example-code battlearena-avengers alt/background-4
+(define-example-code
+  #:with-test (test game-test)
+ battlearena-avengers alt/background-4
   (define (my-planet)
     (basic-planet #:image LAVA-BG
                   #:rows 2
@@ -213,6 +251,3 @@
   (avengers-game #:planet (my-planet))
   )
 
-; ---------------
-;We'll test that the examples all run as games for 10 ticks
-(test-all-examples-as-games 'battlearena-avengers)

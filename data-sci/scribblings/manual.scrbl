@@ -6,14 +6,12 @@
 @title{data-science docs}
 @author{thoughtstem}
 
-@defmodulelang[data-science]
+@defmodulelang[data-sci]
 
-@section{Functions}
-
-@(include-extracted "../lang/main.rkt")
-
-@section{Image Assets}
-
-@(include-extracted "../assets.rkt")
-
+This language reprovides much of @racket[plot]
+and @racket[data-science].  The vision is to 
+add on some interesting
+data sets, convenience functions, and
+abstractions for dealing with certain types of
+data or specific data sets.
 

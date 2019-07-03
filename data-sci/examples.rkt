@@ -13,9 +13,9 @@
 (define-example-code 
 ;  #:with-test (test no-test)
   data-sci
-  data-sci-000
+  data-sci-pict-000
 
-  (hc-appen (circle 10) 
+  (hc-append (circle 10) 
              (circle 10)))
 
 
@@ -23,7 +23,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-001
+  data-sci-pict-001
   
   (define (two-circles)
     (hc-append (circle 10) 
@@ -38,7 +38,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-002
+  data-sci-pict-002
   
   (define (two-circles)
     (hc-append (circle 10) 
@@ -53,12 +53,125 @@
              (scale (four-circles) 2)
              (four-circles)))
 
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-pict-003
+  
+  (rotate
+    (text "This is upside down")
+    pi))
+
 
 (define-example-code 
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-003
+  data-sci-pict-004
+  
+  (rotate
+    (text "This is sideways")
+    (/ pi 2)))
+
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-pict-005
+  
+  (scale
+    (text "This is big")
+    2))
+
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-pict-006
+  
+  (scale
+    (rotate
+      (text "This is sideways")
+      (/ pi 2))
+    2))
+
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-pict-007
+  
+  (colorize
+    (text "This is red")
+    "red"))
+
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-pict-008
+  
+  (rotate
+    (colorize
+      (text "This is green and sideways")
+      "green")
+    pi))
+
+(define-example-code 
+  ;  #:with-test (test no-test)
+
+  data-sci
+  data-sci-pict-009
+
+  (rectangle 200 200 
+             #:border-width 10
+             #:border-color "green"))
+
+(define-example-code 
+  ;  #:with-test (test no-test)
+
+  data-sci
+  data-sci-pict-010
+
+  (cc-superimpose
+    (text "I am in a green box")
+    (rectangle 200 200 
+               #:border-width 10
+               #:border-color "green")))
+
+(define-example-code 
+  ;  #:with-test (test no-test)
+
+  data-sci
+  data-sci-pict-011
+
+  (define green-box
+    (cc-superimpose
+      (text "This is green")
+      (rectangle 200 200 
+                 #:border-width 10
+                 #:border-color "green"))) 
+
+  (define red-box
+    (cc-superimpose
+      (text "This is red")
+      (rectangle 200 200 
+                 #:border-width 10
+                 #:border-color "red"))) 
+
+  (vc-append green-box 
+             red-box 
+             green-box 
+             red-box))
+
+
+#|
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-000
   
   (plot-pict (discrete-histogram
                (list '(apples 100) '(bananas 200)))))
@@ -67,7 +180,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-004
+  data-sci-001
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -82,7 +195,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-005
+  data-sci-002
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -103,7 +216,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-006
+  data-sci-003
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -112,13 +225,16 @@
 
   (define macs-pcs
     (plot-pict (discrete-histogram
+                 #:color "green"
                  (list '(macs 1000) '(pcs 1000)))))
   
 
   
-  (hc-append 
-    (rotate apples-bananas (/ pi 5))
-    (rotate macs-pcs (- (/ pi 5)))))
+  (scale 
+    (hc-append 
+      (rotate apples-bananas (/ pi 5))
+      (rotate macs-pcs (- (/ pi 5))))
+    0.5))
 
 
 ;More random image assembly here...
@@ -256,4 +372,4 @@
 
 
 
-
+|#

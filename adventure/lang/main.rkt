@@ -1474,7 +1474,7 @@
      #:components (on-start (set-counter START-OF-DAYTIME))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset END-OF-DAYTIME)
                            (do-many (spawn (game-toast-entity "NIGHTTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5))
-                                    (spawn-many-on-current-tile (filter night-only? enemies-with-night-code))
+                                    (spawn-many-on-current-tile (map add-random-start-pos (filter night-only? enemies-with-night-code)))
                                     ))
                   (on-rule (reached-multiple-of? LENGTH-OF-DAY #:offset START-OF-DAYTIME)
                            (spawn (game-toast-entity "DAYTIME HAS BEGUN" #:position 'center #:duration 50 #:scale 1.5)))
@@ -1527,7 +1527,7 @@
                        
                        (map add-random-start-pos updated-food-list)
                        (map add-random-start-pos updated-coin-list)
-                       (map add-random-start-pos enemies-with-night-code)
+                       (map add-random-start-pos (filter-not night-only? enemies-with-night-code))
                        
                        (cons ent custom-entities)
 

@@ -8,7 +8,9 @@
 
 ; ---------------
 
-(define-example-code adventure-mario alt/avatar-1
+(define-example-code 
+  #:with-test (test game-test)
+  adventure-mario alt/avatar-1
   (mario-game
    #:character (basic-character
                 #:sprite mario-sprite
@@ -16,7 +18,8 @@
   )
 
 
-(define-example-code adventure-mario alt/avatar-2
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/avatar-2
   (define (my-character)
     (basic-character
      #:sprite luigi-sprite
@@ -28,7 +31,8 @@
    #:character (my-character))
   )
 
-(define-example-code adventure-mario alt/avatar-3
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/avatar-3
   (mario-game
    #:character (basic-character
                 #:sprite princesspeach-sprite
@@ -39,7 +43,8 @@
                            "Princess Peach.")))
   )
 
-(define-example-code adventure-mario alt/avatar-4
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/avatar-4
   (mario-game
    #:character (basic-character
                 #:sprite toad-sprite)
@@ -53,7 +58,8 @@
 
 ; ---------------
 
-(define-example-code adventure-mario alt/level-design-3
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/level-design-3
   (mario-game
    #:level           (basic-level
                       #:image FOREST-BG
@@ -63,7 +69,8 @@
                                         #:hd? #t)) 
   )
 
-(define-example-code adventure-mario alt/level-design-4
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/level-design-4
 
   (mario-game
    #:character (basic-character
@@ -80,7 +87,8 @@
                                         #:hd? #t))
   )
 
-(define-example-code adventure-mario alt/level-design-5
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/level-design-5
   
   (mario-game
    #:other-entities (question-block (posn 100 200) #:tile 1 #:size 2)
@@ -91,7 +99,8 @@
 
 ; -------------------------
 
-(define-example-code adventure-mario alt/fetch-quest-1
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/fetch-quest-1
   (define lost-yoshi
     (basic-npc
      #:name "Yoshi"
@@ -107,7 +116,8 @@
                                #:item lost-yoshi)))))
   )
 
-(define-example-code adventure-mario alt/fetch-quest-2
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/fetch-quest-2
   (define lost-cheep
     (basic-npc
      #:sprite orangecheep-sprite))
@@ -129,7 +139,8 @@
                                     #:cutscene my-cutscene)))))
   )
 
-(define-example-code adventure-mario alt/fetch-quest-3  
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/fetch-quest-3  
   (define fetch-quest-1
     (fetch-quest
      #:item (basic-item
@@ -152,7 +163,8 @@
                                    fetch-quest-2))))
   )
 
-(define-example-code adventure-mario alt/fetch-quest-4  
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/fetch-quest-4  
   (define my-fetch-quest
     (fetch-quest #:item (basic-item
                          #:sprite goomba-sprite)
@@ -167,7 +179,8 @@
                      #:quest-list (list my-fetch-quest))))
   )
 
-(define-example-code adventure-mario alt/fetch-quest-5  
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/fetch-quest-5  
   (define my-quest-item
     (basic-item
      #:sprite  bluespiny-sprite
@@ -193,7 +206,8 @@
 
 ; -----------------
 
-(define-example-code adventure-mario alt/enemy-2
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/enemy-2
   (define (easy-enemy)
     (basic-enemy #:ai              'easy
                   #:sprite          goomba-sprite
@@ -215,7 +229,8 @@
                       (hard-enemy)))
   )
 
-(define-example-code adventure-mario alt/enemy-4
+(define-example-code
+  #:with-test (test game-test) adventure-mario alt/enemy-4
   (define (hard-enemy)
     (basic-enemy  #:amount-in-world 3
                   #:ai 'hard
@@ -235,5 +250,3 @@
    #:enemy-list  (list (hard-enemy)))
   )
 
-;We'll test that the examples all run as games for 10 ticks
-(test-all-examples-as-games 'adventure-mario)

@@ -5,6 +5,18 @@
   (require (submod ".." powers test))
   (require (submod ".." items test)))
 
+(module+ syntaxes
+  (provide
+    (all-from-out
+      (submod ".." basic syntaxes)  
+      (submod ".." powers syntaxes)  
+      (submod ".." items syntaxes)))
+
+  (require
+    (submod ".." basic syntaxes)  
+    (submod ".." powers syntaxes)  
+    (submod ".." items syntaxes)))
+
 (module basic racket
 
   (require ts-kata-util k2/lang/hero/basic)

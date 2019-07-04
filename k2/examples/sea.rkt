@@ -5,6 +5,18 @@
   (require (submod ".." friends test))
   (require (submod ".." enemies test)))
 
+(module+ syntaxes
+  (provide
+    (all-from-out
+      (submod ".." foods syntaxes)  
+      (submod ".." friends syntaxes)  
+      (submod ".." enemies syntaxes)))
+
+  (require
+    (submod ".." foods syntaxes)  
+    (submod ".." friends syntaxes)  
+    (submod ".." enemies syntaxes)))
+
 
 (module foods racket
   (require ts-kata-util k2/lang/sea/foods)

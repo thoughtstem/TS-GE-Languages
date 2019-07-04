@@ -1,25 +1,34 @@
 #lang racket
 
-(provide (all-from-out "./animal-lang.rkt"))
-(require "./animal-lang.rkt")
+(provide (all-from-out "./animal-lang.rkt"
+                       "../animal/animal-asset-friendly-names.rkt")
+         (rename-out [start-animal start])
+         rand
+         )
+(require "./animal-lang.rkt"
+         "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
   k2/lang/animal/animal-lang)
 
+(define rand
+    (lambda () (first (shuffle (list cat dog apple mushroom onion potato gold silver copper)))))
+
 (module ratchet racket 
   (require ratchet
            ratchet/util
-           "./animal-lang.rkt"
-           "../animal/animal-asset-friendly-names.rkt"
+           (rename-in "../animal/animal-lang.rkt" 
+	              [start-animal start])
            "../icons.rkt"
+           "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)
            (prefix-in h: 2htdp/image))
 
   (define (crop i)
-    (h:crop 0 0 32 32 i))
-
+    (h:crop 0 0 0 32 32 i))
+  
   (define rand
-    (lambda () (first (shuffle (list dog horse rabbit apple grapes mushroom onion potato strawberry)))))
+    (lambda () (first (shuffle (list cat dog apple mushroom onion potato gold silver copper)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
                           animal-lang
@@ -39,12 +48,20 @@
                           [potato   p (s:scale-to-fit (s:draw-sprite potato)   32)]
 
                           ;Coins
-                          ;[gold     g (s:scale-to-fit (s:draw-sprite gold)     32)]
-                          ;[silver   s (s:scale-to-fit (s:draw-sprite silver)   32)]
-                          ;[copper   c (s:scale-to-fit (s:draw-sprite copper)   32)]
-
+                          [copper   x (s:scale-to-fit (s:draw-sprite copper)   32)]
+                          [silver   y (s:scale-to-fit (s:draw-sprite silver)   32)]
+                          [gold     z (s:scale-to-fit (s:draw-sprite gold)     32)]
+                          
+                          ;Colors
+                          [red            R (h:square 32 'solid 'red)]
+                          [orange         O (h:square 32 'solid 'orange)]
+                          [yellow         Y (h:square 32 'solid 'yellow)]
+                          [green          G (h:square 32 'solid 'green)]
+                          [blue           B (h:square 32 'solid 'blue)]
+                          [purple         P (h:square 32 'solid 'purple)]
+    
                           ;Other
                           [rand     ? question-icon]
-                          [start-animal   = play-icon]))
+                          [start    = play-icon]))
 
 

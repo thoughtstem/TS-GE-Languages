@@ -7,6 +7,18 @@
   (require (submod ".." coins test))
   (require (submod ".." enemies test)))
 
+(module+ syntaxes
+  (provide
+    (all-from-out
+      (submod ".." foods syntaxes)  
+      (submod ".." coins syntaxes)  
+      (submod ".." enemies syntaxes)))
+
+  (require
+    (submod ".." foods syntaxes)  
+    (submod ".." coins syntaxes)  
+    (submod ".." enemies syntaxes)))
+
 (module foods racket
   (require ts-kata-util k2/lang/farm/foods) 
 

@@ -3,6 +3,10 @@
 (require ts-kata-util/assets/main
          game-engine)
 
+(provide foo)
+
+(define foo 42)
+
 ;(define-assets-from "assets")
 
 #|(provide witch-sprite

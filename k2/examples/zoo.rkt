@@ -5,9 +5,23 @@
   (require (submod ".." coins test))
   (require (submod ".." friends test)))
 
+(module+ syntaxes
+  (provide
+    (all-from-out
+      (submod ".." foods syntaxes)  
+      (submod ".." coins syntaxes)  
+      (submod ".." friends syntaxes)))
+
+  (require
+    (submod ".." foods syntaxes)  
+    (submod ".." coins syntaxes)  
+    (submod ".." friends syntaxes)))
+
+
 (module foods racket
   (require ts-kata-util k2/lang/zoo/foods)
   ; ==== ZOO/FOODS
+
   (define-example-code #:with-test (test game-test)
                        k2/lang/zoo/foods
                        zoo-000
@@ -49,13 +63,6 @@
                        (start rand
                               (apple banana grapes onion tomato)))
 
-  )
-
-(module coins racket
-  (require ts-kata-util k2/lang/zoo/coins)
-
-  ; ==== ZOO/FOOD+COINS DAY 2
-
   (define-example-code #:with-test (test game-test)
                        k2/lang/zoo/foods
                        zoo-007
@@ -93,6 +100,13 @@
                        (start rand
                               ((rand blue 5)
                                (rand green 5))))
+  )
+
+(module coins racket
+  (require ts-kata-util)
+
+  ; ==== ZOO/FOOD+COINS DAY 2
+
 
   ; ==== ZOO/FARM+COINS DAY 3
 

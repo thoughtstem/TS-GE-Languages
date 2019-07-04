@@ -166,12 +166,11 @@
              red-box))
 
 
-#|
 (define-example-code 
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-000
+  data-sci-plots-000
   
   (plot-pict (discrete-histogram
                (list '(apples 100) '(bananas 200)))))
@@ -180,7 +179,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-001
+  data-sci-plots-001
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -195,7 +194,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-002
+  data-sci-plots-002
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -216,7 +215,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-003
+  data-sci-plots-003
   
   (define apples-bananas
     (plot-pict (discrete-histogram
@@ -248,7 +247,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-100
+  data-sci-data-100
 
   (map add1 (list 1 2 3 4 5)))
 
@@ -261,7 +260,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-200
+  data-sci-histograms-200
 
   (define the-data
     (list '(a 1) '(b 2) '(c 3) '(d 5)))
@@ -274,7 +273,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-201
+  data-sci-histograms-201
 
   (define the-data
     (list '(a 1) '(b 2) '(c 3) '(d 4)))
@@ -294,7 +293,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-300 
+  data-sci-3d-histograms-300 
 
   (plot3d (discrete-histogram3d '(#(a a 1) #(a b 2) #(b b 3))
                                 #:label "Missing (b,a)"
@@ -307,7 +306,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-400
+  data-sci-data-stories-400
 
   (define the-data
     (list '(a 1) '(b 2) '(c 3) '(d 4)))
@@ -326,7 +325,7 @@
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-401
+  data-sci-data-stories-401
 
   (define the-data
     (list '(a 1) '(b 2) '(c 3) '(d 4)))
@@ -372,4 +371,3 @@
 
 
 
-|#

@@ -116,7 +116,7 @@
     (colorize
       (text "This is green and sideways")
       "green")
-    pi))
+    (/ pi 2)))
 
 (define-example-code 
   ;  #:with-test (test no-test)

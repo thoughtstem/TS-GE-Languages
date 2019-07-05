@@ -470,13 +470,13 @@
                             #:fire-mode  [fire-mode 'normal])
   
   (builder-dart #:entity (droid #:weapon (blaster #:fire-rate fire-rate
-                                                         #:fire-mode fire-mode
-                                                         #:dart (blaster-dart #:color      c
-                                                                              #:sprite     s
-                                                                              #:damage     dmg
-                                                                              #:durability dur
-                                                                              #:speed      spd
-                                                                              #:range      rng)))))
+                                                  #:fire-mode fire-mode
+                                                  #:color      c
+                                                  #:sprite     s
+                                                  #:damage     dmg
+                                                  #:durability dur
+                                                  #:speed      spd
+                                                  #:range      rng))))
 
 ;; ----- DROIDS
 

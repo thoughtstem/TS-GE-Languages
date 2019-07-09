@@ -242,7 +242,7 @@
 
 
 
-(new-stimuli func-defs-015 "Define a function called magic-22/45 that takes a number.  If the number is 22 or 45, it should return a purple star.  For any other number, it should return a red square.  Call it twice to produce both a blue circle and a red square.")
+(new-stimuli func-defs-015 "Define a function called magic-22/45 that takes a number.  If the number is 22 or 45, it should return a purple star.  For any other number, it should return a red square.  Call it twice to produce both a purple star and a red square.")
 (define-example-code #:with-test (test begin)
   fundamentals func-defs-015
 

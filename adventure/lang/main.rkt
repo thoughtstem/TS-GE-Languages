@@ -1649,9 +1649,9 @@
   
   (define dialog
     (if (not d)
-        (dialog->sprites (first (shuffle (list (list "I haven't seen you around here before...")
+        (dialog->sprites (first (shuffle (list (list "You must be new around here...")
                                                (list "Hey! I'm walkin' here!")
-                                               (list "Sorry, I don't have time to talk now.")
+                                               (list "Sorry, I don't have time to talk.")
                                                (list "Be careful, I think I saw a dragon!"))))
                      #:game-width GAME-WIDTH
                      #:animated #t

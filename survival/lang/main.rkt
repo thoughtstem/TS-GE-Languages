@@ -1756,7 +1756,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (scale-sprite 1.1))))
+               (every-tick (simple-scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:icon              [i [make-icon "IM" 'lightcyan]]
@@ -1806,7 +1806,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (scale-sprite 1.1))))
+               (every-tick (simple-scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:icon              [i [make-icon "SM" 'silver]]
@@ -1975,7 +1975,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (do-many (scale-sprite 1.05)
+               (every-tick (do-many (simple-scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
 ; ==== PREBUILT FOOD AND RECIPES ===

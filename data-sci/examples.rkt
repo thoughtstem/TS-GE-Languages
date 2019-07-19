@@ -9,6 +9,21 @@
 
 ;Procedural Pictures
 
+;TODO: This is copy/pasted from fundamentals/examples.rkt.  Abstract into macro
+(module+ stimuli
+  (require ts-kata-util/katas/main)
+  (provide stimuli)
+  (define stimuli (list)))
+
+(define-syntax-rule (new-stimuli id text)
+  (module+ stimuli
+    (set! stimuli (append stimuli
+                          (list 'id
+                                (read text))))))
+
+
+
+
 
 (define-example-code 
 ;  #:with-test (test no-test)
@@ -116,7 +131,7 @@
     (colorize
       (text "This is green and sideways")
       "green")
-    pi))
+    (/ pi 2)))
 
 (define-example-code 
   ;  #:with-test (test no-test)
@@ -166,6 +181,8 @@
              red-box))
 
 
+
+(new-stimuli data-sci-plots-000 "Generate a chart showing that there are 100 apples in stock and 200 bananas.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -173,8 +190,11 @@
   data-sci-plots-000
   
   (plot-pict (discrete-histogram
-               (list '(apples 100) '(bananas 200)))))
+               #:title "Fruits in stock"
+               '((apples 100) 
+                 (bananas 200)))))
 
+(new-stimuli data-sci-plots-001 "Generate a chart showing that there are 100 apples in stock and 200 bananas.  Draw a circle around the chart.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -183,13 +203,16 @@
   
   (define apples-bananas
     (plot-pict (discrete-histogram
-                 (list '(apples 100) '(bananas 200)))))
+                 '((apples 100) 
+                   (bananas 200)))))
   
 
   (cc-superimpose
     apples-bananas
     (circle 200 #:border-color "red" #:border-width 10)))
 
+
+(new-stimuli data-sci-plots-002 "Generate a chart showing that there are 100 apples in stock and 200 bananas.  Render that chart beside itself at three different sizes.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -198,19 +221,18 @@
   
   (define apples-bananas
     (plot-pict (discrete-histogram
-                 (list '(apples 100) '(bananas 200)))))
+                 '((apples 100) 
+                   (bananas 200)))))
   
-
-  (define small-apples-bananas 
-    (scale apples-bananas 0.5))
 
   
   (hc-append
-    small-apples-bananas 
+    (scale apples-bananas 2)
     apples-bananas 
-    small-apples-bananas))
+    (scale apples-bananas 0.5)))
 
 
+(new-stimuli data-sci-plots-003 "Render two charts beside each other, at a slight rotation.  One should show that there are 100 apples and 200 bananas.  The other should show that there are 1000 Macs and 1000 PCs")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -219,21 +241,123 @@
   
   (define apples-bananas
     (plot-pict (discrete-histogram
-                 (list '(apples 100) '(bananas 200)))))
+                 '((apples 100) 
+                   (bananas 200)))))
   
 
   (define macs-pcs
     (plot-pict (discrete-histogram
                  #:color "green"
-                 (list '(macs 1000) '(pcs 1000)))))
-  
+                 '((macs 1000) 
+                   (pcs 2000)))))
 
-  
-  (scale 
     (hc-append 
       (rotate apples-bananas (/ pi 5))
-      (rotate macs-pcs (- (/ pi 5))))
-    0.5))
+      (rotate macs-pcs (- (/ pi 5)))))
+
+
+(new-stimuli data-sci-plots-004 "There are 1000 apples, 1500 bananas, and 3000 oranges.  Render a chart that makes the point that oranges outnumber bananas and apples.")
+(define-example-code
+  data-sci
+  data-sci-plots-004
+
+  (define data
+    (zip
+      '(apples bananas oranges)
+      '(1000   1500    3000)))
+
+  (plot-pict
+    (discrete-histogram data)
+    #:title "Oranges outnumber bananas and apples"))
+
+
+(new-stimuli data-sci-plots-005 "There are 1000 apples, 1500 bananas, and 3000 oranges.  Render a chart with a large y-axis, making the point that all fruits are scarse.")
+(define-example-code
+  data-sci 
+  data-sci-plots-005
+
+  (define data
+    (zip
+      '(apples bananas oranges)
+      '(1000   1500    3000)))
+
+  (plot-pict
+    (discrete-histogram data)
+    #:y-max 10000
+    #:title "All fruits scarse"))
+
+
+(new-stimuli data-sci-plots-006 "There are two machines, the \"Magic Cooker\" and the \"Cook 2000\".  Each can cook Eggs, Bacon, and Pancakes in under 4 minutes.  Make up data for each one and plot the data on a bar chart that compares their cooking times.")
+(define-example-code
+  data-sci 
+  data-sci-plots-006
+
+  (define magic-cooker-data '((Eggs 1.5) (Bacon 2.5) (Pancakes 3.5)))
+  (define cook-2000-data '((Eggs 1.4) (Bacon 2.3) (Pancakes 3.1)))
+
+  (plot (list (discrete-histogram
+                magic-cooker-data
+                #:skip 2.5 #:x-min 0
+                #:label "The Magic Cooker")
+              (discrete-histogram
+                cook-2000-data
+                #:skip 2.5 #:x-min 1
+                #:label "The Cook 2000" #:color 2 #:line-color 2))
+        #:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
+        #:title "Cooking Times For Breakfast Food, Per Processor"))
+
+
+#;
+(define-example-code
+  data-sci 
+  data-sci-plots-007
+
+  (plot (list (discrete-histogram '((a 1) (b 2) (c 3) (d 2)
+                                    (e 4) (f 2.5) (g 1))
+                                  #:label "Numbers per letter")
+              (discrete-histogram (list #(1 1) #(4 2) #(3 1.5))
+                                  #:x-min 8
+                                  #:label "Numbers per number"
+                                  #:color 2 #:line-color 2))))
+
+
+#;
+(define-example-code
+  data-sci 
+  data-sci-plots-008
+
+  (define data1
+    (map list
+	 '(Eggs Bacon Pancakes)
+	 '(1.5 2.5 3.5)))
+
+  (define data2
+    (map list
+	 '(Eggs Bacon Pancakes)
+	 '(1.4 2.3 3.1)))
+
+  (define data3
+    (map list
+	 '(Eggs Bacon Pancakes)
+	 '(1.7 2.7 3.1)))
+
+  (define (compare sets labels)
+    (define (hist data label start)
+      (discrete-histogram
+	data
+	#:skip (+ 0.5 (length sets))
+	#:x-min start
+	#:label label
+	#:color (add1 start)
+	#:line-color (add1 start)))
+
+    (map hist sets labels (range (length sets))))
+
+
+  (plot (compare (list data1 data2 data3)
+		 '("AMD" "Intel" "Qualcomm")) 
+	#:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
+	#:title "Cooking Times For Breakfast Food, Per Processor") )
 
 
 ;More random image assembly here...
@@ -243,6 +367,7 @@
 
 ;Data manipulation
 
+(new-stimuli data-sci-data-100 "Map add1 over a list of numbers from 1 and 5 to get the numbers 2 through 6")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -252,10 +377,53 @@
   (map add1 (list 1 2 3 4 5)))
 
 
+(new-stimuli data-sci-data-101 "Map sub1 over the numbers from 0 to 100 to get the numbers -1 through 9")
+(define-example-code data-sci data-sci-data-101
+   (map sub1 
+        (range 100)))
+
+
+(new-stimuli data-sci-data-102 "Map the circle function over the range of numbers from 10 to 100, skipping every 10 numbers.  You should get back a list of circles of increasing size.")
+(define-example-code data-sci data-sci-data-102
+   (map circle (range 10 100 10)))
+
+(new-stimuli data-sci-data-103 "Map the rectangle function over two lists of numbers between 0 and 10, getting a list of squares.")
+(define-example-code data-sci data-sci-data-103
+   (map rectangle (range 10) 
+                  (range 10)))
+
+(new-stimuli data-sci-data-104 "Map the string-upcase function over a list of six lowercase strings of your choice")
+(define-example-code data-sci data-sci-data-104
+   (map string-upcase '("apple" "dog" "banana" "cat" "orange" "fish")))
+
+(new-stimuli data-sci-data-105 "Map the string-downcase function over a list of six uppercase strings of your choice")
+(define-example-code data-sci data-sci-data-105
+   (map string-downcase '("APPLE" "DOG" "BANANA" "CAT" "ORANGE" "FISH")))
+
+(new-stimuli data-sci-data-106 "Map the even? function over a list of numbers from 0 to 99")
+(define-example-code data-sci data-sci-data-106
+   (map even? (range 100)))
+
+(new-stimuli data-sci-data-107 "Map the negate function over three booleans")
+(define-example-code data-sci data-sci-data-107
+   (map negate '(#f #t #f)))
+
+(new-stimuli data-sci-data-108 "Find the sum of all the numbers from 0 to 99")
+(define-example-code data-sci data-sci-data-108
+   (apply + (range 100)))
+
+
+#;  ;Maybe too tricky...
+(define-example-code data-sci data-sci-data-104
+   (map (negate =)  
+        (list 1 2 1 4)  
+        (list 1 2 3 4)))
 
 
 ;Histograms
 
+
+#;
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -263,12 +431,13 @@
   data-sci-histograms-200
 
   (define the-data
-    (list '(a 1) '(b 2) '(c 3) '(d 5)))
+    '((a 1) (b 2) (c 3) (d 5)))
   
   (plot (discrete-histogram the-data)))
 
 
 
+#;
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -276,43 +445,28 @@
   data-sci-histograms-201
 
   (define the-data
-    (list '(a 1) '(b 2) '(c 3) '(d 4)))
+    '((a 1) (b 2) (c 3) (d 4)))
   
   (define the-data2
-    (list '(a 2) '(b 3) '(c 4) '(d 5)))
+    '((a 2) (b 3) (c 4) (d 5)))
   
   (plot (list
          (discrete-histogram the-data)
          (discrete-histogram the-data2 #:x-min 6 #:color 2))))
 
 
-;3D Histograms
-
-
-(define-example-code
-;  #:with-test (test no-test)
-  
-  data-sci
-  data-sci-3d-histograms-300 
-
-  (plot3d (discrete-histogram3d '(#(a a 1) #(a b 2) #(b b 3))
-                                #:label "Missing (b,a)"
-                                #:color 4 #:line-color 4)))
-
-;Storytelling
-
-
+#;
 (define-example-code 
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-data-stories-400
+  data-sci-histograms-202
 
   (define the-data
-    (list '(a 1) '(b 2) '(c 3) '(d 4)))
+    '((a 1) (b 2) (c 3) (d 4)))
   
   (define the-data2
-    (list '(a 2) '(b 3) '(c 4) '(d 5)))
+    '((a 2) (b 3) (c 4) (d 5)))
 
   (cc-superimpose
    (text "As you can see below, the greens are bigger than the blues...")
@@ -321,17 +475,18 @@
                (discrete-histogram the-data2 #:x-min 6 #:color 2)))))
 
 
+#;
 (define-example-code 
 ;  #:with-test (test no-test)
   
   data-sci
-  data-sci-data-stories-401
+  data-sci-histograms-203
 
   (define the-data
-    (list '(a 1) '(b 2) '(c 3) '(d 4)))
+    '((a 1) (b 2) (c 3) (d 4)))
   
   (define the-data2
-    (list '(a 2) '(b 3) '(c 4) '(d 5)))
+    '((a 2) (b 3) (c 4) (d 5)))
 
   (define plot1
     (plot-pict (list
@@ -348,26 +503,158 @@
    plot2))
 
 
-;Real datasets
 
+
+;3D Histograms
 
 
 #;
-(define-example-code 
-  #:with-test (test no-test)
+(define-example-code
+;  #:with-test (test no-test)
   
   data-sci
-  data-sci-500
+  data-sci-3d-histograms-300 
 
-  (define data-science-sentiment
-    (words->sentiment
-     (corpus->words
-      (data-science-wiki))))
-
-  (plot-sentiment-polarity data-science-sentiment))
+  (plot3d (discrete-histogram3d '((a a 1) (a b 2) (b b 3))
+                                #:label "Missing (b,a)"
+                                #:color 4 #:line-color 4)))
 
 
 
 
+;Real datasets
+
+(new-stimuli data-sci-real-data-500 "Print all of the data from the large-cities data set.")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-500
+
+  (define data (data-set large-cities))
+  
+  data)
+
+
+
+(new-stimuli data-sci-real-data-501 "Print the first five rows of the large-cities data set.")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-501
+
+  (define data (data-set large-cities))
+  
+  (take data 5))
+
+
+
+(new-stimuli data-sci-real-data-502 "Print the all but the first five rows of the large-cities data set.")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-502
+
+  (define data (data-set large-cities))
+  
+  (drop data 5))
+
+
+(new-stimuli data-sci-real-data-503 "Print the second 5 rows of the large-cities data set")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-503
+
+  (define data (data-set large-cities))
+  (define all-but-first-5 (drop data 5))
+  
+  (take all-but-first-5 5))
+
+
+(new-stimuli data-sci-real-data-504 "Print only the city names in the data set.")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-504
+
+  (define data (data-set large-cities))
+  (define city-names (map first data))
+
+  city-names)
+
+
+(new-stimuli data-sci-real-data-505 "Print only the first five city names in the data set.")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-505
+
+  (define data (data-set large-cities))
+  (define city-names (map first data))
+  
+  (take 5 city-names))
+
+
+(new-stimuli data-sci-real-data-506 "Print the first five city names in the data set in reverse order")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-506
+
+  (define data (data-set large-cities))
+  (define city-names (map first data))
+  (define first-5-city-names (take 5 city-names)) 
+  
+  (reverse first-5-city-names))
+
+
+(new-stimuli data-sci-real-data-507 "Sort the data alphabetically by city name and print it")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-507
+
+  (define data (data-set large-cities))
+  (define sorted-data (sort data string<? #:key first))
+  
+  sorted-data)
+
+(new-stimuli data-sci-real-data-508 "Print only the populations from the data set")
+(define-example-code 
+  
+  data-sci
+  data-sci-real-data-508
+
+  (define data (data-set large-cities))
+  (define populations (map third data))
+  
+  populations)
+
+
+(new-stimuli data-sci-real-data-509 "Display a bar chart that compares the population of all cities in the data set.")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-509
+
+  (define the-data (data-set large-cities))
+  (define cities-only (map first the-data))
+  (define population-only (map third the-data))
+
+  (define cities-with-population
+    (zip cities-only
+         population-only))
+  
+  (plot-pict (discrete-histogram cities-with-population
+                                 #:invert #t)
+             #:height 700
+             #:width 700))
+
+;TODO: Plots... 
+
+
+
+;Averages?
 
 

@@ -270,7 +270,10 @@
                   (combatant
                    #:stats (list (make-stat-config 'health
                                                    health
-                                                   (stat-progress-bar 'red #:max max-health #:offset (posn 0 -30))
+                                                   (stat-progress-bar-system 'red
+                                                                             #:max max-health
+                                                                             #:starting-value health
+                                                                             #:offset (posn 0 -30))
                                                    #:max-value max-health))
                    #:damage-processor (filter-damage-by-tag #:filter-out '(passive enemy-team)
                                                             #:hit-sound SHORT-BLIP-SOUND)

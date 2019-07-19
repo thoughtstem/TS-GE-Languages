@@ -1,10 +1,10 @@
 #lang racket
 
-(module+ test
+#|(module+ test
   (require (submod ".." basic test))
   (require (submod ".." powers test))
   (require (submod ".." items test)))
-
+|#
 (module+ syntaxes
   (provide
     (all-from-out
@@ -19,48 +19,50 @@
 
 (module basic racket
 
-  (require ts-kata-util k2/lang/hero/basic)
+  (require ts-kata-util
+           ;k2/lang/hero/basic
+           )
 
   ; ===== HERO - INTRO
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-000
                        (start))
 
   ;===== HERO - BASIC
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-001
                        (start ironman))
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-002
                        (start gamora)
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-003
                        (start gamora
                               (nebula))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-004
                        (start hulk
                               (loki redskull mandarin))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-005
                        (start ironman
                               (captainamerica hulk))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/basic
                        hero-006
                        (start captainamerica
@@ -75,28 +77,28 @@
   (require ts-kata-util k2/lang/hero/powers)
   ; ===== HERO - POWERS
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-007
                        (start (thor hammer)
                               (loki))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-008
                        (start (starlord star-bit)
                               (mandarin))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-009
                        (start (gamora magic-orb)
                               ((nebula energy-blast)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-010
                        (start (loki energy-blast)
@@ -104,7 +106,7 @@
                                (starlord star-bit)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-011
                        (start (nebula energy-blast)
@@ -114,7 +116,7 @@
                                (starlord magic-orb)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-012
                        (start (thor randp)
@@ -126,14 +128,14 @@
 
   ; ===== HERO - POWERS + COLORS
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-013
                        (start (gamora magic-orb green )
                               ((nebula energy-blast blue)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-014
                        (start (loki energy-blast yellow)
@@ -141,7 +143,7 @@
                                (starlord star-bit purple)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-015
                        (start (nebula energy-blast green)
@@ -151,7 +153,7 @@
                                (starlord magic-orb red)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-016
                        (start (loki star-bit)
@@ -163,7 +165,7 @@
                                (thor hammer purple)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-017
                        (start (gamora randp red)
@@ -171,7 +173,7 @@
                                (mandarin randp yellow)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/powers
                        hero-018
                        (start (starlord randp randc)
@@ -188,7 +190,7 @@
 
   ; ===== HERO - ITEMS
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-019
                        (start (drax energy-blast)
@@ -196,7 +198,7 @@
                                (thor hammer)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-020
                        (start (ironman magic-orb red)
@@ -204,7 +206,7 @@
                                (mandarin randp randc)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-021
                        (start (ironman star-bit)
@@ -213,7 +215,7 @@
                               (health forcefield))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-022
                        (start (thor hammer blue)
@@ -222,7 +224,7 @@
                               (grow shrink speed))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-023
                        (start (nebula star-bit randc)
@@ -231,7 +233,7 @@
                               (health speed))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-024
                        (start (ironman magic-orb red)
@@ -242,7 +244,7 @@
                        )
 
   ; ===== HERO - ITEMS - MULTI-GAMES
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-025
                        (start (drax randp randc)
@@ -253,7 +255,7 @@
                               (health grow shrink speed forcefield))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-026
                        (start (thor hammer)
@@ -264,7 +266,7 @@
                                (loki star-bit red)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-027
                        (start (ironman magic-orb green)
@@ -278,7 +280,7 @@
                                (mandarin magic-orb yellow)))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-028
                        (start (blackwidow randp randc)
@@ -292,7 +294,7 @@
                               (health speed))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-029
                        (start (ironman randp randc)
@@ -306,7 +308,7 @@
                               (health speed))
                        )
 
-  (define-example-code #:with-test (test game-test)
+  (define-example-code ;#:with-test (test game-test)
                        k2/lang/hero/items
                        hero-030
                        (start (ironman randp randc)

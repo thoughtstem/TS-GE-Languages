@@ -47,7 +47,7 @@
                           [crab        c (s:scale-to-fit (s:draw-sprite crab)        32)]
 
                           [potato      p (s:scale-to-fit (s:draw-sprite potato)      32)]
-                          [strawberry  b (s:scale-to-fit (s:draw-sprite strawberry)  32)]
+                          [strawberry  y (s:scale-to-fit (s:draw-sprite strawberry)  32)]
                           [apple       a (s:scale-to-fit (s:draw-sprite apple)       32)]
                           [cherries    i (s:scale-to-fit (s:draw-sprite cherries)    32)]
                           [banana      b (s:scale-to-fit (s:draw-sprite banana)      32)]

@@ -23,7 +23,6 @@
 
 (provide lightsaber-droid
          blaster-droid
-         double-lightsaber
          lightsaber-sprite
          (rename-out (swinging-lightsaber-sprite swinginglightsaber-sprite))
          (rename-out (double-lightsaber-sprite doublelightsaber-sprite))
@@ -202,12 +201,6 @@
                               #:durability        [dur 20]
                               #:speed             [spd  5]
                               #:range             [rng 1000]
-                              #:dart              [d (blaster-dart
-                                                      #:sprite    (blaster-dart-sprite c)
-                                                      #:damage     dmg
-                                                      #:durability dur
-                                                      #:speed      spd
-                                                      #:range      rng)]
                               #:fire-mode         [fm 'normal]
                               #:fire-rate         [fr 3]
                               #:fire-key          [key 'f]
@@ -225,7 +218,6 @@
         #:durability  [dur number?]
         #:speed       [spd number?]
         #:range       [rng number?]
-        #:dart        [dart entity?]
         #:fire-mode   [fire-mode fire-mode?]
         #:fire-rate   [fire-rate number?]
         #:fire-key    [fire-key symbol?]
@@ -243,7 +235,10 @@
   (repeater #:name              n
             #:icon              i
             #:sprite            s
-            #:dart              d
+            #:damage            dmg
+            #:durability        dur
+            #:speed             spd
+            #:range             rng
             #:fire-mode         fm
             #:fire-rate         fr
             #:fire-key          key
@@ -318,21 +313,62 @@
 (define (blaster-dart-sprite c)
   (rectangle 10 2 "solid" c))
 
-(define (double-lightsaber
-         #:color      [c "red"]
-         #:sprite     [s (double-lightsaber-sprite c)]
-         #:damage     [dmg 50]
-         #:durability [dur 20]
-         #:speed      [spd  0]
-         #:range      [rng 10])
-
-  (sword #:name          "Double Lightsaber"
-         #:icon          (make-icon "DL")
-         #:sprite        s
-         #:damage        dmg
-         #:durability    dur
-         #:speed         spd
-         #:duration      rng))
+; ---- DOUBLE LIGHTSABER
+(define/contract/doc (double-lightsaber
+                      #:name              [n "Lightsaber"]
+                      #:icon              [i (make-icon "DBL" "red")]
+                      #:color             [c "red"]
+                      #:sprite            [s (double-lightsaber-sprite c)]
+                      #:damage            [dmg 50]
+                      #:durability        [dur 20]
+                      #:duration          [rng 10]
+                      #:speed             [spd  0]
+                      #:fire-mode         [fm 'normal]
+                      #:fire-rate         [fr 3]
+                      #:fire-key          [key 'f]
+                      #:fire-sound        [fire-sound random-lightsaber-sound]
+                      #:mouse-fire-button [button 'left]
+                      #:point-to-mouse?   [ptm? #t]
+                      #:rapid-fire?       [rf? #t]
+                      #:rarity            [rarity 'common])
+  (->i ()
+       (#:name        [name string?]
+        #:icon        [sprite (or/c sprite? (listof sprite?))]
+        #:color       [color image-color?]
+        #:sprite      [s (or/c sprite? (listof sprite?))]
+        #:speed       [spd number?]
+        #:damage      [dmg number?]
+        #:durability  [dur number?]
+        #:duration    [rng number?]
+        #:fire-mode   [fire-mode fire-mode?]
+        #:fire-rate   [fire-rate number?]
+        #:fire-key    [fire-key symbol?]
+        #:fire-sound  [fire-sound (or/c rsound? procedure? #f '())]
+        #:mouse-fire-button [button (or/c 'left 'right)]
+        #:point-to-mouse?   [ptm? boolean?]
+        #:rapid-fire?       [rf? boolean?]
+        #:rarity      [rarity rarity-level?])
+       [result entity?])
+  
+@{Returns a custom double lightsaber, which will be placed in to the world
+         automatically if it is passed into @racket[starwars-game]
+         via the @racket[#:weapon-list] parameter.}
+  
+  (sword #:name              n
+         #:sprite            s
+         #:icon              i
+         #:speed             spd
+         #:damage            dmg
+         #:durability        dur
+         #:duration          rng
+         #:fire-mode         fm
+         #:fire-rate         fr
+         #:fire-key          key
+         #:fire-sound        fire-sound
+         #:mouse-fire-button button
+         #:point-to-mouse?   ptm?
+         #:rapid-fire?       rf?
+         #:rarity            rarity))
 
 (define (blaster-dart
          #:color      [c "green"]
@@ -434,13 +470,13 @@
                             #:fire-mode  [fire-mode 'normal])
   
   (builder-dart #:entity (droid #:weapon (blaster #:fire-rate fire-rate
-                                                         #:fire-mode fire-mode
-                                                         #:dart (blaster-dart #:color      c
-                                                                              #:sprite     s
-                                                                              #:damage     dmg
-                                                                              #:durability dur
-                                                                              #:speed      spd
-                                                                              #:range      rng)))))
+                                                  #:fire-mode fire-mode
+                                                  #:color      c
+                                                  #:sprite     s
+                                                  #:damage     dmg
+                                                  #:durability dur
+                                                  #:speed      spd
+                                                  #:range      rng))))
 
 ;; ----- DROIDS
 

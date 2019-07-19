@@ -595,7 +595,7 @@
   (define data (data-set large-cities))
   (define city-names (map first data))
   
-  (take 5 city-names))
+  (take city-names 5))
 
 
 (new-stimuli data-sci-real-data-506 "Print the first five city names in the data set in reverse order")
@@ -606,7 +606,7 @@
 
   (define data (data-set large-cities))
   (define city-names (map first data))
-  (define first-5-city-names (take 5 city-names)) 
+  (define first-5-city-names (take city-names 5)) 
   
   (reverse first-5-city-names))
 

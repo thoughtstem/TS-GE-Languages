@@ -189,12 +189,13 @@
   data-sci
   data-sci-plots-000
   
-  (plot-pict (discrete-histogram
-               #:title "Fruits in stock"
+  (plot-pict 
+    #:title "Fruits in stock"
+    (discrete-histogram
                '((apples 100) 
                  (bananas 200)))))
 
-(new-stimuli data-sci-plots-001 "Generate a chart showing that there are 100 apples in stock and 200 bananas.  Draw a circle around the chart.")
+(new-stimuli data-sci-plots-001 "Generate a chart showing that there are 100 apples in stock and 200 bananas.  Draw a red circle on the chart.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -267,8 +268,8 @@
       '(1000   1500    3000)))
 
   (plot-pict
-    (discrete-histogram data)
-    #:title "Oranges outnumber bananas and apples"))
+    #:title "Oranges outnumber bananas and apples"  
+    (discrete-histogram data)))
 
 
 (new-stimuli data-sci-plots-005 "There are 1000 apples, 1500 bananas, and 3000 oranges.  Render a chart with a large y-axis, making the point that all fruits are scarse.")
@@ -282,9 +283,9 @@
       '(1000   1500    3000)))
 
   (plot-pict
-    (discrete-histogram data)
+    #:title "All fruits scarse"  
     #:y-max 10000
-    #:title "All fruits scarse"))
+    (discrete-histogram data)))
 
 
 (new-stimuli data-sci-plots-006 "There are two machines, the \"Magic Cooker\" and the \"Cook 2000\".  Each can cook Eggs, Bacon, and Pancakes in under 4 minutes.  Make up data for each one and plot the data on a bar chart that compares their cooking times.")
@@ -295,16 +296,17 @@
   (define magic-cooker-data '((Eggs 1.5) (Bacon 2.5) (Pancakes 3.5)))
   (define cook-2000-data '((Eggs 1.4) (Bacon 2.3) (Pancakes 3.1)))
 
-  (plot (list (discrete-histogram
-                magic-cooker-data
-                #:skip 2.5 #:x-min 0
-                #:label "The Magic Cooker")
-              (discrete-histogram
-                cook-2000-data
-                #:skip 2.5 #:x-min 1
-                #:label "The Cook 2000" #:color 2 #:line-color 2))
-        #:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
-        #:title "Cooking Times For Breakfast Food, Per Processor"))
+  (plot 
+    #:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
+    #:title "Cooking Times For Breakfast Food, Per Processor"  
+    (list (discrete-histogram
+            magic-cooker-data
+            #:skip 2.5 #:x-min 0
+            #:label "The Magic Cooker")
+          (discrete-histogram
+            cook-2000-data
+            #:skip 2.5 #:x-min 1
+            #:label "The Cook 2000" #:color 2 #:line-color 2))))
 
 
 #;
@@ -354,10 +356,11 @@
     (map hist sets labels (range (length sets))))
 
 
-  (plot (compare (list data1 data2 data3)
-		 '("AMD" "Intel" "Qualcomm")) 
-	#:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
-	#:title "Cooking Times For Breakfast Food, Per Processor") )
+  (plot 
+    #:x-label "Breakfast Food" #:y-label "Cooking Time (minutes)"
+    #:title "Cooking Times For Breakfast Food, Per Processor"   
+    (compare (list data1 data2 data3)
+             '("AMD" "Intel" "Qualcomm"))))
 
 
 ;More random image assembly here...
@@ -592,7 +595,7 @@
   (define data (data-set large-cities))
   (define city-names (map first data))
   
-  (take 5 city-names))
+  (take city-names 5))
 
 
 (new-stimuli data-sci-real-data-506 "Print the first five city names in the data set in reverse order")
@@ -603,7 +606,7 @@
 
   (define data (data-set large-cities))
   (define city-names (map first data))
-  (define first-5-city-names (take 5 city-names)) 
+  (define first-5-city-names (take city-names 5)) 
   
   (reverse first-5-city-names))
 
@@ -647,7 +650,7 @@
          population-only))
   
   (plot-pict (discrete-histogram cities-with-population
-                                 #:invert #t)
+                                 #:invert? #t)
              #:height 700
              #:width 700))
 

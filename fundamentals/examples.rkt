@@ -1,8 +1,7 @@
 #lang racket
 
 (require ts-kata-util
-         ts-kata-util/main
-         )
+         ts-kata-util/main)
 
 (module+ stimuli
   (require ts-kata-util/katas/main)

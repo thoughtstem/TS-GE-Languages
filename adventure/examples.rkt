@@ -17,8 +17,7 @@
 
   (adventure-game
     #:avatar (basic-avatar #:sprite lightelf-sprite
-                           #:speed  20))
-  )
+                           #:speed  20)))
 
 
 (define-example-code

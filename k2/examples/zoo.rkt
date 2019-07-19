@@ -163,7 +163,8 @@
   )
 
 (module friends racket
-  (require ts-kata-util k2/lang/zoo/friends)
+  (require ts-kata-util ;k2/lang/zoo/friends
+           )
 
   ;==== ZOO/FRIENDS DAY 4
 

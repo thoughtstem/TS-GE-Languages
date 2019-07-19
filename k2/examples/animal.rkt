@@ -84,7 +84,8 @@
 )
 
 (module coins racket
-  (require ts-kata-util k2/lang/animal/coins)
+  (require ts-kata-util ;k2/lang/animal/coins
+           )
 
   ; === ANIMALS/COINS
   (define-example-code ;#:with-test (test game-test)
@@ -151,7 +152,8 @@
 )
 
 (module enemies racket
-  (require ts-kata-util k2/lang/animal/enemies)
+  (require ts-kata-util ;k2/lang/animal/enemies
+           )
   
   ; === ANIMAL/ENEMIES
   (define-example-code ;#:with-test (test game-test)

@@ -74,7 +74,8 @@
   )
 
 (module coins racket
-  (require ts-kata-util k2/lang/farm/coins) 
+  (require ts-kata-util ;k2/lang/farm/coins
+           ) 
   ; ==== FARM/COINS -- day 2
 
   (define-example-code ;#:with-test (test game-test)
@@ -164,7 +165,8 @@
   )
 
 (module enemies racket
-  (require ts-kata-util k2/lang/farm/enemies) 
+  (require ts-kata-util ;k2/lang/farm/enemies
+           ) 
   ; ==== FARM/ENEMIES -- day 4
 
   (define-example-code ;#:with-test (test game-test)

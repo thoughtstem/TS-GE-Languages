@@ -11,22 +11,21 @@
 
 ; ----------------- AVATAR KATAS
 
-; Make a game with a lightelf avatar with 20 speed
+; Make a game with a wizard avatar with 20 speed
 (define-example-code
   ;#:with-test (test game-test)
   adventure avatar-1
 
   (adventure-game
-    #:avatar (basic-avatar #:sprite lightelf-sprite
-                           #:speed  20))
-  )
+    #:avatar (basic-avatar #:sprite wizard-sprite
+                           #:speed  20)))
 
 
 (define-example-code
   ;#:with-test (test game-test)
   adventure avatar-2
   (define (my-avatar)
-    (basic-avatar #:sprite darkknight-sprite
+    (basic-avatar #:sprite pirate-sprite
                   #:speed  20
                   #:health 200
                   #:max-health 200))
@@ -250,17 +249,15 @@
 (define-example-code
   ;#:with-test (test game-test)
   adventure fetch-quest-2
-  (define lost-cat
-    (basic-item #:name "Mylo"
-                #:sprite cat-sprite))
-
+  
   (define my-cutscene
-    (basic-cutscene (page (set-sprite-scale 2 cat-sprite)
-                          "Mylo is happy to be home!")))
+    (basic-cutscene (page (set-sprite-scale 2 darkknight-sprite)
+                          "Thank you! I should probably stop losing this...")))
 
   (adventure-game
-    #:npc-list (list (basic-npc #:dialog (list "Can you help me find my cat?")
-                                #:quest-list (list (fetch-quest #:item lost-cat
+    #:npc-list (list (basic-npc #:sprite darkknight-sprite 
+                                #:dialog (list "Can you help me find my sword?")
+                                #:quest-list (list (fetch-quest #:item (sword)
                                                                 #:cutscene my-cutscene)))))
   )
 
@@ -293,16 +290,15 @@
   adventure fetch-quest-4
 
   (define my-fetch-quest
-    (fetch-quest #:item (basic-item #:name "Mylo"
-                                    #:sprite cat-sprite)
-                 #:quest-complete-dialog (list "Thank you for finding Mylo!")
-                 #:new-response-dialog   (list "Thanks again for your help.")
+    (fetch-quest #:item (basic-item #:sprite bowl-sprite)
+                 #:quest-complete-dialog (list "Phew! This is a family herloom!!")
+                 #:new-response-dialog   (list "Thanks again! My mom was so mad...")
                  #:reward-amount 400 ))
 
   (adventure-game
     #:npc-list (list (basic-npc #:name "Erin"
                                 #:sprite lightelf-sprite
-                                #:dialog (list "Can you help me find my cat?")
+                                #:dialog (list "Can you find my antique bowl?")
                                 #:quest-list (list my-fetch-quest))))
   )
 
@@ -495,9 +491,6 @@
   ;#:with-test (test game-test)
   adventure enemy-4
 
-  (define (easy-enemy)
-    (basic-enemy #:amount-in-world 5))
-
   (define (hard-enemy)
     (basic-enemy #:amount-in-world 3
                  #:ai 'hard
@@ -509,8 +502,7 @@
                                            "You died!")
                                      (page "Try harder!"))
     #:weapon-list (list (spear))
-    #:enemy-list  (list (easy-enemy)
-                        (hard-enemy)))
+    #:enemy-list  (list (hard-enemy)))
   )
 
 ; Make a game with 10 enemies and an npc with a quest to kill 5
@@ -830,7 +822,7 @@
                                          "maybe I should have cooked it."))))
 
   (adventure-game
-    #:avatar (basic-avatar #:health 50
+    #:avatar (basic-avatar #:health 100
                            #:max-health 200)
     #:food-list  (list special-food))
 

@@ -1,9 +1,10 @@
 #lang racket
 
-(require ts-kata-util adventure)
+(require ts-kata-util ;adventure
+         )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure hello-world-1
   (adventure-game))
 
@@ -12,7 +13,7 @@
 
 ; Make a game with a lightelf avatar with 20 speed
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure avatar-1
 
   (adventure-game
@@ -22,7 +23,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure avatar-2
   (define (my-avatar)
     (basic-avatar #:sprite darkknight-sprite
@@ -35,7 +36,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure avatar-3
   (adventure-game
     #:avatar (basic-avatar #:sprite pirategirl-sprite
@@ -46,7 +47,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure avatar-4
   (adventure-game
     #:avatar (basic-avatar
@@ -62,7 +63,7 @@
 ; ----------------- COIN KATAS
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure coin-1
   (adventure-game
     #:coin-list  (list (basic-coin #:sprite goldcoin-sprite
@@ -72,7 +73,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure coin-2
   (define (copper-coin)
     (basic-coin #:sprite coppercoin-sprite
@@ -96,7 +97,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure coin-3
   (define (my-trick-coin)
     (basic-coin #:name "Gold Coin"
@@ -112,7 +113,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure coin-4
   (define (my-special-coin)
     (basic-coin #:name "Gold Coin"
@@ -130,7 +131,7 @@
 ; Make a game with 10 gold coins worth 10 each,
 ; and an npc with a quest to collect 100 worth and reward you with 50 and a reward item
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure coin-5
 
   (define (my-coin)
@@ -154,7 +155,7 @@
 ; Make a game with a forest background
 ; filled with default world objects
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure level-design-1
 
   (adventure-game
@@ -166,7 +167,7 @@
 ; Make a game with a pink background
 ; filled with random color and high definition candy-cane-trees and snow-pine-trees
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure level-design-2
 
   (adventure-game
@@ -181,7 +182,7 @@
 ; Make a game with an HD desert background
 ; filled with random HD brown rocks
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure level-design-3
 
   (adventure-game
@@ -196,7 +197,7 @@
 ; Make a game with an HD lava background
 ; filled with random HD gray rocks
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure level-design-4
 
   (adventure-game
@@ -218,7 +219,7 @@
 ; Make a game with any background and
 ; 3 world objects with basicized position, tile, size, and/or hue
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure level-design-5
 
   (adventure-game
@@ -233,7 +234,7 @@
 
 ;Make a game with a basic fetch quest
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure fetch-quest-1
   (define lost-cat
     (basic-item #:name "Mylo"
@@ -247,7 +248,7 @@
 
 ;Make a game with a basic fetch quest with a cutscene
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure fetch-quest-2
   (define lost-cat
     (basic-item #:name "Mylo"
@@ -264,7 +265,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure fetch-quest-3
 
   (define fetch-quest-1
@@ -288,7 +289,7 @@
 
 ;Make a game that has an npc with a fetch quest (with basicized dialog and reward)
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure fetch-quest-4
 
   (define my-fetch-quest
@@ -308,7 +309,7 @@
 ; Make a game that has a basicized quest item with on-store and on-drop cutscenes
 ; and an npc with a fetch quest (with reward and cutscene)
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure fetch-quest-5
 
   (define my-quest-item
@@ -336,7 +337,7 @@
 
 ;Make a game with a basic loot quest
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure loot-quest-1
   (define stolen-chest (basic-item))
 
@@ -349,7 +350,7 @@
 
 ;Make a game with an npc that stole a cat and a quest to get him back.
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure loot-quest-2
   (define stolen-cat
     (make-storable
@@ -365,7 +366,7 @@
 
 ;Make a game with a loot quest and a quest cutscene
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure loot-quest-3
   (define stolen-food
     (basic-food #:name "Apples"
@@ -385,7 +386,7 @@
 
 ;Make a game that has an npc with a loot quest (with basicized dialog and reward)
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure loot-quest-4
 
   (define stolen-cat
@@ -408,7 +409,7 @@
 ; Make a game that has a basicized quest item with on-store and on-drop cutscenes
 ; and an npc with a loot quest
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure loot-quest-5
 
   (define stolen-item
@@ -432,7 +433,7 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure enemy-1
   (adventure-game
     #:enemy-list (list (curry basic-enemy
@@ -443,7 +444,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure enemy-2
   (define (easy-enemy)
     (basic-enemy #:ai           'easy
@@ -470,7 +471,7 @@
 ; and reward you with 50 and a reward-item
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure enemy-3  
   (define (my-gold-coin)
     (basic-coin #:sprite goldcoin-sprite
@@ -491,7 +492,7 @@
 ; and reward you with 50 and a reward-item
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure enemy-4
 
   (define (easy-enemy)
@@ -516,7 +517,7 @@
 ; and reward you with 50 and a reward-item
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure enemy-5
 
   (define my-hunt-quest
@@ -539,7 +540,7 @@
 ;in-line 1 npc with default dialog all other keywords
 ;QUESTION additional keywords to add? scale, speed?
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure npc-1
 
   (adventure-game
@@ -553,7 +554,7 @@
 
 ;define 2 npc with simple dialog (inline with def)
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure npc-2
 
   (define (polite-npc)
@@ -575,7 +576,7 @@
 
 ;1 npc with multiple lines of dialog (dialog defined, npc in-line)
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure npc-3
   (define player-dialog
     (player-dialog-with "Jordan"
@@ -596,7 +597,7 @@
 
 ;2 npc with different dialog
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure npc-4
 
   (adventure-game
@@ -610,7 +611,7 @@
 
 ;fetch quest with quest finish dialog
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure npc-5
 
   (define spear-quest
@@ -626,7 +627,7 @@
 ; -----------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure crafter-1
   (adventure-game
     #:avatar       (basic-avatar)
@@ -634,7 +635,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure crafter-2
   (adventure-game
     #:avatar       (basic-avatar)
@@ -644,7 +645,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure crafter-3
   (define (fish-stew)
     (basic-food #:name "Fish Stew"
@@ -665,7 +666,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure crafter-4  
   (define (fish-stew)
     (basic-food #:name "Fish Stew"
@@ -694,7 +695,7 @@
 
 ; sword, damage, has-gold? options (spear) fire-magic, etc
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-crafter-1
   (define my-sword-recipe
     (recipe #:product (sword)
@@ -708,7 +709,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-crafter-2
   (define my-sword-recipe
     (recipe #:product (sword #:name "Heavy Sword"
@@ -723,7 +724,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-crafter-3
   (define my-fire-magic-recipe
     (recipe #:product (fire-magic  #:name "Fire Magic"
@@ -743,7 +744,7 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure sky-1 
   (adventure-game
     #:avatar (basic-avatar)
@@ -751,7 +752,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure sky-2 
   (adventure-game
     #:avatar (basic-avatar)
@@ -760,7 +761,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure sky-3 
   (adventure-game
     #:avatar (basic-avatar)
@@ -769,7 +770,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure sky-4 
 
   (adventure-game
@@ -784,7 +785,7 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure food-1
 
   (adventure-game
@@ -796,7 +797,7 @@
 
 ; Make a game with a 10 apples and a 1 cherry that heals by 50 that doesn't respawn
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure food-2
 
   (define my-food
@@ -817,7 +818,7 @@
 
 ;Make a game with basic food and a rare food with a cutscene
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure food-3
 
   (define special-food
@@ -837,7 +838,7 @@
 
 ;Make a game with a food and crafter
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure food-4
   (define fish-stew
     (basic-food #:name "Fish Stew"
@@ -857,7 +858,7 @@
 
 ; Make a game with a food, recipe, crafter, and npc with a craft quest
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure food-5
 
   (define carrot-stew
@@ -879,7 +880,7 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure bg-1
   (adventure-game
     #:avatar (basic-avatar)
@@ -887,7 +888,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure bg-2
   (adventure-game
     #:avatar (basic-avatar)
@@ -895,7 +896,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure bg-3
   (define (my-bg)
     (basic-bg
@@ -909,7 +910,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure bg-4
   (define (my-bg)
     (basic-bg #:image LAVA-BG
@@ -924,7 +925,7 @@
 
 ; ----- WEAPON KATAS
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-1
   (adventure-game
     #:weapon-list (list (spear #:name "Needle"
@@ -934,7 +935,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-2
   (define (my-sword)
     (sword #:damage 50
@@ -951,7 +952,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-3
   (define (my-weapon)
     (repeater #:name "Hologram Shooter"
@@ -968,7 +969,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-4
   (define (my-fire-magic)
     (fire-magic #:on-store (spawn (page "Ouch, this is hot!"))))
@@ -983,7 +984,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure weapon-5
   (define (my-sword)
     (sword #:damage 50

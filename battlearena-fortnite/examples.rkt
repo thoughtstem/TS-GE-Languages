@@ -9,14 +9,14 @@
 ; ---------------
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-fortnite alt/avatar-2
  (fortnite-game
    #:avatar (basic-avatar #:sprite constructor-sprite))
   )
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-fortnite alt/avatar-3
   (define (my-avatar)
     (basic-avatar #:sprite     ninja-sprite

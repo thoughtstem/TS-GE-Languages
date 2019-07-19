@@ -8,14 +8,14 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/avatar-2
  (avengers-game
    #:hero (basic-hero #:sprite thor-sprite))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/avatar-3
   (define (my-hero)
     (basic-hero #:sprite     hulk-sprite
@@ -26,7 +26,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/avatar-4
  (define (my-hero)
     (basic-hero #:sprite     drax-sprite
@@ -44,7 +44,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/enemy-3
   (define (my-villain)
     (basic-villain #:sprite          loki-sprite
@@ -58,7 +58,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/enemy-4
   (define (easy-villain)
     (basic-villain #:sprite          wintersoldier-sprite
@@ -80,7 +80,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/enemy-weapon-1
   (avengers-game
    #:villain-list (list (basic-villain
@@ -89,7 +89,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/enemy-weapon-2
   (avengers-game
    #:villain-list (list (basic-villain
@@ -99,7 +99,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/enemy-weapon-3
   (define (my-power)
     (ring-of-fire #:damage 50
@@ -122,14 +122,14 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers power-1
   (avengers-game
    #:power-list (list (energy-blast)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers power-2
   (avengers-game
    #:power-list (list (energy-blast #:color 'orange
@@ -137,7 +137,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers power-3
   (define (my-power)
     (star-bit #:color 'orange
@@ -150,7 +150,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers power-4
   (define (my-power-1)
     (magic-orb #:damage      10
@@ -172,14 +172,14 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers drone-1
   (avengers-game
     #:power-list (list (energy-drone)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers drone-2
   (define (my-drone)
     (energy-drone #:color     'yellow
@@ -190,7 +190,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers drone-3
   (define (my-drone)
     (energy-drone #:color     'red
@@ -206,7 +206,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers armor-1
   (avengers-game
    #:item-list (list (basic-armor #:name "Energy Armor"
@@ -215,7 +215,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers armor-2
   (avengers-game
    #:item-list (list (basic-armor #:name "Energy Armor"
@@ -225,7 +225,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers armor-3
   (define (energy-armor)
     (basic-armor #:name "Energy Armor"
@@ -239,7 +239,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
  battlearena-avengers alt/background-4
   (define (my-planet)
     (basic-planet #:image LAVA-BG

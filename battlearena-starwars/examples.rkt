@@ -10,14 +10,14 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/avatar-2
   (starwars-game
     #:rebel (basic-rebel #:sprite yoda-sprite))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/avatar-3
   (define (my-rebel)
     (basic-rebel #:sprite obiwan-sprite
@@ -27,7 +27,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/avatar-4
   (define (my-rebel)
     (basic-rebel #:sprite     obiwan-sprite
@@ -43,7 +43,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-3
   (define (my-enemy)
     (basic-imperial #:sprite          darthmaul-sprite
@@ -57,7 +57,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-4
   (define (easy-enemy)
     (basic-imperial #:ai 'easy
@@ -75,7 +75,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-5
   (define (easy-enemy)
     (basic-imperial #:ai 'easy
@@ -95,7 +95,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-weapon-1
   (starwars-game 
     #:imperial-list (list (basic-imperial
@@ -104,7 +104,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-weapon-2
   (starwars-game 
     #:imperial-list (list (basic-imperial
@@ -114,7 +114,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/enemy-weapon-3 
   (starwars-game 
     #:imperial-list (list (basic-imperial
@@ -125,7 +125,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/sword-armor-1  
   (starwars-game
     #:item-list (list (basic-armor #:name          "Lightsaber Armor"
@@ -134,7 +134,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/sword-armor-2
   (define (l-armor)
     (basic-armor #:name          "Lightsaber Armor"
@@ -148,7 +148,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars alt/sword-armor-3
   (define (l-armor)
     (basic-armor #:name          "Lightsaber Armor"
@@ -171,14 +171,14 @@
 ;  define-example-code/from*
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-1
   (starwars-game
     #:weapon-list (list (lightsaber)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-2
   (define (my-lightsaber)
     (lightsaber #:icon   (make-icon "LOL" 'blue)
@@ -194,7 +194,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-3
   (define (my-lightsaber)
     (lightsaber #:name       "Flashy"
@@ -210,14 +210,14 @@
 ; ----------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-1
   (starwars-game
     #:weapon-list (list (blaster)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-2
   (define (my-blaster)
     (blaster
@@ -229,7 +229,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-3
   (define (my-blaster)
     (blaster #:damage     20
@@ -244,14 +244,14 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-droid-1
   (starwars-game
     #:weapon-list (list (lightsaber-droid)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-droid-2
   (define (ls-droid)
     (lightsaber-droid #:color      'orange
@@ -263,7 +263,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars lightsaber-droid-3
   (define (ls-droid)
     (lightsaber-droid #:color      'orange
@@ -277,14 +277,14 @@
 ;---------------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-droid-1
   (starwars-game
     #:weapon-list (list (blaster-droid)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-droid-2
   (define (b-droid)
     (blaster-droid #:color     'yellow
@@ -296,7 +296,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-droid-3
   (define (b-droid)
     (blaster-droid #:color     'yellow
@@ -313,7 +313,7 @@
 ; ----------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-armor-1 
   (starwars-game
     #:item-list (list (basic-armor #:name          "Blaster Armor"
@@ -322,7 +322,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-armor-2
   (define (b-armor)
     (basic-armor #:name          "Blaster Armor"
@@ -336,7 +336,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena-starwars blaster-armor-3
   (define (b-armor)
     (basic-armor #:name          "Blaster Armor"

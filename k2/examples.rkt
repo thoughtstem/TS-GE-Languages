@@ -15,7 +15,7 @@
   "./examples/farm.rkt"
   "./examples/animal.rkt")
 
-(module+ test
+#|(module+ test
   (require 
     (submod "./examples/hero.rkt" test)
 
@@ -23,7 +23,7 @@
 
     (submod "./examples/sea.rkt" test)    
     (submod "./examples/farm.rkt" test)
-    (submod "./examples/animal.rkt" test)))
+    (submod "./examples/animal.rkt" test)))|#
 
 (module+ syntaxes
   (provide

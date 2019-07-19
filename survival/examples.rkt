@@ -3,28 +3,28 @@
 (require ts-kata-util)
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival hello-world-1
   (survival-game))
 
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival avatar-1
   (survival-game
     #:avatar (basic-avatar))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival avatar-2
   (survival-game
     #:avatar (basic-avatar #:sprite wizard-sprite))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival avatar-3
   (define (my-avatar)
     (basic-avatar #:sprite pirate-sprite
@@ -35,7 +35,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival avatar-4
   (define (my-avatar)
     (basic-avatar #:sprite monk-sprite
@@ -48,7 +48,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival avatar-5
   (define (my-avatar)
     (basic-avatar #:sprite wizard-sprite
@@ -64,14 +64,14 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival coin-1
   (survival-game
     #:coin-list  (list (basic-coin)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival coin-2 
   (define (my-coin)
     (basic-coin #:value 500))
@@ -81,7 +81,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival coin-3
   (define (my-coin)
     (basic-coin #:sprite          silvercoin-sprite
@@ -94,7 +94,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival coin-4  
   (define (my-coin)
     (basic-coin #:sprite silvercoin-sprite
@@ -113,7 +113,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival coin-5
   (define (silver-coin)
     (basic-coin #:sprite silvercoin-sprite
@@ -137,7 +137,7 @@
 ; ------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival crafter-1
   (survival-game
     #:crafter-list (list (basic-crafter #:sprite cauldron-sprite
@@ -146,7 +146,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival crafter-2
   (survival-game
     #:food-list    (list (carrot #:name "Carrot"
@@ -156,7 +156,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival crafter-3
   (define (fish-stew)
     (basic-product #:name "Fish Stew"
@@ -173,7 +173,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival crafter-4  
   (define (fish-stew)
     (basic-product #:name "Fish Stew"
@@ -196,7 +196,7 @@
 
 ; sword, damage, has-gold? options (spear) fire-magic, etc
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival weapon-crafter-1
   (define my-sword-recipe
     (recipe #:product (sword)
@@ -209,7 +209,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival weapon-crafter-2
   (define my-sword-recipe
     (recipe #:product (sword #:damage 100)
@@ -222,7 +222,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival weapon-crafter-3
   (define my-fire-magic-recipe
     (recipe #:product (fire-magic #:name "Fast Flame"
@@ -239,14 +239,14 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival sky-1 
   (survival-game
     #:sky    (basic-sky #:length-of-day 5000))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival sky-2
   (survival-game
     #:sky (basic-sky #:night-sky-color  'darkmagenta))
@@ -254,7 +254,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival sky-3 
   (survival-game
     #:sky    (basic-sky #:length-of-day 500
@@ -263,7 +263,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival sky-4 
 
   (survival-game
@@ -277,21 +277,21 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-1
   (survival-game
     #:enemy-list (list (basic-enemy)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-2
   (survival-game
     #:enemy-list (list (basic-enemy #:amount-in-world 10)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-3 
   (define (my-enemy)
     (basic-enemy #:ai              'medium
@@ -302,7 +302,7 @@
     #:enemy-list (list (my-enemy))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-4
   (define (easy-enemy)
     (basic-enemy #:ai           'easy
@@ -320,7 +320,7 @@
                        (medium-enemy))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-5
   (define (hard-enemy)
     (basic-enemy #:ai              'hard
@@ -333,7 +333,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival enemy-6
   (define (easy-enemy)
     (basic-enemy #:ai             'easy
@@ -362,14 +362,14 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-1
   (survival-game
     #:food-list  (list (basic-food #:amount-in-world 10)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-2
   (define (my-food)
     (basic-food #:amount-in-world 2
@@ -381,7 +381,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-3
   (define (my-food)
     (basic-food #:sprite          apples-sprite
@@ -394,7 +394,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-4
 
   (define (my-food)
@@ -415,7 +415,7 @@
                        (special-food))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-5
   (define (my-food)
     (basic-food #:sprite          cherry-sprite
@@ -429,7 +429,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival food-6
   (define (basic-cherry)
     (basic-food #:sprite          cherry-sprite
@@ -457,7 +457,7 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival npc-1
   (survival-game
     #:npc-list (list (basic-npc)))
@@ -465,7 +465,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival npc-2
   (define (my-npc)
     (basic-npc
@@ -477,7 +477,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival npc-3
   (define (my-npc)
     (basic-npc
@@ -489,7 +489,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival npc-4
   (define (my-npc)
     (basic-npc
@@ -503,7 +503,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival npc-5
   (define (my-npc)
     (basic-npc
@@ -527,21 +527,21 @@
 ; -----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival bg-1
   (survival-game
     #:bg (basic-bg))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival bg-2
   (survival-game
     #:bg (basic-bg #:image DESERT-BG))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival bg-3
   (define (my-bg)
     (basic-bg
@@ -554,7 +554,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival bg-4
   (define (my-bg)
     (basic-bg #:image LAVA-BG
@@ -571,7 +571,7 @@
 
 ; ==== LEVEL DESIGN KATAS ====
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival level-design-1
 
   (survival-game
@@ -581,7 +581,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival level-design-2
 
   (survival-game
@@ -592,7 +592,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival level-design-3
 
   (survival-game
@@ -605,7 +605,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival level-design-4
 
   (survival-game
@@ -618,7 +618,7 @@
 ; ==============================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival game-jam-1 
   (survival-game
     #:avatar       (basic-avatar)
@@ -628,7 +628,7 @@
     #:crafter-list (list (basic-crafter))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival game-jam-2
   (define (my-avatar)
     (basic-avatar #:sprite wizard-sprite))

@@ -2,20 +2,21 @@
 
 (require ts-kata-util
          "./lang/main.rkt"
-         "./assets.rkt")
+         ;"./assets.rkt"
+         )
 
 (define-example-code/from* survival/examples)
 
 ;=================================
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/avatar-2
   (minecraft-game
     #:skin (basic-skin #:sprite alex-sprite)))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/avatar-3
   (define (my-hero)
     (basic-skin #:sprite monk-sprite))
@@ -24,7 +25,7 @@
     #:skin (reduce-quality-by 3 (my-hero))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/avatar-4
   (define (my-hero)
     (basic-skin #:sprite alex-sprite
@@ -34,7 +35,7 @@
     #:skin (my-hero)))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/avatar-5
   (define (my-hero)
     (basic-skin #:sprite alex-sprite
@@ -45,7 +46,7 @@
     #:skin (my-hero)))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft avatar-6
 
   (define (my-hero)
@@ -62,7 +63,7 @@
 ;======================================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/enemy-3  
   (define (my-mob)
     (basic-mob #:ai 'medium
@@ -74,7 +75,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/enemy-4
   (define (easy-mob)
     (basic-mob #:ai 'easy
@@ -92,7 +93,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/enemy-5 
   (define (medium-mob)
     (basic-mob #:ai 'medium
@@ -113,7 +114,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/enemy-6
 
   (define (hard-mob)
@@ -130,14 +131,14 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/coin-2
   (minecraft-game
     #:ore-list (list (basic-ore #:value 50)))
   )
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/coin-3 
   (define (my-ore)
     (basic-ore #:sprite goldore-sprite
@@ -150,7 +151,7 @@
   )
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/coin-4 
   (define (gold-ore)
     (basic-ore #:sprite goldore-sprite
@@ -169,7 +170,7 @@
   )
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/coin-5   
   (define (diamond)
     (basic-ore #:sprite           diamond-sprite
@@ -191,7 +192,7 @@
 ;=========================================================
 
 #;(define-example-code 
-#:with-test (test game-test)
+;#:with-test (test game-test)
 survival-minecraft alt/npc-2 
 (define (my-entity)
   (basic-entity
@@ -202,7 +203,7 @@ survival-minecraft alt/npc-2
   #:entity-list (list (my-entity))))
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/npc-3 
   (define (my-entity)
     (basic-entity
@@ -215,7 +216,7 @@ survival-minecraft alt/npc-2
     #:entity-list (list (my-entity))))
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/npc-4 
   (define (my-entity)
     (basic-entity
@@ -226,7 +227,7 @@ survival-minecraft alt/npc-2
     #:entity-list (list (my-entity))))
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/npc-5 
   (define (my-entity)
     (basic-entity
@@ -250,7 +251,7 @@ survival-minecraft alt/npc-2
 ;====================================================
 
 (define-example-code 
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-minecraft alt/bg-4  
   (define (my-biome)
     (basic-biome

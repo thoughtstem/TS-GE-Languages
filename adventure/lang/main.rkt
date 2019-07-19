@@ -1649,9 +1649,9 @@
   
   (define dialog
     (if (not d)
-        (dialog->sprites (first (shuffle (list (list "I haven't seen you around here before...")
+        (dialog->sprites (first (shuffle (list (list "You must be new around here...")
                                                (list "Hey! I'm walkin' here!")
-                                               (list "Sorry, I don't have time to talk now.")
+                                               (list "Sorry, I don't have time to talk.")
                                                (list "Be careful, I think I saw a dragon!"))))
                      #:game-width GAME-WIDTH
                      #:animated #t
@@ -2301,7 +2301,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (scale-sprite 1.1))))
+               (every-tick (simple-scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:sprite            [s ice-sprite]
@@ -2356,7 +2356,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (scale-sprite 1.1))))
+               (every-tick (simple-scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:sprite            [s flying-sword-sprite]
@@ -2545,7 +2545,7 @@
                #:speed      spd
                #:range      rng
                #:components (on-start (set-size 0.5))
-               (every-tick (do-many (scale-sprite 1.05)
+               (every-tick (do-many (simple-scale-sprite 1.05)
                                     (change-direction-by 10)))))
 
 ; ==== PREBUILT FOOD AND RECIPES ===

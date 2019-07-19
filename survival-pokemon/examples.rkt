@@ -2,7 +2,8 @@
 
 (require ts-kata-util
          "./lang/main.rkt"
-         survival-pokemon)
+         ;survival-pokemon
+         )
 
 (define-example-code/from* survival/examples)
 
@@ -10,14 +11,14 @@
 ;=================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/avatar-2
   (pokemon-game
     #:pokemon (basic-pokemon #:sprite bulbasaur-sprite))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/avatar-3
   (define (my-pokemon)
     (basic-pokemon #:sprite charmander-sprite
@@ -28,7 +29,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/avatar-4
   (define (my-pokemon)
     (basic-pokemon #:sprite   armoredmewtwo-sprite
@@ -40,7 +41,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/avatar-5
   (define (my-pokemon)
     (basic-pokemon #:sprite     armoredmewtwo-sprite
@@ -56,7 +57,7 @@
 ;=================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/coin-2
   (define (my-stone)
     (basic-stone #:value 500))
@@ -66,7 +67,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/coin-3
   (define (my-stone)
     (basic-stone #:sprite leafstone-sprite
@@ -80,7 +81,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/coin-4
   (define (my-stone)
     (basic-stone #:sprite moonstone-sprite
@@ -100,7 +101,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/coin-5
   (define (thunder-stone)
     (basic-coin #:sprite thunderstone-sprite
@@ -125,7 +126,7 @@
 ;=================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/enemy-3
   (define (my-trainer)
     (basic-trainer #:ai 'medium
@@ -137,7 +138,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/enemy-4
   (define (hard-trainer)
     (basic-trainer #:ai 'hard
@@ -150,7 +151,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/enemy-5
   (define (easy-trainer)
     (basic-trainer #:ai 'medium
@@ -169,7 +170,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/enemy-6
   (define (easy-trainer)
     (basic-trainer #:ai 'easy
@@ -197,7 +198,7 @@
 ;=================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/npc-2
   (define (my-friend)
     (basic-friend #:sprite squirtle-sprite
@@ -208,7 +209,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/npc-3
   (define (my-friend)
     (basic-friend  #:dialog (list
@@ -221,7 +222,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/npc-4
   (define (my-friend)
     (basic-friend #:sprite wartortle-sprite
@@ -234,7 +235,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/npc-5
   (define (my-friend)
     (basic-friend #:name "Francis"
@@ -260,7 +261,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/weapon-crafter-1
   (define my-attack-recipe
     (recipe #:product (fire-blast)
@@ -274,7 +275,7 @@
 ;======================================
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   survival-pokemon alt/bg-3
   (define (my-town)
     (basic-town

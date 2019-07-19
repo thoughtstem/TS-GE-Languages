@@ -1,10 +1,11 @@
 #lang racket
 
-(require ts-kata-util battlearena)
+(require ts-kata-util ;battlearena
+         )
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena hello-world-1
   (battlearena-game)
   )
@@ -12,7 +13,7 @@
 ; ---------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena force-field-1
   (battlearena-game
     #:item-list (list (basic-item #:name "Force Field"
@@ -20,7 +21,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena force-field-2
   (battlearena-game
     #:item-list (list (basic-item #:name "Force Field"
@@ -29,7 +30,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena force-field-3
   (define (force-field-item)
     (basic-item #:name "Force Field"
@@ -44,21 +45,21 @@
 ;-----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena avatar-1
   (battlearena-game
     #:avatar (basic-avatar))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena avatar-2
   (battlearena-game
     #:avatar (basic-avatar #:sprite pirateboy-sprite))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena avatar-3
   (define (my-avatar)
     (basic-avatar #:sprite pirategirl-sprite
@@ -69,7 +70,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena avatar-4
   (define (my-avatar)
     (basic-avatar #:sprite pirateboy-sprite
@@ -87,21 +88,21 @@
 ;-----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-1
   (battlearena-game
     #:enemy-list (list (basic-enemy)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-2
   (battlearena-game
     #:enemy-list (list (curry basic-enemy #:amount-in-world 10)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-3
   (define (my-enemy)
     (basic-enemy #:sprite          darkknight-sprite
@@ -114,7 +115,7 @@
 
 ;Tip: you can also change shield instead of health
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-4
   (define (easy-enemy)
     (basic-enemy #:ai              'easy
@@ -133,7 +134,7 @@
                        (medium-enemy))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-5
 
   (define (hard-enemy)
@@ -149,7 +150,7 @@
 ;-----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-weapon-1
   (battlearena-game
     #:enemy-list (list (basic-enemy
@@ -157,7 +158,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-weapon-2
   (define (my-weapon)
     (sword #:damage 40))
@@ -168,7 +169,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena enemy-weapon-3
 
   (define (my-weapon)
@@ -187,14 +188,14 @@
 
 ;Tip: defaults: damage = 25, durability = 20, range = 10
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-1
   (battlearena-game
     #:weapon-list (list (sword)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-2
   (battlearena-game
     #:weapon-list (list (sword #:name "Heavy Sword"
@@ -203,7 +204,7 @@
 
 ; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-3
   (define (my-sword)
     (sword #:name   "Heavy Sword"
@@ -215,7 +216,7 @@
 
 ; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-4
   (define (my-sword)
     (sword #:name   "Sword"
@@ -232,20 +233,20 @@
 ;-----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena background-1  
   (battlearena-game
     #:bg (basic-bg))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena background-2
   (battlearena-game #:bg (basic-bg #:image LAVA-BG))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena background-3
   (define (my-bg)
     (basic-bg #:image LAVA-BG
@@ -256,7 +257,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena background-4
   (define (my-bg)
     (basic-bg #:image LAVA-BG
@@ -272,7 +273,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena boost-1
   (battlearena-game
     #:weapon-list (list (repeater))
@@ -282,7 +283,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena boost-2
   (battlearena-game
     #:item-list (list (basic-item #:name   "Speed Boost"
@@ -291,7 +292,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena boost-3
   (define (damage-boost)
     (basic-item #:name   "Damage Boost"
@@ -313,13 +314,13 @@
 ;-----------------
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena dagger-tower-1
   (battlearena-game
     #:weapon-list (list (dagger-tower))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena dagger-tower-2
   (battlearena-game
     #:weapon-list (list (dagger-tower
@@ -327,7 +328,7 @@
                           #:fire-mode  'spread))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena dagger-tower-3
   (battlearena-game
     #:weapon-list (list (dagger-tower
@@ -340,7 +341,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena size-1
 
   (battlearena-game
@@ -349,7 +350,7 @@
                                   #:on-use (scale-sprite 2 #:for 100)))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena size-2
 
   (battlearena-game
@@ -358,7 +359,7 @@
                                   #:on-use (scale-sprite 0.5 #:for 100)))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena size-3
 
   (define (grow-powerup)
@@ -380,7 +381,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena health-1
 
   (battlearena-game
@@ -392,7 +393,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena health-2
 
   (battlearena-game
@@ -404,7 +405,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena health-3
 
   (define (health-powerup)
@@ -424,7 +425,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena homing-repeater-1
   (battlearena-game
     #:weapon-list    (list (repeater #:name "Homing Repeater"
@@ -434,7 +435,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena homing-repeater-2
 
   (battlearena-game
@@ -447,7 +448,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena homing-repeater-3
 
   (define (homing-repeater)
@@ -466,7 +467,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena lava-pit-1
   (battlearena-game
     #:weapon-list (list (lava-pit))))
@@ -474,7 +475,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena lava-pit-2
   (battlearena-game
     #:weapon-list (list (lava-pit
@@ -484,7 +485,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena lava-pit-3
   (define (my-lava-pit)
     (lava-pit #:damage  25
@@ -499,7 +500,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena magic-balance-1
   (battlearena-game
     #:weapon-list (list (ring-of-fire #:name "Light Magic"
@@ -510,7 +511,7 @@
 
 ;Tip: also try ring-of-ice
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena magic-balance-2
   (battlearena-game
     #:weapon-list (list (ring-of-fire #:name "Heavy Magic"
@@ -520,7 +521,7 @@
                                       #:rarity 'epic))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena magic-balance-3
   (define (heavy-magic)
     (ring-of-fire #:name   "Heavy Magic"
@@ -544,7 +545,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena melee-balance-1
   (battlearena-game
     #:weapon-list (list (sword #:name "Light Sword"
@@ -553,7 +554,7 @@
                                #:rarity 'common))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena melee-balance-2
   (battlearena-game
     #:weapon-list (list (sword #:name "Heavy Sword"
@@ -563,7 +564,7 @@
                                #:rarity 'epic))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena melee-balance-3
   (define (heavy-sword)
     (sword #:name "Heavy Sword"
@@ -585,7 +586,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena paint-thrower-1
 
   (battlearena-game
@@ -593,7 +594,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena paint-thrower-2
   (define (my-weapon)
     (paint-thrower #:name   "Heavy Paint Thrower"
@@ -604,7 +605,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena paint-thrower-3
   (define (my-weapon)
     (paint-thrower #:name   "Paint Thrower"
@@ -619,7 +620,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena paint-thrower-4
   (define (my-weapon)
     (paint-thrower #:name   "Paint Thrower"
@@ -635,7 +636,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena fire-magic-1
 
   (battlearena-game
@@ -643,7 +644,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena fire-magic-2
   (define (my-weapon)
     (fire-magic #:name   "Heavy Fire Magic"
@@ -654,7 +655,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena fire-magic-3
   (define (my-weapon)
     (fire-magic #:damage 20
@@ -666,7 +667,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena fire-magic-4
   (define (my-weapon)
     (fire-magic #:name   "Fire Magic"
@@ -682,7 +683,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena ice-magic-1
 
   (battlearena-game
@@ -690,7 +691,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena ice-magic-2
   (define (my-weapon)
     (ice-magic #:name   "Heavy Ice Magic"
@@ -701,7 +702,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena ice-magic-3
   (define (my-weapon)
     (ice-magic #:name   "Ice Magic"
@@ -715,7 +716,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena ice-magic-4
   (define (my-weapon)
     (ice-magic #:name   "Ice Magic"
@@ -731,7 +732,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-armor-1
 
   (battlearena-game
@@ -745,7 +746,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-armor-2
 
   (battlearena-game
@@ -763,7 +764,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-armor-3
 
   (battlearena-game
@@ -781,7 +782,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-balance-1
   (battlearena-game
     #:weapon-list (list (repeater #:name "Light Repeater"
@@ -792,7 +793,7 @@
                                   #:rarity 'common))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-balance-2
   (battlearena-game
     #:weapon-list (list (repeater #:name "Heavy Repeater"
@@ -803,7 +804,7 @@
                                   #:rarity 'uncommon))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-balance-3
   (define (heavy-weapon)
     (repeater #:name "Heavy Repeater"
@@ -830,7 +831,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-tower-1
   (battlearena-game
     #:weapon-list (list (repeater-tower))))
@@ -838,7 +839,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-tower-2
   (battlearena-game
     #:weapon-list (list (repeater-tower
@@ -848,7 +849,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena repeater-tower-3
   (battlearena-game
     #:weapon-list (list (repeater-tower
@@ -860,7 +861,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena rocket-tower-1
   (battlearena-game
     #:weapon-list (list (rocket-tower))))
@@ -868,7 +869,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena rocket-tower-2
   (battlearena-game
     #:weapon-list (list (rocket-tower
@@ -878,7 +879,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena rocket-tower-3
   (battlearena-game
     #:weapon-list (list (rocket-tower
@@ -891,7 +892,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena shield-1
   (battlearena-game
     #:item-list (list (basic-item #:name     "Shield Power-up" 
@@ -904,7 +905,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena shield-2
   (battlearena-game
     #:item-list (list (basic-item #:name     "Max Shield Power-up"
@@ -917,7 +918,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena shield-3
 
   (define (shield-powerup)
@@ -943,7 +944,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena single-shot-1
   (battlearena-game
     #:weapon-list (list (repeater #:name        "Single Shot"
@@ -951,7 +952,7 @@
                                   #:rapid-fire? #f))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena single-shot-2
 
   (define (my-weapon)
@@ -968,7 +969,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena single-shot-3
 
   (define (single-shot)
@@ -987,14 +988,14 @@
 
 ;Tip: defaults: damage = 50, speed = 5, range 20
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-1
   (battlearena-game
     #:weapon-list (list (spear)))
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-2
   (battlearena-game
     #:weapon-list (list (spear #:name "Heavy Spear"
@@ -1003,7 +1004,7 @@
 
 ; Tip: common = 5, uncommon = 4, rare = 3, epic = 2, legendary = 1
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-3
   (define (my-spear)
     (spear #:name   "Heavy Spear"
@@ -1015,7 +1016,7 @@
 
 ; Tip: try different colors like: 'red 'lightblue 'darkmagenta
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-4
   (define (my-spear)
     (spear #:name   "Spear"
@@ -1031,13 +1032,13 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-tower-1
   (battlearena-game
     #:weapon-list (list (spear-tower))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-tower-2
   (battlearena-game
     #:weapon-list (list (spear-tower
@@ -1045,7 +1046,7 @@
                           #:range 50))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spear-tower-3
   (battlearena-game
     #:weapon-list (list (spear-tower
@@ -1055,14 +1056,14 @@
                           #:range 50))))
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spike-mine-1
   (battlearena-game
     #:weapon-list (list (spike-mine))))
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spike-mine-2
   (battlearena-game
     #:weapon-list (list (spike-mine
@@ -1071,7 +1072,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spike-mine-3
   (battlearena-game
     #:weapon-list (list (spike-mine
@@ -1081,7 +1082,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spread-shot-1
   (battlearena-game
     #:weapon-list (list (repeater #:name      "Spread Shot"
@@ -1091,7 +1092,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spread-shot-2
 
   (define (my-weapon)
@@ -1107,7 +1108,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena spread-shot-3
 
   (define (spread-shot)
@@ -1125,7 +1126,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-armor-1
 
   (battlearena-game
@@ -1136,7 +1137,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-armor-2
 
   (battlearena-game
@@ -1150,7 +1151,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena sword-armor-3
 
   (battlearena-game
@@ -1168,7 +1169,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena wall-builder
   (battlearena-game
     #:enemy-list (list (basic-enemy #:amount-in-world 20))
@@ -1178,7 +1179,7 @@
 
 ; ==== LEVEL DESIGN KATAS ====
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena level-design-1
 
   (battlearena-game
@@ -1188,7 +1189,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena level-design-2
 
   (battlearena-game
@@ -1199,7 +1200,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena level-design-3
 
   (battlearena-game
@@ -1212,7 +1213,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   battlearena level-design-4
 
   (battlearena-game

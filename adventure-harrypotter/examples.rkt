@@ -2,14 +2,15 @@
 
 (require ts-kata-util
          "./lang/main.rkt"
-         adventure-harrypotter)
+         ;adventure-harrypotter
+         )
 
 (define-example-code/from* adventure/examples)
 
 ; --------------- WIZARD
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/avatar-1
   (harrypotter-game
     #:wizard (basic-wizard
@@ -19,7 +20,7 @@
 
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/avatar-2
   (define (my-wizard)
     (basic-wizard
@@ -33,7 +34,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/avatar-3
   (harrypotter-game
     #:wizard (basic-wizard
@@ -46,7 +47,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/avatar-4
   (harrypotter-game
     #:wizard (basic-wizard
@@ -62,7 +63,7 @@
 ; --------------- POTION
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/food-1
 
   (harrypotter-game
@@ -72,7 +73,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/food-2
 
   (define my-potion
@@ -92,7 +93,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/food-3
   (define special-potion
     (basic-potion  #:name      "Yellow Potion"
@@ -110,7 +111,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/food-4
   (define pumpkin-potion
     (basic-potion  #:name "Pumpkin Potion"
@@ -129,7 +130,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/food-5
 
   (define carrot-potion
@@ -150,7 +151,7 @@
 ; --------------- LOOT-QUEST
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/loot-quest-3
   (define stolen-food
     (basic-food #:sprite apples-sprite))
@@ -164,7 +165,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/loot-quest-4
 
   (define stolen-pumpkin
@@ -182,7 +183,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/loot-quest-5
 
   (define stolen-item
@@ -201,7 +202,7 @@
 ; --------------- NPC
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/npc-5
 
   (define wand-quest
@@ -217,7 +218,7 @@
 
 ; --------------- SPELLS
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/weapon-1
   (harrypotter-game
     #:spell-list (list (wand #:name "Phoenix Feather"
@@ -227,7 +228,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/weapon-2
   (define (my-wand)
     (wand  #:damage 50
@@ -245,7 +246,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/weapon-3
   (define (my-spell)
     (basic-spell   #:name "Expecto Patronum"
@@ -262,7 +263,7 @@
   )
 
 (define-example-code
-  #:with-test (test game-test)
+  ;#:with-test (test game-test)
   adventure-harrypotter alt/weapon-5
   (define (my-wand)
     (wand #:damage 50

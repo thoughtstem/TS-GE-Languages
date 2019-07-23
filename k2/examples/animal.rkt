@@ -48,7 +48,7 @@
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/foods
                        animal-004
-                       (start rabbit ((potato 5))))
+                       (start rabbit (potato kiwi tomato)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/foods

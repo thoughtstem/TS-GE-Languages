@@ -48,7 +48,7 @@
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/foods
                        animal-004
-                       (start rabbit ((potato 5))))
+                       (start rabbit (potato kiwi tomato)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/foods
@@ -80,7 +80,7 @@
                        k2/lang/animal/foods
                        animal-010
                        (start goat (mushroom apple rand rand))
-                       (start rand ((rand 5) onion)))
+                       (start rand (onion (rand 5))))
 )
 
 (module coins racket

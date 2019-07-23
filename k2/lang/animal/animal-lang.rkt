@@ -174,7 +174,7 @@
     [(start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) (enemy-sprite ...))
      (let ()
        (define avatar
-         (app make-avatar avatar-sprite))
+         (app make-healing-avatar avatar-sprite))
        (define food-list
          (list (app make-food food-sprite ) ...))
        (define npc-list
@@ -317,8 +317,7 @@
                             "I to open these instructions"))
 
        (survival-game #:bg           (custom-bg #:rows 2
-                                                 #:columns 2
-                                                 #:components (on-key 'm (open-mini-map #:close-key 'm)))
+                                                #:columns 2)
                        #:sky          #f
                        #:starvation-rate 25
                        #:avatar       avatar

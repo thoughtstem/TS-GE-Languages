@@ -12,7 +12,13 @@
   k2/lang/animal/animal-lang)
 
 (define rand
-    (lambda () (first (shuffle (list cat dog horse rabbit turkey wolf apple mushroom onion potato gold silver copper)))))
+  (lambda () (first (shuffle (list cat dog goat
+                                   horse rabbit
+                                   sheep turkey
+                                   wolf apple
+                                   banana kiwi
+                                   mushroom
+                                   onion pepper)))))
 
 (module ratchet racket 
   (require ratchet
@@ -31,13 +37,17 @@
     (lambda () (first (shuffle (list cat dog goat
                                      horse rabbit
                                      sheep turkey
-                                     wolf apple mushroom
-                                     onion potato
-                                     gold silver copper)))))
+                                     wolf apple
+                                     banana kiwi
+                                     mushroom
+                                     onion pepper)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
     animal-lang
     "./animal-lang.rkt"
+    
+    [start    = play-icon]
+    
     ;Animals
     [cat      c (s:scale-to-fit (s:draw-sprite cat)      32)]
     [dog      d (s:scale-to-fit (s:draw-sprite dog)      32)]
@@ -51,16 +61,10 @@
     ;Foods
     [apple    a (s:scale-to-fit (s:draw-sprite apple)    32)]
     [banana   b (s:scale-to-fit (s:draw-sprite banana)   32)]
-    [eggplant e (s:scale-to-fit (s:draw-sprite eggplant) 32)]
     [kiwi     k (s:scale-to-fit (s:draw-sprite kiwi)     32)]
     [mushroom m (s:scale-to-fit (s:draw-sprite mushroom) 32)]
     [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
     [pepper   p (s:scale-to-fit (s:draw-sprite pepper)   32)]
-
-    ;Coins
-    [copper   x (s:scale-to-fit (s:draw-sprite copper)   32)]
-    [silver   y (s:scale-to-fit (s:draw-sprite silver)   32)]
-    [gold     z (s:scale-to-fit (s:draw-sprite gold)     32)]
                           
     ;Colors
     [red            R (h:square 32 'solid 'red)]
@@ -71,7 +75,6 @@
     [purple         P (h:square 32 'solid 'purple)]
     
     ;Other
-    [rand     ? question-icon]
-    [start    = play-icon]))
+    [rand     ? question-icon]))
 
 

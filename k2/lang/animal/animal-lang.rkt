@@ -171,38 +171,40 @@
 ;start-c = avatar + foods (optional) + coins (optional) + enemies (optional)
 (define-syntax start-animal
   (syntax-rules ()
-    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...) )
+    [(start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) (enemy-sprite ...))
      (let ()
        (define avatar
          (app make-avatar avatar-sprite))
        (define food-list
          (list (app make-food food-sprite ) ...))
-       (define coin-list
-         (list (app make-coin coin-sprite ) ...))
+       (define npc-list
+         (list (app make-hurt-animal npc-sprite ) ...))
        (define enemy-list
          (list (app make-enemy enemy-sprite ) ...))
 
        (define instructions
          (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food and collect coins"
+                            "SPACE to eat food and talk"
                             "ENTER to close dialogs"
+                            "H to heal animals"
                             "I to open these instructions"))
 
        (survival-game #:bg           (custom-bg #:rows 2
-                                                 #:columns 2)
+                                                #:columns 2)
                        #:sky          #f
-                       #:avatar       avatar
-                       #:food-list    food-list
-                       #:enemy-list   enemy-list
-                       #:coin-list    coin-list
-                       #:score-prefix "Score"
+                       #:starvation-rate 25
+                       #:avatar        avatar
+                       #:food-list     food-list
+                       #:npc-list      npc-list
+                       #:enemy-list    enemy-list
+                       #:score-prefix "Animals Healed"
                        #:instructions instructions)
        )]
     [(start-animal)                                 (start-animal a:question-icon () () ())]
     [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
     [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
     [(start-animal avatar-sprite (food-sprite ...)
-                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+                                 (npc-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) ())]
     ))
     
 
@@ -318,7 +320,7 @@
                                                  #:columns 2
                                                  #:components (on-key 'm (open-mini-map #:close-key 'm)))
                        #:sky          #f
-                       #:starvation-rate -1000
+                       #:starvation-rate 25
                        #:avatar       avatar
                        #:npc-list     npc-list
                        #:food-list    food-list

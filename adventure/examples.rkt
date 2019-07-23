@@ -322,10 +322,7 @@
                                 #:sprite     lightelf-sprite
                                 #:dialog     (list "Can you help my find my cat?")
                                 #:quest-list (fetch-quest #:item my-quest-item
-                                                          #:reward-amount 500
-                                                          #:cutscene (page (list (set-sprite-x-offset -50 lightelf-sprite)
-                                                                                 (set-sprite-x-offset 50 cat-sprite))
-                                                                           "Mylo, I've missed you!"))
+                                                          #:reward-amount 500)
                                 )))
   )
 

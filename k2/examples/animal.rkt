@@ -98,7 +98,7 @@
                               (rand rand rand)))
   
 
-; -- section 3
+; -- section 3 - more friends
   
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/friends
@@ -154,126 +154,98 @@
                        k2/lang/animal/enemies
                        animal-017
                        (start rand
-                              ((pineapple purple))
-                              ((gold green 5))))
+                              ((banana red))
+                              ((wolf 2))
+                              ((turkey 3))))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-018
-                       (start rand
+                       (start (dog green)
                              (rand rand rand)
-                             (rand rand rand)))
+                             (rand rand)
+                             (rand)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-019
                        (start mushroom
-                              ((rabbit green 5) (wolf yellow 2))
-                              ((silver 10) (gold 4))))
+                              ((pepper yellow 5) (pepper green 5))
+                              ((kiwi banana))
+                              ((onion red 3))))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-020
                        (start rand
-                              ((apple purple 10))
-                              ((copper 5) (silver 3) (gold purple))))
+                              ((apple purple 5))
+                              ((apple blue 5))
+                              ((apple orange 5))))
 
+  ; section 5 - more enemies
+  
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-021
-                       (start cat ((rand green 3)) ((gold 4))))
+                       (start cat
+                              ((apple green 5)))
+                       (start cat
+                              ((apple yellow 5))
+                              ((wolf 3))))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-022
-                       (start horse
-                              ((apple 8))
-                              ((copper 10))
-                              (wolf)))
+                       (start (horse blue)
+                              ((pepper 8))
+                              (rabbit))
+                       (start (horse orange)
+                              ((pepper 2))
+                              ((rabbit 3))
+                              (dog)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-023
-                       (start rabbit
-                              ((wolf green 4))
-                              ((wolf yellow 3))
-                              ((wolf red 5))))
+                       (start sheep
+                              ((banana red 2) (kiwi purple 3))
+                              (sheep (wolf blue) (turkey red 2))
+                              (rand))
+                       (start rand
+                              (rand rand)
+                              (rand rand rand)
+                              (rand rand rand rand)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-024
-                       (start rand
-                              (rand)
-                              (rand rand)
-                              (rand rand rand)))
+                       (start goat
+                              (mushroom yellow 2))
+                       (start goat
+                              (banana)
+                              (wolf green 4))
+                       (start goat
+                             (apple)
+                             (sheep)
+                             (dog red 3)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-025
-                       (start dog
-                              ((apple green 2))
-                              (copper gold)
-                              (turkey))
-                       (start cat
-                              ((rabbit 3))
-                              ((silver 3))
-                              ((dog 3))))
-
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-026
-                       (start rand
-                              (rand rand rand)
-                              (rand rand rand)
-                              (rand rand rand))
+                       (start horse
+                              ((horse green 2))
+                              ((horse yellow 3))
+                              ((horse red)))
                        (start wolf
-                              (turkey rabbit cat)
-                              ((onion orange) (mushroom purple))
-                              (copper silver gold)))
-  
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-027
-                       (start copper
-                              ((copper blue 5))
-                              ((copper green 3))
-                              ((copper purple))))
-
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-028
-                       (start rabbit
-                              ((mushroom red 5))
-                              ((copper 5) (silver 5))
-                              ((rabbit red 5)))
-                       (start onion
-                              (rand rand)
-                              (rand rand)
-                              (rand rand)))
-
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-029
-                       (start rand (rand))
-                       (start rand () (rand))
-                       (start rand () () (rand)))
-
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-030
-                       (start cat
-                              ((apple green 4) (mushroom 3))
-                              (copper silver gold)
-                              ((turkey 4) (wolf 6)))
-                       (start dog
-                              (rand (onion 4) (pepper red 2))
-                              ((gold 10))
-                              (cat horse rabbit turkey wolf))
-                       (start mushroom
-                              ((mushroom 4))
-                              ((pepper red 3)(apple orange 2))
-                              (copper silver gold)))
-)
+                              ((wolf purple 4))
+                              ((wolf blue 2))
+                              ((wolf orange 3)))
+                       (start banana
+                              ((banana orange 2))
+                              ((banana green 3))
+                              ((banana red 4)))
+    )
+  )
 
 (provide (all-from-out 'foods 'friends 'enemies))
 (require 'foods 'friends 'enemies)

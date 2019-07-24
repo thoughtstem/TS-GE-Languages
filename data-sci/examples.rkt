@@ -654,11 +654,129 @@
              #:height 700
              #:width 700))
 
+(new-stimuli data-sci-real-data-600 "Print the first ten rows of the titanic dataset")
 (define-example-code 
 ;  #:with-test (test no-test)
   
   data-sci
   data-sci-real-data-600
+
+  (define the-data (data-set titanic))
+
+  (define first-10-rows (take the-data 10))
+
+  first-10-rows)
+
+(new-stimuli data-sci-real-data-601 "Print only the names of everyone in the dataset")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-601
+
+  (define the-data (data-set titanic))
+
+  (define names (map titanic-row-name the-data))
+
+  names)
+
+(new-stimuli data-sci-real-data-602 "Print the number of the people under the age of 10 in the dataset")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-602
+
+  (define the-data (data-set titanic))
+
+  (define (is-under-ten? row)
+    (> 10 (titanic-row-age row)))
+
+  (define under-ten (filter is-under-ten? the-data))
+
+  (length under-ten))
+
+(new-stimuli data-sci-real-data-603 "Print the names of the people under the age of 30 in the dataset")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-603
+
+  (define the-data (data-set titanic))
+
+  (define (is-under-thirty? row)
+    (> 30 (titanic-row-age row)))
+
+  (define under-thirty (filter is-under-thirty? the-data))
+
+  (define names (map titanic-row-name under-thirty))
+
+  names)
+
+(new-stimuli data-sci-real-data-604 "Print the average age of everyone over thirty in the dataset")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-604
+
+  (define the-data (data-set titanic))
+
+  (define (is-over-thirty? row)
+    (< 30 (titanic-row-age row)))
+
+  (define over-thirty (filter is-over-thirty? the-data))
+
+  (define ages (map titanic-row-age over-thirty))
+
+  (define average (mean ages))
+  
+  average)
+
+(new-stimuli data-sci-real-data-605 "Make a histogram of the ages and names of everyone under 10 in the titanic dataset")
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-605
+
+  (define the-data
+    (sort (data-set titanic)
+	  <
+	  #:key titanic-row-age))
+
+  (define (is-under-10? row)
+    (> 10 (titanic-row-age row)))
+
+  (define under-10 (filter is-under-10? the-data))
+
+  (define names (map titanic-row-name under-10))
+
+  (define ages (map titanic-row-age under-10))
+
+  (plot (discrete-histogram
+	  #:invert? #t
+	  (zip names ages))
+	#:height 1000
+	#:width 700))
+
+
+;Clarify which dataset in the stimuli above.
+;Make under-# consistent with is-under-#?
+
+;Add more histogram related things for both datasets
+
+;Add in XYZ datasets...
+
+#;
+(new-stimuli data-sci-real-data-610 "Make a histogram showing the titanic deaths sorted by age")
+#;
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-610
 
   (define the-data (data-set titanic))
   (define names (map titanic-row-name the-data))

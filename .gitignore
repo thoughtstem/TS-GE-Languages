@@ -1,6 +1,7 @@
 *.dep
 *.swp
 *.swo
+*.swn
 *.zo
 *.bak
 *.scrbl~

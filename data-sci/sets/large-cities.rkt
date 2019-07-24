@@ -8,9 +8,6 @@
          racket/runtime-path
          "./html-util.rkt")
 
-;TODO: Clean up this file, make automated tests, 
-;      Add more data sets.  Corpuses?
-
 (define-runtime-path here ".")
 
 (define (large-cities-raw-string)
@@ -27,7 +24,7 @@
 		 (fourth (large-cities-raw-data)))
 	 1)))
 
-
+;A gross munging function for some gross data.
 (define (tr->city tr)
   (define tds (filter (collect-tag td?) tr))
 

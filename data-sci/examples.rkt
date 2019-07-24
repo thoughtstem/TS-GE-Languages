@@ -654,6 +654,61 @@
              #:height 700
              #:width 700))
 
+(define-example-code 
+;  #:with-test (test no-test)
+  
+  data-sci
+  data-sci-real-data-600
+
+  (define the-data (data-set titanic))
+  (define names (map titanic-row-name the-data))
+  (define ages (map titanic-row-age the-data))
+
+  (define names-with-ages (zip names ages)) 
+  
+  (plot-pict (discrete-histogram names-with-ages
+                                 #:invert? #t)
+             #:height 700
+             #:width 700))
+
+
+#;
+(define-example-code data-sci data-sci-real-data-700
+
+                      ;TODO: Make this or somethin like it a provided dataset
+                      ;      Name cluster function k-means-cluster?
+		     (define data
+
+		       (rest
+			 (csv->list-of-lists
+			   "/home/thoughtstem/Desktop/for-k-means.csv")))
+
+		     (define data-with-numbers
+		       (map (curry map string->number) data))
+
+		     (define (row->xyz1 row)
+		       (list (first row)
+			     (third row)
+			     (fifth row)))
+
+		     (define xyzs
+		       (map row->xyz1 data-with-numbers))
+
+		     (define-values (centers clusters)
+		       (cluster xyzs 3))
+
+		     (define red (points3d (first clusters)
+					   #:color "red"))
+
+		     (define green (points3d (second clusters)
+					     #:color "green"))
+
+		     (define blue (points3d (third clusters)
+					    #:color "blue"))
+
+
+		     (plot3d (list red green blue))
+		     )
 
 
 ;TODO: Plots... 

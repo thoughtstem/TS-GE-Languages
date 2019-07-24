@@ -216,9 +216,21 @@
                               (rand rand rand)
                               (rand rand rand rand)))
 
-  (define-example-code ;#:with-test (test game-test)
+    (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/enemies
                        animal-024
+                       (start horse
+                              ((horse green 2))
+                              ((horse yellow 3))
+                              ((horse red)))
+                       (start banana
+                              ((banana orange 2))
+                              ((banana green 3))
+                              ((banana red 4))))
+
+  (define-example-code ;#:with-test (test game-test)
+                       k2/lang/animal/enemies
+                       animal-025
                        (start goat
                               (mushroom yellow 2))
                        (start goat
@@ -229,22 +241,8 @@
                              (sheep)
                              (dog red 3)))
 
-  (define-example-code ;#:with-test (test game-test)
-                       k2/lang/animal/enemies
-                       animal-025
-                       (start horse
-                              ((horse green 2))
-                              ((horse yellow 3))
-                              ((horse red)))
-                       (start wolf
-                              ((wolf purple 4))
-                              ((wolf blue 2))
-                              ((wolf orange 3)))
-                       (start banana
-                              ((banana orange 2))
-                              ((banana green 3))
-                              ((banana red 4)))
-    )
+
+    
   )
 
 (provide (all-from-out 'foods 'friends 'enemies))

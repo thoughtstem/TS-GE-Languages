@@ -74,7 +74,8 @@
 
 (module powers racket
 
-  (require ts-kata-util k2/lang/hero/powers)
+  (require ts-kata-util ;k2/lang/hero/powers
+           )
   ; ===== HERO - POWERS
 
   (define-example-code ;#:with-test (test game-test)
@@ -185,8 +186,8 @@
 
 (module items racket
 
-  (require ts-kata-util
-           k2/lang/hero/items)
+  (require ts-kata-util ;k2/lang/hero/items
+           )
 
   ; ===== HERO - ITEMS
 

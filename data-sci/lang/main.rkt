@@ -1,15 +1,15 @@
-#lang at-exp racket
+#lang racket/base
 
-(provide zip data-set (all-from-out "../sets.rkt"))
+(provide zip 
+         cluster
+         data-set 
+         (all-from-out "../sets.rkt"))
 
-(require scribble/srcdoc)
-(require (for-doc racket/base scribble/manual))
-
-(require ts-kata-util
-         plot 
+(require plot 
          racket/runtime-path
          data-science
-         "../sets.rkt")
+         "../sets.rkt"
+         "./k-means.rkt")
 
 (define (zip l1 l2)
   (map list l1 l2))
@@ -53,7 +53,6 @@
 ;Salaries across different fields
 
 ;Happiness data
-
 
 
 

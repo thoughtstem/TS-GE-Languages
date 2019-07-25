@@ -574,7 +574,7 @@
   (take all-but-first-5 5))
 
 
-(new-stimuli data-sci-real-data-504 "Print only the city names in the data set.")
+(new-stimuli data-sci-real-data-504 "Print only the city names in the large-cities data set.")
 (define-example-code 
   
   data-sci
@@ -586,7 +586,7 @@
   city-names)
 
 
-(new-stimuli data-sci-real-data-505 "Print only the first five city names in the data set.")
+(new-stimuli data-sci-real-data-505 "Print only the first five city names in the large-cities data set.")
 (define-example-code 
   
   data-sci
@@ -598,7 +598,7 @@
   (take city-names 5))
 
 
-(new-stimuli data-sci-real-data-506 "Print the first five city names in the data set in reverse order")
+(new-stimuli data-sci-real-data-506 "Print the first five city names in the large-cities data set in reverse order")
 (define-example-code 
   
   data-sci
@@ -622,7 +622,7 @@
   
   sorted-data)
 
-(new-stimuli data-sci-real-data-508 "Print only the populations from the data set")
+(new-stimuli data-sci-real-data-508 "Print only the populations from the large-cities data set")
 (define-example-code 
   
   data-sci
@@ -634,7 +634,7 @@
   populations)
 
 
-(new-stimuli data-sci-real-data-509 "Display a bar chart that compares the population of all cities in the data set.")
+(new-stimuli data-sci-real-data-509 "Display a bar chart that compares the population of all cities in the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -654,7 +654,7 @@
              #:height 700
              #:width 700))
 
-(new-stimuli data-sci-real-data-600 "Print the first ten rows of the titanic dataset")
+(new-stimuli data-sci-real-data-600 "Print the first ten rows of the titanic data set")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -667,7 +667,7 @@
 
   first-10-rows)
 
-(new-stimuli data-sci-real-data-601 "Print only the names of everyone in the dataset")
+(new-stimuli data-sci-real-data-601 "Print only the names of everyone in the titanic data set")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -680,7 +680,7 @@
 
   names)
 
-(new-stimuli data-sci-real-data-602 "Print the number of the people under the age of 10 in the dataset")
+(new-stimuli data-sci-real-data-602 "Print the number of the people under the age of 10 in the titanic data set")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -689,14 +689,14 @@
 
   (define the-data (data-set titanic))
 
-  (define (is-under-ten? row)
+  (define (is-under-10? row)
     (> 10 (titanic-row-age row)))
 
-  (define under-ten (filter is-under-ten? the-data))
+  (define under-10 (filter is-under-10? the-data))
 
-  (length under-ten))
+  (length under-10))
 
-(new-stimuli data-sci-real-data-603 "Print the names of the people under the age of 30 in the dataset")
+(new-stimuli data-sci-real-data-603 "Print the names of the people under the age of 30 in the titanic data set")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -705,16 +705,16 @@
 
   (define the-data (data-set titanic))
 
-  (define (is-under-thirty? row)
+  (define (is-under-30? row)
     (> 30 (titanic-row-age row)))
 
-  (define under-thirty (filter is-under-thirty? the-data))
+  (define under-30 (filter is-under-30? the-data))
 
-  (define names (map titanic-row-name under-thirty))
+  (define names (map titanic-row-name under-30))
 
   names)
 
-(new-stimuli data-sci-real-data-604 "Print the average age of everyone over thirty in the dataset")
+(new-stimuli data-sci-real-data-604 "Print the average age of everyone over thirty in the titanic data set")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -723,18 +723,18 @@
 
   (define the-data (data-set titanic))
 
-  (define (is-over-thirty? row)
+  (define (is-over-30? row)
     (< 30 (titanic-row-age row)))
 
-  (define over-thirty (filter is-over-thirty? the-data))
+  (define over-30 (filter is-over-30? the-data))
 
-  (define ages (map titanic-row-age over-thirty))
+  (define ages (map titanic-row-age over-30))
 
   (define average (mean ages))
   
   average)
 
-(new-stimuli data-sci-real-data-605 "Make a histogram of the ages and names of everyone under 10 in the titanic dataset")
+(new-stimuli data-sci-real-data-605 "Make a histogram of the ages and names of everyone under 10 in the titanic data set.  Sort your data so the histogram looks pretty.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -761,9 +761,6 @@
 	#:height 1000
 	#:width 700))
 
-
-;Clarify which dataset in the stimuli above.
-;Make under-# consistent with is-under-#?
 
 ;Add more histogram related things for both datasets
 

@@ -91,7 +91,7 @@
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/zoo/foods
                        zoo-011
-                       (start penguin
+                       (start monkey
                               ((fish green 3)
                                (fish red 5))))
 

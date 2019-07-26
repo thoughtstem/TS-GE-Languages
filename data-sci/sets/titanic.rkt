@@ -3,6 +3,8 @@
 (provide
   titanic
   titanic-raw-data
+
+  titanic-row-survived?
   titanic-row-name
   titanic-row-age)
 
@@ -30,6 +32,9 @@
     (or number? s))
 
   (map maybe-numberize r))
+
+(define (titanic-row-survived? r)
+  (= (first r) 1))
 
 (define (titanic-row-name r)
   (third r))

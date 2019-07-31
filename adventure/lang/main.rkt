@@ -57,8 +57,8 @@
          ;custom-item
          ;if/r
          
-         in-backpack-by-id?
-         in-game-by-id?
+         ;in-backpack-by-id?
+         ;in-game-by-id?
 
          fetch-quest
          craft-quest
@@ -1285,8 +1285,14 @@
          (map (compose first
                        storage-data) reward-components)))
   
-  (define item-list (filter identity (flatten (map npc->fetch-quest-items npc-list))))
-  
+  (define item-list (filter identity (flatten (map npc->fetch-quest-items npc-list)))) ;only for fetch items that auto appear in world
+
+  (define items-with-observers (filter (curry get-storage "backpack-observer") (append known-products-list
+                                                                                       known-loot-list
+                                                                                       world-weapon-list
+                                                                                       updated-food-list
+                                                                                       (cons ent custom-entities))))
+                                                                                       
   (define player-with-recipes-and-weapons
     (if p
         (add-components p (map weapon-entity->player-system
@@ -1310,9 +1316,7 @@
                                          (filter-not (curry get-storage "Weapon") known-products-list))
                                 name-eq?))
                           (map item-entity->backpack-observer item-list)
-                          (map item-entity->backpack-observer (append known-weapons-list
-                                                                      world-weapon-list
-                                                                      weapons-from-loot))
+                          (map item-entity->backpack-observer items-with-observers)
                           )
         #f))
 

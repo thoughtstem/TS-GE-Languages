@@ -1287,6 +1287,10 @@
   
   (define item-list (filter identity (flatten (map npc->fetch-quest-items npc-list)))) ;only for fetch items that auto appear in world
 
+  (define weapons-from-fetch-quests (filter (curry get-storage "Weapon") item-list))
+  (define food-from-fetch-quests    (filter (curry get-storage "heals-by") item-list))
+  (define coins-from-fetch-quests   (filter (curry get-storage "value") item-list))
+  
   (define items-with-observers (filter (curry get-storage "backpack-observer") (append known-products-list
                                                                                        known-loot-list
                                                                                        world-weapon-list
@@ -1299,7 +1303,8 @@
                                (remove-duplicates
                                 (append known-weapons-list
                                         world-weapon-list
-                                        weapons-from-loot)
+                                        weapons-from-loot
+                                        weapons-from-fetch-quests)
                                 name-eq?))
                         
                           ;(map weapon-entity->player-system world-weapon-list)
@@ -1313,7 +1318,8 @@
                                (remove-duplicates
                                 (append  updated-food-list
                                          food-from-loot
-                                         (filter-not (curry get-storage "Weapon") known-products-list))
+                                         food-from-fetch-quests
+                                         (filter (curry get-storage "heals-by") known-products-list))
                                 name-eq?))
                           (map item-entity->backpack-observer item-list)
                           (map item-entity->backpack-observer items-with-observers)
@@ -1446,7 +1452,8 @@
                                  (storage "kill-count" 0)
                                  (layer "ui")
                                  (map (curryr coin->component prefix) (remove-duplicates (append updated-coin-list
-                                                                                                 coins-from-loot)
+                                                                                                 coins-from-loot
+                                                                                                 coins-from-fetch-quests)
                                                                                          name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))
                                  (map npc->counter-quest-rewards npc-list)

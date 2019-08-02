@@ -11,14 +11,9 @@
 (module reader syntax/module-reader
   k2/lang/animal/animal-lang)
 
-(define rand
-  (lambda () (first (shuffle (list cat dog goat
-                                   horse rabbit
-                                   sheep turkey
-                                   wolf apple
-                                   banana kiwi
-                                   mushroom
-                                   onion pepper)))))
+  (define rand
+    (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
+                                     apple banana kiwi mushroom onion pepper)))))
 
 (module ratchet racket 
   (require ratchet
@@ -34,13 +29,8 @@
     (h:crop 0 0 0 32 32 i))
 
   (define rand
-    (lambda () (first (shuffle (list cat dog goat
-                                     horse rabbit
-                                     sheep turkey
-                                     wolf apple
-                                     banana kiwi
-                                     mushroom
-                                     onion pepper)))))
+    (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
+                                     apple banana kiwi mushroom onion pepper)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
     animal-lang

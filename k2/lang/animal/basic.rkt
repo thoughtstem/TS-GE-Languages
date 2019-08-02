@@ -1,7 +1,12 @@
 #lang racket
 
-(provide (all-from-out "./animal-lang.rkt"))
+(provide (all-from-out "./animal-lang.rkt")
+         rand)
 (require "./animal-lang.rkt")
+
+ (define rand
+    (lambda () (first (shuffle (list dog horse rabbit apple grapes mushroom onion potato strawberry)))))
+
 
 (module reader syntax/module-reader
   k2/lang/animal/animal-lang)

@@ -5,21 +5,22 @@
          (rename-out [start-animal start])
          rand
          )
+
 (require "./animal-lang.rkt"
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/animal/enemies)
 
-  (define rand
-    (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
-                                     apple banana kiwi mushroom onion pepper)))))
+(define rand
+  (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
+                                   apple banana kiwi mushroom onion pepper)))))
 
 (module ratchet racket 
   (require ratchet
            ratchet/util
            (rename-in "../animal/animal-lang.rkt" 
-	              [start-animal start])
+                      [start-animal start])
            "../icons.rkt"
            "../animal/animal-asset-friendly-names.rkt"
            (prefix-in s: survival)

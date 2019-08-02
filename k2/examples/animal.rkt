@@ -171,7 +171,7 @@
                        animal-019
                        (start mushroom
                               ((pepper yellow 5) (pepper green 5))
-                              ((kiwi banana))
+                              (kiwi banana)
                               ((onion red 3))))
 
   (define-example-code ;#:with-test (test game-test)

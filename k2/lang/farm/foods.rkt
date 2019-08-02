@@ -15,8 +15,7 @@
 (module reader syntax/module-reader
   k2/lang/farm/foods)
 
-(module ratchet racket
-  
+(module ratchet racket  
   (require ratchet
            ratchet/util
            (rename-in "../animal/animal-lang.rkt" 

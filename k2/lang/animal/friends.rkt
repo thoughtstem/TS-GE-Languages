@@ -9,7 +9,7 @@
          "../animal/animal-asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/animal/animal-lang)
+  k2/lang/animal/friends)
 
   (define rand
     (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey

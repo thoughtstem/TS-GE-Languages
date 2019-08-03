@@ -384,7 +384,8 @@
                                         "I to open these instructions"
                                         "Z to pick up items"
                                         "X to drop items"
-                                        "B to open and close backpack")))
+                                        "B to open and close backpack"
+                                        "M to open and close map")))
   (apply make-instructions i-list))
 
 ; === WON AND LOST RULES ===
@@ -1070,7 +1071,9 @@
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
                                    (spawn automated-instructions-entity
-                                          #:relative? #f))))
+                                          #:relative? #f))
+                           (on-key 'm (open-mini-map #:close-key 'm))
+                    ))
  
   (define es (filter identity
                      (flatten
@@ -1100,7 +1103,8 @@
 
                        ;For precompilation...
                        default-combat-particles
-              
+
+                       (mini-map bg-with-instructions #:close-key 'm)
                        bg-with-instructions))))
 
   

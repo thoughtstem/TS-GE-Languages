@@ -309,7 +309,8 @@
                                         "I to open these instructions"
                                         "Z to pick up items"
                                         "X to drop items"
-                                        "B to open and close backpack")))
+                                        "B to open and close backpack"
+                                        "M to open and close map")))
   (apply make-instructions i-list))
      
 ; ==== NEW HELPER SYSTEMS ====
@@ -941,7 +942,9 @@
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
                                    (spawn automated-instructions-entity 
-                                          #:relative? #f))))
+                                          #:relative? #f))
+                           (on-key 'm (open-mini-map #:close-key 'm))
+                    ))
   
   (define (add-random-start-pos e)
     (define world-amt (get-storage-data "amount-in-world" e))
@@ -1086,7 +1089,8 @@
                                                #:rows    rows-from-bg
                                                #:columns columns-from-bg)
                            #f)
-              
+
+                       (mini-map bg-with-instructions #:close-key 'm)
                        bg-with-instructions))))
   
   (if headless

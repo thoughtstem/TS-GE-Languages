@@ -187,7 +187,8 @@
                             "SPACE to eat food and talk"
                             "ENTER to close dialogs"
                             "H to heal animals"
-                            "I to open these instructions"))
+                            "I to open these instructions"
+                            "M to open and close the map"))
 
        (survival-game #:bg           (custom-bg #:rows 2
                                                 #:columns 2)
@@ -247,10 +248,10 @@
   (define name-and-dialog (cond ;[(fast-sprite-equal? sprite a:lion)     (list "Lion"     "RoaAaRR!")]
                                 [(fast-sprite-equal? sprite a:monkey)   (list "Monkey"   "*screams*")]
                                 [(fast-sprite-equal? sprite a:elephant) (list "Elephant" "*trumpet sound*")]
-                                [(fast-sprite-equal? sprite a:giraffe)  (list "Giraffe"  "...")]
+                                [(fast-sprite-equal? sprite a:giraffe)  (list "Giraffe"  "Hello!")]
                                 [(fast-sprite-equal? sprite a:hippo)    (list "Hippo"    "Growl!")]
                                 [(fast-sprite-equal? sprite a:kangaroo) (list "Kangaroo" "Phmpt!")]
-                                [(fast-sprite-equal? sprite a:penguin)  (list "Penguin"  "...")]
+                                [(fast-sprite-equal? sprite a:penguin)  (list "Penguin"  "Hello!")]
                                 [(fast-sprite-equal? sprite a:zebra)    (list "Zebra"    "Barrk!")]
                                 ;[(fast-sprite-equal? sprite a:tiger)    (list "Tiger"    "RoaAr!")]
                                 ;adding sea animals
@@ -265,7 +266,7 @@
                                 [(fast-sprite-equal? sprite a:octopus)     (list "Octavia"    "Fwoosh")]
                                 [(fast-sprite-equal? sprite a:crab)        (list "Christoph"  "*snip snip*")]
                                 
-                                [else                                      (list "Animal"   "...")]))
+                                [else                                      (list "Animal"   "Hello!")]))
                                 
   (define (become-combatant g e)
     (define c (~> e
@@ -314,7 +315,8 @@
                             "SPACE to eat food and talk"
                             "ENTER to close dialogs"
                             "H to heal animals"
-                            "I to open these instructions"))
+                            "I to open these instructions"
+                            "M to open and close the map"))
 
        (survival-game #:bg           (custom-bg #:rows 2
                                                 #:columns 2)
@@ -354,7 +356,8 @@
          (make-instructions "ARROW KEYS to move"
                             "SPACE to eat food"
                             "ENTER to close dialogs"
-                            "I to open these instructions"))
+                            "I to open these instructions"
+                            "M to open and close the map"))
 
        (survival-game #:bg           (custom-bg #:image a:sea-bg
                                                  #:rows 2
@@ -397,7 +400,8 @@
                             "SPACE to eat food and talk"
                             "ENTER to close dialogs"
                             "H to heal"
-                            "I to open these instructions"))
+                            "I to open these instructions"
+                            "M to open and close the map"))
 
        (survival-game #:bg           (custom-bg #:image a:sea-bg
                                                  #:rows 2

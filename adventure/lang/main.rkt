@@ -101,6 +101,26 @@
          (only-in lang/posn make-posn)
          )
 
+
+; ==== START OF ERROR PORT HACK ====
+(define default-error-handler (error-display-handler))
+
+(define (new-error-handler msg trace)
+  (displayln (first (shuffle (list "==== ERROR! YOUR CODE IS NOT PERFECT ===="
+                                   "==== IT'S OK, WE ALL MAKE MISTAKES ===="
+                                   "==== ARE YOU SURE THAT'S RIGHT? ===="
+                                   "==== IF AT FIRST YOU DON'T SUCCEED, TRY, TRY AGAIN ===="
+                                   "==== NEVER GIVE UP, NEVER SURRENDER ===="
+                                   "==== OOPS! SOMETHING WENT WRONG ===="
+                                   "==== AWESOME! A BUG! ===="
+                                   "==== PRO DEBUGGERS ARE PRO CODERS ===="))))
+  (default-error-handler msg trace)
+  )
+
+(error-display-handler new-error-handler)
+
+; ==== END OF ERROR PORT HACK ====
+
 (define STORABLE-ITEM-ID-COUNTER 0)
 
 (define (next-storable-item-id)
@@ -1253,6 +1273,7 @@
   (define known-products-list (map recipe-product known-recipes-list))
 
   (define known-weapons-list (filter (curry get-storage "Weapon") known-products-list))
+  (define coins-from-products (filter (curry get-storage "value") known-products-list))
 
   (define (known-weapon? e)
     (member (get-name e) (map get-name known-weapons-list)))
@@ -2030,11 +2051,24 @@
                                 ))
 
 ; ==== PREBUILT WEAPONS & DARTS ====
+
+(define (make-fancy-icon s [c1 "yellow"] [c2 "black"])
+  (list (set-sprite-angle -45 (apply-image-function (curryr scale-to-fit 28) s))
+        (make-icon "")))
+
+(define (make-fancy-sword-icon s [c1 "yellow"] [c2 "black"])
+  (list (set-sprite-angle 45
+                          (apply-image-function
+                           (compose (curryr scale-to-fit 28)
+                                    (λ(i) (crop/align 'center 'top (image-width i) (/ (image-height i) 2) i)))
+                           s))
+        (make-icon "")))
+
+
 (define (repeater #:name              [n "Repeater"]
                   #:color             [c "green"]
                   #:sprite            [ds (rectangle 10 2 "solid" c)]
-                  #:icon              [i (list (set-sprite-angle -45 ds)
-                                               (make-icon ""))]
+                  #:icon              [i (make-fancy-icon ds)]
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
@@ -2067,8 +2101,7 @@
 
 (define (spear #:name              [n "Spear"]
                #:sprite            [s spear-sprite]
-               #:icon              [i (list (set-sprite-angle -45 s)
-                                               (make-icon "" 'brown))]
+               #:icon              [i (make-fancy-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -2117,8 +2150,7 @@
 
 (define (sword #:name              [n "Sword"]
                #:sprite            [s swinging-sword-sprite]
-               #:icon              [i (list (set-sprite-angle -45 s)
-                                               (make-icon "" 'silver))]
+               #:icon              [i (make-fancy-sword-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -2185,8 +2217,7 @@
 
 (define (acid-spitter  #:name              [n "Acid Spitter"]
                        #:sprite            [s   acid-sprite]
-                       #:icon              [icon (list (set-sprite-angle -45 s)
-                                               (make-icon "" 'green))]
+                       #:icon              [icon (make-fancy-icon s)]
                        #:damage            [dmg 10]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -2234,8 +2265,7 @@
 
 (define (fireball  #:name              [n "Fireball"]
                    #:sprite            [s   flame-sprite]
-                   #:icon              [icon (list (set-sprite-angle -45 s)
-                                                   (make-icon ""))]
+                   #:icon              [icon (make-fancy-icon s)]
                    #:damage            [dmg 10]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -2271,8 +2301,7 @@
 
 (define (fire-magic #:name              [n "Fire Magic"]
                     #:sprite            [s flame-sprite]
-                    #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'red))]
+                    #:icon              [i (make-fancy-icon s 'red)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -2321,8 +2350,7 @@
 
 (define (ice-magic #:name              [n "Ice Magic"]
                    #:sprite            [s ice-sprite]
-                   #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'lightcyan))]
+                   #:icon              [i (make-fancy-icon s)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -2376,8 +2404,7 @@
 
 (define (sword-magic #:name              [n "Sword Magic"]
                      #:sprite            [s flying-sword-sprite]
-                     #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'silver))]
+                     #:icon              [i (make-fancy-icon s)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -2427,8 +2454,7 @@
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
                         #:sprite            [s flying-sword-sprite]
-                        #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'silver))]
+                        #:icon              [i (make-fancy-icon s)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -2479,8 +2505,7 @@
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
                       #:sprite            [s flame-sprite]
-                      #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'red))]
+                      #:icon              [i (make-fancy-icon s)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -2515,8 +2540,7 @@
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
                      #:sprite            [s ice-sprite]
-                     #:icon              [i (list (set-sprite-angle -45 s)
-                                                   (make-icon "" 'lightcyan))]
+                     #:icon              [i (make-fancy-icon s)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]

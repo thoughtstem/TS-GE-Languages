@@ -72,6 +72,25 @@
          (only-in lang/posn make-posn)
          )
 
+; ==== START OF ERROR PORT HACK ====
+(define default-error-handler (error-display-handler))
+
+(define (new-error-handler msg trace)
+  (displayln (first (shuffle (list "==== ERROR! YOUR CODE IS NOT PERFECT ===="
+                                   "==== IT'S OK, WE ALL MAKE MISTAKES ===="
+                                   "==== ARE YOU SURE THAT'S RIGHT? ===="
+                                   "==== IF AT FIRST YOU DON'T SUCCEED, TRY, TRY AGAIN ===="
+                                   "==== NEVER GIVE UP, NEVER SURRENDER ===="
+                                   "==== OOPS! SOMETHING WENT WRONG ===="
+                                   "==== AWESOME! A BUG! ===="
+                                   "==== PRO DEBUGGERS ARE PRO CODERS ===="))))
+  (default-error-handler msg trace)
+  )
+
+(error-display-handler new-error-handler)
+
+; ==== END OF ERROR PORT HACK ====
+
 (define STORABLE-ITEM-ID-COUNTER 0)
 
 (define (next-storable-item-id)

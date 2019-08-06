@@ -630,8 +630,8 @@
                                     #:point-to-mouse?   [ptm? #f]
                                     #:rapid-fire?       [rf? #t]
                                     #:rarity            [rarity 'common]
-                                    #:on-store          [store-func (λ (g e) e)]
-                                    #:on-drop           [drop-func (λ (g e) e)])
+                                    #:on-store          [store-func (do-nothing)]
+                                    #:on-drop           [drop-func (do-nothing)])
   (->i ()
        (#:name              [name string?]
         #:sprite            [sprite (or/c sprite? (listof sprite?))]
@@ -771,7 +771,7 @@
                                                                    #:dart (acid-dart)))
                                    #:death-particles (particles (custom-particles))
                                    #:night-only? (night-only? #f)
-                                   #:on-death  [death-func (λ (g e) e)]
+                                   #:on-death  [death-func (do-nothing)]
                                    #:loot-list [loot-list '()]
                                    #:components (c #f)
                                    . custom-components
@@ -1771,9 +1771,9 @@
                                    #:value             [val    #f]
                                    #:heals-by          [heals-by 10]    ;only used if consumable is #t
                                    #:respawn?          [respawn? #t]    ;only used if consumable is #t
-                                   #:on-pickup         [pickup-func (λ (g e) e)]
-                                   #:on-store          [store-func (λ (g e) e)]
-                                   #:on-drop           [drop-func (λ (g e) e)]
+                                   #:on-pickup         [pickup-func (do-nothing)]
+                                   #:on-store          [store-func (do-nothing)]
+                                   #:on-drop           [drop-func (do-nothing)]
                                    #:components        [c #f]
                                    . custom-components)
   (->i () (#:name       [name string?]
@@ -1875,9 +1875,9 @@
                                       #:value             [val    #f]
                                       #:heals-by          [heals-by 10]    ;only used if consumable is #t
                                       #:respawn?          [respawn? #f]    ;only used if consumable is #t
-                                      #:on-pickup         [pickup-func (λ (g e) e)]
-                                      #:on-store          [store-func (λ (g e) e)]
-                                      #:on-drop           [drop-func (λ (g e) e)]
+                                      #:on-pickup         [pickup-func (do-nothing)]
+                                      #:on-store          [store-func (do-nothing)]
+                                      #:on-drop           [drop-func (do-nothing)]
                                       #:components        [c #f]
                                       . custom-components)
   (->i () (#:name       [name string?]
@@ -1990,9 +1990,9 @@
                                   #:value             [val 10]      ;only used if consumable is #t
                                   #:heals-by          [heals-by #f]
                                   #:respawn?          [respawn? #t] ;only used if consumable is #t
-                                  #:on-pickup         [pickup-func (λ (g e) e)]
-                                  #:on-store          [store-func (λ (g e) e)]
-                                  #:on-drop           [drop-func (λ (g e) e)]
+                                  #:on-pickup         [pickup-func (do-nothing)]
+                                  #:on-store          [store-func (do-nothing)]
+                                  #:on-drop           [drop-func (do-nothing)]
                                   #:components        [c #f]
                                   . custom-components)
   (->i () (#:name            [name string?]
@@ -2577,13 +2577,19 @@
                                     (change-direction-by 10)))))
 
 ; ==== PREBUILT FOOD AND RECIPES ===
-(define (carrot #:sprite           [s carrot-sprite]
-                #:position         [p (posn 0 0)]
-                #:name             [n "Carrot"]
+(define (carrot #:name             [n "Carrot"]
+                #:sprite           [s carrot-sprite]
                 #:tile             [t 0]
+                #:position         [p (posn 0 0)]
                 #:amount-in-world  [world-amt 1]
-                #:heals-by         [heal-amt 20]
+                #:storable?        [storable? #t]
+                #:consumable?      [consumable? #t]
+                #:value            [val    #f]
+                #:heals-by         [heal-amt 10]
                 #:respawn?         [respawn? #t]
+                #:on-pickup        [pickup-func (do-nothing)]
+                #:on-store         [store-func (do-nothing)]
+                #:on-drop          [drop-func (do-nothing)]
                 #:components       [c #f]
                 . custom-entities)
   (custom-food  #:sprite           s 
@@ -2591,17 +2597,29 @@
                 #:name             n
                 #:tile             t
                 #:amount-in-world  world-amt
+                #:storable?        storable?
+                #:consumable?      consumable?
+                #:value            val
                 #:heals-by         heal-amt
                 #:respawn?         respawn?
+                #:on-pickup        pickup-func
+                #:on-store         store-func
+                #:on-drop          drop-func
                 #:components       (cons c custom-entities)))
 
-(define (fish #:sprite           [s fish-sprite]
-              #:position         [p (posn 0 0)]
-              #:name             [n "Fish"]
+(define (fish #:name             [n "Fish"]
+              #:sprite           [s fish-sprite]
               #:tile             [t 0]
+              #:position         [p (posn 0 0)]
               #:amount-in-world  [world-amt 1]
+              #:storable?        [storable? #t]
+              #:consumable?      [consumable? #t]
+              #:value            [val    #f]
               #:heals-by         [heal-amt 20]
               #:respawn?         [respawn? #t]
+              #:on-pickup        [pickup-func (do-nothing)]
+              #:on-store         [store-func (do-nothing)]
+              #:on-drop          [drop-func (do-nothing)]                    
               #:components       [c #f]
               . custom-entities)
   (custom-food  #:sprite           s 
@@ -2609,17 +2627,29 @@
                 #:name             n
                 #:tile             t
                 #:amount-in-world  world-amt
+                #:storable?        storable?
+                #:consumable?      consumable?
+                #:value            val
                 #:heals-by         heal-amt
                 #:respawn?         respawn?
+                #:on-pickup        pickup-func
+                #:on-store         store-func
+                #:on-drop          drop-func
                 #:components       (cons c custom-entities)))
 
-(define (carrot-stew #:sprite           [s carrotstew-sprite]
-                     #:position         [p (posn 0 0)]
-                     #:name             [n "Carrot Stew"]
+(define (carrot-stew #:name             [n "Carrot Stew"]
+                     #:sprite           [s carrotstew-sprite]
                      #:tile             [t 0]
+                     #:position         [p (posn 0 0)]
                      #:amount-in-world  [world-amt 0]
+                     #:storable?        [storable? #t]
+                     #:consumable?      [consumable? #t]
+                     #:value            [val    #f]
                      #:heals-by         [heal-amt 40]
                      #:respawn?         [respawn? #f]
+                     #:on-pickup        [pickup-func (do-nothing)]
+                     #:on-store         [store-func (do-nothing)]
+                     #:on-drop          [drop-func (do-nothing)]
                      #:components       [c #f]
                      . custom-entities)
   (custom-food  #:sprite           s 
@@ -2627,8 +2657,14 @@
                 #:name             n
                 #:tile             t
                 #:amount-in-world  world-amt
+                #:storable?        storable?
+                #:consumable?      consumable?
+                #:value            val
                 #:heals-by         heal-amt
                 #:respawn?         respawn?
+                #:on-pickup        pickup-func
+                #:on-store         store-func
+                #:on-drop          drop-func
                 #:components       (cons c custom-entities)))
 
 (define carrot-stew-recipe
@@ -2641,40 +2677,60 @@
 (define (random-food #:amount-in-world [amt 1]
                      #:position        [p (posn 0 0)]
                      #:tile            [t 0]
+                     #:storable?       [storable? #t]
+                     #:consumable?     [consumable? #t]
+                     #:value           [val    #f]
                      #:respawn?        [respawn? #f]
+                     #:on-pickup       [pickup-func (do-nothing)]
+                     #:on-store        [store-func (do-nothing)]
+                     #:on-drop         [drop-func (do-nothing)]
                      #:components      [c #f]
                      . custom-components)
   (define food-sets (list (list "Carrot" carrot-sprite 10)
                           (list "Fish"  fish-sprite 20)
                           (list "Carrot Stew" carrotstew-sprite 30)))
   (define choice (random (length food-sets)))
-  (custom-food #:name     (first (list-ref food-sets choice))
-               #:sprite   (second (list-ref food-sets choice))
-               #:heals-by (third (list-ref food-sets choice))
+  (custom-food #:name            (first (list-ref food-sets choice))
+               #:sprite          (second (list-ref food-sets choice))
+               #:heals-by        (third (list-ref food-sets choice))
                #:amount-in-world amt
-               #:position p
-               #:tile t
-               #:respawn? respawn?
-               #:components (cons c custom-components)))
+               #:position        p
+               #:tile            t
+               #:storable?       storable?
+               #:respawn?        respawn?
+               #:on-pickup       pickup-func
+               #:on-store        store-func
+               #:on-drop         drop-func
+               #:components      (cons c custom-components)))
 
 (define (random-coin #:amount-in-world [amt 1]
                      #:position        [p (posn 0 0)]
                      #:tile            [t 0]
-                     #:respawn?        [respawn? #f]
+                     #:respawn?        [respawn? #t]
+                     #:storable?       [storable? #t]
+                     #:consumable?     [consumable? #f]
+                     #:on-pickup       [pickup-function (do-nothing)]
+                     #:on-store        [store-func (do-nothing)]
+                     #:on-drop         [drop-func (do-nothing)]
                      #:components      [c #f]
                      . custom-components)
   (define coin-sets (list (list "Copper Coin" coppercoin-sprite 1)
                           (list "Silver Coin" silvercoin-sprite 10)
                           (list "Gold Coin"   goldcoin-sprite   25)))
   (define choice (random (length coin-sets)))
-  (custom-coin #:name     (first (list-ref coin-sets choice))
-               #:sprite   (second (list-ref coin-sets choice))
-               #:value    (third (list-ref coin-sets choice))
+  (custom-coin #:name            (first (list-ref coin-sets choice))
+               #:sprite          (second (list-ref coin-sets choice))
+               #:value           (third (list-ref coin-sets choice))
                #:amount-in-world amt
-               #:position p
-               #:tile t
-               #:respawn? respawn?
-               #:components (cons c custom-components)))
+               #:position        p
+               #:tile            t
+               #:respawn?        respawn?
+               #:storable        storable?
+               #:consumable?     consumable?
+               #:on-pickup       pickup-function
+               #:on-store        store-func
+               #:on-drop         drop-func
+               #:components      (cons c custom-components)))
 
 (define/contract (random-player-dialog-with name)
   (-> string? component-or-system?)

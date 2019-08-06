@@ -327,7 +327,7 @@
                 #:mouse-fire-button button
                 #:point-to-mouse?   ptm?
                 #:rapid-fire?       rf?
-                #:rarity            'common
+                #:rarity            rarity
                 ))
 
 (define (hammer-dart #:color             [c   'black]
@@ -373,7 +373,7 @@
                 #:mouse-fire-button button
                 #:point-to-mouse?   ptm?
                 #:rapid-fire?       rf?
-                #:rarity            'common
+                #:rarity            rarity
                 ))
 
 (define (star-bit-dart #:color             [c "green"]
@@ -418,7 +418,7 @@
                 #:mouse-fire-button button
                 #:point-to-mouse?   ptm?
                 #:rapid-fire?       rf?
-                #:rarity            'common
+                #:rarity            rarity
                 ))
 
 (define (energy-blast-dart  #:color             [c "green"]
@@ -466,7 +466,7 @@
                 #:mouse-fire-button button
                 #:point-to-mouse?   ptm?
                 #:rapid-fire?       rf?
-                #:rarity            'common
+                #:rarity            rarity
                 ))
 
 (define (energy

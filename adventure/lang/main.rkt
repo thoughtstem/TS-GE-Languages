@@ -1317,7 +1317,8 @@
                                                                                        known-loot-list
                                                                                        world-weapon-list
                                                                                        updated-food-list
-                                                                                       (cons ent custom-entities))))
+                                                                                       (flatten (cons ent custom-entities))
+                                                                                       )))
                                                                                        
   (define player-with-recipes-and-weapons
     (if p

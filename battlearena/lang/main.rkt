@@ -1204,6 +1204,9 @@
 
   )
 
+(define (spawn-top-on-current-tile g e)
+  (define to-spawn (get-storage-data "Top" e))
+  ((spawn-on-current-tile to-spawn) g (remove-storage "Top" e)))
 
 (define (tower #:weapon (weapon (custom-weapon))
                #:die-after (die-after 500))
@@ -1254,7 +1257,8 @@
                   (physical-collider)
                   (on-collide tower-name die)
                   (after-time die-after die)
-                  (on-start (spawn-on-current-tile tower-top-entity))))
+                  (storage "Top" tower-top-entity)
+                  (on-start spawn-top-on-current-tile)))
 
 
 (define (lava #:size size
@@ -1275,7 +1279,7 @@
 
 (define (wall-builder #:name              [n "Wall Builder"]
                       #:sprite            [s (wall)]
-                      #:icon              [i (make-icon "WALL" 'turquoise )]
+                      #:icon              [i (make-fancy-icon s)]
                       #:speed             [spd 10]
                       #:damage            [dmg 0]
                       #:range             [rng 5]
@@ -1389,8 +1393,7 @@
 
 (define (repeater #:name              [n "Repeater"]
                   #:sprite            [ds (rectangle 10 2 "solid" "green")]
-                  #:icon              [i (list (set-sprite-angle -45 ds)
-                                               (make-icon ""))]
+                  #:icon              [i (make-fancy-icon ds)]
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
@@ -1421,11 +1424,11 @@
                  #:rarity rarity))
 
 (define (spear #:name              [n "Spear"]
-               #:icon              [i [make-icon "SP" 'brown]]
                #:color             [c #f]
                #:sprite            [s (if c
                                           (apply-image-function (curry set-img-hue (name->hue c)) spear-sprite)
                                           spear-sprite)]
+               #:icon              [i (make-fancy-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1469,11 +1472,11 @@
                                                            (horizontal-flip-sprite)))))
 
 (define (sword #:name              [n "Sword"]
-               #:icon              [i [make-icon "SW" 'silver]]
                #:color             [c #f]
                #:sprite            [s (if c
                                           (apply-image-function (curry set-img-hue (name->hue c)) swinging-sword-sprite)
                                           swinging-sword-sprite)]
+               #:icon              [i (make-fancy-sword-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1516,11 +1519,11 @@
                #:components (every-tick (change-direction-by 15))))
 
 (define (paint-thrower #:name              [n "Paint Thrower"]
-                       #:icon              [i [make-icon "PT"]]
                        #:color             [c #f]
                        #:sprite            [s (if c
                                                   (apply-image-function (curry set-img-hue (name->hue c)) paint-sprite)
                                                   paint-sprite)]
+                       #:icon              [i (make-triple-icon s)]
                        #:damage            [dmg 5]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -1563,11 +1566,11 @@
                (every-tick (simple-scale-sprite 1.1))))
 
 (define (fire-magic #:name              [n "Fire Magic"]
-                    #:icon              [i [make-icon "FM" 'red]]
                     #:color             [c #f]
                     #:sprite            [s (if c
                                                (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
                                                flame-sprite)]
+                    #:icon              [i (make-triple-icon s)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -1614,11 +1617,11 @@
                (every-tick (simple-scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
-                   #:icon              [i [make-icon "IM" 'lightcyan]]
                    #:color             [c #f]
                    #:sprite            [s (if c
                                               (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
                                               ice-sprite)]
+                   #:icon              [i (make-triple-icon s)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -1667,11 +1670,11 @@
                (every-tick (simple-scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
-                     #:icon              [i [make-icon "SM" 'silver]]
                      #:color             [c #f]
                      #:sprite            [s (if c
                                                 (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
                                                 flying-sword-sprite)]
+                     #:icon              [i (make-triple-icon s)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -1716,11 +1719,11 @@
                (do-every 10 (change-direction-by-random -25 25))))
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
-                        #:icon              [i (make-icon "RoB" 'silver)]
                         #:color             [c #f]
                         #:sprite            [s (if c
                                                    (apply-image-function (curry set-img-hue (name->hue c)) flying-sword-sprite)
                                                    flying-sword-sprite)]
+                        #:icon              [i (make-ring-icon s)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -1766,11 +1769,11 @@
 
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
-                      #:icon              [i (make-icon "RoF" 'red)]
                       #:color             [c #f] 
                       #:sprite            [s (if c
                                                  (apply-image-function (curry set-img-hue (name->hue c)) flame-sprite)
                                                  flame-sprite)]
+                      #:icon              [i (make-ring-icon s)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -1801,11 +1804,11 @@
                  #:rarity rarity))
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
-                     #:icon              [i (make-icon "RoI" 'lightcyan)]
                      #:color             [c #f]
                      #:sprite            [s (if c
                                                 (apply-image-function (curry set-img-hue (name->hue c)) ice-sprite)
                                                 ice-sprite)]
+                     #:icon              [i (make-ring-icon s)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]
@@ -1853,8 +1856,8 @@
                                     (change-direction-by 10)))))
 
 (define (spear-tower #:name              [n "Spear Tower"]
-                     #:icon              [i (make-icon "ST" 'aqua)]
                      #:sprite            [s spear-sprite]
+                     #:icon              [i (make-tower-icon s (draw-entity (tower)))]
                      #:damage            [dmg 50]
                      #:durability        [dur 20]
                      #:speed             [spd 5]
@@ -1912,8 +1915,8 @@
   (rotate 30 (triangle 10 'solid 'gray)))
 
 (define (spike-mine #:name              [n "Spike Mine"]
-                    #:icon              [i (make-icon "SPM" 'coral)]
                     #:sprite            [s spike-mine-sprite]
+                    #:icon              [i (make-fancy-icon s)]
                     #:damage            [dmg 2]
                     #:durability        [dur 10]
                     #:speed             [spd 5]
@@ -1966,8 +1969,8 @@
                                               ))))
 
 (define (lava-pit #:name              [n "Lava Pit"]
-                  #:icon              [i (make-icon "LP" 'crimson)]
                   #:sprite            [s lava-sprite]
+                  #:icon              [i (make-fancy-icon s)]
                   #:size              [size 1]
                   #:damage            [dmg 10]
                   #:durability        [dur 10]
@@ -2026,8 +2029,8 @@
                ))
 
 (define (rocket-tower #:name              [n "Rocket Tower"]
-                      #:icon              [i (make-icon "RKT" 'chartreuse)]
                       #:sprite            [s rocket-sprite]
+                      #:icon              [i (make-tower-icon s (draw-entity (tower)))]
                       #:size              [size 1]
                       #:damage            [dmg 100]
                       #:durability        [dur 10]
@@ -2082,8 +2085,8 @@
                                                        #:range      rng)))))
 
 (define (repeater-tower #:name              [n "Repeater Tower"]
-                        #:icon              [i (make-icon "RPT" 'mediumorchid)]
                         #:sprite            [s (rectangle 10 2 "solid" "green")]
+                        #:icon              [i (make-tower-icon s (draw-entity (tower)))]
                         #:damage            [dmg 10]
                         #:durability        [dur 10]
                         #:speed             [spd 10]
@@ -2138,8 +2141,8 @@
                                                        #:range      rng)))))
 
 (define (dagger-tower #:name              [n "Dagger Tower"]
-                      #:icon              [i (make-icon "DT" 'mediumorchid)]
                       #:sprite            [s (scale 0.5 flying-sword-sprite)]
+                      #:icon              [i (make-tower-icon s (draw-entity (tower)))]
                       #:damage            [dmg 50]
                       #:durability        [dur 20]
                       #:speed             [spd 5]

@@ -1,6 +1,7 @@
 #lang racket
 
 (provide start-animal
+         start-animal-asp
          start-npc
          start-sea
          start-sea-npc
@@ -168,8 +169,47 @@
 (provide-strings red orange yellow green blue purple
                  pink lightgreen lightblue cyan magenta salmon)
 
-;start-c = avatar + foods (optional) + coins (optional) + enemies (optional)
+;start-animal = avatar + foods (optional) + coins (optional) + enemies (optional)
 (define-syntax start-animal
+  (syntax-rules ()
+    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (enemy-sprite ...))
+     (let ()
+       (define avatar
+         (app make-avatar avatar-sprite))
+       (define food-list
+         (list (app make-food food-sprite ) ...))
+       (define coin-list
+         (list (app make-coin coin-sprite ) ...))
+       (define enemy-list
+         (list (app make-enemy enemy-sprite ) ...))
+
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and collect coins"
+                            "ENTER to close dialogs"
+                            "I to open these instructions"
+                            "M to open and close the map"))
+
+       (survival-game #:bg           (custom-bg #:rows 2
+                                                #:columns 2)
+                       #:sky          #f
+                       #:starvation-rate 25
+                       #:avatar        avatar
+                       #:food-list     food-list
+                       #:coin-list     coin-list
+                       #:enemy-list    enemy-list
+                       #:score-prefix "Score"
+                       #:instructions instructions)
+       )]
+    [(start-animal)                                 (start-animal a:question-icon () () ())]
+    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
+    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
+    [(start-animal avatar-sprite (food-sprite ...)
+                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+    ))
+
+;start-animal-asp = avatar + foods (optional) + hurt-npc (optional) + enemies (optional)
+(define-syntax start-animal-asp
   (syntax-rules ()
     [(start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) (enemy-sprite ...))
      (let ()
@@ -207,7 +247,6 @@
     [(start-animal avatar-sprite (food-sprite ...)
                                  (npc-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) ())]
     ))
-    
 
 ; === START-NPC: HEAL YOUR FRIENDS GAME ===
 

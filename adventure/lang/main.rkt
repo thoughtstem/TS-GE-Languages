@@ -1317,7 +1317,8 @@
                                                                                        known-loot-list
                                                                                        world-weapon-list
                                                                                        updated-food-list
-                                                                                       (cons ent custom-entities))))
+                                                                                       (flatten (cons ent custom-entities))
+                                                                                       )))
                                                                                        
   (define player-with-recipes-and-weapons
     (if p
@@ -2289,7 +2290,7 @@
 
 (define (fire-magic #:name              [n "Fire Magic"]
                     #:sprite            [s flame-sprite]
-                    #:icon              [i (make-triple-icon s 'red)]
+                    #:icon              [i (make-triple-icon s)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]

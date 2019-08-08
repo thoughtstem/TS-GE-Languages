@@ -72,6 +72,25 @@
          (only-in lang/posn make-posn)
          )
 
+; ==== START OF ERROR PORT HACK ====
+(define default-error-handler (error-display-handler))
+
+(define (new-error-handler msg trace)
+  (displayln (first (shuffle (list "==== ERROR! YOUR CODE IS NOT PERFECT ===="
+                                   "==== IT'S OK, WE ALL MAKE MISTAKES ===="
+                                   "==== ARE YOU SURE THAT'S RIGHT? ===="
+                                   "==== IF AT FIRST YOU DON'T SUCCEED, TRY, TRY AGAIN ===="
+                                   "==== NEVER GIVE UP, NEVER SURRENDER ===="
+                                   "==== OOPS! SOMETHING WENT WRONG ===="
+                                   "==== AWESOME! A BUG! ===="
+                                   "==== PRO DEBUGGERS ARE PRO CODERS ===="))))
+  (default-error-handler msg trace)
+  )
+
+(error-display-handler new-error-handler)
+
+; ==== END OF ERROR PORT HACK ====
+
 (define STORABLE-ITEM-ID-COUNTER 0)
 
 (define (next-storable-item-id)
@@ -309,7 +328,8 @@
                                         "I to open these instructions"
                                         "Z to pick up items"
                                         "X to drop items"
-                                        "B to open and close backpack")))
+                                        "B to open and close backpack"
+                                        "M to open and close map")))
   (apply make-instructions i-list))
      
 ; ==== NEW HELPER SYSTEMS ====
@@ -899,7 +919,8 @@
   (define known-products-list (map recipe-product known-recipes-list))
 
   (define known-weapons-list (filter (curry get-storage "Weapon") known-products-list))
-
+  (define known-coins-list (filter (curry get-storage "value") known-products-list))
+  
   (define (known-weapon? e)
     (member (get-name e) (map get-name known-weapons-list)))
   
@@ -941,7 +962,9 @@
   (define bg-with-instructions
     (add-components bg-ent (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
                                    (spawn automated-instructions-entity 
-                                          #:relative? #f))))
+                                          #:relative? #f))
+                           (on-key 'm (open-mini-map #:close-key 'm))
+                    ))
   
   (define (add-random-start-pos e)
     (define world-amt (get-storage-data "amount-in-world" e))
@@ -1012,7 +1035,9 @@
                                                                (draw-counter-rpg #:prefix (~a prefix ": ") #:exact-floor? #t)
                                                                (do-font-fx)
                                                                ))
-                                 (map (curryr coin->component prefix) (remove-duplicates updated-coin-list name-eq?))
+                                 (map (curryr coin->component prefix) (remove-duplicates (append updated-coin-list
+                                                                                                 known-coins-list)
+                                                                                         name-eq?))
                                  (map (curry recipe->coin-system #:prefix prefix) (filter recipe-has-cost? known-recipes-list))))
  
   (define (spawn-many-on-current-tile e-list)
@@ -1086,7 +1111,8 @@
                                                #:rows    rows-from-bg
                                                #:columns columns-from-bg)
                            #f)
-              
+
+                       (mini-map bg-with-instructions #:close-key 'm)
                        bg-with-instructions))))
   
   (if headless
@@ -1545,8 +1571,7 @@
 ; ==== PREBUILT WEAPONS & DARTS ====
 (define (repeater #:name              [n "Repeater"]
                   #:sprite            [ds (rectangle 10 2 "solid" "green")]
-                  #:icon              [i (list (set-sprite-angle -45 ds)
-                                               (make-icon ""))]
+                  #:icon              [i (make-fancy-icon ds)]
                   #:speed             [spd 10]
                   #:damage            [dmg 10]
                   #:range             [rng 1000]
@@ -1574,8 +1599,8 @@
                  #:rarity rarity))
 
 (define (spear #:name              [n "Spear"]
-               #:icon              [i [make-icon "SP" 'brown]]
                #:sprite            [s spear-sprite]
+               #:icon              [i (make-fancy-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 5]
@@ -1619,8 +1644,8 @@
                                                            (horizontal-flip-sprite)))))
 
 (define (sword #:name              [n "Sword"]
-               #:icon              [i [make-icon "SW" 'silver]]
                #:sprite            [s swinging-sword-sprite]
+               #:icon              [i (make-fancy-sword-icon s)]
                #:damage            [dmg 25]
                #:durability        [dur 20]
                #:speed             [spd 0]
@@ -1682,8 +1707,8 @@
                #:components (on-start (random-size 0.5 1))))
 
 (define (acid-spitter  #:name              [n "Acid Spitter"]
-                       #:icon              [icon (make-icon "AS")]
                        #:sprite            [s   acid-sprite]
+                       #:icon              [icon (make-fancy-icon s)]
                        #:damage            [dmg 10]
                        #:durability        [dur 5]
                        #:speed             [spd 3]
@@ -1714,8 +1739,8 @@
                  #:rarity            rarity))
 
 (define (fire-magic #:name              [n "Fire Magic"]
-                    #:icon              [i [make-icon "FM" 'red]]
                     #:sprite            [s flame-sprite]
+                    #:icon              [i (make-triple-icon s)]
                     #:damage            [dmg 5]
                     #:durability        [dur 5]
                     #:speed             [spd 3]
@@ -1759,8 +1784,8 @@
                (every-tick (simple-scale-sprite 1.1))))
 
 (define (ice-magic #:name              [n "Ice Magic"]
-                   #:icon              [i [make-icon "IM" 'lightcyan]]
                    #:sprite            [s ice-sprite]
+                   #:icon              [i (make-triple-icon s)]
                    #:damage            [dmg 5]
                    #:durability        [dur 5]
                    #:speed             [spd 3]
@@ -1809,8 +1834,8 @@
                (every-tick (simple-scale-sprite 1.1))))
 
 (define (sword-magic #:name              [n "Sword Magic"]
-                     #:icon              [i [make-icon "SM" 'silver]]
                      #:sprite            [s flying-sword-sprite]
+                     #:icon              [i (make-triple-icon s)]
                      #:damage            [dmg 10]
                      #:durability        [dur 20]
                      #:speed             [spd 4]
@@ -1855,8 +1880,8 @@
                (do-every 10 (change-direction-by-random -25 25))))
 
 (define (ring-of-blades #:name              [n "Ring of Blades"]
-                        #:icon              [i (make-icon "RoB" 'silver)]
                         #:sprite            [s flying-sword-sprite]
+                        #:icon              [i (make-ring-icon s)]
                         #:damage            [dmg 10]
                         #:durability        [dur 20]
                         #:speed             [spd 10]
@@ -1902,8 +1927,8 @@
 
 
 (define (ring-of-fire #:name              [n "Ring of Fire"]
-                      #:icon              [i (make-icon "RoF" 'red)]
                       #:sprite            [s flame-sprite]
+                      #:icon              [i (make-ring-icon s)]
                       #:damage            [dmg 5]
                       #:durability        [dur 20]
                       #:speed             [spd 10]
@@ -1933,8 +1958,8 @@
                  #:rarity rarity))
 
 (define (ring-of-ice #:name              [n "Ring of Ice"]
-                     #:icon              [i (make-icon "RoI" 'lightcyan)]
                      #:sprite            [s ice-sprite]
+                     #:icon              [i (make-ring-icon s)]
                      #:damage            [dmg 5]
                      #:durability        [dur 20]
                      #:speed             [spd 10]

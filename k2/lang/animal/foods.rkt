@@ -2,7 +2,7 @@
 
 (provide (all-from-out "./animal-lang.rkt"
                        "./animal-asset-friendly-names.rkt")
-         (rename-out [start-animal start])
+         (rename-out [start-animal-asp start])
          rand
          )
 
@@ -22,7 +22,7 @@
 (require ratchet
            ratchet/util
            (rename-in "./animal-lang.rkt" 
-	              [start-animal start])
+	              [start-animal-asp start])
            "../icons.rkt"
            "./animal-asset-friendly-names.rkt"
            (prefix-in s: survival))

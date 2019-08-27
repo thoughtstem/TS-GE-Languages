@@ -23,6 +23,10 @@
 (module foods racket
   (require ts-kata-util  ;k2/lang/animal/foods
            )
+  (define-example-code ;#:with-test (test game-test)
+                       k2/lang/animal/foods
+                       hello-world
+                       (start))
 
   ; === ANIMAL/FOODS
   (define-example-code ;#:with-test (test game-test)

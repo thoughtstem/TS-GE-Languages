@@ -53,6 +53,9 @@
          custom-cutscene
          page
 
+         move-a-sprite
+         scale-a-sprite
+
          ;custom-food ;TODO: write contract and autoprovide
          ;custom-item
          ;if/r
@@ -85,6 +88,8 @@
                      (custom-item basic-item)
                      (custom-product basic-product)
                      )
+         image-or-images?
+         string-or-text-frame?
          )
 
 (require scribble/srcdoc)
@@ -911,32 +916,81 @@
             string?     (listof string?)
             text-frame? (listof text-frame?)))
 
+
+; ==== SPRITE MOTION FUNCTIONS ====
+
+(define (move-a-sprite as #:direction [dir 0] #:speed [spd 0])
+  (lambda (g e)
+    (define current-as (get-component e (curry component-eq? as)))
+    (if current-as
+        (let ([updated-sprite (move-sprite current-as
+                                           #:direction dir
+                                           #:speed spd)])
+          (update-entity e (curry component-eq? current-as)
+                         updated-sprite))
+        e)))
+
+(define (scale-a-sprite scale as)
+  (lambda (g e)
+    (define current-as (get-component e (curry component-eq? as)))
+    (if current-as
+        (let ([updated-sprite (~> current-as
+                                  (scale-xy scale _)
+                                  (multiply-x-offset scale _)
+                                  (multiply-y-offset scale _))])
+          (update-entity e (curry component-eq? current-as)
+                         updated-sprite))
+        e)))
+
 ; ===== CUT-SCENE =====
 ; This is basically a mode-lambda/game-engine friendly version of (above ...)
 ; It can take any combination of images, text, sprites, or listof sprites
 
 (define (page #:name         [name "Cut Scene"]
+              #:bg           [bg #f]
               #:bg-color     [bg-color (color 50 50 50)]
               #:border-color [border-color 'white]
-              ;#:game-width   [game-width 480]
-              ;#:game-height  [game-height 360]
+              #:duration     [duration #f]
               #:line-padding [line-padding 4]
+              #:mode         [mode 'still]
               . items
               )
+  (define bg-sprite (if bg
+                        (ensure-sprite bg)
+                        #f))
+
+  (define (motion-item? item)
+    (and (list? item)
+         ((listof sprite?) (first item))
+         ((or/c every-tick?
+                after-time?) (second item))))
+  
   ;item can be an image, text, sprite, or list of sprites
   (define (ensure-list-of-sprites item)
     (cond [(image-or-images? item)       (list (new-sprite item))]
-          [(string-or-text-frame? item)  (list (new-sprite item #:color 'yellow))]
+          [(string-or-text-frame? item)  (list (if (eq? mode 'star-wars)
+                                                   (text-sprite item #:font-size 14)
+                                                   (new-sprite item #:color 'yellow)))]
           [(animated-sprite? item)       (list item)]
           [((listof sprite?) (flatten item)) (map ensure-sprite (flatten item))]
+          [(motion-item? item)           (first item)]
           [else (error "That wasn't a valid cut-scene item!")]))
+
+  (define (get-motion-component item)
+    (and (motion-item? item)
+         (second item)))
   
   (define items-list
     (map ensure-list-of-sprites items))
 
+  (define motion-components
+    (filter identity (map get-motion-component items)))
+
   (define outer-border-img (square 1 'solid 'black))
   (define inner-border-img (square 1 'solid border-color))
   (define box-img (square 1 'solid bg-color))
+
+  ;(define space-bg (space-bg-sprite 480 360 100))
 
   ;(displayln "==== PRECOMPILING UI ====")
   (precompile! outer-border-img
@@ -944,18 +998,29 @@
                box-img)
   
   ;(displayln "==== PRECOMPILING PAGES ====")
-  (apply precompile! (flatten items-list)) ; Now works with sprites!
+  (apply precompile! (filter identity (flatten (append items-list
+                                                       bg-sprite)))) ; Now works with sprites!
   
 
   (define (get-sprite-height as)
     (* (image-height (pick-frame as
                                  (animated-sprite-current-frame as)))
        (get-y-scale as)))
+
+  (define (get-sprite-width as)
+    (* (image-width (pick-frame as
+                                 (animated-sprite-current-frame as)))
+       (get-x-scale as)))
   
   (define (get-largest-sprite-height list-of-sprites)
     (+ line-padding (apply max (map get-sprite-height list-of-sprites))))
+
+  (define (get-largest-sprite-width list-of-sprites)
+    (apply max (map get-sprite-width list-of-sprites)))
   
   (define total-height (apply + (map get-largest-sprite-height items-list)))
+  (define total-width (get-largest-sprite-width (flatten items-list)))
+  
   (define half-of-total (/ total-height 2))
   
   (define offset-items-list
@@ -974,22 +1039,76 @@
     (lambda (g e)
       (define G-WIDTH (game-width g))
       (define G-HEIGHT (game-height g))
+      (define OFFSET-WIDTH (+ (/ (- G-WIDTH total-width) 2) total-width))
+      (define OFFSET-HEIGHT (+ (/ (- G-HEIGHT total-height) 2) total-height))
+      (define modified-offset-items-list
+        (cond [(eq? mode 'star-wars)    (map (compose (curry change-y-offset (- OFFSET-HEIGHT 50))
+                                                      (curry set-sprite-layer "star-wars")) offset-items-list)]
+              [(eq? mode 'star-wars-zoom-out)     (map (compose (curry scale-xy 4)
+                                                      (curry multiply-x-offset 4)
+                                                      (curry multiply-y-offset 4))     offset-items-list)]
+              [(eq? mode 'scroll-up)    (map (curry change-y-offset OFFSET-HEIGHT)     offset-items-list)]
+              [(eq? mode 'scroll-down)  (map (curry change-y-offset (- OFFSET-HEIGHT)) offset-items-list)]
+              [(eq? mode 'scroll-right) (map (curry change-x-offset (- OFFSET-WIDTH))  offset-items-list)]
+              [(eq? mode 'scroll-left)  (map (curry change-x-offset OFFSET-WIDTH)      offset-items-list)]
+              [(eq? mode 'zoom-in)      (map (compose (curry scale-xy 0.25)
+                                                      (curry multiply-x-offset 0.25)
+                                                      (curry multiply-y-offset 0.25))  offset-items-list)]
+              [(eq? mode 'zoom-out)     (map (compose (curry scale-xy 4)
+                                                      (curry multiply-x-offset 4)
+                                                      (curry multiply-y-offset 4))     offset-items-list)]
+              [else offset-items-list]))
+      (define bg-scale (if bg-sprite
+                           (if (> (/ G-WIDTH G-HEIGHT) (/ (sprite-width bg-sprite) (sprite-height bg-sprite)))
+                               (/ G-WIDTH  (sprite-width bg-sprite))
+                               (/ G-HEIGHT (sprite-height bg-sprite)))
+                           1.0))
       (define sprites-list
-        (append offset-items-list
-                (bordered-box-sprite G-WIDTH G-HEIGHT #:color bg-color #:border-color border-color)))
+        (append modified-offset-items-list ;offset-items-list
+                (if bg-sprite
+                    (list (set-sprite-scale bg-scale bg-sprite))
+                    (bordered-box-sprite G-WIDTH G-HEIGHT #:color bg-color #:border-color border-color))))
       ;((change-sprite sprites-list) g e)))
       (~> e
           (remove-components _ animated-sprite?)
-          (add-components _ (reverse sprites-list)))))
+          (add-components _ (reverse sprites-list)
+                            motion-components))))
+
+  (define dir (cond [(eq? mode 'star-wars)                                 270]
+                    [(string-prefix? (symbol->string mode) "scroll-up")    270]
+                    [(string-prefix? (symbol->string mode) "scroll-down")  90]
+                    [(string-prefix? (symbol->string mode) "scroll-right") 0]
+                    [(string-prefix? (symbol->string mode) "scroll-left")  180]
+                    [else 0]))
+
+  (define spd (if (eq? mode 'star-wars)
+                  0.3
+                  1))
+  (define scroll-delay 1)
+  
+  (define (motion-fx g e)
+    
+    (cond [(or (string-prefix? (symbol->string mode) "scroll")
+               (eq? mode 'star-wars))          ((apply do-many (map (curry move-a-sprite
+                                                                           #:direction dir
+                                                                           #:speed spd) offset-items-list)) g e)]
+          [(eq? mode 'zoom-in)                 ((apply do-many (map (curry scale-a-sprite 1.01) offset-items-list)) g e)]
+          [(or (eq? mode 'zoom-out)
+               (eq? mode 'star-wars-zoom-out)) ((apply do-many (map (curry scale-a-sprite 0.99) offset-items-list)) g e)]
+          [else e]))
 
   (sprite->entity empty-image
                   #:name       name
                   #:position   (posn 0 0)
                   #:components (layer "ui")
-                               (hidden)                               
+                               (hidden)
+                               (storage "duration" duration)
                                (on-start (do-many (set-fullscreen-page)
-                                                  (go-to-pos 'center)  
-                                                  show))               
+                                                  (go-to-pos 'center) 
+                                                  (do-after-time scroll-delay (λ (g e)
+                                                                                (add-components e (every-tick motion-fx))))
+                                                  show))
+                               (if duration (after-time duration die) #f)
                                (on-key 'space die)
                                (on-key 'enter die)
                                ;(storable)   ;DON'T LEAVE THIS IN!
@@ -1009,8 +1128,16 @@
     (if (= current-scene-index (sub1 (length cut-scenes)))
         (die g e)
         (~> e
-            (remove-components _ animated-sprite?)
-            (add-components _ (get-components (list-ref cut-scenes next-scene-index) animated-sprite?))
+            (remove-components _ (or/c animated-sprite?
+                                       after-time?
+                                       every-tick?))
+            (add-components _ (get-components (list-ref cut-scenes next-scene-index) (or/c animated-sprite?
+                                                                                           every-tick?
+                                                                                           (and/c after-time?
+                                                                                                  (λ (c)
+                                                                                                    (not (eq? (after-time-func c) die))))))
+                            (unless (not (get-storage-data "duration" (list-ref cut-scenes next-scene-index)))
+                              (after-time (get-storage-data "duration" (list-ref cut-scenes next-scene-index)) (change-cutscene))))
             (update-entity _ counter? (counter next-scene-index))))))
 
 (define (custom-cutscene . pages)
@@ -1026,7 +1153,14 @@
       (define cut-scenes (get-storage-data "cut-scenes" e))
       (~> e
           (remove-components _ animated-sprite?)
-          (add-components _ (get-components (first cut-scenes) animated-sprite?)))))
+          (add-components _ (get-components (first cut-scenes) (or/c animated-sprite?
+                                                                     every-tick?
+                                                                     (and/c after-time?
+                                                                            (λ (c)
+                                                                              (not (eq? (after-time-func c) die))))))
+                            (unless (not (get-storage-data "duration" (first cut-scenes)))
+                              (after-time (get-storage-data "duration" (first cut-scenes)) (change-cutscene))))
+          )))
 
   (define (bake-and-store-pages)
     (lambda (g e)

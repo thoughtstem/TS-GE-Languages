@@ -151,7 +151,7 @@
 
   (cc-superimpose
     (text "I am in a green box")
-    (rectangle 200 200 
+    (rectangle 300 150 
                #:border-width 10
                #:border-color "green")))
 
@@ -233,7 +233,7 @@
     (scale apples-bananas 0.5)))
 
 
-(new-stimuli data-sci-plots-003 "Render two charts beside each other, at a slight rotation.  One should show that there are 100 apples and 200 bananas.  The other should show that there are 1000 Macs and 1000 PCs")
+(new-stimuli data-sci-plots-003 "Render two charts beside each other, at a slight rotation.  One should show that there are 100 apples and 200 bananas.  The other should show that there are 1000 Macs and 1000 PCs.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -370,7 +370,7 @@
 
 ;Data manipulation
 
-(new-stimuli data-sci-data-100 "Map add1 over a list of numbers from 1 and 5 to get the numbers 2 through 6")
+(new-stimuli data-sci-data-100 "Map add1 over a list of numbers from 1 and 5 to get the numbers 2 through 6.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -380,7 +380,7 @@
   (map add1 (list 1 2 3 4 5)))
 
 
-(new-stimuli data-sci-data-101 "Map sub1 over the numbers from 0 to 100 to get the numbers -1 through 9")
+(new-stimuli data-sci-data-101 "Map sub1 over the numbers from 0 to 100 to get the numbers -1 through 98.")
 (define-example-code data-sci data-sci-data-101
    (map sub1 
         (range 100)))
@@ -395,23 +395,23 @@
    (map rectangle (range 10) 
                   (range 10)))
 
-(new-stimuli data-sci-data-104 "Map the string-upcase function over a list of six lowercase strings of your choice")
+(new-stimuli data-sci-data-104 "Map the string-upcase function over a list of six lowercase strings of your choice.")
 (define-example-code data-sci data-sci-data-104
    (map string-upcase '("apple" "dog" "banana" "cat" "orange" "fish")))
 
-(new-stimuli data-sci-data-105 "Map the string-downcase function over a list of six uppercase strings of your choice")
+(new-stimuli data-sci-data-105 "Map the string-downcase function over a list of six uppercase strings of your choice.")
 (define-example-code data-sci data-sci-data-105
    (map string-downcase '("APPLE" "DOG" "BANANA" "CAT" "ORANGE" "FISH")))
 
-(new-stimuli data-sci-data-106 "Map the even? function over a list of numbers from 0 to 99")
+(new-stimuli data-sci-data-106 "Map the even? function over a list of numbers from 0 to 99.")
 (define-example-code data-sci data-sci-data-106
    (map even? (range 100)))
 
-(new-stimuli data-sci-data-107 "Map the negate function over three booleans")
+(new-stimuli data-sci-data-107 "Map the not function over three booleans.")
 (define-example-code data-sci data-sci-data-107
-   (map negate '(#f #t #f)))
+   (map not '(#f #t #f)))
 
-(new-stimuli data-sci-data-108 "Find the sum of all the numbers from 0 to 99")
+(new-stimuli data-sci-data-108 "Find the sum of all the numbers from 0 to 99.")
 (define-example-code data-sci data-sci-data-108
    (apply + (range 100)))
 
@@ -562,7 +562,7 @@
   (drop data 5))
 
 
-(new-stimuli data-sci-real-data-503 "Print the second 5 rows of the large-cities data set")
+(new-stimuli data-sci-real-data-503 "Print the second 5 rows of the large-cities data set.")
 (define-example-code 
   
   data-sci
@@ -598,7 +598,7 @@
   (take city-names 5))
 
 
-(new-stimuli data-sci-real-data-506 "Print the first five city names in the large-cities data set in reverse order")
+(new-stimuli data-sci-real-data-506 "Print the first five city names in the large-cities data set in reverse order.")
 (define-example-code 
   
   data-sci
@@ -611,7 +611,7 @@
   (reverse first-5-city-names))
 
 
-(new-stimuli data-sci-real-data-507 "Sort the data alphabetically by city name and print it")
+(new-stimuli data-sci-real-data-507 "Sort the data alphabetically by city name and print it.")
 (define-example-code 
   
   data-sci
@@ -622,7 +622,7 @@
   
   sorted-data)
 
-(new-stimuli data-sci-real-data-508 "Print only the populations from the large-cities data set")
+(new-stimuli data-sci-real-data-508 "Print only the populations from the large-cities data set.")
 (define-example-code 
   
   data-sci
@@ -654,7 +654,7 @@
              #:height 700
              #:width 700))
 
-(new-stimuli data-sci-real-data-600 "Print the first ten rows of the titanic data set")
+(new-stimuli data-sci-real-data-600 "Print the first ten rows of the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -667,7 +667,7 @@
 
   first-10-rows)
 
-(new-stimuli data-sci-real-data-601 "Print only the names of everyone in the titanic data set")
+(new-stimuli data-sci-real-data-601 "Print only the names of everyone in the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -680,7 +680,7 @@
 
   names)
 
-(new-stimuli data-sci-real-data-602 "Print the number of the people under the age of 10 in the titanic data set")
+(new-stimuli data-sci-real-data-602 "Print the number of the people under the age of 10 in the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -696,7 +696,7 @@
 
   (length under-10))
 
-(new-stimuli data-sci-real-data-603 "Print the names of the people under the age of 30 in the titanic data set")
+(new-stimuli data-sci-real-data-603 "Print the names of the people under the age of 30 in the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -714,7 +714,7 @@
 
   names)
 
-(new-stimuli data-sci-real-data-604 "Print the average age of everyone over thirty in the titanic data set")
+(new-stimuli data-sci-real-data-604 "Print the average age of everyone over thirty in the titanic data set.")
 (define-example-code 
 ;  #:with-test (test no-test)
   
@@ -767,7 +767,7 @@
 ;Add in XYZ datasets...
 
 #;
-(new-stimuli data-sci-real-data-610 "Make a histogram showing the titanic deaths sorted by age")
+(new-stimuli data-sci-real-data-610 "Make a histogram showing the titanic deaths sorted by age.")
 #;
 (define-example-code 
 ;  #:with-test (test no-test)

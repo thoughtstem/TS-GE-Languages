@@ -37,7 +37,7 @@
 
 ;Function defs
 
-(new-stimuli func-def-000 "Define a function named foo that returns the number 42.  Call it after you define it.")
+(new-stimuli func-defs-000 "Define a function named foo that returns the number 42.  Call it after you define it.")
 (define-example-code #:with-test (test begin)
   fundamentals func-defs-000 
 
@@ -99,7 +99,7 @@
   fundamentals func-defs-005
 
   (define (add-1-and-square x)
-    (add1 (sqr x)))
+    (sqr (add1 x)))
 
   (add-1-and-square -1)
   (add-1-and-square -5)
@@ -178,7 +178,7 @@
   (define (colored-circle-triangle b color)
     (if b 
       (circle 40 'solid color)
-      (star 40 'solid color)))
+      (triangle 40 'solid color)))
 
   (colored-circle-triangle #t "red")
   (colored-circle-triangle #t "orange")
@@ -189,7 +189,7 @@
 
 
 
-(new-stimuli func-defs-012 "Define a function called sum-or-diff that takes two numbers and a boolean.  If the boolean is true, the function should return return the sum of the two numbers.  Otherwise, it should return the difference.  Call it 5 times on a variety of inputs.")
+(new-stimuli func-defs-012 "Define a function called sum-or-diff that takes two numbers and a boolean.  If the boolean is true, the function should return the sum of the two numbers.  Otherwise, it should return the difference.  Call it 5 times on a variety of inputs.")
 (define-example-code #:with-test (test begin)
   fundamentals func-defs-012
 
@@ -208,7 +208,7 @@
 
 
 
-(new-stimuli func-defs-013 "Define a function called max-or-min that takes two numbers and a boolean.  If the boolean is true, the function should return return greater of the two numbers.  Otherwise, it should return the lesser.  Call it 5 times on a variety of inputs.")
+(new-stimuli func-defs-013 "Define a function called max-or-min that takes two numbers and a boolean.  If the boolean is true, the function should return the greater of the two numbers.  Otherwise, it should return the lesser.  Call it 5 times on a variety of inputs.")
 (define-example-code #:with-test (test begin)
   fundamentals func-defs-013
 

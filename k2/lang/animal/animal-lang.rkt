@@ -5,6 +5,7 @@
          start-npc
          start-sea
          start-sea-npc
+         start-recycle
          (all-from-out racket))
 
 (require survival
@@ -141,6 +142,18 @@
                                                                       #:value  2
                                                                       #:amount-in-world (or amount 5) 
                                                                       #:name "Silver")]
+    [(fast-sprite-equal? (call-if-proc sprite) a:trash) (custom-coin #:sprite s
+                                                                      #:value  10
+                                                                      #:amount-in-world (or amount 1) 
+                                                                      #:name "Trash Bag")]
+    [(fast-sprite-equal? (call-if-proc sprite) a:can) (custom-coin #:sprite s
+                                                                      #:value  5
+                                                                      #:amount-in-world (or amount 5) 
+                                                                      #:name "Aluminum Can")]
+    [(fast-sprite-equal? (call-if-proc sprite) a:bottle) (custom-coin #:sprite s
+                                                                      #:value  2
+                                                                      #:amount-in-world (or amount 10) 
+                                                                      #:name "Plastic Bottle")]
     [else  (custom-coin #:sprite s
                         #:value 1
                         #:amount-in-world (or amount 10))]))
@@ -473,7 +486,45 @@
                     (coin-sprite ...))  (start-sea-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...) (coin-sprite ...))]
     ))
 
+;start-recycle = avatar + foods (optional) + coins (optional) + hurt-npc (optional)
+(define-syntax start-recycle
+  (syntax-rules ()
+    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (npc-sprite ...))
+     (let ()
+       (define avatar
+         (app make-healing-avatar avatar-sprite))
+       (define food-list
+         (list (app make-food food-sprite ) ...))
+       (define coin-list
+         (list (app make-coin coin-sprite ) ...))
+       (define npc-list
+         (list (app make-hurt-animal npc-sprite ) ...))
 
+       (define instructions
+         (make-instructions "ARROW KEYS to move"
+                            "SPACE to eat food and collect trash"
+                            "ENTER to close dialogs"
+                            "H to heal animals"
+                            "I to open these instructions"
+                            "M to open and close the map"))
+
+       (survival-game #:bg           (custom-bg #:rows 2
+                                                #:columns 2)
+                       #:sky          #f
+                       #:starvation-rate 25
+                       #:avatar        avatar
+                       #:food-list     food-list
+                       #:npc-list      npc-list
+                       #:coin-list    coin-list
+                       #:score-prefix "Trash Collected"
+                       #:instructions instructions)
+       )]
+    [(start-animal)                                 (start-animal a:question-icon () () ())]
+    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
+    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
+    [(start-animal avatar-sprite (food-sprite ...)
+                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+    ))
 
 (define-syntax-rule (top-level lines ...)
   (let ()

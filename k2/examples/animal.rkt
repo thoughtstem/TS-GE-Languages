@@ -90,9 +90,9 @@
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/friends
                        animal-009
-                       (start (sheep green)
+                       (start (turkey green)
                               (onion apple)
-                              (turkey rand)))
+                              (sheep rand)))
 
   (define-example-code ;#:with-test (test game-test)
                        k2/lang/animal/friends

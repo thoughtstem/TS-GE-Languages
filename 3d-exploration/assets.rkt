@@ -1,14 +1,12 @@
 #lang at-exp racket
 
-(require
-  (only-in ts-kata-util/assets/main
-           define-assets-from
-           )
-  (rename-in vr-engine
-             [scale vr:scale]
-             [color vr:color])
-  racket/runtime-path
-  )
+(require define-assets-from
+           
+         (rename-in vr-engine
+                    [scale vr:scale]
+                    [color vr:color])
+         racket/runtime-path
+         )
 
 (define-assets-from "assets")
 

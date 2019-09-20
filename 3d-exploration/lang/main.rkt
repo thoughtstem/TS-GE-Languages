@@ -29,7 +29,7 @@
         #:ocean          [ocean any/c]
         #:sky-objects    [sky-objects any/c]
         #:ground-objects [ground-objects any/c])
-        ;#:rest          [more-objects
+        #:rest          [more-objects any/c]
        [returns any/c])
 
     @{The top -level function for the 3d-explotation languag.

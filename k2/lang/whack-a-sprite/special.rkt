@@ -1,5 +1,5 @@
 #lang racket
-
+#|
 (provide (all-from-out "./animal-lang.rkt"
                        "../animal/animal-asset-friendly-names.rkt")
          (rename-out [start-animal-asp start])
@@ -68,3 +68,4 @@
     [rand     ? question-icon]))
 
 
+|#

@@ -56,6 +56,8 @@
          move-a-sprite
          scale-a-sprite
 
+         (struct-out motion-item)
+
          ;custom-food ;TODO: write contract and autoprovide
          ;custom-item
          ;if/r
@@ -942,6 +944,9 @@
                          updated-sprite))
         e)))
 
+; ==== MOTION-ITEM STRUCT ====
+(struct motion-item (sprites delay motion-func start-func in-line?))
+
 ; ===== CUT-SCENE =====
 ; This is basically a mode-lambda/game-engine friendly version of (above ...)
 ; It can take any combination of images, text, sprites, or listof sprites
@@ -958,12 +963,6 @@
   (define bg-sprite (if bg
                         (ensure-sprite bg)
                         #f))
-
-  (define (motion-item? item)
-    (and (list? item)
-         ((listof sprite?) (first item))
-         ((or/c every-tick?
-                after-time?) (second item))))
   
   ;item can be an image, text, sprite, or list of sprites
   (define (ensure-list-of-sprites item)
@@ -973,24 +972,28 @@
                                                    (new-sprite item #:color 'yellow)))]
           [(animated-sprite? item)       (list item)]
           [((listof sprite?) (flatten item)) (map ensure-sprite (flatten item))]
-          [(motion-item? item)           (first item)]
+          ;[(motion-item? item)           (first item)]
+          [(motion-item? item)             (motion-item-sprites item)]
           [else (error "That wasn't a valid cut-scene item!")]))
-
-  (define (get-motion-component item)
-    (and (motion-item? item)
-         (second item)))
+         
+  (define (motion-item->motion-component item)
+    (define delay (motion-item-delay item))
+    (define motion-f (motion-item-motion-func item))
+    (after-time delay (λ (g e)
+                        (add-components e (every-tick motion-f)))))
   
   (define items-list
     (map ensure-list-of-sprites items))
 
   (define motion-components
-    (filter identity (map get-motion-component items)))
+    (map motion-item->motion-component (filter motion-item? items)))
+
+  (define start-functions
+    (map motion-item-start-func (filter motion-item? items)))
 
   (define outer-border-img (square 1 'solid 'black))
   (define inner-border-img (square 1 'solid border-color))
   (define box-img (square 1 'solid bg-color))
-
-  ;(define space-bg (space-bg-sprite 480 360 100))
 
   ;(displayln "==== PRECOMPILING UI ====")
   (precompile! outer-border-img
@@ -1002,10 +1005,20 @@
                                                        bg-sprite)))) ; Now works with sprites!
   
 
+  (define (in-line-item? motion-item)
+    (motion-item-in-line? motion-item))
+  
+  (define list-of-floating-motion-sprites
+    (flatten (map ensure-list-of-sprites (filter (and/c motion-item?
+                                                        (not/c in-line-item?))
+                                                 items))))
+  
   (define (get-sprite-height as)
-    (* (image-height (pick-frame as
+    (if (member as list-of-floating-motion-sprites component-eq?) ;ignore non in-line motion items
+        0
+        (* (image-height (pick-frame as
                                  (animated-sprite-current-frame as)))
-       (get-y-scale as)))
+           (get-y-scale as))))
 
   (define (get-sprite-width as)
     (* (image-width (pick-frame as
@@ -1013,7 +1026,10 @@
        (get-x-scale as)))
   
   (define (get-largest-sprite-height list-of-sprites)
-    (+ line-padding (apply max (map get-sprite-height list-of-sprites))))
+    (define max-height (apply max (map get-sprite-height list-of-sprites)))
+    (if (> max-height 0)
+        (+ line-padding max-height)
+        0))
 
   (define (get-largest-sprite-width list-of-sprites)
     (apply max (map get-sprite-width list-of-sprites)))
@@ -1033,7 +1049,8 @@
                                          half-height-item
                                          (- half-of-total)
                                          (get-y-offset s)) s))
-                      item)))))
+                      item)
+                 ))))
 
   (define (set-fullscreen-page)
     (lambda (g e)
@@ -1072,7 +1089,11 @@
       (~> e
           (remove-components _ animated-sprite?)
           (add-components _ (reverse sprites-list)
-                            motion-components))))
+                            motion-components
+                            ;on-start-components
+                            )
+          ((apply do-many start-functions) g _)
+          )))
 
   (define dir (cond [(eq? mode 'star-wars)                                 270]
                     [(string-prefix? (symbol->string mode) "scroll-up")    270]
@@ -1133,6 +1154,7 @@
                                        every-tick?))
             (add-components _ (get-components (list-ref cut-scenes next-scene-index) (or/c animated-sprite?
                                                                                            every-tick?
+                                                                                           on-start?
                                                                                            (and/c after-time?
                                                                                                   (λ (c)
                                                                                                     (not (eq? (after-time-func c) die))))))
@@ -1165,7 +1187,9 @@
   (define (bake-and-store-pages)
     (lambda (g e)
       (define (bake-page page)
-        ((on-start-func (get-component page on-start?)) g page))
+        (~> page
+            ((apply do-many (map on-start-func (get-components page on-start?))) g _)
+            (remove-components _ on-start?)))
       (define baked-pages (map bake-page pages-or-default))
       (add-components e (storage "cut-scenes" baked-pages))))
   
@@ -1946,59 +1970,6 @@
                 #:on-store          store-func 
                 #:on-drop           drop-func 
                 #:components        (cons c custom-components)))
-
-
-#;(define/contract/doc (custom-food #:entity           [base-entity (carrot-entity)]
-                                  #:sprite           [s #f]
-                                  #:position         [p #f]
-                                  #:name             [n #f]
-                                  #:tile             [t #f]
-                                  #:amount-in-world  [world-amt 1]
-                                  #:heals-by         [heal-amt 10]
-                                  #:respawn?         [respawn? #t]
-                                  #:components       [c #f]
-                                  . custom-entities)
-  (->i () (#:entity     [entity entity?]
-           #:sprite     [sprite (or/c sprite? (listof sprite?))]
-           #:position   [position posn?]
-           #:name       [name string?]
-           #:tile       [tile number?]
-           #:amount-in-world [amount-in-world number?]
-           #:heals-by   [heal-amt number?]
-           #:respawn?   [respawn? boolean?]
-           #:components [first-component  component-or-system?])
-       #:rest [more-components (listof component-or-system?)]
-       [returns entity?])
-
-  @{Returns a custom food, which will be placed into the world
-              automatically if it is passed into @racket[adventure-game]
-              via the @racket[#:food-list] parameter.}
-  
-  (define sprite (cond [(image? s)           (new-sprite s)]
-                       [(animated-sprite? s) s             ]
-                       [else              #f]))
-  (define name   (if n (entity-name n) #f))
-  (define tile   (if t (active-on-bg t) #f))
-  (define new-entity (~> base-entity
-                         (safe-update-entity _ animated-sprite? sprite)
-                         (safe-update-entity _ posn? p)
-                         (safe-update-entity _ entity-name? name)
-                         (safe-update-entity _ active-on-bg? tile)
-                         (add-components _ (storage "amount-in-world" world-amt)
-                                           (storage "heals-by"        heal-amt)
-                                           ;(static)
-                                           (cons c custom-entities))))
-  (if respawn?
-      (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
-                                                                                                  (not/c bg?))))
-                                         (do-many (respawn 'anywhere)
-                                                  (active-on-random))))
-      (add-components new-entity (on-key 'space #:rule (and/r near-player?
-                                                              (nearest-to-player? #:filter (and/c (has-component? on-key?)
-                                                                                                  (not/c bg?))))
-                                         die))))
-
 
 (define/contract/doc (custom-product  #:name              [n "Carrot Stew"]
                                       #:sprite            [s carrotstew-sprite]

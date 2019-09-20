@@ -5,10 +5,10 @@
 
 (require vr-engine
          "../assets.rkt"
-         ;ts-kata-util
+         ts-kata-util
          )
 
-(provide exploration-scene
+(provide ;exploration-scene
          random-scale
          random-color
          random-rotation)
@@ -18,11 +18,23 @@
   (real->double-flonum (/ (random  (exact-round (* min factor)) (exact-round (* max factor))) factor)))
 
 ; ==== EXPLORATION SCENE =====
-(define (exploration-scene #:environment    [environment (basic-forest)]
-                           #:ocean          [ocean #f]
-                           #:sky-objects    [sky-objects '()]
-                           #:ground-objects [ground-objects '()]
-                           . other-entities)
+(define/contract/doc (exploration-scene #:environment    [environment (basic-forest)]
+                                        #:ocean          [ocean #f]
+                                        #:sky-objects    [sky-objects '()]
+                                        #:ground-objects [ground-objects '()]
+                                        . other-entities)
+  ; === TODO: Fix contract
+  (->i ()
+       (#:environment    [environment any/c]
+        #:ocean          [ocean any/c]
+        #:sky-objects    [sky-objects any/c]
+        #:ground-objects [ground-objects any/c])
+        ;#:rest          [more-objects
+       [returns any/c])
+
+    @{The top -level function for the 3d-explotation languag.
+         Can be run with no parameters to get a basic, default explorable world.}
+  
   (define (randomize-sky-position e)
     (define old-attrs (entity-attrs e))
     (define (position-attribute? attr)

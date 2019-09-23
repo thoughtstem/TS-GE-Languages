@@ -6,7 +6,8 @@
 (require adventure
          ratchet/util
          (for-syntax racket)
-         (prefix-in a: "./asset-friendly-names.rkt"))
+         (prefix-in a: "./asset-friendly-names.rkt")
+         (only-in racket/gui make-font))
 
 (define (fast-sprite-equal? s1 s2)
     (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
@@ -199,34 +200,187 @@
                                   avoidables-list
                                   specials-list))
        
-       (define instructions
-         (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food and collect coins"
-                            "ENTER to close dialogs"
-                            "I to open these instructions"
-                            "M to open and close the map"))
+       (define instructions-entity
+         (make-instructions "CLICK on the good things."
+                            "AVOID the bad things."
+                            "WIN by getting 1000 points."
+                            "PRESS I to open these instructions."))
 
        (define tm-entity
          (time-manager-entity
-          #:components (on-rule (and/r (reached-multiple-of? 10)
+          #:components (on-rule (and/r (reached-multiple-of? 20)
                                        (λ (g e) (not (get-entity "collectible" g))))
-                                (do-many (spawn (λ()(first (shuffle collectibles-list))))
-
+                                (do-many (if (empty? collectibles-list)
+                                             (λ (g e) e)
+                                             (spawn (λ()(first (shuffle collectibles-list)))))
+                                         
                                          ))
           (on-rule (reached-game-count? 500)
                    (λ (g e)
                      (add-components e
+                                     (spawn-once (toast-entity "==== LEVEL 2 ===="))
                                      (on-rule (reached-multiple-of? 100)
-                                              (do-many (spawn (λ() (first (shuffle avoidables-list))))
-
+                                              (do-many (if (empty? collectibles-list)
+                                                           (λ (g e) e)
+                                                           (spawn (λ() (first (shuffle avoidables-list)))))
                                                        ))
-                                     )))))
+                                     (on-rule (and/r (reached-multiple-of? 20)
+                                                     (λ (g e) (<= (length (get-entities "collectible" g)) 2)))
+                                              (if (empty? collectibles-list)
+                                                  (λ (g e) e)
+                                                  (spawn (λ() (first (shuffle collectibles-list)))))))
+                                     ))
+
+          (on-rule (reached-game-count? 1000)
+                   (λ (g e)
+                     (add-components e
+                                     (spawn-once (toast-entity "==== LEVEL 3 ===="))
+                                     (on-rule (reached-multiple-of? 100)
+                                              (do-many (if (empty? collectibles-list)
+                                                           (λ (g e) e)
+                                                           (spawn (λ() (first (shuffle avoidables-list)))))
+                                                       ))
+                                     (on-rule (and/r (reached-multiple-of? 20)
+                                                     (λ (g e) (<= (length (get-entities "collectible" g)) 4)))
+                                              (if (empty? collectibles-list)
+                                                  (λ (g e) e)
+                                                  (spawn (λ() (first (shuffle collectibles-list)))))))
+                                     ))
+
+          ))
+
+       ; ======= START OF SCORE CODE =========
+       (define score-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern))
+       (define bold-font (make-font #:size 13 #:face MONOSPACE-FONT-FACE #:family 'modern #:weight 'bold))
+
+       (register-fonts! bold-font)
+
+       (define (change-text-sprite s)
+         (lambda (g e)
+           (define current-sprite (get-component e string-animated-sprite?))
+           (update-entity e (is-component? current-sprite)
+                          s)))
+
+       (define (do-font-fx)
+         (lambda (g e)
+           (define current-sprite (get-component e string-animated-sprite?))
+           (define current-text-frame (render-text-frame current-sprite))
+           (define regular-text-frame (~> current-text-frame
+                                          (set-text-frame-font score-font _)
+                                          (set-text-frame-color 'yellow _)))
+           (define bold-text-frame (~> current-text-frame
+                                       (set-text-frame-font bold-font _)
+                                       (set-text-frame-color 'white _)))
+           (~> e
+               (update-entity _ (is-component? current-sprite)
+                              (new-sprite (list bold-text-frame
+                                                regular-text-frame)
+                                          10
+                                          #:scale 1.1
+                                          ))
+               (add-components _ (after-time 20 (change-text-sprite (new-sprite regular-text-frame)))))))
+
+
+       (define (start-dead-component? c)
+         (and (on-start? c)
+              (eq? (on-start-func c) die)))
+
+       (define (collectible-clicked? g e)
+         (define collect-broadcast (get-entity "Collect Broadcast" g))
+         (and collect-broadcast
+              (get-component collect-broadcast start-dead-component?)))
+
+       (define (avoidable-clicked? g e)
+         (define avoid-broadcast (get-entity "Avoid Broadcast" g))
+         (and avoid-broadcast
+              (get-component avoid-broadcast start-dead-component?)))
+
+       (define (special-clicked? g e)
+         (define special-broadcast (get-entity "Special Broadcast" g))
+         (and special-broadcast
+              (get-component special-broadcast start-dead-component?)))
+
+       (define (score-entity [prefix "Points"])
+         (define counter-sprite
+           (append (list (new-sprite (~a (string-titlecase prefix) ": 0")
+                                     #:color 'yellow))
+                   (bordered-box-sprite (* 10 (+ 7 (string-length prefix))) 24)
+                   ))
+         (define (special-update-counter g e)
+           (define special-broadcast (get-entity "Special Broadcast" g))
+           (define special-value (get-storage-data "Value" special-broadcast))
+           ((change-counter-by special-value) g e))
+
+         (define (game-won? g e)
+           (>= (get-counter e) 2000))
+
+         (define win-page
+           (remove-components
+            (page (text-sprite "YOU WIN!" #:font-size 24 #:color 'green)
+                  ""
+                  ""
+                  ""
+                  (list (text-sprite  "(This game will self destruct in     seconds)")
+                        (text-sprite (list
+                                      "                                             "
+                                      "                                 10          "
+                                      "                                 10          "
+                                      "                                  9          "
+                                      "                                  9          "
+                                      "                                  8          "
+                                      "                                  8          "
+                                      "                                  7          "
+                                      "                                  7          "
+                                      "                                  6          "
+                                      "                                  6          "
+                                      "                                  5          "
+                                      "                                  5          "
+                                      "                                  4          "
+                                      "                                  4          "
+                                      "                                  3          "
+                                      "                                  3          "
+                                      "                                  2          "
+                                      "                                  2          "
+                                      "                                  1          "
+                                      "                                  1          ")
+                                     #:font-weight 'bold
+                                     #:mode 'blink
+                                     #:delay 20))
+                  #:duration 440)
+            on-key?))
+
+         (precompile! win-page)
+    
+         (sprite->entity counter-sprite
+                         #:name       "score"
+                         #:position   (posn 330 20)
+                         #:components (static)
+                         (counter 0)
+                         (layer "ui")
+                         (observe-change (λ (g e)
+                                           (get-counter e))
+                                         (λ (g e1 e2)
+                                           ((do-many (draw-counter-rpg #:prefix (~a (string-titlecase prefix) ": "))
+                                                     (do-font-fx)) g e2)))
+                         (on-rule collectible-clicked? (change-counter-by 100))
+                         (on-rule avoidable-clicked? (change-counter-by -50))
+                         (on-rule special-clicked? special-update-counter)
+                         (observe-change game-won?
+                                         (if/r game-won?
+                                               (do-many (spawn win-page)
+                                                        (do-after-time 440 (λ (g e) (/ 0 0)))
+                                                        )))
+                         ))
+       ; ======= END OF SCORE CODE =========
 
        (define bg-entity
          (basic-bg #:image (crop 0 0 640 480 FOREST-BG)
                    #:rows 1
-                   #:columns 1))
-
+                   #:columns 1
+                   #:components (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
+                                        (spawn instructions-entity
+                                               #:relative? #f))))
+         
        (define trees-list
          (map (curryr remove-component physical-collider?)
               (filter (λ(e)
@@ -238,6 +392,8 @@
        
        (apply start-game
               (flatten (list tm-entity
+                             (score-entity) ;note: use #:prefix for future skinning
+                             instructions-entity
                              pointer
                              trees-list
                              bg-entity)))
@@ -248,74 +404,6 @@
     [(start-whack-a-sprite pointer-sprite (collectible-sprite ...)
                            (avoidable-sprite ...)) (start-whack-a-sprite pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
     ))
-
-; === START-NPC: HEAL YOUR FRIENDS GAME ===
-
-(define healed-broadcast
-    (sprite->entity empty-image
-                    #:name "NPC Healed Broadcast"
-                    #:position (posn 0 0)
-                    #:components (on-start die)))
-
-(define (health-at-max? g e)
-  (define h (get-health e))       ;(get-storage-data "health-stat" e))
-  (define max-h (get-storage-data "max-health-stat" e))
-  (and h
-       (= h max-h)))
-
-(define (spawn-message-when-healed)
-  (define healed-toast (toast-entity "HEALED" #:color 'green))
-  (precompile! healed-toast)
-  (observe-change health-at-max?
-                  (λ (g e1 e2)
-                    (if (health-at-max? g e2)
-                        ((do-many
-                          (play-sound PICKUP-SOUND)
-                          (spawn (custom-particles))
-                          (spawn healed-toast)
-                          (spawn healed-broadcast)) g e2)
-                        e2))
-                   ))
-
-;start-npc = avatar + npc + healing? + food (optional) coin (optional) enemy (optional)
-(define-syntax start-npc
-  (syntax-rules ()
-    [(start-npc avatar-sprite (npc-sprite ...) (food-sprite ...) (enemy-sprite ...))
-     (let ()
-       (define avatar
-         (app make-healing-avatar avatar-sprite))
-       (define npc-list
-         (list (app make-hurt-animal npc-sprite) ...))
-       (define food-list
-         (list (app make-food food-sprite ) ...))
-       (define enemy-list
-         (list (app make-enemy enemy-sprite ) ...))
-
-       (define instructions
-         (make-instructions "ARROW KEYS to move"
-                            "SPACE to eat food and talk"
-                            "ENTER to close dialogs"
-                            "H to heal animals"
-                            "I to open these instructions"
-                            "M to open and close the map"))
-
-       (survival-game #:bg           (custom-bg #:rows 2
-                                                #:columns 2)
-                       #:sky          #f
-                       #:starvation-rate 25
-                       #:avatar       avatar
-                       #:npc-list     npc-list
-                       #:food-list    food-list
-                       #:enemy-list   enemy-list
-                       #:score-prefix "Animals Healed"
-                       #:instructions instructions)
-       )]
-    [(start-npc)                                (start-npc a:question-icon () () ())]
-    [(start-npc avatar-sprite)                  (start-npc avatar-sprite () () ())]
-    [(start-npc avatar-sprite (npc-sprite ...)) (start-npc avatar-sprite (npc-sprite ...) () ())]
-    [(start-npc avatar-sprite (npc-sprite ...)
-                              (food-sprite ...)) (start-npc avatar-sprite (npc-sprite ...) (food-sprite ...) ())]))
-
 
 (define-syntax-rule (top-level lines ...)
   (let ()

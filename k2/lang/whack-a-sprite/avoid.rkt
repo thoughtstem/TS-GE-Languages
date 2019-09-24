@@ -35,7 +35,7 @@
 
   (define-visual-language #:wrapper launch-for-ratchet
     whack-a-sprite-lang
-    "./what-a-sprite-lang.rkt"
+    "./whack-a-sprite-lang.rkt"
     
     [start    = play-icon]
 

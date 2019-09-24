@@ -38,8 +38,12 @@
     [start    = play-icon]
 
     ;Pointers
-    [pointer  p (s:scale-to-fit (s:draw-sprite pointer) 32)]
-    [cage     c (s:scale-to-fit (s:draw-sprite cage) 32)]
+    [pointer    p (s:scale-to-fit (s:draw-sprite pointer) 32)]
+    [cage       c (s:scale-to-fit (s:draw-sprite cage) 32)]
+    [magic-wand m (s:scale-to-fit (s:draw-sprite magic-wand) 32)]
+    [glove      g (s:scale-to-fit (s:draw-sprite glove) 32)]
+    [white-hand w (s:scale-to-fit (s:draw-sprite white-hand) 32)]
+    
     ;Animals
     ;[cat      c (s:scale-to-fit (s:draw-sprite cat)      32)]
     [dog      d (s:scale-to-fit (s:draw-sprite dog)      32)]

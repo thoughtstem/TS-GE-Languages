@@ -61,6 +61,10 @@
           (pointer-sprite pointer)
           (cage-sprite cage)
           
+          (glovecursor-sprite glove)
+          (magicwandcursor-sprite magic-wand)
+          (whitehandcursor-sprite white-hand)
+          
           )
 
          question-icon
@@ -84,6 +88,7 @@
 
   (define-assets-from "../../assets/animal")
   (define-assets-from "../../assets")
+  (define-assets-from "./assets")
 
   (provide ;blackcat-sprite
            blackdog-sprite
@@ -155,6 +160,10 @@
 
            pointer-sprite
            cage-sprite
+           glovecursor-sprite
+           magicwandcursor-sprite
+           whitehandcursor-sprite
+          
            )
   
   ; == ANIMALS
@@ -588,6 +597,15 @@
 
   (define cage-sprite
     (new-sprite (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5)))))
+
+  (define glovecursor-sprite
+    (new-sprite glove-cursor))
+  
+  (define magicwandcursor-sprite (sheet->sprite magic-wand-cursor-sheet
+                                           #:columns 6
+                                           #:delay 5))
+  
+  (define whitehandcursor-sprite (new-sprite white-hand-cursor))
   
   )
 

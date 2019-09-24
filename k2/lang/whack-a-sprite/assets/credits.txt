@@ -1,0 +1,5 @@
+cursors.png https://opengameart.org/content/variety-of-cursors
+crosshairs64.png https://opengameart.org/content/64-crosshairs-pack
+glove - https://opengameart.org/content/pointers-part-5
+   modified - https://opengameart.org/content/gauntlet-cursor
+white-hand.png https://opengameart.org/content/cursor

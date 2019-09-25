@@ -52,7 +52,7 @@
     ;[goat     g (s:scale-to-fit (s:draw-sprite goat)     32)]
     [horse    h (s:scale-to-fit (s:draw-sprite horse)    32)]
     [rabbit   r (s:scale-to-fit (s:draw-sprite rabbit)   32)]
-    [sheep    s (s:scale-to-fit (s:draw-sprite sheep)    32)]
+    ;[sheep    s (s:scale-to-fit (s:draw-sprite sheep)    32)]
     [turkey   t (s:scale-to-fit (s:draw-sprite turkey)   32)]
     ;[wolf     w (s:scale-to-fit (s:draw-sprite wolf)     32)]
     
@@ -63,7 +63,12 @@
     [mushroom m (s:scale-to-fit (s:draw-sprite mushroom) 32)]
     [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
     ;[pepper   p (s:scale-to-fit (s:draw-sprite pepper)   32)]
-                          
+
+    ;Specials
+    [chest     l (s:scale-to-fit (s:draw-sprite chest) 32)]
+    [freeze    f (s:scale-to-fit (s:draw-sprite freeze) 32)]
+    [slow      s (s:scale-to-fit (s:draw-sprite slow) 32)]
+    
     ;Colors
     [red            R (h:square 32 'solid 'red)]
     [orange         O (h:square 32 'solid 'orange)]

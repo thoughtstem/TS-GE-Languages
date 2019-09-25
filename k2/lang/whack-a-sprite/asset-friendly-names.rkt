@@ -64,6 +64,10 @@
           (glovecursor-sprite glove)
           (magicwandcursor-sprite magic-wand)
           (whitehandcursor-sprite white-hand)
+
+          (chest-sprite chest)
+          (freeze-sprite freeze)
+          (slow-sprite slow)
           
           )
 
@@ -163,6 +167,9 @@
            glovecursor-sprite
            magicwandcursor-sprite
            whitehandcursor-sprite
+
+           freeze-sprite
+           slow-sprite
           
            )
   
@@ -606,6 +613,10 @@
                                            #:delay 5))
   
   (define whitehandcursor-sprite (new-sprite white-hand-cursor))
+
+  (define freeze-sprite (new-sprite (make-icon "FRZ" 'cyan)))
+
+  (define slow-sprite (new-sprite (make-icon "SLO" 'cyan)))
   
   )
 

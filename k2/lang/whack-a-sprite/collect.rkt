@@ -65,6 +65,11 @@
     ;[strawberry s (s:scale-to-fit (s:draw-sprite strawberry) 32)]
     [tomato     t (s:scale-to-fit (s:draw-sprite tomato)     32)]
 
+    ;Specials
+    [chest     l (s:scale-to-fit (s:draw-sprite chest) 32)]
+    [freeze    f (s:scale-to-fit (s:draw-sprite freeze) 32)]
+    [slow      s (s:scale-to-fit (s:draw-sprite slow) 32)]
+
     ;Other
     [rand     ? question-icon]))
 

@@ -654,6 +654,7 @@
        
        (apply start-game
               (flatten (list tm-entity
+                             (night-sky-with-lighting #:scale (/ 640 480))
                              (score-entity) ;note: use #:prefix for future skinning
                              instructions-entity
                              pointer

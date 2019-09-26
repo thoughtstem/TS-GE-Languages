@@ -1,6 +1,10 @@
 #lang racket
 
-(provide start-whack-a-sprite
+(provide start-clicker-forest
+         start-clicker-desert
+         start-clicker-snow
+         start-clicker-lava
+         start-clicker-pink
          (all-from-out racket))
 
 (require game-engine
@@ -9,7 +13,8 @@
          ratchet/util
          (for-syntax racket)
          (prefix-in a: "./asset-friendly-names.rkt")
-         (only-in racket/gui make-font))
+         (only-in racket/gui make-font)
+         (only-in lang/posn make-posn))
 
 (define (fast-sprite-equal? s1 s2)
     (fast-equal? (current-fast-frame s1) (current-fast-frame s2)))
@@ -86,6 +91,30 @@
   (and special-broadcast
        (eq? (get-storage-data "Value" special-broadcast) "chest")))
 
+(define (light-clicked? g e)
+  (define special-broadcast (get-entity "Special Broadcast" g))
+  (and special-broadcast
+       (eq? (get-storage-data "Value" special-broadcast) "light")))
+
+(define (freeze-sprite)
+  (lambda (g e)
+    (define og-sprite (get-component e animated-sprite?))
+    (define frozen-sprite (apply-image-function (curry tint-img 'cyan) (first (get-components e animated-sprite?))))
+    (~> e
+        (update-entity _ animated-sprite? frozen-sprite)
+        (add-components _ (storage "stored-sprite" og-sprite)))
+    ))
+
+(define (restore-sprite)
+  (lambda (g e)
+    (define stored-sprite (and (get-storage "stored-sprite" e)
+                               (get-storage-data "stored-sprite" e)))
+    (if stored-sprite
+        (~> e
+            (update-entity _ animated-sprite? stored-sprite)
+            (remove-storage "stored-sprite" _))
+        e)))
+
 (define (slow-entity)
   (lambda (g e)
     (define s (get-ai-speed e))
@@ -127,11 +156,15 @@
                                                                (spawn collect-broadcast)
                                                                (do-after-time 1 die)))
                                      (observe-change freeze-clicked? (if/r freeze-clicked?
-                                                                           (do-many (freeze-entity)
-                                                                                    (do-after-time 100 (un-freeze-entity)))))
-                                     (observe-change slow-clicked? (if/r slow-clicked?
-                                                                         (do-many (slow-entity)
-                                                                                  (do-after-time 100 (un-slow-entity)))))
+                                                                      (do-many (freeze-entity)
+                                                                               (freeze-sprite)
+                                                                               (do-after-time 100 (do-many (un-freeze-entity)
+                                                                                                           (restore-sprite))))))
+                                (observe-change slow-clicked? (if/r slow-clicked?
+                                                                    (do-many (slow-entity)
+                                                                             (freeze-sprite)
+                                                                             (do-after-time 100 (do-many (un-slow-entity)
+                                                                                                         (restore-sprite))))))
                                      )
                           physical-collider?))
       (remove-component (create-npc #:sprite (if color
@@ -152,11 +185,15 @@
                                                              (spawn collect-broadcast)
                                                              (do-after-time 1 die)))
                                    (observe-change freeze-clicked? (if/r freeze-clicked?
-                                                                         (do-many (freeze-entity)
-                                                                                  (do-after-time 100 (un-freeze-entity)))))
-                                   (observe-change slow-clicked? (if/r slow-clicked?
-                                                                       (do-many (slow-entity)
-                                                                                (do-after-time 100 (un-slow-entity)))))
+                                                                      (do-many (freeze-entity)
+                                                                               (freeze-sprite)
+                                                                               (do-after-time 100 (do-many (un-freeze-entity)
+                                                                                                           (restore-sprite))))))
+                                (observe-change slow-clicked? (if/r slow-clicked?
+                                                                    (do-many (slow-entity)
+                                                                             (freeze-sprite)
+                                                                             (do-after-time 100 (do-many (un-slow-entity)
+                                                                                                         (restore-sprite))))))
                                    )
                         physical-collider?)))
 
@@ -184,11 +221,15 @@
                                                                (spawn avoid-broadcast)
                                                                (do-after-time 1 die)))
                                      (observe-change freeze-clicked? (if/r freeze-clicked?
-                                                                           (do-many (freeze-entity)
-                                                                                    (do-after-time 100 (un-freeze-entity)))))
-                                     (observe-change slow-clicked? (if/r slow-clicked?
-                                                                         (do-many (slow-entity)
-                                                                                  (do-after-time 100 (un-slow-entity)))))
+                                                                      (do-many (freeze-entity)
+                                                                               (freeze-sprite)
+                                                                               (do-after-time 100 (do-many (un-freeze-entity)
+                                                                                                           (restore-sprite))))))
+                                (observe-change slow-clicked? (if/r slow-clicked?
+                                                                    (do-many (slow-entity)
+                                                                             (freeze-sprite)
+                                                                             (do-after-time 100 (do-many (un-slow-entity)
+                                                                                                         (restore-sprite))))))
                                      (after-time 200 die)
                                      )
                           physical-collider?))
@@ -210,11 +251,15 @@
                                                              (spawn avoid-broadcast)
                                                              (do-after-time 1 die)))
                                    (observe-change freeze-clicked? (if/r freeze-clicked?
-                                                                         (do-many (freeze-entity)
-                                                                                  (do-after-time 100 (un-freeze-entity)))))
-                                   (observe-change slow-clicked? (if/r slow-clicked?
-                                                                       (do-many (slow-entity)
-                                                                                (do-after-time 100 (un-slow-entity)))))
+                                                                      (do-many (freeze-entity)
+                                                                               (freeze-sprite)
+                                                                               (do-after-time 100 (do-many (un-freeze-entity)
+                                                                                                           (restore-sprite))))))
+                                (observe-change slow-clicked? (if/r slow-clicked?
+                                                                    (do-many (slow-entity)
+                                                                             (freeze-sprite)
+                                                                             (do-after-time 100 (do-many (un-slow-entity)
+                                                                                                         (restore-sprite))))))
                                    (after-time 200 die)
                                    )
                         physical-collider?)))
@@ -222,6 +267,7 @@
 (define (make-special sprite . options)
   (define value (cond [(fast-sprite-equal? sprite (new-sprite (make-icon "FRZ" 'cyan))) "freeze"]
                       [(fast-sprite-equal? sprite (new-sprite (make-icon "SLO" 'cyan))) "slow"]
+                      [(fast-sprite-equal? sprite (new-sprite (make-icon "LIT" 'yellow))) "light"]
                       [(fast-sprite-equal? sprite chest-sprite) "chest"]
                       [else (or (findf number? options)
                                 100)]))
@@ -241,6 +287,7 @@
                                                        (flatten (list (spawn (toast-entity (cond [(eq? value "freeze") "==== FREEZE ===="]
                                                                                                  [(eq? value "slow")   "==== SLOW ===="]
                                                                                                  [(eq? value "chest")  "==== LOOT ===="]
+                                                                                                 [(eq? value "light")  "==== LIGHT ===="]
                                                                                                  [else                 (~a "+" value " POINTS!")])
                                                                                            #:color 'green))
                                                                       (spawn (special-broadcast value))
@@ -276,6 +323,7 @@
                                                   (flatten (list (spawn (toast-entity (cond [(eq? value "freeze") "==== FREEZE ===="]
                                                                                             [(eq? value "slow")   "==== SLOW ===="]
                                                                                             [(eq? value "chest")  "==== LOOT ===="]
+                                                                                            [(eq? value "light")  "==== LIGHT ===="]
                                                                                             [else                 (~a "+" value " POINTS!")])
                                                                                       #:color 'green))
                                                                  (spawn (special-broadcast value))
@@ -323,25 +371,15 @@
 (provide-strings red orange yellow green blue purple
                  pink lightgreen lightblue cyan magenta salmon)
 
-;start-whack-a-sprite = pointer + collectibles (optional) + avoidables (optional) + specials (optional)
-(define-syntax start-whack-a-sprite
-  (syntax-rules ()
-    [(start-whack-a-sprite pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
-     (let ()
-       (define pointer
-         (app make-pointer pointer-sprite))
-       (define collectibles-list
-         (list (app make-collectible collectible-sprite ) ...))
-       (define avoidables-list
-         (list (app make-avoidable avoidable-sprite ) ...))
-       (define specials-list
-         (list (app make-special special-sprite ) ...))
-
-       (apply precompile! (append collectibles-list
+(define (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite [bg-sprite (crop 0 0 640 480 FOREST-BG)])
+  (apply precompile! (append collectibles-list
                                   avoidables-list
-                                  specials-list))
-       
-       (define instructions-entity
+                                  specials-list
+                                  (map (curry apply-image-function (curry tint-img 'cyan))
+                                       (append collectibles-list
+                                               avoidables-list
+                                               specials-list))))
+  (define instructions-entity
          (make-instructions "CLICK on the good things."
                             "AVOID the bad things."
                             "WIN by getting 1000 points."
@@ -519,14 +557,76 @@
                                                         )))
                          ))
        ; ======= END OF SCORE CODE =========
+       (define (mround-up num multiple)
+         (define rounded-num (exact-round num))
+         (define remainder (modulo rounded-num multiple))
+         (cond [(= remainder 0) rounded-num]
+               [else (+ rounded-num multiple (- remainder))]))
 
-       (define bg-entity
-         (sprite->entity (crop 0 0 640 480 FOREST-BG)
-                         #:name "bg"
+       (define (draw-sky-with-light color)
+         (place-images (list (circle 24 'outline (pen color 36 'solid 'round 'bevel))
+                             ;(circle 24 'outline (pen color 37 'solid 'round 'bevel))
+                             (circle 24 'outline (pen color 38 'solid 'round 'bevel))
+                             ;(circle 24 'outline (pen color 39 'solid 'round 'bevel))
+                             (circle 24 'outline (pen color 40 'solid 'round 'bevel)))
+                       (list (make-posn 24 18)
+                             ;(make-posn 24 18)
+                             (make-posn 24 18)
+                             ;(make-posn 24 18)
+                             (make-posn 24 18))
+                       (rectangle 48 36 'outline 'transparent)))
+
+       ;default sky is sized for 2x 480 by 360
+       (define (sky-sprite-with-light color #:scale [scale 1])
+         (define sky-img (draw-sky-with-light color))
+         (new-sprite sky-img #:scale (* scale 20.167)))
+
+       (define (night-sky-with-lighting #:color         [color 'black]
+                                        #:max-alpha     [m-alpha 160]
+                                        #:length-of-day [length-of-day 2400]
+                                        #:scale         [scale 1])
+         (define max-alpha (exact-round (* m-alpha 0.56)))
+         (define update-multiplier 2)
+         (define update-interval (* update-multiplier (/ length-of-day 2 max-alpha)))
+         (define c (name->color color))
+         (define r-val (color-red c))
+         (define g-val (color-green c))
+         (define b-val (color-blue c))
+         (define (update-night-sky g e)
+           (define game-count (get-counter (get-entity "time manager" g)))
+           (define time-of-day (modulo game-count length-of-day))
+           (define alpha-val (mround-up (abs (* (- (/ time-of-day length-of-day) .5) 2 max-alpha)) update-multiplier))
+           ;(displayln (~a "TIME-OF-DAY: " time-of-day ", ALPHA: " alpha-val))
+           (define new-night-sky (sky-sprite-with-light (make-color r-val g-val b-val alpha-val) #:scale scale))
+           (update-entity e animated-sprite? new-night-sky))
+         (sprite->entity (sky-sprite-with-light (make-color r-val g-val b-val max-alpha) #:scale scale)
                          #:position (posn 0 0)
-                         #:components (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
-                                              (spawn instructions-entity
-                                                     #:relative? #f)))
+                         #:name "night sky"
+                         #:components (layer "sky")
+                         (hidden)
+                         (lock-to "pointer")
+                         (on-edge 'right (go-to-pos 'right))
+                         (on-edge 'left (go-to-pos 'left))
+                         (on-edge 'top (go-to-pos 'top))
+                         (on-edge 'bottom (go-to-pos 'bottom))
+                         ;(apply precompiler
+                         ;       (map (λ (a)(freeze (draw-sky-with-light (make-color r-val g-val b-val a))))
+                         ;            (range 0 (+ max-alpha 2 1) update-multiplier)))
+                         (on-start (do-many (go-to-pos 'center)
+                                            show))
+                         ;(do-every update-interval update-night-sky)
+                         (observe-change light-clicked? (if/r light-clicked?
+                                                              (do-many hide
+                                                                       (do-after-time 100 show))))
+                         ))
+       
+       (define bg-entity
+         (reduce-quality (sprite->entity bg-sprite 
+                                         #:name "bg"
+                                         #:position (posn 0 0)
+                                         #:components (on-key "i" #:rule (λ (g e) (not (get-entity "instructions" g)))
+                                                              (spawn instructions-entity
+                                                                     #:relative? #f))))
          )
          
        (define trees-list
@@ -534,9 +634,23 @@
               (filter (λ(e)
                         (and (<= (posn-x (get-posn e)) 700)
                              (<= (posn-y (get-posn e)) 540)))
-                      (make-world-objects round-tree pine-tree
-                                          #:rows    1
-                                          #:columns 1))))
+                      (cond [(equal? bg-sprite (crop 0 0 640 480 FOREST-BG)) (make-world-objects round-tree pine-tree
+                                                                                              #:rows    1
+                                                                                              #:columns 1)]
+                            [(equal? bg-sprite (crop 0 0 640 480 DESERT-BG)) (make-world-objects large-brown-rock random-brown-rock
+                                                                                              #:rows    1
+                                                                                              #:columns 1)]
+                            [(equal? bg-sprite (crop 0 0 640 480 SNOW-BG)) (make-world-objects snow-pine-tree random-gray-rock
+                                                                                              #:rows    1
+                                                                                              #:columns 1)]
+                            [(equal? bg-sprite (crop 0 0 640 480 LAVA-BG)) (make-world-objects large-gray-rock random-gray-rock
+                                                                                              #:rows    1
+                                                                                              #:columns 1)]
+                            [(equal? bg-sprite (crop 0 0 640 480 PINK-BG)) (make-world-objects candy-cane-tree candy-cane-tree
+                                                                                              #:rows    1
+                                                                                              #:columns 1)]
+                            [else (make-world-objects round-tree pine-tree #:rows 1 #:columns 1)])
+                      )))
        
        (apply start-game
               (flatten (list tm-entity
@@ -544,13 +658,118 @@
                              instructions-entity
                              pointer
                              trees-list
-                             bg-entity)))
+                             bg-entity))))
+
+;start-clicker = pointer + collectibles (optional) + avoidables (optional) + specials (optional)
+(define-syntax start-clicker-forest
+  (syntax-rules ()
+    [(start-clicker-forest pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
+     (let ()
+       (define pointer
+         (app make-pointer pointer-sprite))
+       (define collectibles-list
+         (list (app make-collectible collectible-sprite ) ...))
+       (define avoidables-list
+         (list (app make-avoidable avoidable-sprite ) ...))
+       (define specials-list
+         (list (app make-special special-sprite ) ...))
+
+       (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite (crop 0 0 640 480 FOREST-BG))
        )]
-    [(start-whack-a-sprite)                                         (start-whack-a-sprite a:question-icon () () ())]
-    [(start-whack-a-sprite pointer-sprite)                          (start-whack-a-sprite pointer-sprite () () ())]
-    [(start-whack-a-sprite pointer-sprite (collectible-sprite ...)) (start-whack-a-sprite pointer-sprite (collectible-sprite ...) () ())]
-    [(start-whack-a-sprite pointer-sprite (collectible-sprite ...)
-                           (avoidable-sprite ...)) (start-whack-a-sprite pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
+    [(start-clicker-forest)                                         (start-clicker-forest a:question-icon () () ())]
+    [(start-clicker-forest pointer-sprite)                          (start-clicker-forest pointer-sprite () () ())]
+    [(start-clicker-forest pointer-sprite (collectible-sprite ...)) (start-clicker-forest pointer-sprite (collectible-sprite ...) () ())]
+    [(start-clicker-forest pointer-sprite (collectible-sprite ...)
+                           (avoidable-sprite ...)) (start-clicker-forest pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
+    ))
+
+(define-syntax start-clicker-desert
+  (syntax-rules ()
+    [(start-clicker-desert pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
+     (let ()
+       (define pointer
+         (app make-pointer pointer-sprite))
+       (define collectibles-list
+         (list (app make-collectible collectible-sprite ) ...))
+       (define avoidables-list
+         (list (app make-avoidable avoidable-sprite ) ...))
+       (define specials-list
+         (list (app make-special special-sprite ) ...))
+
+       (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite (crop 0 0 640 480 DESERT-BG))
+       )]
+    [(start-clicker-desert)                                         (start-clicker-desert a:question-icon () () ())]
+    [(start-clicker-desert pointer-sprite)                          (start-clicker-desert pointer-sprite () () ())]
+    [(start-clicker-desert pointer-sprite (collectible-sprite ...)) (start-clicker-desert pointer-sprite (collectible-sprite ...) () ())]
+    [(start-clicker-desert pointer-sprite (collectible-sprite ...)
+                           (avoidable-sprite ...)) (start-clicker-desert pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
+    ))
+
+
+(define-syntax start-clicker-snow
+  (syntax-rules ()
+    [(start-clicker-snow pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
+     (let ()
+       (define pointer
+         (app make-pointer pointer-sprite))
+       (define collectibles-list
+         (list (app make-collectible collectible-sprite ) ...))
+       (define avoidables-list
+         (list (app make-avoidable avoidable-sprite ) ...))
+       (define specials-list
+         (list (app make-special special-sprite ) ...))
+
+       (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite (crop 0 0 640 480 SNOW-BG))
+       )]
+    [(start-clicker-snow)                                         (start-clicker-snow a:question-icon () () ())]
+    [(start-clicker-snow pointer-sprite)                          (start-clicker-snow pointer-sprite () () ())]
+    [(start-clicker-snow pointer-sprite (collectible-sprite ...)) (start-clicker-snow pointer-sprite (collectible-sprite ...) () ())]
+    [(start-clicker-snow pointer-sprite (collectible-sprite ...)
+                           (avoidable-sprite ...)) (start-clicker-snow pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
+    ))
+
+(define-syntax start-clicker-lava
+  (syntax-rules ()
+    [(start-clicker-lava pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
+     (let ()
+       (define pointer
+         (app make-pointer pointer-sprite))
+       (define collectibles-list
+         (list (app make-collectible collectible-sprite ) ...))
+       (define avoidables-list
+         (list (app make-avoidable avoidable-sprite ) ...))
+       (define specials-list
+         (list (app make-special special-sprite ) ...))
+
+       (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite (crop 0 0 640 480 LAVA-BG))
+       )]
+    [(start-clicker-lava)                                         (start-clicker-lava a:question-icon () () ())]
+    [(start-clicker-lava pointer-sprite)                          (start-clicker-lava pointer-sprite () () ())]
+    [(start-clicker-lava pointer-sprite (collectible-sprite ...)) (start-clicker-lava pointer-sprite (collectible-sprite ...) () ())]
+    [(start-clicker-lava pointer-sprite (collectible-sprite ...)
+                           (avoidable-sprite ...)) (start-clicker-lava pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
+    ))
+
+(define-syntax start-clicker-pink
+  (syntax-rules ()
+    [(start-clicker-pink pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) (special-sprite ...))
+     (let ()
+       (define pointer
+         (app make-pointer pointer-sprite))
+       (define collectibles-list
+         (list (app make-collectible collectible-sprite ) ...))
+       (define avoidables-list
+         (list (app make-avoidable avoidable-sprite ) ...))
+       (define specials-list
+         (list (app make-special special-sprite ) ...))
+
+       (start-clicker pointer collectibles-list avoidables-list specials-list #:bg-sprite (crop 0 0 640 480 PINK-BG))
+       )]
+    [(start-clicker-pink)                                         (start-clicker-pink a:question-icon () () ())]
+    [(start-clicker-pink pointer-sprite)                          (start-clicker-pink pointer-sprite () () ())]
+    [(start-clicker-pink pointer-sprite (collectible-sprite ...)) (start-clicker-pink pointer-sprite (collectible-sprite ...) () ())]
+    [(start-clicker-pink pointer-sprite (collectible-sprite ...)
+                           (avoidable-sprite ...)) (start-clicker-pink pointer-sprite (collectible-sprite ...) (avoidable-sprite ...) ())]
     ))
 
 (define-syntax-rule (top-level lines ...)

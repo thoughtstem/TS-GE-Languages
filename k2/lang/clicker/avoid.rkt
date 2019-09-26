@@ -1,16 +1,20 @@
 #lang racket
 
-(provide (all-from-out "./whack-a-sprite-lang.rkt"
+(provide (all-from-out "./clicker-lang.rkt"
                        "./asset-friendly-names.rkt")
-         (rename-out [start-whack-a-sprite start])
+         (rename-out [start-clicker-forest start-forest]
+                     [start-clicker-desert start-desert]
+                     [start-clicker-snow start-snow]
+                     [start-clicker-lava start-lava]
+                     [start-clicker-pink start-pink])
          rand
          )
 
-(require "./whack-a-sprite-lang.rkt"
+(require "./clicker-lang.rkt"
          "./asset-friendly-names.rkt")
 
 (module reader syntax/module-reader
-  k2/lang/whack-a-sprite/avoid)
+  k2/lang/clicker/avoid)
 
 (define rand
   (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
@@ -19,25 +23,34 @@
 (module ratchet racket 
   (require ratchet
            ratchet/util
-           (rename-in "./whack-a-sprite-lang.rkt" 
-                      [start-whack-a-sprite start])
+           (rename-in "./clicker-lang.rkt" 
+	              [start-clicker-forest start-forest]
+                      [start-clicker-desert start-desert]
+                      [start-clicker-snow   start-snow]
+                      [start-clicker-lava   start-lava]
+                      [start-clicker-pink   start-pink])
            "../icons.rkt"
            "./asset-friendly-names.rkt"
            (prefix-in s: survival)
-           (prefix-in h: 2htdp/image))
+           (prefix-in h: 2htdp/image)
+           (prefix-in p: pict))
 
   (define (crop i)
-    (h:crop 0 0 0 32 32 i))
+    (h:crop 0 0 32 32 i))
 
   (define rand
     (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
                                      apple banana kiwi mushroom onion pepper)))))
 
   (define-visual-language #:wrapper launch-for-ratchet
-    whack-a-sprite-lang
-    "./whack-a-sprite-lang.rkt"
+    clicker-lang
+    "./clicker-lang.rkt"
     
-    [start    = play-icon]
+    [start-forest F (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:FOREST-BG))]
+    [start-desert D (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:DESERT-BG))]
+    [start-snow S (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:SNOW-BG))]
+    [start-lava L (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:LAVA-BG))]
+    ;[start-forest P (overlay play-icon (h:crop 0 0 32 32 s:PINK-BG))]
 
     ;Pointers
     [pointer    p (s:scale-to-fit (s:draw-sprite pointer) 32)]
@@ -60,14 +73,11 @@
     [apple    a (s:scale-to-fit (s:draw-sprite apple)    32)]
     [banana   b (s:scale-to-fit (s:draw-sprite banana)   32)]
     [kiwi     k (s:scale-to-fit (s:draw-sprite kiwi)     32)]
-    [mushroom m (s:scale-to-fit (s:draw-sprite mushroom) 32)]
-    [onion    o (s:scale-to-fit (s:draw-sprite onion)    32)]
-    ;[pepper   p (s:scale-to-fit (s:draw-sprite pepper)   32)]
 
     ;Specials
-    [chest     l (s:scale-to-fit (s:draw-sprite chest) 32)]
     [freeze    f (s:scale-to-fit (s:draw-sprite freeze) 32)]
     [slow      s (s:scale-to-fit (s:draw-sprite slow) 32)]
+    [light     l (s:scale-to-fit (s:draw-sprite light) 32)]
     
     ;Colors
     [red            R (h:square 32 'solid 'red)]

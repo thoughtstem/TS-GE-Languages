@@ -68,6 +68,7 @@
           (chest-sprite chest)
           (freeze-sprite freeze)
           (slow-sprite slow)
+          (light-sprite light)
           
           )
 
@@ -170,7 +171,7 @@
 
            freeze-sprite
            slow-sprite
-          
+           light-sprite
            )
   
   ; == ANIMALS
@@ -603,10 +604,10 @@
     (new-sprite POINTER-IMG))
 
   (define cage-sprite
-    (new-sprite (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5)))))
+    (new-sprite (change-img-alpha -64 (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5))))))
 
   (define glovecursor-sprite
-    (new-sprite glove-cursor))
+    (new-sprite (change-img-alpha -64 glove-cursor)))
   
   (define magicwandcursor-sprite (sheet->sprite magic-wand-cursor-sheet
                                            #:columns 6
@@ -617,6 +618,8 @@
   (define freeze-sprite (new-sprite (make-icon "FRZ" 'cyan)))
 
   (define slow-sprite (new-sprite (make-icon "SLO" 'cyan)))
+
+  (define light-sprite (new-sprite (make-icon "LIT" 'yellow)))
   
   )
 

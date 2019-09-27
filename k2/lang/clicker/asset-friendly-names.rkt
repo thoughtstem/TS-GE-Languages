@@ -81,6 +81,7 @@
          rainbow-icon
 
          sea-bg
+         play-outline-icon
          )
 
 (require survival)
@@ -604,10 +605,10 @@
     (new-sprite POINTER-IMG))
 
   (define cage-sprite
-    (new-sprite (change-img-alpha -64 (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5))))))
+    (new-sprite (change-img-alpha -100 (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5))))))
 
   (define glovecursor-sprite
-    (new-sprite (change-img-alpha -64 glove-cursor)))
+    (new-sprite (change-img-alpha -100 glove-cursor)))
   
   (define magicwandcursor-sprite (sheet->sprite magic-wand-cursor-sheet
                                            #:columns 6
@@ -615,12 +616,12 @@
   
   (define whitehandcursor-sprite (new-sprite white-hand-cursor))
 
-  (define freeze-sprite (new-sprite (make-icon "FRZ" 'cyan)))
+  (define freeze-sprite (new-sprite (make-rounded-icon freeze-icon 'cyan)))
 
-  (define slow-sprite (new-sprite (make-icon "SLO" 'cyan)))
+  (define slow-sprite (new-sprite (make-rounded-icon turtle-icon 'cyan)))
 
-  (define light-sprite (new-sprite (make-icon "LIT" 'yellow)))
-  
+  (define light-sprite (new-sprite (make-rounded-icon sun-icon 'yellow)))
+
   )
 
 (require 'animal-sprites)

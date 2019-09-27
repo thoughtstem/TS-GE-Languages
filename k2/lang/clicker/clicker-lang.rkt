@@ -265,9 +265,9 @@
                         physical-collider?)))
 
 (define (make-special sprite . options)
-  (define value (cond [(fast-sprite-equal? sprite (new-sprite (make-icon "FRZ" 'cyan))) "freeze"]
-                      [(fast-sprite-equal? sprite (new-sprite (make-icon "SLO" 'cyan))) "slow"]
-                      [(fast-sprite-equal? sprite (new-sprite (make-icon "LIT" 'yellow))) "light"]
+  (define value (cond [(fast-sprite-equal? sprite a:freeze) "freeze"]
+                      [(fast-sprite-equal? sprite a:slow) "slow"]
+                      [(fast-sprite-equal? sprite a:light) "light"]
                       [(fast-sprite-equal? sprite chest-sprite) "chest"]
                       [else (or (findf number? options)
                                 100)]))

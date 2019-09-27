@@ -41,15 +41,20 @@
     (lambda () (first (shuffle (list cat dog horse rabbit
                                      apple kiwi onion potato tomato)))))
 
+  (define (bg->play-icon bg)
+    (h:overlay play-outline-icon ((compose (curry s:change-img-bright 40)
+                                           (curry s:change-img-sat -20))
+                                  (h:crop 624 420 32 24 bg))))
+
   (define-visual-language #:wrapper launch-for-ratchet
     clicker-lang
     "./clicker-lang.rkt" 
     
-    [start-forest F (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:FOREST-BG))]
-    [start-desert D (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:DESERT-BG))]
-    [start-snow S (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:SNOW-BG))]
-    [start-lava L (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:LAVA-BG))]
-    [start-pink P (h:overlay (p:pict->bitmap play-icon) (h:crop 0 0 32 32 s:PINK-BG))]
+    [start-forest F (h:overlay (p:pict->bitmap play-outline-icon) (bg->play-icon s:FOREST-BG))]
+    [start-desert D (h:overlay (p:pict->bitmap play-outline-icon) (bg->play-icon s:DESERT-BG))]
+    [start-snow S (h:overlay (p:pict->bitmap play-outline-icon)   (bg->play-icon s:SNOW-BG))]
+    [start-lava L (h:overlay (p:pict->bitmap play-outline-icon)   (bg->play-icon s:LAVA-BG))]
+    [start-pink P (h:overlay (p:pict->bitmap play-outline-icon)   (bg->play-icon s:PINK-BG))]
 
     ;Pointers
     [pointer    p (s:scale-to-fit (s:draw-sprite pointer) 32)]

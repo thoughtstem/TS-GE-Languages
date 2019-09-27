@@ -19,10 +19,6 @@
 (define rand
   (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
                                    apple banana kiwi mushroom onion pepper)))))
-(define (bg->play-icon bg)
-    (h:overlay play-outline-icon ((compose (curry s:change-img-bright 40)
-                                           (curry s:change-img-sat -20))
-                                  (h:crop 624 420 32 24 bg))))
 
 (module ratchet racket 
   (require ratchet
@@ -45,6 +41,11 @@
   (define rand
     (lambda () (first (shuffle (list cat dog goat horse rabbit sheep turkey wolf
                                      apple banana kiwi mushroom onion pepper)))))
+
+  (define (bg->play-icon bg)
+    (h:overlay play-outline-icon ((compose (curry s:change-img-bright 40)
+                                           (curry s:change-img-sat -20))
+                                  (h:crop 624 420 32 24 bg))))
 
   (define-visual-language #:wrapper launch-for-ratchet
     clicker-lang

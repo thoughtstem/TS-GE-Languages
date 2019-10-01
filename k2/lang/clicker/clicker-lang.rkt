@@ -400,7 +400,7 @@
                      (add-components e
                                      (spawn-once (toast-entity "==== LEVEL 2 ===="))
                                      (on-rule (reached-multiple-of? 200)
-                                              (do-many (if (empty? collectibles-list)
+                                              (do-many (if (empty? avoidables-list)
                                                            (λ (g e) e)
                                                            (spawn (λ() (first (shuffle avoidables-list)))))
                                                        ))
@@ -630,7 +630,13 @@
          )
          
        (define trees-list
-         (map (curryr remove-component physical-collider?)
+         (map (curryr remove-component (or/c physical-collider?
+                                             active-on-bg?
+                                             on-key?
+                                             damager?
+                                             size-val?
+                                             hue-val?
+                                             static?))
               (filter (λ(e)
                         (and (<= (posn-x (get-posn e)) 700)
                              (<= (posn-y (get-posn e)) 540)))

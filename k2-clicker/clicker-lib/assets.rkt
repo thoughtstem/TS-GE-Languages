@@ -25,10 +25,11 @@
     (change-img-alpha -100 (apply beside (map (λ (x) (rectangle 20 80 'outline (pen 'gray 4 'solid 'butt 'bevel))) (range 5))))))
 
 (define glovecursor-sprite
-  (new-sprite (change-img-alpha -100 glove-cursor)))
+  (sprite->cursor-sprite (new-sprite (change-img-alpha -100 glove-cursor)) 8 2))
 
-(define magicwandcursor-sprite (sheet->sprite magic-wand-cursor-sheet
-                                              #:columns 6
-                                              #:delay 5))
+(define magicwandcursor-sprite (sprite->cursor-sprite (sheet->sprite magic-wand-cursor-sheet
+                                                                      #:columns 6
+                                                                      #:delay 5)
+                                                       6 5))
 
-(define whitehandcursor-sprite (new-sprite white-hand-cursor))
+(define whitehandcursor-sprite (sprite->cursor-sprite (new-sprite white-hand-cursor) 8 0))

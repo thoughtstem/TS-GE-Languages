@@ -2,7 +2,7 @@
 
 (provide (all-from-out "./assets.rkt")
          (all-from-out common-icons)
-         (all-from-out clicker-assets)
+         ;(all-from-out clicker-assets)
          (all-from-out animal-assets)
          (all-from-out color-strings)
          bg->play-icon
@@ -13,7 +13,7 @@
 
 (require "./assets.rkt"
          common-icons
-         clicker-assets
+         ;clicker-assets ;we only need the renamed sprites for clicker, not the images that have conflicting ids
          animal-assets
          (only-in color-strings
            red

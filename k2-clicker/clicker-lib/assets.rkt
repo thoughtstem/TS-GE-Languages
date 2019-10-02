@@ -32,4 +32,4 @@
                                                                       #:delay 5)
                                                        6 5))
 
-(define whitehandcursor-sprite (sprite->cursor-sprite (new-sprite white-hand-cursor) 8 0))
+(define whitehandcursor-sprite (sprite->cursor-sprite (new-sprite white-hand) 8 0))

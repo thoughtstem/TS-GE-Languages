@@ -5,5 +5,6 @@
 (define deps '("survival"
                "color-strings"
                "common-icons"
-               "ratchet"))
+               "ratchet"
+               "english"))
 

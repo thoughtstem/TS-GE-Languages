@@ -3,7 +3,8 @@
 (define scribblings '(("scribblings/manual.scrbl" (multi-page))))
 
 (define deps 
-  '("adventure" 
+  '("game-engine"
+    "game-engine-demos-common"
     "ratchet"
     "clicker-assets"
     "animal-assets"))

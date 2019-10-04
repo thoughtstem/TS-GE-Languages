@@ -5,7 +5,7 @@
 
 (define deps '(
   "https://github.com/thoughtstem/TS-Kata-Collections.git?path=ts-kata-util"
-  "adventure"
+  "https://github.com/thoughtstem/TS-Languages.git?path=adventure"
   ))
 
 (define compile-omit-paths '(

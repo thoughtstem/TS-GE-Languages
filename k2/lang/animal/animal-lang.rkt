@@ -224,7 +224,7 @@
 ;start-animal-asp = avatar + foods (optional) + hurt-npc (optional) + enemies (optional)
 (define-syntax start-animal-asp
   (syntax-rules ()
-    [(start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) (enemy-sprite ...))
+    [(start-animal-asp avatar-sprite (food-sprite ...) (npc-sprite ...) (enemy-sprite ...))
      (let ()
        (define avatar
          (app make-healing-avatar avatar-sprite))
@@ -254,11 +254,11 @@
                        #:score-prefix "Animals Healed"
                        #:instructions instructions)
        )]
-    [(start-animal)                                 (start-animal a:question-icon () () ())]
-    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
-    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
-    [(start-animal avatar-sprite (food-sprite ...)
-                                 (npc-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (npc-sprite ...) ())]
+    [(start-animal-asp)                                 (start-animal-asp a:question-icon () () ())]
+    [(start-animal-asp avatar-sprite)                   (start-animal-asp avatar-sprite () () ())]
+    [(start-animal-asp avatar-sprite (food-sprite ...)) (start-animal-asp avatar-sprite (food-sprite ...) () ())]
+    [(start-animal-asp avatar-sprite (food-sprite ...)
+                                 (npc-sprite ...)) (start-animal-asp avatar-sprite (food-sprite ...) (npc-sprite ...) ())]
     ))
 
 ; === START-NPC: HEAL YOUR FRIENDS GAME ===
@@ -489,7 +489,7 @@
 ;start-recycle = avatar + foods (optional) + coins (optional) + hurt-npc (optional)
 (define-syntax start-recycle
   (syntax-rules ()
-    [(start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) (npc-sprite ...))
+    [(start-recycle avatar-sprite (food-sprite ...) (coin-sprite ...) (npc-sprite ...))
      (let ()
        (define avatar
          (app make-healing-avatar avatar-sprite))
@@ -519,11 +519,11 @@
                        #:score-prefix "Trash Collected"
                        #:instructions instructions)
        )]
-    [(start-animal)                                 (start-animal a:question-icon () () ())]
-    [(start-animal avatar-sprite)                   (start-animal avatar-sprite () () ())]
-    [(start-animal avatar-sprite (food-sprite ...)) (start-animal avatar-sprite (food-sprite ...) () ())]
-    [(start-animal avatar-sprite (food-sprite ...)
-                                 (coin-sprite ...)) (start-animal avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
+    [(start-recycle)                                 (start-recycle a:question-icon () () ())]
+    [(start-recycle avatar-sprite)                   (start-recycle avatar-sprite () () ())]
+    [(start-recycle avatar-sprite (food-sprite ...)) (start-recycle avatar-sprite (food-sprite ...) () ())]
+    [(start-recycle avatar-sprite (food-sprite ...)
+                                 (coin-sprite ...)) (start-recycle avatar-sprite (food-sprite ...) (coin-sprite ...) ())]
     ))
 
 (define-syntax-rule (top-level lines ...)

@@ -13,14 +13,15 @@
   ;#:with-test (test game-test)
   survival avatar-1
   (survival-game
-    #:avatar (basic-avatar))
+   #:avatar (basic-avatar))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival avatar-2
   (survival-game
-    #:avatar (basic-avatar #:sprite wizard-sprite))
+   #:avatar (basic-avatar
+             #:sprite wizard-sprite))
   )
 
 (define-example-code
@@ -28,10 +29,10 @@
   survival avatar-3
   (define (my-avatar)
     (basic-avatar #:sprite pirate-sprite
-                  #:speed  20))
+                  #:speed 20))
 
   (survival-game
-    #:avatar (my-avatar))
+   #:avatar (my-avatar))
   )
 
 (define-example-code
@@ -39,11 +40,11 @@
   survival avatar-4
   (define (my-avatar)
     (basic-avatar #:sprite monk-sprite
-                  #:speed  20
+                  #:speed 20
                   #:key-mode 'wasd))
 
   (survival-game
-    #:avatar (my-avatar))
+   #:avatar (my-avatar))
   )
 
 
@@ -52,14 +53,13 @@
   survival avatar-5
   (define (my-avatar)
     (basic-avatar #:sprite wizard-sprite
-                  #:speed  20
+                  #:speed 20
                   #:key-mode 'wasd
-                  #:health     200
-                  #:max-health 200
-                  ))
+                  #:health 200
+                  #:max-health 200))
 
   (survival-game
-    #:avatar (my-avatar))
+   #:avatar (my-avatar))
   )
 ; -----------------
 
@@ -67,7 +67,7 @@
   ;#:with-test (test game-test)
   survival coin-1
   (survival-game
-    #:coin-list  (list (basic-coin)))
+   #:coin-list  (list (basic-coin)))
   )
 
 (define-example-code
@@ -77,7 +77,7 @@
     (basic-coin #:value 500))
 
   (survival-game
-    #:coin-list  (list (my-coin)))
+   #:coin-list  (list (my-coin)))
   )
 
 (define-example-code
@@ -90,7 +90,7 @@
                 #:amount-in-world 20))
 
   (survival-game
-    #:coin-list  (list (my-coin)))
+   #:coin-list  (list (my-coin)))
   )
 
 (define-example-code
@@ -108,8 +108,8 @@
                 #:respawn?        #f))
 
   (survival-game
-    #:coin-list  (list (my-coin)
-                       (my-special-coin)))
+   #:coin-list  (list (my-coin)
+                      (my-special-coin)))
   )
 
 (define-example-code
@@ -129,9 +129,9 @@
                 #:respawn?        #f))
 
   (survival-game
-    #:coin-list  (list (basic-coin)
-                       (silver-coin)
-                       (gold-coin)))
+   #:coin-list  (list (basic-coin)
+                      (silver-coin)
+                      (gold-coin)))
   )
 
 ; ------------
@@ -140,19 +140,25 @@
   ;#:with-test (test game-test)
   survival crafter-1
   (survival-game
-    #:crafter-list (list (basic-crafter #:sprite cauldron-sprite
-                                        #:position    (posn 200 200)
-                                        #:tile        2)))
+   #:crafter-list (list
+                   (basic-crafter
+                    #:sprite cauldron-sprite
+                    #:position (posn 200 200)
+                    #:tile 2)))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival crafter-2
   (survival-game
-    #:food-list    (list (carrot #:name "Carrot"
-                                 #:amount-in-world 10))
-    #:crafter-list (list (basic-crafter
-                           #:recipe-list (list carrot-stew-recipe))))
+   #:food-list (list
+                (carrot
+                 #:name "Carrot"
+                 #:amount-in-world 10))
+   #:crafter-list (list
+                   (basic-crafter
+                    #:recipe-list (list
+                                   carrot-stew-recipe))))
   )
 
 (define-example-code
@@ -168,8 +174,11 @@
             #:ingredients (list "Fish")))
 
   (survival-game
-    #:food-list    (list (fish))
-    #:crafter-list (list (basic-crafter #:recipe-list (list fish-stew-recipe))))
+   #:food-list (list (fish))
+   #:crafter-list (list
+                   (basic-crafter
+                    #:recipe-list (list
+                                   fish-stew-recipe))))
   )
 
 (define-example-code
@@ -185,13 +194,17 @@
             #:ingredients (list "Fish")))
 
   (define (my-cauldron)
-    (basic-crafter #:recipe-list (list carrot-stew-recipe
-                                       fish-stew-recipe)))
+    (basic-crafter
+     #:recipe-list (list
+                    carrot-stew-recipe
+                    fish-stew-recipe)))
 
   (survival-game
-    #:food-list    (list (carrot #:amount-in-world 10)
-                         (fish #:amount-in-world 10))
-    #:crafter-list (list (my-cauldron)))
+   #:food-list (list
+                (carrot #:amount-in-world 10)
+                (fish #:amount-in-world 10))
+   #:crafter-list (list
+                   (my-cauldron)))
   )
 
 ; sword, damage, has-gold? options (spear) fire-magic, etc
@@ -203,9 +216,11 @@
             #:build-time 20))
 
   (survival-game
-    #:crafter-list (list (basic-crafter
-                           #:sprite      woodtable-sprite
-                           #:recipe-list (list my-sword-recipe))))
+   #:crafter-list (list
+                   (basic-crafter
+                    #:sprite woodtable-sprite
+                    #:recipe-list (list
+                                   my-sword-recipe))))
   )
 
 (define-example-code
@@ -216,24 +231,28 @@
             #:build-time 100))
 
   (survival-game
-    #:crafter-list (list (basic-crafter
-                           #:sprite      woodtable-sprite
-                           #:recipe-list (list my-sword-recipe))))
+   #:crafter-list (list (basic-crafter
+                         #:sprite woodtable-sprite
+                         #:recipe-list (list my-sword-recipe))))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival weapon-crafter-3
   (define my-fire-magic-recipe
-    (recipe #:product (fire-magic #:name "Fast Flame"
-                                  #:speed 7)
-            #:cost       100))
+    (recipe #:product (fire-magic
+                       #:name "Fast Flame"
+                       #:speed 7)
+            #:cost 100))
 
   (survival-game
-    #:coin-list    (list (basic-coin))
-    #:crafter-list (list (basic-crafter
-                           #:sprite woodtable-sprite
-                           #:recipe-list (list my-fire-magic-recipe))))
+   #:coin-list (list
+                (basic-coin))
+   #:crafter-list (list
+                   (basic-crafter
+                    #:sprite woodtable-sprite
+                    #:recipe-list (list
+                                   my-fire-magic-recipe))))
   )
 
 ; -----------------
@@ -242,14 +261,14 @@
   ;#:with-test (test game-test)
   survival sky-1 
   (survival-game
-    #:sky    (basic-sky #:length-of-day 5000))
+   #:sky    (basic-sky #:length-of-day 5000))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival sky-2
   (survival-game
-    #:sky (basic-sky #:night-sky-color  'darkmagenta))
+   #:sky (basic-sky #:night-sky-color  'darkmagenta))
   )
 
 
@@ -257,8 +276,8 @@
   ;#:with-test (test game-test)
   survival sky-3 
   (survival-game
-    #:sky    (basic-sky #:length-of-day 500
-                        #:max-darkness  255))
+   #:sky    (basic-sky #:length-of-day 500
+                       #:max-darkness  255))
   )
 
 
@@ -267,11 +286,11 @@
   survival sky-4 
 
   (survival-game
-    #:enemy-list   (list (basic-enemy #:amount-in-world 20
-                                      #:night-only? #t))
-    #:sky          (basic-sky #:length-of-day    2400
-                              #:start-of-daytime 200
-                              #:end-of-daytime   2200))
+   #:enemy-list   (list (basic-enemy #:amount-in-world 20
+                                     #:night-only? #t))
+   #:sky          (basic-sky #:length-of-day    2400
+                             #:start-of-daytime 200
+                             #:end-of-daytime   2200))
   )
 
 ; -----------------
@@ -280,83 +299,91 @@
   ;#:with-test (test game-test)
   survival enemy-1
   (survival-game
-    #:enemy-list (list (basic-enemy)))
+   #:enemy-list (list
+                 (basic-enemy)))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival enemy-2
   (survival-game
-    #:enemy-list (list (basic-enemy #:amount-in-world 10)))
+   #:enemy-list (list
+                 (basic-enemy
+                  #:amount-in-world 10)))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival enemy-3 
   (define (my-enemy)
-    (basic-enemy #:ai              'medium
-                 #:sprite          bat-sprite
+    (basic-enemy #:ai 'medium
+                 #:sprite bat-sprite
                  #:amount-in-world 5))
 
   (survival-game
-    #:enemy-list (list (my-enemy))))
+   #:enemy-list (list
+                 (my-enemy))))
 
 (define-example-code
   ;#:with-test (test game-test)
   survival enemy-4
   (define (easy-enemy)
-    (basic-enemy #:ai           'easy
-                 #:sprite       slime-sprite
+    (basic-enemy #:ai 'easy
+                 #:sprite slime-sprite
                  #:amount-in-world 5))
 
   (define (medium-enemy)
-    (basic-enemy #:ai              'medium
-                 #:sprite          bat-sprite
+    (basic-enemy #:ai 'medium
+                 #:sprite bat-sprite
                  #:amount-in-world 5
                  #:night-only? #t))
 
   (survival-game
-    #:enemy-list (list (easy-enemy)
-                       (medium-enemy))))
+   #:enemy-list (list
+                 (easy-enemy)
+                 (medium-enemy))))
 
 (define-example-code
   ;#:with-test (test game-test)
   survival enemy-5
   (define (hard-enemy)
-    (basic-enemy #:ai              'hard
-                 #:sprite          snake-sprite
+    (basic-enemy #:ai 'hard
+                 #:sprite snake-sprite
                  #:amount-in-world 5
-                 #:weapon          (acid-spitter #:damage 50)))
+                 #:weapon (acid-spitter
+                           #:damage 50)))
 
   (survival-game
-    #:enemy-list   (list (hard-enemy)))
+   #:enemy-list (list
+                 (hard-enemy)))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival enemy-6
   (define (easy-enemy)
-    (basic-enemy #:ai             'easy
-                 #:sprite          slime-sprite
+    (basic-enemy #:ai 'easy
+                 #:sprite slime-sprite
                  #:amount-in-world 5))
 
   (define (medium-enemy)
-    (basic-enemy #:ai              'medium
-                 #:sprite          snake-sprite
+    (basic-enemy #:ai 'medium
+                 #:sprite snake-sprite
                  #:amount-in-world 3
                  ))
 
   (define (hard-enemy)
-    (basic-enemy #:ai              'hard
-                 #:sprite          bat-sprite
+    (basic-enemy #:ai 'hard
+                 #:sprite bat-sprite
                  #:amount-in-world 1
-                 #:night-only?     #t
-                 #:weapon          (acid-spitter #:damage 50)))
+                 #:night-only? #t
+                 #:weapon (acid-spitter
+                           #:damage 50)))
 
   (survival-game
-    #:enemy-list   (list (easy-enemy)
-                         (medium-enemy)
-                         (hard-enemy)))
+   #:enemy-list (list (easy-enemy)
+                      (medium-enemy)
+                      (hard-enemy)))
   )
 
 ; -----------------
@@ -365,7 +392,9 @@
   ;#:with-test (test game-test)
   survival food-1
   (survival-game
-    #:food-list  (list (basic-food #:amount-in-world 10)))
+   #:food-list (list
+                (basic-food
+                 #:amount-in-world 10)))
   )
 
 (define-example-code
@@ -373,10 +402,11 @@
   survival food-2
   (define (my-food)
     (basic-food #:amount-in-world 2
-                #:heals-by        20))
+                #:heals-by 20))
 
   (survival-game
-    #:food-list  (list (my-food)))
+   #:food-list (list
+                (my-food)))
   )
 
 
@@ -384,13 +414,14 @@
   ;#:with-test (test game-test)
   survival food-3
   (define (my-food)
-    (basic-food #:sprite          apples-sprite
-                #:name            "Apples"
+    (basic-food #:sprite apples-sprite
+                #:name "Apples"
                 #:amount-in-world 2
-                #:heals-by        20))
+                #:heals-by 20))
 
   (survival-game
-    #:food-list  (list (my-food)))
+   #:food-list (list
+                (my-food)))
   )
 
 (define-example-code
@@ -398,34 +429,35 @@
   survival food-4
 
   (define (my-food)
-    (basic-food #:sprite          apples-sprite
-                #:name            "Apples"
+    (basic-food #:sprite apples-sprite
+                #:name "Apples"
                 #:amount-in-world 15
-                #:heals-by        5))
+                #:heals-by 5))
 
   (define (special-food)
-    (basic-food #:sprite          cherry-sprite
-                #:name            "Cherry"
+    (basic-food #:sprite cherry-sprite
+                #:name "Cherry"
                 #:amount-in-world 1
-                #:heals-by        50
-                #:respawn?        #f))
+                #:heals-by 50
+                #:respawn? #f))
 
   (survival-game
-    #:food-list  (list (my-food)
-                       (special-food))))
+   #:food-list (list (my-food)
+                     (special-food))))
 
 (define-example-code
   ;#:with-test (test game-test)
   survival food-5
   (define (my-food)
-    (basic-food #:sprite          cherry-sprite
-                #:name            "Cherries"
+    (basic-food #:sprite cherry-sprite
+                #:name "Cherries"
                 #:amount-in-world 20
-                #:heals-by        50))
+                #:heals-by 50))
 
   (survival-game
-    #:food-list       (list (my-food))
-    #:starvation-rate 100)
+   #:food-list (list
+                (my-food))
+   #:starvation-rate 100)
   )
 
 (define-example-code
@@ -450,9 +482,9 @@
                 #:respawn? #f))
 
   (survival-game
-    #:food-list       (list (basic-cherry)
-                            (basic-smores)
-                            (special-carrot)))
+   #:food-list       (list (basic-cherry)
+                           (basic-smores)
+                           (special-carrot)))
   )
 ; -----------------
 
@@ -460,7 +492,7 @@
   ;#:with-test (test game-test)
   survival npc-1
   (survival-game
-    #:npc-list (list (basic-npc)))
+   #:npc-list (list (basic-npc)))
   )
 
 
@@ -469,11 +501,11 @@
   survival npc-2
   (define (my-npc)
     (basic-npc
-      #:sprite witch-sprite
-      #:name   "Witch"))
+     #:sprite witch-sprite
+     #:name   "Witch"))
 
   (survival-game
-    #:npc-list (list (my-npc)))
+   #:npc-list (list (my-npc)))
   )
 
 (define-example-code
@@ -481,11 +513,11 @@
   survival npc-3
   (define (my-npc)
     (basic-npc
-      #:dialog (list "Woah, who are you??"
-                     "Nevermind -- I'm too busy."
-                     "Move along, now!")))
+     #:dialog (list "Woah, who are you??"
+                    "Nevermind -- I'm too busy."
+                    "Move along, now!")))
   (survival-game
-    #:npc-list (list (my-npc)))
+   #:npc-list (list (my-npc)))
   )
 
 (define-example-code
@@ -493,13 +525,13 @@
   survival npc-4
   (define (my-npc)
     (basic-npc
-      #:sprite witch-sprite
-      #:name   "Witch"
-      #:tile   3
-      #:mode   'follow))
+     #:sprite witch-sprite
+     #:name   "Witch"
+     #:tile   3
+     #:mode   'follow))
 
   (survival-game
-    #:npc-list (list (my-npc)))
+   #:npc-list (list (my-npc)))
   )
 
 (define-example-code
@@ -507,21 +539,21 @@
   survival npc-5
   (define (my-npc)
     (basic-npc
-      #:name   "Francis"
-      #:tile   4
-      #:dialog (list "Greetings!"
-                     "You better find some food soon...")))
+     #:name   "Francis"
+     #:tile   4
+     #:dialog (list "Greetings!"
+                    "You better find some food soon...")))
 
   (define (another-npc)
     (basic-npc
-      #:sprite witch-sprite
-      #:mode   'pace
-      #:dialog (list "Now where did I put it..."
-                     "Have you seen an eye of newt?"
-                     "Oh, I think I see it!")))
+     #:sprite witch-sprite
+     #:mode   'pace
+     #:dialog (list "Now where did I put it..."
+                    "Have you seen an eye of newt?"
+                    "Oh, I think I see it!")))
 
   (survival-game
-    #:npc-list (list (my-npc) (another-npc)))
+   #:npc-list (list (my-npc) (another-npc)))
   )
 
 ; -----------------
@@ -530,14 +562,15 @@
   ;#:with-test (test game-test)
   survival bg-1
   (survival-game
-    #:bg (basic-bg))
+   #:bg (basic-bg))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
   survival bg-2
   (survival-game
-    #:bg (basic-bg #:image DESERT-BG))
+   #:bg (basic-bg
+         #:image DESERT-BG))
   )
 
 (define-example-code
@@ -545,12 +578,12 @@
   survival bg-3
   (define (my-bg)
     (basic-bg
-      #:image LAVA-BG
-      #:rows 2
-      #:columns 2))
+     #:image LAVA-BG
+     #:rows 2
+     #:columns 2))
 
   (survival-game
-    #:bg (my-bg))
+   #:bg (my-bg))
   )
 
 (define-example-code
@@ -575,8 +608,9 @@
   survival level-design-1
 
   (survival-game
-    #:bg (basic-bg #:image FOREST-BG)
-    #:enable-world-objects? #t)
+   #:bg (basic-bg
+         #:image FOREST-BG)
+   #:enable-world-objects? #t)
 
   )
 
@@ -585,10 +619,13 @@
   survival level-design-2
 
   (survival-game
-    #:bg             (basic-bg #:image FOREST-BG)
-    #:other-entities (make-world-objects round-tree
-                                         pine-tree
-                                         #:hd? #t))
+   #:bg (basic-bg
+         #:image FOREST-BG)
+   #:other-entities
+   (make-world-objects
+    round-tree
+    pine-tree
+    #:hd? #t))
   )
 
 (define-example-code
@@ -596,11 +633,13 @@
   survival level-design-3
 
   (survival-game
-    #:bg             (basic-bg #:image PINK-BG)
-    #:other-entities (make-world-objects candy-cane-tree
-                                         snow-pine-tree
-                                         #:hd? #t
-                                         #:random-color? #t))
+   #:bg (basic-bg
+         #:image PINK-BG)
+   #:other-entities (make-world-objects
+                     candy-cane-tree
+                     snow-pine-tree
+                     #:hd? #t
+                     #:random-color? #t))
 
   )
 
@@ -609,9 +648,15 @@
   survival level-design-4
 
   (survival-game
-    #:other-entities (pine-tree   (posn 100 200) #:tile 0)
-    (wood-house  (posn 100 200) #:tile 1 #:size 0.5)
-    (brick-house (posn 100 200) #:tile 2 #:hue (random 360)))
+   #:other-entities
+   (pine-tree (posn 100 200)
+              #:tile 0)
+   (wood-house (posn 100 200)
+               #:tile 1
+               #:size 0.5)
+   (brick-house (posn 100 200)
+                #:tile 2
+                #:hue (random 360)))
 
   )
 
@@ -621,11 +666,11 @@
   ;#:with-test (test game-test)
   survival game-jam-1 
   (survival-game
-    #:avatar       (basic-avatar)
-    #:coin-list    (list (basic-coin))
-    #:food-list    (list (basic-food #:amount-in-world 10))
-    #:enemy-list   (list (basic-enemy))
-    #:crafter-list (list (basic-crafter))))
+   #:avatar       (basic-avatar)
+   #:coin-list    (list (basic-coin))
+   #:food-list    (list (basic-food #:amount-in-world 10))
+   #:enemy-list   (list (basic-enemy))
+   #:crafter-list (list (basic-crafter))))
 
 (define-example-code
   ;#:with-test (test game-test)
@@ -728,19 +773,19 @@
 
 
   (survival-game
-    #:avatar       (my-avatar)
-    #:coin-list    (list 
-                     #;
-                     (silver-coin)
-                     (gold-coin))
-    #:food-list    (list (toasted-marshmallow)
-                         (cherry)
-                         (carrot)
-                         (bowl))
-    #:enemy-list   (list (my-enemy-1)
-                         (my-enemy-2))
-    #:crafter-list (list (cauldron)
-                         (campfire))))
+   #:avatar       (my-avatar)
+   #:coin-list    (list 
+                   #;
+                   (silver-coin)
+                   (gold-coin))
+   #:food-list    (list (toasted-marshmallow)
+                        (cherry)
+                        (carrot)
+                        (bowl))
+   #:enemy-list   (list (my-enemy-1)
+                        (my-enemy-2))
+   #:crafter-list (list (cauldron)
+                        (campfire))))
 
 
 

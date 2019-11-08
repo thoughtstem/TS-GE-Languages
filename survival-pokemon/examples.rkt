@@ -276,7 +276,7 @@
 
 (define-example-code
   ;#:with-test (test game-test)
-  survival-pokemon alt/bg-3
+  survival-pokemon alt/background-3
   (define (my-town)
     (basic-town
       #:image LAVA-BG

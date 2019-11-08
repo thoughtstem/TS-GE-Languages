@@ -560,14 +560,14 @@
 
 (define-example-code
   ;#:with-test (test game-test)
-  survival bg-1
+  survival background-1
   (survival-game
    #:bg (basic-bg))
   )
 
 (define-example-code
   ;#:with-test (test game-test)
-  survival bg-2
+  survival background-2
   (survival-game
    #:bg (basic-bg
          #:image DESERT-BG))
@@ -575,7 +575,7 @@
 
 (define-example-code
   ;#:with-test (test game-test)
-  survival bg-3
+  survival background-3
   (define (my-bg)
     (basic-bg
      #:image LAVA-BG
@@ -588,7 +588,7 @@
 
 (define-example-code
   ;#:with-test (test game-test)
-  survival bg-4
+  survival background-4
   (define (my-bg)
     (basic-bg #:image LAVA-BG
               #:rows 2

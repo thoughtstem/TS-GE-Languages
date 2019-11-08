@@ -252,7 +252,7 @@ survival-minecraft alt/npc-2
 
 (define-example-code 
   ;#:with-test (test game-test)
-  survival-minecraft alt/bg-4  
+  survival-minecraft alt/background-4  
   (define (my-biome)
     (basic-biome
       #:image LAVA-BG

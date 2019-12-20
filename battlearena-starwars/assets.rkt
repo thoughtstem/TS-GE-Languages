@@ -1,144 +1,37 @@
 #lang at-exp racket
 
-(require ts-kata-util/assets/main
+(require fandom-sprites/assets-starwars
          battlearena)
 
-(define-assets-from "assets")
+(provide c2po-sheet ;need for drone trick
+         )
 
-(provide bobafett-sprite
-         darthmaul-sprite
-         darthvader-sprite
-         hansolo-sprite
-         luke-sprite
-         obiwan-sprite
-         padawan-sprite
-         princessleia-sprite
-         r2d2-sprite
-         stormtrooper-sprite
-         twilek-sprite
-         yoda-sprite
-         c3po-sprite
-         c2po-sprite
-         chewie-sprite
-         rebelpilot-sprite
-         lando-sprite)       
-
-; ==== CUSTOM ASSETS ====
-(define twilek-sprite
-  (sheet->sprite twilek-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
+(define (easy-sprite sheet r c n)
+  (sheet->sprite sheet
+                 #:rows r
+                 #:columns c
+                 #:row-number n
                  #:delay 5))
 
-(define darthmaul-sprite
-  (sheet->sprite darthmaul-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-syntax-rule (define-sprite sheet r c n sprite-name)
+  (begin
+    (provide sprite-name)
+    (define sprite-name (easy-sprite sheet r c n))))
 
-(define darthvader-sprite
-  (sheet->sprite darthvader-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define bobafett-sprite
-  (sheet->sprite bobafett-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define hansolo-sprite
-  (sheet->sprite hansolo-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define luke-sprite
-  (sheet->sprite luke-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define obiwan-sprite
-  (sheet->sprite obiwan-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define padawan-sprite
-  (sheet->sprite padawan-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define princessleia-sprite
-  (sheet->sprite princessleia-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define yoda-sprite
-  (sheet->sprite yoda-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define r2d2-sprite
-  (sheet->sprite r2d2-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define stormtrooper-sprite
-  (sheet->sprite stormtrooper-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define c2po-sprite
-  (sheet->sprite c2po-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define c3po-sprite
-  (sheet->sprite c3po-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define chewie-sprite
-  (sheet->sprite chewie-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define lando-sprite
-  (sheet->sprite lando-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define rebelpilot-sprite
-  (sheet->sprite rebelpilot-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-sprite twilek-sheet 4 4 3 twilek-sprite)
+(define-sprite darthmaul-sheet 4 4 3 darthmaul-sprite)
+(define-sprite darthvader-sheet 4 4 3 darthvader-sprite)
+(define-sprite bobafett-sheet 4 4 3 bobafett-sprite)
+(define-sprite hansolo-sheet 4 4 3 hansolo-sprite)
+(define-sprite luke-sheet 4 4 3 luke-sprite)
+(define-sprite obiwan-sheet 4 4 3 obiwan-sprite)
+(define-sprite padawan-sheet 4 4 3 padawan-sprite)
+(define-sprite princessleia-sheet 4 4 3 princessleia-sprite)
+(define-sprite yoda-sheet 4 4 3 yoda-sprite)
+(define-sprite r2d2-sheet 4 4 3 r2d2-sprite)
+(define-sprite stormtrooper-sheet 4 4 3 stormtrooper-sprite)
+(define-sprite c2po-sheet 4 4 3 c2po-sprite)
+(define-sprite c3po-sheet 4 4 3 c3po-sprite)
+(define-sprite chewie-sheet 4 4 3 chewie-sprite)
+(define-sprite lando-sheet 4 4 3 lando-sprite)
+(define-sprite rebelpilot-sheet 4 4 3 rebelpilot-sprite)

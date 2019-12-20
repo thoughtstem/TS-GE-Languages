@@ -1,180 +1,44 @@
 #lang at-exp racket
 
-(require ts-kata-util/assets/main
+(require fandom-sprites/assets-avengers
          battlearena)
 
-(define-assets-from "assets")
+(provide energyball-sheet ;need sheet for tint trick
+         ironpatriot-sheet ;need sheet for drone trick
+         )
 
-(provide  blackwidow-sprite
-          gamora-sprite
-          ironman-sprite
-          mandarin-sprite
-          redskull-sprite
-          starlord-sprite
-          wintersoldier-sprite
-          captainamerica-sprite
-          hawkeye-sprite
-          loki-sprite
-          nebula-sprite
-          rocketracoon-sprite
-          thor-sprite
-          drax-sprite
-          hulk-sprite
-          malekith-sprite
-          nickfury-sprite
-          ronan-sprite
-          tonystark-sprite
-          ironpatriot-sprite
-
-          green-effect-sprite)
-
-; ==== POWERS ====
-
-(define green-effect-sprite
-  (sheet->sprite (rotate 90 green-effect)
-                 #:rows 1
-                 #:columns 10
-                 #:row-number 1
-                 #:delay 1))
-
-; ==== CUSTOM ASSETS ====
-
-(define blackwidow-sprite
-  (sheet->sprite blackwidow-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
+(define (easy-sprite sheet r c n)
+  (sheet->sprite sheet
+                 #:rows r
+                 #:columns c
+                 #:row-number n
                  #:delay 5))
 
-(define gamora-sprite
-  (sheet->sprite gamora-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-syntax-rule (define-sprite sheet r c n sprite-name)
+  (begin
+    (provide sprite-name)
+    (define sprite-name (easy-sprite sheet r c n))))
 
-(define ironman-sprite
-  (sheet->sprite ironman-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
 
-(define mandarin-sprite
-  (sheet->sprite mandarin-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
 
-(define redskull-sprite
-  (sheet->sprite redskull-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define starlord-sprite
-  (sheet->sprite starlord-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define wintersoldier-sprite
-  (sheet->sprite wintersoldier-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define captainamerica-sprite
-  (sheet->sprite captainamerica-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define hawkeye-sprite
-  (sheet->sprite hawkeye-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define loki-sprite
-  (sheet->sprite loki-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define nebula-sprite
-  (sheet->sprite nebula-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define rocketracoon-sprite
-  (sheet->sprite rocketracoon-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define thor-sprite
-  (sheet->sprite thor-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define drax-sprite
-  (sheet->sprite drax-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define hulk-sprite
-  (sheet->sprite hulk-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define malekith-sprite
-  (sheet->sprite malekith-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define nickfury-sprite
-  (sheet->sprite nickfury-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define ronan-sprite
-  (sheet->sprite ronan-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define tonystark-sprite
-  (sheet->sprite tonystark-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
-
-(define ironpatriot-sprite
-  (sheet->sprite ironpatriot-sheet
-                 #:rows 4
-                 #:columns 4
-                 #:row-number 3
-                 #:delay 5))
+(define-sprite (rotate 90 green-effect) 1 10 1 green-effect-sprite)
+(define-sprite blackwidow-sheet 4 4 3 blackwidow-sprite)
+(define-sprite gamora-sheet 4 4 3 gamora-sprite)
+(define-sprite ironman-sheet 4 4 3 ironman-sprite)
+(define-sprite mandarin-sheet 4 4 3 mandarin-sprite)
+(define-sprite redskull-sheet 4 4 3 redskull-sprite)
+(define-sprite starlord-sheet 4 4 3 starlord-sprite)
+(define-sprite wintersoldier-sheet 4 4 3 wintersoldier-sprite)
+(define-sprite captainamerica-sheet 4 4 3 captainamerica-sprite)
+(define-sprite hawkeye-sheet 4 4 3 hawkeye-sprite)
+(define-sprite loki-sheet 4 4 3 loki-sprite)
+(define-sprite nebula-sheet 4 4 3 nebula-sprite)
+(define-sprite rocketracoon-sheet 4 4 3 rocketracoon-sprite)
+(define-sprite thor-sheet 4 4 3 thor-sprite)
+(define-sprite drax-sheet 4 4 3 drax-sprite)
+(define-sprite hulk-sheet 4 4 3 hulk-sprite)
+(define-sprite malekith-sheet 4 4 3 malekith-sprite)
+(define-sprite nickfury-sheet 4 4 3 nickfury-sprite)
+(define-sprite ronan-sheet 4 4 3 ronan-sprite)
+(define-sprite tonystark-sheet 4 4 3 tonystark-sprite)
+(define-sprite ironpatriot-sheet 4 4 3 ironpatriot-sprite)

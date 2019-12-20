@@ -5,7 +5,6 @@
 
 (require ts-kata-util
          "../assets.rkt"
-         "../extra-assets.rkt"
          (except-in adventure
                     basic-npc
                     basic-enemy)

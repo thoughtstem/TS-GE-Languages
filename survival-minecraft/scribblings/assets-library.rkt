@@ -2,7 +2,7 @@
 
 @(require game-engine
           game-engine-demos-common
-          "../assets.rkt")
+          fandom-sprites-ge)
 
 @require[scribble/extract]
 

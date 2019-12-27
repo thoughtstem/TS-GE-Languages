@@ -2,7 +2,7 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"]
+         fandom-sprites-ge]
 
 @title{Assets Library}
 
@@ -24,7 +24,3 @@
 @(sprite->sheet soldier-sprite)
 
 @(include-section battlearena/scribblings/assets-library)
-
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

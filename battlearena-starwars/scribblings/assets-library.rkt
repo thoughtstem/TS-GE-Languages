@@ -2,7 +2,7 @@
 
 @require[scribble/extract]
 @require[game-engine
-         "../assets.rkt"]
+         fandom-sprites-ge]
 
 @title{Assets Library}
 

@@ -2,7 +2,7 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"]
+         fandom-sprites-ge]
 
 @title{Assets Library}
 
@@ -72,10 +72,5 @@
 @defthing[james-sprite animated-sprite?]
 @(sprite->sheet james-sprite)
 
+@; ---
 @(include-section survival/scribblings/assets-library)
-
-
-
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

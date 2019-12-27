@@ -2,7 +2,7 @@
 
 @(require game-engine
           game-engine-demos-common
-          "../assets.rkt")
+          fandom-sprites-ge)
 
 @require[scribble/extract]
 
@@ -73,10 +73,5 @@
 @defthing[diamond-sprite image?]
 @diamond-sprite
 
-
+@; ---
 @(include-section survival/scribblings/assets-library)
-
-@section{Sprite Sheets}
-@(include-extracted "../assets.rkt")
-
-

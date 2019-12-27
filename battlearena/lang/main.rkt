@@ -10,7 +10,6 @@
 
 (require ts-kata-util
          (only-in racket/draw make-font)
-         ;"../assets.rkt"
          )
 
 ;Instead of using provide,

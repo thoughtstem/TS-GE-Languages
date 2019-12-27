@@ -2,7 +2,6 @@
 
 @(require game-engine
           game-engine-demos-common
-          ;"../assets.rkt"
           )
 
 @require[scribble/extract]

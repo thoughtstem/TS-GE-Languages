@@ -18,11 +18,11 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         "../assets.rkt"
+         fandom-sprites-ge
          (except-in survival basic-entity)
          )
 
-(language-mappings survival          survival-minecraft
+(language-mappings survival         survival-minecraft
                    [basic-bg        basic-biome]
                    [basic-avatar    basic-skin]
                    [basic-npc       basic-entity]

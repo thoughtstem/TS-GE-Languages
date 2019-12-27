@@ -2,8 +2,7 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"
-         "../extra-assets.rkt"]
+          fandom-sprites-ge]
 
 @title{Assets Library}
 
@@ -238,10 +237,6 @@
 @defthing[greyquestion-sprite animated-sprite?]
 @(sprite->sheet greyquestion-sprite)
 
+
 @;----
 @(include-section adventure/scribblings/assets-library)
-
-@;---
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

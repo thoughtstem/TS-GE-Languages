@@ -4,7 +4,7 @@
 (require (for-doc racket/base scribble/manual))
 
 (require ts-kata-util
-         "../assets.rkt"
+         fandom-sprites-ge
          survival)
 
 (language-mappings survival          survival-pokemon

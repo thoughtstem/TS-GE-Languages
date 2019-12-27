@@ -64,8 +64,7 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         (only-in racket/draw make-font)
-         "../assets.rkt")
+         (only-in racket/draw make-font))
 
 (require game-engine
          game-engine-demos-common

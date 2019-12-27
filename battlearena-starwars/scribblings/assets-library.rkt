@@ -2,11 +2,11 @@
 
 @require[scribble/extract]
 @require[game-engine
-         "../assets.rkt"]
+         fandom-sprites-ge]
 
 @title{Assets Library}
 
-@section{Heros}
+@section{Heroes}
 
 @defthing[luke-sprite animated-sprite?]
 @(sprite->sheet luke-sprite)
@@ -61,8 +61,5 @@
 @defthing[stormtrooper-sprite animated-sprite?]
 @(sprite->sheet stormtrooper-sprite)
 
+@;----
 @(include-section battlearena/scribblings/assets-library)
-
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

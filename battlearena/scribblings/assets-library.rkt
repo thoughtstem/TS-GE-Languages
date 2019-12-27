@@ -3,7 +3,6 @@
 @require[scribble/extract]
 @require[game-engine
          game-engine-demos-common
-         ;"../assets.rkt"
          ]
 
 @title{Battle Arena Assets}

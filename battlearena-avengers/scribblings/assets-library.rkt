@@ -2,7 +2,7 @@
 
 @require[scribble/extract]
 @require[ game-engine
-         "../assets.rkt"]
+         fandom-sprites-ge]
 
 @title{Assets Library}
 
@@ -70,8 +70,5 @@
 @defthing[ronan-sprite animated-sprite?]
 @(sprite->sheet ronan-sprite)
 
+@;----
 @(include-section battlearena/scribblings/assets-library)
-
-@section{Sprite Sheets}
-
-@(include-extracted "../assets.rkt")

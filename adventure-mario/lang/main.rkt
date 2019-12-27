@@ -4,15 +4,14 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         "../assets.rkt"
-         "../extra-assets.rkt"
          (except-in adventure
                     basic-npc
                     basic-enemy)
          (rename-in adventure
                     [basic-npc   a:custom-npc]
                     [basic-enemy a:custom-enemy])
-         game-engine-demos-common)
+         game-engine-demos-common
+         fandom-sprites-ge)
 
 (provide block
          brick

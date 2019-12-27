@@ -4,9 +4,10 @@
 (require (for-doc racket/base scribble/manual ))
 
 (require ts-kata-util
-         "../assets.rkt"
          adventure
-         game-engine-demos-common)
+         game-engine-demos-common
+         fandom-sprites-ge
+         )
 
 
 (language-mappings adventure       adventure-harrypotter

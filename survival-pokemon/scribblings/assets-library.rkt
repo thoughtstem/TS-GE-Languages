@@ -29,8 +29,8 @@
 @defthing[charmander-sprite animated-sprite?]
 @(sprite->sheet charmander-sprite)
 
-@defthing[charmelon-sprite animated-sprite?]
-@(sprite->sheet charmelon-sprite)
+@defthing[charmeleon-sprite animated-sprite?]
+@(sprite->sheet charmeleon-sprite)
 
 @defthing[charizard-sprite animated-sprite?]
 @(sprite->sheet charizard-sprite)
